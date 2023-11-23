@@ -3,8 +3,11 @@
 
 int main()
 {
-	std::cout << "vec3 tests" << std::endl;
 
+	HSim::vec3d v3(1, 2, 3); 
+	v3 = {2, 3, 4};
+	std::cout << v3;
+	// std::cout << HSim::vec3d({1, 2, 3});
 	
 	return 0;
 }

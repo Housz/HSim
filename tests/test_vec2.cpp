@@ -28,7 +28,7 @@ int main()
 
     std::cout << vd[1] << std::endl;
 
-    vd = *vd1;  std::cout << vd;
+    vd =  *vd1;  std::cout << vd;
     vd += *vd1; std::cout << vd;
     vd -= *vd1; std::cout << vd;
     vd *= *vd1; std::cout << vd;
@@ -41,10 +41,11 @@ int main()
     std::cout << vd / *vd1 + vd;
     std::cout << vd * 2 / 3;
 
-
-
     auto is = vd == (*vd1);
 
+    HSim::vec2d vlist = {1, 2}; std::cout << vlist;
+    vlist.set({1, 3}); std::cout << vlist;
+    vlist = {3, 4}; std::cout << vlist;
     
     
 

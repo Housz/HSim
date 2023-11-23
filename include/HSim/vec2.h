@@ -8,7 +8,7 @@ namespace HSim
 {
 
     /**
-     * @brief 2D vector
+     * @brief 2-D vector
      *
      * @tparam T : element type
      */
@@ -29,6 +29,8 @@ namespace HSim
         Vec2() : x(0), y(0) {}
         Vec2(T x_, T y_) : x(x_), y(y_) {}
         Vec2(Vec2 &v_) : x(v_.x), y(v_.y) {}
+        template <typename U>
+        Vec2(const std::initializer_list<U> &list) { set(list); }
 
         void set(T x_)
         {
@@ -44,6 +46,16 @@ namespace HSim
         {
             x = v_.x;
             y = v_.y;
+        }
+        template <typename U>
+        void set(const std::initializer_list<U> &list)
+        {
+
+            assert(list.size() >= 2);
+
+            auto inputElem = list.begin();
+            x = static_cast<T>(*inputElem);
+            y = static_cast<T>(*(++inputElem));
         }
 
         T length()
@@ -153,6 +165,14 @@ namespace HSim
             set(v_);
             return (*this);
         }
+        
+        template <typename U>
+        Vec2 &operator=(const std::initializer_list<U>& list)
+        {
+            set(list);
+            return (*this);
+        }
+
 
         Vec2 operator+(Vec2<T> &v_) { return add(v_); }
 
