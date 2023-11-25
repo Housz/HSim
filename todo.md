@@ -4,7 +4,6 @@
 - [ ] 3d vector
 - [ ] 4d vector
 - [ ] nd vector
-- [ ] 
 - [ ] 2d matrix
 - [ ] 3d matrix
 - [ ] 4d matrix

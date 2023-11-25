@@ -226,9 +226,9 @@ namespace HSim
 
     }; // class Vec3
 
-    typedef Vec3<int> vec3i;
-    typedef Vec3<float> vec3f;
-    typedef Vec3<double> vec3d;
+    typedef Vec3<int>       Vec3i;
+    typedef Vec3<float>     Vec3f;
+    typedef Vec3<double>    Vec3d;
 
     template <typename T1>
     std::ostream &operator<<(std::ostream &os, Vec3<T1> &v_)

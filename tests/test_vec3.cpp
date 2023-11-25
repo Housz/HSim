@@ -4,7 +4,7 @@
 int main()
 {
 
-	HSim::vec3d v3(1, 2, 3); 
+	HSim::Vec3d v3(1, 2, 3); 
 	v3 = {2, 3, 4};
 	std::cout << v3;
 	// std::cout << HSim::vec3d({1, 2, 3});

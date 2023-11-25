@@ -8,22 +8,22 @@
 int main()
 {
     HSim::Vec2<double> v2(1, 2);
-    HSim::vec2d vd(1, 2);
-    HSim::vec2f vf(1, 2);
+    HSim::Vec2d vd(1, 2);
+    HSim::Vec2f vf(1, 2);
 
     std::cout << v2 << vd << vf;
 
     std::cout << v2.add(2);
-    auto vd1 = new HSim::vec2d(3, 4);
+    auto vd1 = new HSim::Vec2d(3, 4);
     std::cout << *vd1 ;
 
     std::cout << vd.add( 1.2 );
-    std::cout << vd.add( *(new HSim::vec2d(1, 2)) );
+    std::cout << vd.add( *(new HSim::Vec2d(1, 2)) );
     std::cout << vd.sub( 3.14 );
-    std::cout << vd.sub( *(new HSim::vec2d(1, 2)) );
+    std::cout << vd.sub( *(new HSim::Vec2d(1, 2)) );
     std::cout << vd.mul( 2 );
 
-    vd.add_self( *(new HSim::vec2d(1, 2)) );
+    vd.add_self( *(new HSim::Vec2d(1, 2)) );
     std::cout << vd;
 
     std::cout << vd[1] << std::endl;
@@ -43,7 +43,7 @@ int main()
 
     auto is = vd == (*vd1);
 
-    HSim::vec2d vlist = {1, 2}; std::cout << vlist;
+    HSim::Vec2d vlist = {1, 2}; std::cout << vlist;
     vlist.set({1, 3}); std::cout << vlist;
     vlist = {3, 4}; std::cout << vlist;
     
