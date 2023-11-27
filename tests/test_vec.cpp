@@ -36,7 +36,7 @@ int main()
 		v1[i] = i;
 	});
 	std::cout << v1.avg() << std::endl;
-	
+	std::cout << v1.min() << std::endl;
 
 
 
