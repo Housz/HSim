@@ -10,18 +10,34 @@ namespace HSim
 {
 
 	template <typename IteratorType, typename Function>
-	void parallelFor(IteratorType begin, IteratorType end, const Function &func)
+	void parallelForEach(IteratorType begin, IteratorType end, const Function &func)
 	{
 		tbb::parallel_for_each(begin, end, func);
 	}
 
 	template <typename IteratorType, typename T>
-	void parallelFill(IteratorType begin, IteratorType end, T value)
+	void parallelFillEach(IteratorType begin, IteratorType end, T value)
 	{
 		tbb::parallel_for_each(begin, end, [&](auto &i){
 			i = value;
 		});
 	}
+
+	template <typename IndexType, typename Function>
+	void parallelFor(IndexType startIndex, IndexType endIndex, Function& func)
+	{
+		if(startIndex > endIndex)
+			return;
+
+		tbb::parallel_for(startIndex, endIndex, func);
+	}
+
+	
+	// void parallelFill()
+	// {
+
+	// }
+
 
 	template <typename IteratorType, typename T, typename Function, typename Reduce>
 	T parallelReduce(
