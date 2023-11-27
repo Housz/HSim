@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <iostream>
+#include <HSim/common.h>
 
 #include <HSim/parallel.h>
 
@@ -63,12 +61,32 @@ namespace HSim
         template <typename T1>
         T dot(Vec<T1>& v_)
         {
-            assert(v_.size() == size())
-            
+            assert(v_.size() == size());
+            T sum = parallelReduce(
+                begin(), end(),
+                T(0),
+                [&](tbb::blocked_range<size_t> r, T local_sum){
+                    for( size_t i = r.begin(); i < r.end(); i++)
+                    {
+                        local_sum += container[i] * v_[i];
+                    }
+                    return local_sum;
+                },
+                std::plus<T>()
+            );
+
+            return sum;
         }
 
 
         T* data() { return container.data(); }
+
+        T& operator[](size_t i)
+        {
+            return container[i];
+        }
+
+        
 
         
 
