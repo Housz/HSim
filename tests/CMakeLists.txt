@@ -8,6 +8,9 @@ target_link_libraries(testvec PUBLIC TBB::tbb)
 add_executable(testparallel test_parallel.cpp)
 target_link_libraries(testparallel PUBLIC TBB::tbb)
 
+add_executable(testmat test_mat.cpp)
+target_link_libraries(testmat PUBLIC TBB::tbb)
+
 add_subdirectory(benchmarks)
 
 

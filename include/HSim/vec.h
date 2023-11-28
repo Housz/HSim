@@ -3,8 +3,6 @@
 #include <HSim/common.h>
 #include <HSim/parallel.h>
 
-// todo: warp of std::vector, add some funcs
-
 namespace HSim
 {
 
@@ -30,6 +28,7 @@ namespace HSim
         template <typename T1>
         Vec(Vec<T1> &v_) : container(v_.size(), 0) { set(v_); }
         Vec(const std::initializer_list<T> &list) { set(list); }
+        Vec(std::vector<T> &v_) : container(v_) {}
 
         size_t size() const { return container.size(); }
 
