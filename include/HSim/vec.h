@@ -32,7 +32,7 @@ namespace HSim
         template <typename T1>
         Vec(const std::initializer_list<T1> &list) { set(list); }
 
-        size_t size() { return container.size(); }
+        size_t size() const { return container.size(); }
 
         template <typename T1>
         void set(const std::initializer_list<T1> &list) { container = list; }
@@ -48,7 +48,7 @@ namespace HSim
         {
             assert(v_.size() == size());
 
-            HSim::parallelFor(size_t(0), size(), [&](size_t i)
+            parallelFor(size_t(0), size(), [&](size_t i)
                               { container[i] = T(v_[i]); });
         }
 
@@ -99,8 +99,9 @@ namespace HSim
 
                 T(0),
 
-                [&](tbb::blocked_range<size_t> r, T local_sum)
-                {
+                [&](tbb::blocked_range<size_t> r, T init)
+                {   
+                    T local_sum = init;
                     for (size_t i = r.begin(); i < r.end(); i++)
                     {
                         local_sum += container[i];
@@ -108,7 +109,8 @@ namespace HSim
                     return local_sum;
                 },
 
-                std::plus<T>());
+                std::plus<T>()
+            );
 
             return sum;
         }
@@ -123,20 +125,23 @@ namespace HSim
             T min = parallelReduce(
                 begin(), end(),
 
-                T(0),
+                std::numeric_limits<T>::max(),
 
-                [&](tbb::blocked_range<size_t> r, T local_min)
+                [&](tbb::blocked_range<size_t> r, T init)
                 {
-                    local_min = container[r.begin()];
-                    for (size_t i = r.begin() + 1; i < r.end(); i++)
+                    T local_min = init;
+                    for (size_t i = r.begin(); i < r.end(); i++)
                     {
                         if(container[i] < local_min)
                             local_min = container[i];
                     }
+
                     return local_min;
                 },
 
-                std::min<T>()
+                [](T x, T y){
+                    return x < y ? x : y;
+                }
                 
                 );
 
@@ -145,46 +150,126 @@ namespace HSim
 
         T max()
         {
+            T max = parallelReduce(
+                begin(), end(),
+
+                std::numeric_limits<T>::min(),
+
+                [&](tbb::blocked_range<size_t> r, T init)
+                {
+                    T local_max = init;
+                    for (size_t i = r.begin(); i < r.end(); i++)
+                    {
+                        if(container[i] > local_max)
+                            local_max = container[i];
+                    }
+
+                    return local_max;
+                },
+
+                [](T x, T y){
+                    return x > y ? x : y;
+                }
+                
+                );
+
+            return max;            
         }
 
         template <typename T1>
-        Vec<T> add(const Vec<T1> v_)
+        Vec<T> add(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            Vec<T> v(size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                v[i] = container[i] + v_[i];
+            });
+
+            return v;
         }
 
         template <typename T1>
-        void add_self(const Vec<T1> v_)
+        void add_self(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] += v_[i];
+            });
         }
 
         template <typename T1>
-        Vec<T> sub(const Vec<T1> v_)
+        Vec<T> sub(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            Vec<T> v(size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                v[i] = container[i] - v_[i];
+            });
+
+            return v;
         }
 
         template <typename T1>
-        void sub_self(const Vec<T1> v_)
+        void sub_self(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] -= v_[i];
+            });
         }
 
         template <typename T1>
-        Vec<T> mul(const Vec<T1> v_)
+        Vec<T> mul(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            Vec<T> v(size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                v[i] = container[i] * v_[i];
+            });
+
+            return v;
         }
 
         template <typename T1>
-        void mul_self(const Vec<T1> v_)
+        void mul_self(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] *= v_[i];
+            });
         }
 
         template <typename T1>
-        Vec<T> div(const Vec<T1> v_)
+        Vec<T> div(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            Vec<T> v(size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                v[i] = container[i] / v_[i];
+            });
+
+            return v;
         }
 
         template <typename T1>
-        void div_self(const Vec<T1> v_)
+        void div_self(const Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] /= v_[i];
+            });
         }
 
         T &operator[](size_t i)
@@ -192,73 +277,146 @@ namespace HSim
             return container[i];
         }
 
+        T operator[](size_t i) const
+        {
+            return container[i];
+        }
+
         template <typename U>
         Vec<T> &operator=(const std::initializer_list<U> &list)
         {
+            set(list);
+            return (*this);
         }
 
         Vec<T> &operator=(Vec<T> &v_)
         {
+            set(v_);
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator+=(T1 value)
         {
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] += T(value);
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator+=(Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] += v_[i];
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator-=(T1 value)
         {
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] -= T(value);
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator-=(Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] -= v_[i];
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator*=(T1 value)
         {
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] *= T(value);
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator*=(Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] *= v_[i];
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator/=(T1 value)
         {
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] /= T(value);
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         Vec<T> &operator/=(Vec<T1> &v_)
         {
+            assert(size() == v_.size());
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                container[i] /= v_[i];
+            });
+
+            return (*this);
         }
 
         template <typename T1>
         bool isEqual(Vec<T1> &v_)
         {
+            if(size() != v_.size())
+                return false;
+
+            for (size_t i = 0; i < size(); i++)
+            {
+                if(container[i] != v_[i])
+                    return false;
+            }
+
+            return true;
         }
 
         template <typename T1>
         bool operator==(Vec<T1> &v_)
         {
+            return isEqual(v_);
         }
 
         template <typename T1>
         bool operator!=(Vec<T1> &v_)
         {
+            return !isEqual(v_);
         }
 
         template <typename Callback>
         void forEach(Callback func)
         {
+            for(T& i: container)
+            {
+                func();
+            }
         }
 
         template <typename Callback>
