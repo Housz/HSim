@@ -29,13 +29,14 @@ namespace HSim
         Vec(size_t n, T value) : container(n, value) {}
         template <typename T1>
         Vec(Vec<T1> &v_) : container(v_.size(), 0) { set(v_); }
-        template <typename T1>
-        Vec(const std::initializer_list<T1> &list) { set(list); }
+        Vec(const std::initializer_list<T> &list) { set(list); }
 
         size_t size() const { return container.size(); }
 
-        template <typename T1>
-        void set(const std::initializer_list<T1> &list) { container = list; }
+        void set(const std::initializer_list<T> &list) 
+        { 
+            container = list; 
+        }
 
         void set(T value)
         {
@@ -118,6 +119,29 @@ namespace HSim
         double avg()
         {
             return sum() / size();
+        }
+
+        double length()
+        {
+            return std::sqrt(dot(*this));
+        }
+
+        void normalize()
+        {
+            (*this) /= length();
+        }
+
+        Vec<T> norm()
+        {
+            Vec<T> v(size());
+
+            T len = length();
+
+            parallelFor(size_t(0), size(), [&](size_t i){
+                v[i] = container[i] / len;
+            });
+
+            return v;
         }
 
         T min()
@@ -282,8 +306,7 @@ namespace HSim
             return container[i];
         }
 
-        template <typename U>
-        Vec<T> &operator=(const std::initializer_list<U> &list)
+        Vec<T> &operator=(const std::initializer_list<T> &list)
         {
             set(list);
             return (*this);

@@ -66,5 +66,13 @@ int main()
 	v_op /= v2;
 	std::cout << v_op;
 
+	HSim::Vecf v_norm {3, 4};
+	std::cout << v_norm.length() << std::endl;
+	std::cout << v_norm.norm() << std::endl;
+	v_norm.normalize();
+	std::cout << v_norm << std::endl;
+
+
+
 	return 0;
 }
