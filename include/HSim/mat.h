@@ -58,12 +58,11 @@ namespace HSim
             });
         }
 
-        // setRow
         template <typename T1>
-        void set_row(size_t i, std::vector<T1> v)
+        void set_row(size_t i, std::vector<T1> row_)
         {
             parallelFor(size_t(0), N, [&](size_t j){
-                container[i][j] = T(v[j]);
+                container[i][j] = T(row_[j]);
             });
         }
 
@@ -75,12 +74,30 @@ namespace HSim
             });
         }
 
-        // setColumn
+        template <typename T1>
+        void set_col(size_t j, std::vector<T1> col_)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                container[i][j] = col_[i];
+            });
+        }
 
-        // +-*/
-        // +=
-        // add
-        // add_self
+        template <typename T1>
+        void set_col(size_t j, T1 value)
+        {
+            parallelFor(size_t(0), N, [&](size_t i){
+                container[i][j] = T(value);
+            });
+        }
+
+        template <typename T1>
+        void set_diag(T1 value)
+        {
+            assert(M == N);
+            parallelFor(size_t(0), M, [&](size_t i){
+                container[i][i] = T(value);
+            });
+        }
         
         size_t size_row()
         {
@@ -90,7 +107,59 @@ namespace HSim
         size_t size_col()    
         {
             return N;
-        }    
+        }
+        
+
+        // template <typename T1>
+        // Mat<T, M, N> add_self(T1 value)
+        // {
+
+        // }
+
+
+        template <typename T1>
+        void add_self(T1 value)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                for(auto &ij: container[i])
+                {
+                    ij += value;
+                }
+            });
+        }
+
+        template <typename T1>
+        void sub_self(T1 value)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                for(auto &ij: container[i])
+                {
+                    ij -= value;
+                }
+            });
+        }
+
+        template <typename T1>
+        void mul_self(T1 value)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                for(auto &ij: container[i])
+                {
+                    ij *= value;
+                }
+            });
+        }
+
+        template <typename T1>
+        void div_self(T1 value)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                for(auto &ij: container[i])
+                {
+                    ij /= value;
+                }
+            });
+        }
 
 
 
@@ -118,7 +187,48 @@ namespace HSim
 			return container[i];
 		}
 
-		
+        template <typename T1>
+        Mat<T, M, N>& operator=(T1 value)
+        {
+            set(value);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator=(const Mat<T1, M, N>& m_)
+        {
+            set(m_);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator+=(T1 value)
+        {
+            add_self(value);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator-=(T1 value)
+        {
+            sub_self(value);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator*=(T1 value)
+        {
+            mul_self(value);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator/=(T1 value)
+        {
+            div_self(value);
+            return *this;
+        }        
+    
 
     };
 
@@ -133,7 +243,7 @@ namespace HSim
             }
             os << std::endl;
         }
-        
+        os << std::endl;
         return os;
     }
 

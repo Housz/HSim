@@ -18,14 +18,21 @@ int main()
     mat33.set(1);
     std::cout << mat33;
 
+
     mat33.set_row(0, std::vector<int> {2, 2, 2});
     mat33.set_row(1, 3);
     std::cout << mat33;
 
-    std::cout << mat22(1);
+    mat33.set_col(0, std::vector<float> {3.14, 3.15, 3.16});
+    mat33.set_col(2, 0);
+    std::cout << mat33;
 
-    mat22[0][1] = 1;
-    std::cout << mat22[0][1] << std::endl;
+    HSim::Mat44d mat44;
+    mat44.set_diag(1);
+    std::cout << mat44;
+    mat44 += 1;
+    std::cout << mat44;
+
 
     // auto mat10000 = new HSim::Mat<float, 10000, 10000>;
     
