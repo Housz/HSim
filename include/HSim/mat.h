@@ -12,14 +12,87 @@ namespace HSim
     {
     public:
         std::vector<std::vector<T>> container;
-        typename std::vector<T>::iterator begin() { return container.begin(); }
-        typename std::vector<T>::iterator end() { return container.end(); }
+        // typename std::vector<T>::iterator begin() { return container.begin(); }
+        // typename std::vector<T>::iterator end() { return container.end(); }
 
         template <typename T1, size_t M1, size_t N1>
         friend std::ostream &operator<<(std::ostream &, Mat<T1, M1, N1> &);
 
         // Mat(): container(M*N, 0) {}
         Mat(): container(M, std::vector<T>(N, 0)){ }
+        Mat(T value): container(M, std::vector<T>(N, value)){ }
+		Mat(const std::initializer_list<std::initializer_list<T>>& list): container(M, std::vector<T>(N, 0)) 
+        {
+             set(list); 
+        }
+        template <typename T1>
+        Mat(const Mat<T1, M, N>& m_): container(M, std::vector<T>(N, 0)) 
+        {
+            set(m_);
+        }
+		
+		void set(const std::initializer_list<std::initializer_list<T>>& list)
+		{
+            for (auto iter = list.begin(); iter < list.end(); iter++)
+            {
+                container[iter-list.begin()] = *iter;
+            }
+		}
+
+        template <typename T1>
+        void set(const Mat<T1, M, N>& m_)
+        {
+            for (size_t i = 0; i < M; i++)
+            {
+                for (size_t j = 0; j < N; j++)
+                {
+                    container[i][j] = (T)m_.container[i][j];
+                }
+            }
+        }
+
+        void set(T value)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                std::fill(container[i].begin(), container[i].end(), value);
+            });
+        }
+
+        // setRow
+        template <typename T1>
+        void set_row(size_t i, std::vector<T1> v)
+        {
+            parallelFor(size_t(0), N, [&](size_t j){
+                container[i][j] = T(v[j]);
+            });
+        }
+
+        template <typename T1>
+        void set_row(size_t i, T1 value)
+        {
+            parallelFor(size_t(0), N, [&](size_t j){
+                container[i][j] = T(value);
+            });
+        }
+
+        // setColumn
+
+        // +-*/
+        // +=
+        // add
+        // add_self
+        
+        size_t size_row()
+        {
+            return M;
+        }
+
+        size_t size_col()    
+        {
+            return N;
+        }    
+
+
 
         T& operator()(size_t i, size_t j)
         {
@@ -40,20 +113,37 @@ namespace HSim
             return row_i;
         }
         
+		std::vector<T>& operator[] (size_t i)
+		{
+			return container[i];
+		}
+
+		
 
     };
 
     template <typename T1, size_t M1, size_t N1>
     std::ostream &operator<<(std::ostream &os, Mat<T1, M1, N1> &m_)
     {
+        for (size_t i = 0; i < M1; i++)
+        {
+            for (size_t j = 0; j < N1; j++)
+            {
+                os << m_[i][j] << " ";
+            }
+            os << std::endl;
+        }
         
-        os << m_(1, 1) << " ";
-
-        os << std::endl;
-
         return os;
     }
 
-    
+    typedef Mat<float, 2, 2> Mat22f;
+    typedef Mat<double, 2, 2> Mat22d;
+
+	typedef Mat<float, 3, 3> Mat33f;
+    typedef Mat<double, 3, 3> Mat33d;
+
+	typedef Mat<float, 4, 4> Mat44f;
+    typedef Mat<double, 4, 4> Mat44d;
 
 } // namespace HSim
