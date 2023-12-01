@@ -108,14 +108,33 @@ namespace HSim
         {
             return N;
         }
-        
 
-        // template <typename T1>
-        // Mat<T, M, N> add_self(T1 value)
-        // {
+        template <typename T1>
+        Mat<T, M, N> add(T1 value)
+        {
+            Mat<T, M, N> m;
 
-        // }
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] + T(value);
+                });
+            });
 
+            return m;
+        }
+
+        template <typename T1>
+        Mat<T, M, N> add(Mat<T1, M, N> &m_)
+        {
+            Mat<T, M, N> m;
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] + T(m_[i][j]);
+                });
+            });
+
+            return m;
+        }       
 
         template <typename T1>
         void add_self(T1 value)
@@ -129,6 +148,43 @@ namespace HSim
         }
 
         template <typename T1>
+        void add_self(Mat<T1, M, N> &m_)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    container[i][j] += (T)m_[i][j];
+                });
+            });
+        }
+
+        template <typename T1>
+        Mat<T, M, N> sub(T1 value)
+        {
+            Mat<T, M, N> m;
+
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] - T(value);
+                });
+            });
+
+            return m;
+        }
+
+        template <typename T1>
+        Mat<T, M, N> sub(Mat<T1, M, N> &m_)
+        {
+            Mat<T, M, N> m;
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] - T(m_[i][j]);
+                });
+            });
+
+            return m;
+        }   
+
+        template <typename T1>
         void sub_self(T1 value)
         {
             parallelFor(size_t(0), M, [&](size_t i){
@@ -138,6 +194,43 @@ namespace HSim
                 }
             });
         }
+
+        template <typename T1>
+        void sub_self(Mat<T1, M, N> &m_)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    container[i][j] -= (T)m_[i][j];
+                });
+            });
+        }
+
+        template <typename T1>
+        Mat<T, M, N> mul(T1 value)
+        {
+            Mat<T, M, N> m;
+
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] * T(value);
+                });
+            });
+
+            return m;
+        }
+
+        template <typename T1>
+        Mat<T, M, N> mul(Mat<T1, M, N> &m_)
+        {
+            Mat<T, M, N> m;
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] * T(m_[i][j]);
+                });
+            });
+
+            return m;
+        }   
 
         template <typename T1>
         void mul_self(T1 value)
@@ -151,6 +244,43 @@ namespace HSim
         }
 
         template <typename T1>
+        void mul_self(Mat<T1, M, N> &m_)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    container[i][j] *= (T)m_[i][j];
+                });
+            });
+        }
+
+        template <typename T1>
+        Mat<T, M, N> div(T1 value)
+        {
+            Mat<T, M, N> m;
+
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] / T(value);
+                });
+            });
+
+            return m;
+        }
+
+        template <typename T1>
+        Mat<T, M, N> div(Mat<T1, M, N> &m_)
+        {
+            Mat<T, M, N> m;
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    m[i][j] = container[i][j] / T(m_[i][j]);
+                });
+            });
+
+            return m;
+        }   
+
+        template <typename T1>
         void div_self(T1 value)
         {
             parallelFor(size_t(0), M, [&](size_t i){
@@ -161,6 +291,15 @@ namespace HSim
             });
         }
 
+        template <typename T1>
+        void div_self(Mat<T1, M, N> &m_)
+        {
+            parallelFor(size_t(0), M, [&](size_t i){
+                parallelFor(size_t(0), N, [&](size_t j){
+                    container[i][j] /= (T)m_[i][j];
+                });
+            });
+        }
 
 
         T& operator()(size_t i, size_t j)
@@ -202,9 +341,64 @@ namespace HSim
         }
 
         template <typename T1>
+        Mat<T, M, N> operator+(T1 value)
+        {
+            return add(value);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator+(Mat<T1, M, N> &m_)
+        {
+            return add(m_);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator-(T1 value)
+        {
+            return sub(value);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator-(Mat<T1, M, N> &m_)
+        {
+            return sub(m_);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator*(T1 value)
+        {
+            return mul(value);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator*(Mat<T1, M, N> &m_)
+        {
+            return mul(m_);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator/(T1 value)
+        {
+            return div(value);
+        }
+
+        template <typename T1>
+        Mat<T, M, N> operator/(Mat<T1, M, N> &m_)
+        {
+            return div(m_);
+        }
+
+        template <typename T1>
         Mat<T, M, N>& operator+=(T1 value)
         {
             add_self(value);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator+=(Mat<T1, M, N> &m_)
+        {
+            add_self(m_);
             return *this;
         }
 
@@ -216,9 +410,23 @@ namespace HSim
         }
 
         template <typename T1>
+        Mat<T, M, N>& operator-=(Mat<T1, M, N> &m_)
+        {
+            sub_self(m_);
+            return *this;
+        }
+
+        template <typename T1>
         Mat<T, M, N>& operator*=(T1 value)
         {
             mul_self(value);
+            return *this;
+        }
+
+        template <typename T1>
+        Mat<T, M, N>& operator*=(Mat<T1, M, N> &m_)
+        {
+            mul_self(m_);
             return *this;
         }
 
@@ -228,7 +436,13 @@ namespace HSim
             div_self(value);
             return *this;
         }        
-    
+
+        template <typename T1>
+        Mat<T, M, N>& operator/=(Mat<T1, M, N> &m_)
+        {
+            div_self(m_);
+            return *this;
+        }  
 
     };
 

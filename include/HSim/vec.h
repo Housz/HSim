@@ -317,6 +317,8 @@ namespace HSim
             return (*this);
         }
 
+        
+        
         template <typename T1>
         Vec<T> &operator+=(T1 value)
         {
@@ -338,6 +340,7 @@ namespace HSim
 
             return (*this);
         }
+
 
         template <typename T1>
         Vec<T> &operator-=(T1 value)

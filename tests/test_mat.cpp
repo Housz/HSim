@@ -33,6 +33,16 @@ int main()
     mat44 += 1;
     std::cout << mat44;
 
+    mat44 += mat44;
+    std::cout << mat44;
+
+    auto ma = mat44.add(1);
+    std::cout << ma;
+    // std::cout << mat44.add(1) << std::endl;
+    // std::cout << mat44.add(mat44) << std::endl;
+
+    std::cout << ma + ma;
+
 
     // auto mat10000 = new HSim::Mat<float, 10000, 10000>;
     
