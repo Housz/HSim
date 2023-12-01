@@ -43,6 +43,13 @@ int main()
 
     std::cout << ma + ma;
 
+    std::cout << mat44 * 2;
+    // std::cout << ma * mat44;
+
+    std::cout << 2 * mat44 * -1;
+
+
+
 
     // auto mat10000 = new HSim::Mat<float, 10000, 10000>;
     

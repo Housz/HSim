@@ -6,7 +6,13 @@
 
 namespace HSim
 {
-
+    /**
+     * @brief mxn matrix
+     * 
+     * @tparam T : float, double
+     * @tparam M : num of rows
+     * @tparam N : num of cols
+     */
     template <typename T, size_t M, size_t N>
     class Mat
     {
@@ -18,7 +24,6 @@ namespace HSim
         template <typename T1, size_t M1, size_t N1>
         friend std::ostream &operator<<(std::ostream &, Mat<T1, M1, N1> &);
 
-        // Mat(): container(M*N, 0) {}
         Mat(): container(M, std::vector<T>(N, 0)){ }
         Mat(T value): container(M, std::vector<T>(N, value)){ }
 		Mat(const std::initializer_list<std::initializer_list<T>>& list): container(M, std::vector<T>(N, 0)) 
@@ -346,6 +351,7 @@ namespace HSim
             return add(value);
         }
 
+
         template <typename T1>
         Mat<T, M, N> operator+(Mat<T1, M, N> &m_)
         {
@@ -364,17 +370,19 @@ namespace HSim
             return sub(m_);
         }
 
+        // m * n
         template <typename T1>
         Mat<T, M, N> operator*(T1 value)
         {
             return mul(value);
         }
 
-        template <typename T1>
-        Mat<T, M, N> operator*(Mat<T1, M, N> &m_)
-        {
-            return mul(m_);
-        }
+        // Mat() * m
+        // template <typename T1>
+        // Mat<T, M, N> operator*(Mat<T1, M, N> &m_)
+        // {
+        //     return mul(m_);
+        // }
 
         template <typename T1>
         Mat<T, M, N> operator/(T1 value)
@@ -460,6 +468,19 @@ namespace HSim
         os << std::endl;
         return os;
     }
+
+    // n * mat
+    template <typename T1, typename T2, size_t M, size_t N>
+    Mat<T2, M, N> operator*(T1 value, Mat<T2, M, N> m_)
+    {
+        return m_.mul(value);
+    }
+
+    // v * mat
+    
+
+    
+
 
     typedef Mat<float, 2, 2> Mat22f;
     typedef Mat<double, 2, 2> Mat22d;
