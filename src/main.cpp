@@ -1,5 +1,6 @@
 #include <iostream>
 #include <HSim/vec2.h>
+#include <HSim/sph.h>
 
 int main()
 {

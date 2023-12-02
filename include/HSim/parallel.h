@@ -5,6 +5,10 @@
 #include <tbb/parallel_for.h>
 #include <tbb/parallel_for_each.h>
 #include <tbb/parallel_reduce.h>
+#include <tbb/blocked_range.h>
+#include <tbb/blocked_range2d.h>
+#include <tbb/blocked_range3d.h>
+
 
 namespace HSim
 {
@@ -51,6 +55,22 @@ namespace HSim
 		
 		return tbb::parallel_reduce(
 			tbb::blocked_range<size_t>(0, n),
+			identity,
+			func,
+			reduce
+		);
+	}
+
+	template <typename T, typename Function, typename Reduce>
+	T parallelReduce(
+		size_t begin, size_t end,
+		T identity,
+		const Function& func, 
+		const Reduce& reduce
+	)
+	{
+		return tbb::parallel_reduce(
+			tbb::blocked_range<size_t>(begin, end),
 			identity,
 			func,
 			reduce

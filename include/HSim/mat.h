@@ -18,6 +18,9 @@ namespace HSim
     {
     public:
         std::vector<std::vector<T>> container;
+
+        // std::vector<T> container(M*N); 
+
         // typename std::vector<T>::iterator begin() { return container.begin(); }
         // typename std::vector<T>::iterator end() { return container.end(); }
 
@@ -476,7 +479,42 @@ namespace HSim
         return m_.mul(value);
     }
 
-    // v * mat
+    // matC(m x n) = matA(m x p) * matB(p x n)
+    template <typename T1, typename T2, size_t M, size_t N, size_t P>
+    Mat<T1, M, N> operator*(Mat<T1, M, P> A, Mat<T2, P, N> B)
+    {
+        Mat<T1, M, N> C;
+
+        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, M, 0, N),
+            [&](tbb::blocked_range2d<size_t> rA){
+                for(size_t i = rA.rows().begin(); i < rA.rows().end(); i++)
+                {
+                    for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
+                    {
+                        // C[i][j]
+                        T1 sum = parallelReduce(
+                            0, P,
+                            T1(0),
+                            [&](tbb::blocked_range<size_t> r, T1 local_sum)
+                            {
+                                for (size_t col = r.begin(); col < r.end(); col++)
+                                {
+                                    local_sum += A[i][col] * B[col][j];
+                                }
+                                return local_sum;
+                            },
+                            std::plus<T1>()
+                        );
+
+                        C[i][j] = sum;
+                    }
+                }                
+            }
+        );
+
+        return C;
+
+    }
     
 
     

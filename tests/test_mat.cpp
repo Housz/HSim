@@ -49,6 +49,17 @@ int main()
     std::cout << 2 * mat44 * -1;
 
 
+    // test op(mat, mat)
+    HSim::Mat<float, 3, 4> m34(2);
+    HSim::Mat<double, 4, 2> m42(3);
+    HSim::Mat<float, 2, 1> m21(1);
+
+    std::cout << m34;
+    std::cout << m42;
+    std::cout << m21;
+    std::cout << m34 * m42;
+    std::cout << m34 * m42 * m21;
+    auto mulmat = m34 * m42 * m21;
 
 
     // auto mat10000 = new HSim::Mat<float, 10000, 10000>;

@@ -6,7 +6,7 @@
 
 // #define TEMP
 
-#define TEST
+// #define TEST
 
 int main()
 {
@@ -49,6 +49,40 @@ int main()
 
 
 #endif 
+
+#ifndef REDUCE
+
+	size_t m = 1 < 10;
+	size_t n = 1 < 11;
+	std::vector<std::vector<float>> v(m, std::vector<float>(n));
+
+	tbb::parallel_for(tbb::blocked_range2d<size_t>(0, n, 0, n),
+		[&](tbb::blocked_range2d<size_t> rA){
+			for(size_t i = rA.rows().begin(); i < rA.rows().end(); i++)
+			{
+				for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
+				{
+					float s = HSim::parallelReduce(
+						0, n,
+						0,
+						[&](tbb::blocked_range<size_t> r, float local_sum)
+						{
+							for (size_t col = r.begin(); col < r.end(); col++)
+							{
+								local_sum += v[i][col];
+							}
+							return local_sum;
+						},
+						std::plus<float>()
+					);
+					v[i][j] = s;
+				}
+			}
+		}
+	);
+
+
+#endif
 
 	return 0;
 }
