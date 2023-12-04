@@ -4,9 +4,12 @@ project(HSim)
 
 include_directories(include)
 
-file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/*.cpp)
-add_executable(main)
-target_sources(main PUBLIC ${sources})
+# file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/.cpp)
+# add_executable(main)
+# target_sources(main PUBLIC ${sources})
+
+add_executable(main src/main.cpp)
+add_executable(my_scalar_field2 src/my_scalar_field2.cpp)
 
 add_subdirectory(tests)
 

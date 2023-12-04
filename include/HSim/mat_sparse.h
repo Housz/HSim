@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include <HSim/common.h>
 
 namespace HSim
 {

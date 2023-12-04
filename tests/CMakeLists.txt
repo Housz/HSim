@@ -11,7 +11,12 @@ target_link_libraries(testparallel PUBLIC TBB::tbb)
 add_executable(testmat test_mat.cpp)
 target_link_libraries(testmat PUBLIC TBB::tbb)
 
+add_executable(testscalarfield2 test_scalar_field2.cpp)
+target_link_libraries(testscalarfield2 PUBLIC TBB::tbb)
+
 add_subdirectory(benchmarks)
+
+
 
 
 
