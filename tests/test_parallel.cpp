@@ -5,8 +5,8 @@
 #include <HSim/vec.h>
 
 // #define TEMP
-
 // #define TEST
+#define REDUCE
 
 int main()
 {
@@ -50,7 +50,7 @@ int main()
 
 #endif 
 
-#ifndef REDUCE
+#ifdef REDUCE
 
 	size_t m = 1 < 10;
 	size_t n = 1 < 11;

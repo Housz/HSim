@@ -61,6 +61,10 @@ int main()
     std::cout << m34 * m42 * m21;
     auto mulmat = m34 * m42 * m21;
 
+    HSim::Mat<float, 1000, 1000> m1(1), m2(1);
+    auto mm = m1*m2;
+    // std::cout << (m1 * m2)[1][1];
+
 
     // auto mat10000 = new HSim::Mat<float, 10000, 10000>;
     

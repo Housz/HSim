@@ -9,7 +9,7 @@ namespace HSim
     /**
      * @brief mxn matrix
      * 
-     * @tparam T : float, double
+     * @tparam T : float or double
      * @tparam M : num of rows
      * @tparam N : num of cols
      */
