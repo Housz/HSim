@@ -12,8 +12,9 @@ public:
 
     T sample(const Vec2i& pos) override
     {
+        const float scalar = 0.1;
         assert(pos.x < X && pos.y < Y);
-        return std::sin(pos.x) * std::sin(pos.y);
+        return std::sin(pos.x * scalar) * std::sin(pos.y * scalar);
     }
 
     Vec2<T> gradient(const Vec2i& pos) override
