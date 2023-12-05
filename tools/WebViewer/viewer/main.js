@@ -63,6 +63,18 @@ const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
 
+let response = await fetch('/data');
+if (response.ok) { // 如果 HTTP 状态码为 200-299
+	// 获取 response body（此方法会在下面解释）
+	let data = await response.text();
+	// console.log(data);
+  } else {
+	alert("HTTP-Error: " + response.status);
+  }
+
+
+
+
 function resizeRendererToDisplaySize( renderer ) {
 
 	const canvas = renderer.domElement;
