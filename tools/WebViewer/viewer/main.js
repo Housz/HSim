@@ -5,6 +5,17 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 const gui = new GUI();
 gui.add(document, 'title');
 
+let guiObj = {
+	btnCallExe: async ()=>{
+		let response = await fetch('/call');
+	}
+};
+
+let response1 = await fetch('/call');
+
+
+gui.add(guiObj.btnCallExe, "callexe");
+
 import vertexShader from './shaders/vertex.glsl.js';
 import fragmentShader from './shaders/fragment.glsl.js';
 
