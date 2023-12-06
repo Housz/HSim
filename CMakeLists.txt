@@ -10,6 +10,7 @@ include_directories(include)
 
 add_executable(main src/main.cpp)
 add_executable(my_scalar_field2 src/my_scalar_field2.cpp)
+add_executable(my_scalar_field3 src/my_scalar_field3.cpp)
 
 add_subdirectory(tests)
 

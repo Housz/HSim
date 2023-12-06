@@ -24,12 +24,14 @@ public:
         return std::sin(pos.x * scalar) * std::sin(pos.y * scalar);
     }
 
+	// to do
     Vec2<T> gradient(const Vec2i& pos) override
     {
         Vec2<T> grad;
         return grad;
     }
 
+	// to do
     T laplacian(const Vec2i& pos) override
     {
         return 0;
@@ -46,8 +48,8 @@ int main(int argc, char *argv[])
     }
     
 
-    size_t X = 100, Y = 100;
-    MyScalarField2<float, 100, 100> sf;
+    const size_t X = 100, Y = 100;
+    MyScalarField2<float, X, Y> sf2;
     // std::cout << sf.sample(Vec2i(1, 1));
 
     // out
@@ -59,7 +61,7 @@ int main(int argc, char *argv[])
         {
             for (size_t j = 0; j < Y; j++)
             {
-                auto s = sf.sample_scale(Vec2i(i, j), scalar);
+                auto s = sf2.sample_scale(Vec2i(i, j), scalar);
         
                 outFile << s << " ";
 
