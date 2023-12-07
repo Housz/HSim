@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
 	// out
 	std::ofstream fs;
-	std::ofstream outFile("a.txt");
+	std::ofstream outFile("sf3sample.txt");
 	if (outFile.is_open())
 	{
 

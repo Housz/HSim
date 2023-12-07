@@ -1,24 +1,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// import { GUI } from 'dat.gui';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-const gui = new GUI();
-gui.add(document, 'title');
-
-let guiObj = {
-	btnCallExe: async ()=>{
-		let response = await fetch('/call');
-	}
-};
-
-let response1 = await fetch('/call');
-
-
-gui.add(guiObj.btnCallExe, "callexe");
 
 import vertexShader from './shaders/vertex.glsl.js';
 import fragmentShader from './shaders/fragment.glsl.js';
 
+/////////////////////////////////// scene ///////////////////////////////////
 const canvas = document.querySelector('#c');
 const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
@@ -38,84 +25,147 @@ const scene = new THREE.Scene();
 	const light = new THREE.DirectionalLight(color, intensity);
 	light.position.set(- 1, 2, 4);
 	scene.add(light);
-
 }
+/////////////////////////////////// scene ///////////////////////////////////
 
 
+/////////////////////////////////// mesh ///////////////////////////////////
 
 const width = 100;
 const height = 100;
 
-const geometry = new THREE.PlaneGeometry(100, 100, 100, 100);
-
-
 const size = width * height;
 const data = new Uint8Array(4 * size);
 
-// for (let i = 0; i < size; i++) {
+const geometry = new THREE.PlaneGeometry(100, 100, 100, 100);
+let texture = new THREE.DataTexture(data, width, height);
+let matTex = new THREE.MeshPhongMaterial({
+	map: texture,
+});
+matTex.map.needsUpdate = true
 
-// 	const stride = i * 4;
-
-// 	let color = new THREE.Color().setHSL(Math.random(), 0.5, 0.5);
-// 	const r = Math.floor(color.r * 255);
-// 	const g = Math.floor(color.g * 255);
-// 	const b = Math.floor(color.b * 255);
-
-// 	data[stride] = r;
-// 	data[stride + 1] = g;
-// 	data[stride + 2] = b;
-// 	data[stride + 3] = 255;
-
-// }
-
-// const texture = new THREE.DataTexture(data, width, height);
-// texture.needsUpdate = true;
-
-let response = await fetch('/data');
-if (response.ok) { // 如果 HTTP 状态码为 200-299
-	// 获取 response body（此方法会在下面解释）
-	let dataText = await response.text();
-
-	let dataArray = dataText.split(/\s+/);
-
-	let colorArray = dataArray.map((value) => mapRange(value, -1, 1, 0, 255));
+let mesh = new THREE.Mesh(geometry, matTex);
+scene.add(mesh);
 
 
-	for (let i = 0; i < size; i++) {
 
-		const stride = i * 4;
+/////////////////////////////////// mesh ///////////////////////////////////
 
-		let r = colorArray[i];
+/////////////////////////////////// GUI ///////////////////////////////////
+const gui = new GUI();
+let guiObj = {
 
-		data[stride] = r;
-		data[stride + 1] = r;
-		data[stride + 2] = r;
-		data[stride + 3] = 255;
+	scale: 1,
+
+	CallExec: onCallExec,
+
+	Load2DTexture: onLoad2DTexture,
+
+	Load3DTexture: onLoad3DTexture,
+};
+
+gui.add(guiObj, 'scale', 0, 1).onChange(async (value) => {
+	console.log(value);
+	let response = await fetch('/call/' + value);
+	if (response.ok) {
 
 	}
 
-	const texture = new THREE.DataTexture(data, width, height);
-	texture.needsUpdate = true;
-
-	let matTex = new THREE.MeshPhongMaterial({
-		map: texture, 
-	});
-	// let matShader = new THREE.ShaderMaterial({
-	// 	// wireframe: true,
-	// 	vertexShader: vertexShader,
-	// 	fragmentShader: fragmentShader,
-	// 	uniforms: {
-	// 		texture: { value: texture }
-	// 	},
-	// });
-
-	const mesh = new THREE.Mesh(geometry, matTex);
-	scene.add(mesh);
+});
+gui.add(guiObj, 'CallExec');
+gui.add(guiObj, 'Load2DTexture');
+gui.add(guiObj, 'Load3DTexture');
+/////////////////////////////////// GUI ///////////////////////////////////
 
 
-} else {
-	alert("HTTP-Error: " + response.status);
+async function onCallExec() {
+	console.log(scale);
+	let response = await fetch('/call');
+	if (response.ok) {
+
+	}
 }
+
+async function onLoad2DTexture() {
+	let response = await fetch('/data2d');
+	if (response.ok) {
+		let dataText = await response.text();
+
+		let dataArray = dataText.split(/\s+/);
+
+		let colorArray = dataArray.map((value) => mapRange(value, -1, 1, 0, 255));
+
+		for (let i = 0; i < size; i++) {
+
+			const stride = i * 4;
+
+			let r = colorArray[i];
+
+			data[stride] = r;
+			data[stride + 1] = r;
+			data[stride + 2] = r;
+			data[stride + 3] = 255;
+
+		}
+
+		const texture = new THREE.DataTexture(data, width, height);
+		texture.needsUpdate = true;
+
+		matTex.map = texture;
+
+	}
+}
+
+
+async function onLoad3DTexture() {
+
+	let response = await fetch('/data3d');
+	if (response.ok) {
+		let dataText = await response.text();
+		let dataArray = dataText.split(/\s+/);
+		let colorArray = dataArray.map((value) => mapRange(value, -1, 1, 0, 255));
+
+		
+
+	}
+
+
+
+}
+
+
+// let response = await fetch('/data2d');
+// if (response.ok) { // 如果 HTTP 状态码为 200-299
+// 	// 获取 response body（此方法会在下面解释）
+// 	let dataText = await response.text();
+
+// 	let dataArray = dataText.split(/\s+/);
+
+// 	let colorArray = dataArray.map((value) => mapRange(value, -1, 1, 0, 255));
+
+
+// 	for (let i = 0; i < size; i++) {
+
+// 		const stride = i * 4;
+
+// 		let r = colorArray[i];
+
+// 		data[stride] = r;
+// 		data[stride + 1] = r;
+// 		data[stride + 2] = r;
+// 		data[stride + 3] = 255;
+
+// 	}
+
+// 	const texture = new THREE.DataTexture(data, width, height);
+// 	texture.needsUpdate = true;
+
+// 	mesh.material.map = texture;
+
+
+// } else {
+// 	alert("HTTP-Error: " + response.status);
+// }
 
 
 const uniforms = {
@@ -156,11 +206,6 @@ gui.add(guiNode, 'my_uniform', 0, 1).onChange(() => {
 function mapRange(value, fromMin, fromMax, toMin, toMax) {
 	return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
 }
-
-
-
-
-
 
 
 function resizeRendererToDisplaySize(renderer) {

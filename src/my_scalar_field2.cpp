@@ -24,7 +24,6 @@ public:
         return std::sin(pos.x * scalar) * std::sin(pos.y * scalar);
     }
 
-	// to do
     Vec2<T> gradient(const Vec2i& pos) override
     {
         Vec2<T> grad;
@@ -54,7 +53,7 @@ int main(int argc, char *argv[])
 
     // out
     std::ofstream fs;
-    std::ofstream outFile("a.txt");
+    std::ofstream outFile("sf2sample.txt");
     if (outFile.is_open()) {
 
         for (size_t i = 0; i < X; i++)

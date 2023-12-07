@@ -5,19 +5,11 @@ const fs = require('fs');
 
 const router = express.Router();
 
-let result = fs.readFileSync("a.txt", 'utf8');
 
+router.get('/call/:scale', (req, res) => {
 
-router.get('/data', (req, res) => {
-
-	console.log("data");
-	res.send(result);
-});
-
-router.get('/call', (req, res) => {
-
-	console.log("call");
-	exec(`my_scalar_field2.exe 0.07`, (err, stdout, stderr) => {
+	console.log(req.params);
+	exec(`my_scalar_field2.exe ` + req.params.scale, (err, stdout, stderr) => {
 		if (err) {
 			console.error(`Error: ${err.message}`);
 			return;
@@ -27,6 +19,23 @@ router.get('/call', (req, res) => {
 	res.send("callres");
 });
 
+
+
+
+
+router.get('/data2d', (req, res) => {
+
+	console.log("data2d");
+	let result = fs.readFileSync("a.txt", 'utf8');
+	res.send(result);
+});
+
+router.get('/data3d', (req, res) => {
+
+	console.log("data3d");
+	let result = fs.readFileSync("a.txt", 'utf8');
+	res.send(result);
+});
 
 
 
