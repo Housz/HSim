@@ -9,7 +9,7 @@
 - [x] nd matrix dense
 - [ ] nd matrix sparse
 
-## sapce data structures
+## spacial data structures
 - [x] 2d scalar field
 - [ ] 3d scalar field
 - [ ] 2d vector field

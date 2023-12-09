@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.26)
+find_package(OpenVDB CONFIG REQUIRED)
 find_package(TBB REQUIRED)
 
 add_executable(testvec2 test_vec2.cpp)
@@ -13,6 +15,9 @@ target_link_libraries(testmat PUBLIC TBB::tbb)
 
 add_executable(testscalarfield2 test_scalar_field2.cpp)
 target_link_libraries(testscalarfield2 PUBLIC TBB::tbb)
+
+add_executable(testiovdb test_io_vdb.cpp)
+target_link_libraries(testiovdb PUBLIC OpenVDB::openvdb)
 
 add_subdirectory(benchmarks)
 
