@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.26)
 
 project(HSim)
+
+find_package(OpenVDB CONFIG REQUIRED)
 
 include_directories(include)
 
@@ -11,6 +13,8 @@ include_directories(include)
 add_executable(main src/main.cpp)
 add_executable(my_scalar_field2 src/my_scalar_field2.cpp)
 add_executable(my_scalar_field3 src/my_scalar_field3.cpp)
+target_link_libraries(my_scalar_field3 PUBLIC OpenVDB::openvdb)
+
 
 add_subdirectory(tests)
 

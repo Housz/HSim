@@ -4,6 +4,8 @@
 
 #include <HSim/scalar_field3.h>
 
+#include <openvdb/openvdb.h>
+
 using namespace HSim;
 
 template <typename T, size_t X, size_t Y, size_t Z>
@@ -39,6 +41,13 @@ public:
 
 int main(int argc, char *argv[])
 {
+	openvdb::initialize();
+
+	openvdb::FloatGrid::Ptr grid =
+		openvdb::FloatGrid::create(/*background value=*/);
+
+	openvdb::FloatGrid::Accessor accessor = grid->getAccessor();
+
 	float scalar = 1;
 	if (argc == 2)
 	{
@@ -58,11 +67,13 @@ int main(int argc, char *argv[])
 		{
 			for (size_t j = 0; j < Y; j++)
 			{
-				for(size_t k = 0; k < Z; k++)
+				for (size_t k = 0; k < Z; k++)
 				{
 					auto s = sf3.sample_scale(Vec3i(i, j, k), scalar);
-
 					outFile << s << " ";
+
+					openvdb::Coord ijk(i, j, k);
+					accessor.setValue(ijk, s);
 				}
 				outFile << std::endl;
 			}
@@ -71,6 +82,13 @@ int main(int argc, char *argv[])
 
 		outFile.close();
 		std::cout << "out done: a.txt" << std::endl;
+
+		grid->setName("mygrid");
+		openvdb::GridPtrVec grids;
+		grids.push_back(grid);
+		openvdb::io::File file("mygrids.vdb");
+		file.write(grids);
+		file.close();
 	}
 	else
 	{
