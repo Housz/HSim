@@ -12,6 +12,7 @@ namespace HSim
     template<typename T>
     class Grid2
     {
+    public:
         Grid2() {}
         ~Grid2() {}
 
