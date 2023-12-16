@@ -19,6 +19,9 @@ target_link_libraries(testscalarfield2 PUBLIC TBB::tbb)
 add_executable(testiovdb test_io_vdb.cpp)
 target_link_libraries(testiovdb PUBLIC OpenVDB::openvdb)
 
+add_executable(testscalargrid3 test_scalar_grid3.cpp)
+target_link_libraries(testscalargrid3 PUBLIC OpenVDB::openvdb)
+
 add_subdirectory(benchmarks)
 
 
