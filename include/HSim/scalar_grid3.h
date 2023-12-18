@@ -33,6 +33,11 @@ namespace HSim
 		Vec3<T> gradientAt(size_t, size_t, size_t);
 		T laplacianAt(size_t, size_t, size_t);
 
+		// for subclasses
+	public:
+		virtual Vec3i dataSize() = 0;
+		virtual Vec3<T> dataOrigin() = 0;
+
 		// data
 	public:
 		std::vector<T> _data;

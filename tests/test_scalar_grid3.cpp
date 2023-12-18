@@ -1,5 +1,6 @@
 #include <HSim/scalar_grid3.h>
 #include <HSim/cell_center_scalar_grid3.h>
+#include <HSim/vertex_center_scalar_grid3.h>
 
 int main()
 {
@@ -7,8 +8,8 @@ int main()
 
 	std::vector<float> data(n * n * n, 1);
 
-	// HSim::ScalarGrid3<float> sg3(n, n, n);
-	HSim::ScalarGrid3<float> sg3({n, n, n});
+	// HSim::CellCenterScalarGrid3<float> sg3({n, n, n});
+	HSim::VertexCenterScalarGrid3<float> sg3({n, n, n});
 
 	sg3.setData(data);
 
@@ -50,6 +51,10 @@ int main()
 
 	sg3.fill(3);
 	std::cout << sg3(99, 99, 99);
+
+	std::cout << sg3.dataSize();
+	std::cout << sg3.dataOrigin();
+	
 
 	return 0;
 }

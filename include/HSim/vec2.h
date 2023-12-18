@@ -82,6 +82,11 @@ namespace HSim
             return (x == v_.x) && (y == v_.y);
         }
 
+        bool isZero()
+        {
+            return (x==0 && y==0);
+        }
+
         //// new_vec2 = this_vec2 (operator) parameters
 
         // add

@@ -423,6 +423,17 @@ namespace HSim
             return true;
         }
 
+        bool isZero()
+        {
+            for (size_t i = 0; i < size(); i++)
+            {
+                if(container[i] != 0)
+                    return false;
+            }
+
+            return true;
+        }
+
         template <typename T1>
         bool operator==(Vec<T1> &v_)
         {

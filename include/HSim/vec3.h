@@ -86,6 +86,11 @@ namespace HSim
             return (x == v_.x) && (y == v_.y) && (z == v_.z);
         }
 
+        bool isZero()
+        {
+            return (x==0 && y==0 && z==0);
+        }
+
         //// new_Vec3 = this_Vec3 (operator) parameters
 
         // add
