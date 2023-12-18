@@ -1,18 +1,3 @@
-## Coordinate System:
-
-```
-Right-handed coordinate system:
-
-    y (j)
-    |
-    |   
-   0|_ _ _ _ x (i)
-   /
-  /
- /
-z (k)
-```
-
 ## Grids
 
 ```
