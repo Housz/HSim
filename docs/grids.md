@@ -1,4 +1,24 @@
-## Grids
+# Grids
+
+## class design
+
+```
+Grid3
+	├─ ScalarGrid3
+	│			 ├─ CellCenterScalarGrid3
+	│			 └─ VertexCenterScalarGrid3
+	│
+	└─ VectorGrid3
+				 ├─ FaceCenterVectorGrid3 (MAC/Staggered Grid)
+				 └─ CollocatedVectorGrid3
+									   ├─ CellCenterVectorGrid3
+									   └─ VertexCenterVectorGrid3
+
+
+```
+
+
+## spacial data structures
 
 ```
 Grid
