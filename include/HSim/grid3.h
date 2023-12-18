@@ -18,9 +18,18 @@ namespace HSim
         Grid3() {}
         ~Grid3() {}
 
+        Grid3(size_t x, size_t y, size_t z) { _resolution = {x, y, z}; }
+        Grid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1}):
+        _resolution(resolution), _origin(origin), _gridSpacing(gridSpacing)
+        {}
+        
+
     public:
         Vec3i resolution() { return _resolution; }
         void setResolution(Vec3i r) { _resolution = r; }
+        size_t sizeX() { return _resolution.x; }
+        size_t sizeY() { return _resolution.y; }
+        size_t sizeZ() { return _resolution.z; }
 
         Vec3<T> origin() { return _origin; }
         void setOrigin(Vec3<T> origin) { _origin = origin; }

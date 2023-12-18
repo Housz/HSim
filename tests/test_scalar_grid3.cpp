@@ -7,9 +7,12 @@ int main()
 
 	std::vector<float> data(n * n * n, 1);
 
-	HSim::ScalarGrid3<float> sg3(n, n, n);
+	// HSim::ScalarGrid3<float> sg3(n, n, n);
+	HSim::ScalarGrid3<float> sg3({n, n, n});
 
 	sg3.setData(data);
+
+	std::cout << sg3._gridSpacing << sg3._origin << sg3._resolution << std::endl;
 
 	std::cout << sg3._data[0] << std::endl;
 	sg3(1, 2, 3) = 2;
@@ -17,21 +20,36 @@ int main()
 	std::cout << sg3.origin() << std::endl;
 	std::cout << sg3.resolution() << std::endl;
 
-	auto& func = [&](size_t i, size_t j, size_t k)
+	// auto func = [&](size_t i, size_t j, size_t k)
+	// {
+	// 	sg3(i, j, k) = i + j*sg3.sizeX() + k*sg3.sizeY()*sg3.sizeX();
+	// };
+
+	// sg3.parallelForEachCell(func);
+	// sg3.forEachCell(func);
+
+	// std::cout << sg3(0, 0, 0) << std::endl;
+	// std::cout << sg3(n-1, 0, 0) << std::endl;
+	// std::cout << sg3(1, 0, 0) << std::endl;
+	// std::cout << sg3(0, 1, 0) << std::endl;
+	// std::cout << sg3(0, 0, 1) << std::endl;
+	// std::cout << sg3(1, 1, 1) << std::endl;
+
+	auto func_laplacian = [&](size_t i, size_t j, size_t k)
 	{
-		sg3(i, j, k) = 3;
+		auto lapl = sg3.laplacianAt(i, j, k);
 	};
 
-	sg3.parallelForEachCell(func);
-	sg3.forEachCell(func);
+	auto func_gradient = [&](size_t i, size_t j, size_t k)
+	{
+		auto grad = sg3.gradientAt(i, j, k);
+	};
 
-	std::cout << sg3(1, 2, 3) << std::endl;
+	sg3.forEachCell(func_laplacian);
+	sg3.forEachCell(func_gradient);
 
-
-	// sg3.parallelForEachCell([&](size_t i, size_t j, size_t k)
-	// {
-	// 	sg3(i, j, k) = 3;
-	// });
+	sg3.fill(3);
+	std::cout << sg3(99, 99, 99);
 
 	return 0;
 }
