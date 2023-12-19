@@ -35,20 +35,20 @@ namespace HSim
 	template <typename T>
 	Vec3i VertexCenterScalarGrid3<T>::dataSize()
 	{
-		if (_resolution.isZero())
+		if (_gridResolution.isZero())
 		{
 			return Vec3i();
 		}
 		else
 		{
-			return _resolution + Vec3i(1, 1, 1);
+			return _gridResolution + Vec3i(1, 1, 1);
 		}
 	}
 
 	template <typename T>
 	Vec3<T> VertexCenterScalarGrid3<T>::dataOrigin()
 	{
-		return _origin;
+		return _girdOrigin;
 	}
 
 

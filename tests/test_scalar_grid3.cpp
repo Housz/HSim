@@ -13,13 +13,13 @@ int main()
 
 	sg3.setData(data);
 
-	std::cout << sg3._gridSpacing << sg3._origin << sg3._resolution << std::endl;
+	std::cout << sg3._gridSpacing << sg3._girdOrigin << sg3._gridResolution << std::endl;
 
 	std::cout << sg3._data[0] << std::endl;
 	sg3(1, 2, 3) = 2;
 	std::cout << sg3(1, 2, 3) << std::endl;
-	std::cout << sg3.origin() << std::endl;
-	std::cout << sg3.resolution() << std::endl;
+	std::cout << sg3.gridOrigin() << std::endl;
+	std::cout << sg3.gridResolution() << std::endl;
 
 	// auto func = [&](size_t i, size_t j, size_t k)
 	// {

@@ -23,13 +23,13 @@ namespace HSim
 
 	template <typename T>
 	CellCenterScalarGrid3<T>::CellCenterScalarGrid3(size_t x, size_t y, size_t z)
-	:ScalarGrid3<T>(x, y, z)
+	:Grid3<T>(x, y, z)
 	{
 	}
 
 	template <typename T>
 	CellCenterScalarGrid3<T>::CellCenterScalarGrid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1})
-	:ScalarGrid3<T>(resolution, origin, gridSpacing)
+	:Grid3<T>(resolution, origin, gridSpacing)
 	{
 	}
 

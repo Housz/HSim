@@ -22,6 +22,9 @@ target_link_libraries(testiovdb PUBLIC OpenVDB::openvdb)
 add_executable(testscalargrid3 test_scalar_grid3.cpp)
 target_link_libraries(testscalargrid3 PUBLIC OpenVDB::openvdb)
 
+add_executable(testfacecentergrid3 test_face_center_grid3.cpp)
+target_link_libraries(testfacecentergrid3 PUBLIC OpenVDB::openvdb)
+
 add_subdirectory(benchmarks)
 
 

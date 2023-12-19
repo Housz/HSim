@@ -19,8 +19,8 @@ namespace HSim
 
 		// setter getter
 	public:
-		void setData(std::vector<T> &sourceData) override;
-		void getData(std::vector<T> &tatgetData) override;
+		void setData(std::vector<T> &sourceData);
+		void getData(std::vector<T> &targetData);
 
 		T &operator()(size_t, size_t, size_t);
 
@@ -93,9 +93,9 @@ namespace HSim
 	template <typename T>
 	Vec3<T> ScalarGrid3<T>::gradientAt(size_t i, size_t j, size_t k)
 	{
-		size_t sizeX = _resolution.x;
-		size_t sizeY = _resolution.y;
-		size_t sizeZ = _resolution.z;
+		size_t sizeX = _gridResolution.x;
+		size_t sizeY = _gridResolution.y;
+		size_t sizeZ = _gridResolution.z;
 		assert(i < sizeX && j < sizeY && k < sizeZ);
 
 		Vec3<T> grad;
@@ -122,9 +122,9 @@ namespace HSim
 	template <typename T>
 	T ScalarGrid3<T>::laplacianAt(size_t i, size_t j, size_t k)
 	{
-		size_t sizeX = _resolution.x;
-		size_t sizeY = _resolution.y;
-		size_t sizeZ = _resolution.z;
+		size_t sizeX = _gridResolution.x;
+		size_t sizeY = _gridResolution.y;
+		size_t sizeZ = _gridResolution.z;
 		assert(i < sizeX && j < sizeY && k < sizeZ);
 
 		T center= dataAt(i, j, k);
