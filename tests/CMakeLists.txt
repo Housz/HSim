@@ -32,4 +32,8 @@ add_executable(testfacecentergrid3 test_face_center_grid3.cpp)
 target_link_libraries(testfacecentergrid3 PUBLIC HSim)
 target_link_libraries(testfacecentergrid3 PUBLIC OpenVDB::openvdb)
 
+add_executable(test_grid_fluid_solver3 test_grid_fluid_solver3.cpp)
+target_link_libraries(test_grid_fluid_solver3 PUBLIC HSim)
+
+
 add_subdirectory(benchmarks)
