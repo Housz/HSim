@@ -19,3 +19,5 @@ target_include_directories(HSim PUBLIC include)
 add_subdirectory(examples)
 
 add_subdirectory(tests)
+
+# todo speed up compile

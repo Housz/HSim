@@ -16,6 +16,9 @@ add_executable(testmat test_mat.cpp)
 target_link_libraries(testmat PUBLIC HSim)
 target_link_libraries(testmat PUBLIC TBB::tbb)
 
+add_executable(testmat33 test_mat33.cpp)
+target_link_libraries(testmat33 PUBLIC HSim)
+
 add_executable(testscalarfield2 test_scalar_field2.cpp)
 target_link_libraries(testscalarfield2 PUBLIC HSim)
 target_link_libraries(testscalarfield2 PUBLIC TBB::tbb)

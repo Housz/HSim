@@ -528,7 +528,6 @@ namespace HSim
 
     template <typename size_t M, size_t N>
     using Matd = Mat<double, M, N>;
-    // typedef Mat<float, M, N> Matf;
 
 
     // typedef Mat<float, 2, 2> Mat22f;
