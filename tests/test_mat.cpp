@@ -6,13 +6,13 @@
 
 int main()
 {
-    HSim::Mat22d mat22;
-    HSim::Mat33d mat33 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    HSim::Matd<2, 2> mat22;
+    HSim::Matd<3, 3> mat33 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     std::cout << mat33;
 
     // auto i = mat33[0];
 
-    HSim::Mat33f mat33f(mat33);
+    HSim::Matf<3, 3> mat33f(mat33);
     std::cout << mat33f;
 
     mat33.set(1);
@@ -27,7 +27,7 @@ int main()
     mat33.set_col(2, 0);
     std::cout << mat33;
 
-    HSim::Mat44d mat44;
+    HSim::Matd<4, 4> mat44;
     mat44.set_diag(1);
     std::cout << mat44;
     mat44 += 1;

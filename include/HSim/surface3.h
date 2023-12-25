@@ -8,7 +8,7 @@ namespace HSim
 	class Surface3
 	{
 	public:
-		Surface3(/* args */){};
+		Surface3(){};
 		~Surface3(){};
 	
 	public:

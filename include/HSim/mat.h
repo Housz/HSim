@@ -19,6 +19,8 @@ namespace HSim
     public:
         std::vector<std::vector<T>> container;
 
+        // to-do array2 container
+
         // std::vector<T> container(M*N); 
 
         // typename std::vector<T>::iterator begin() { return container.begin(); }
@@ -122,6 +124,7 @@ namespace HSim
         {
             Mat<T, M, N> m;
 
+            // todo ji
             parallelFor(size_t(0), M, [&](size_t i){
                 parallelFor(size_t(0), N, [&](size_t j){
                     m[i][j] = container[i][j] + T(value);
@@ -517,16 +520,24 @@ namespace HSim
     }
     
 
-    
+    template <typename size_t M, size_t N>
+    using Mati = Mat<int, M, N>;
+
+    template <typename size_t M, size_t N>
+    using Matf = Mat<float, M, N>;
+
+    template <typename size_t M, size_t N>
+    using Matd = Mat<double, M, N>;
+    // typedef Mat<float, M, N> Matf;
 
 
-    typedef Mat<float, 2, 2> Mat22f;
-    typedef Mat<double, 2, 2> Mat22d;
+    // typedef Mat<float, 2, 2> Mat22f;
+    // typedef Mat<double, 2, 2> Mat22d;
 
-	typedef Mat<float, 3, 3> Mat33f;
-    typedef Mat<double, 3, 3> Mat33d;
+	// typedef Mat<float, 3, 3> Mat33f;
+    // typedef Mat<double, 3, 3> Mat33d;
 
-	typedef Mat<float, 4, 4> Mat44f;
-    typedef Mat<double, 4, 4> Mat44d;
+	// typedef Mat<float, 4, 4> Mat44f;
+    // typedef Mat<double, 4, 4> Mat44d;
 
 } // namespace HSim

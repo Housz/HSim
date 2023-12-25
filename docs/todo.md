@@ -29,3 +29,6 @@
 - [ ] Web Viewer: 2d vector field
 - [ ] Web Viewer: 3d vector field
 - [ ] VDB writer
+
+## current road map
+mat44(transform3) -> surface3 -> im/ex surface3, mesh3 -> gridsolver3
