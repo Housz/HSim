@@ -3,22 +3,19 @@ cmake_minimum_required(VERSION 3.26)
 project(HSim)
 
 find_package(OpenVDB CONFIG REQUIRED)
+find_package(TBB REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(benchmark REQUIRED)
 
-include_directories(include)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
 
-# file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/.cpp)
-# add_executable(main)
-# target_sources(main PUBLIC ${sources})
+file(GLOB_RECURSE source CONFIGURE_DEPENDS include/*.h src/*.cpp)
 
-add_executable(main src/main.cpp)
-add_executable(my_scalar_field2 src/my_scalar_field2.cpp)
-add_executable(my_scalar_field3 src/my_scalar_field3.cpp)
-target_link_libraries(my_scalar_field3 PUBLIC OpenVDB::openvdb)
+add_library(HSim OBJECT ${source})
+target_include_directories(HSim PUBLIC include)
 
+add_subdirectory(examples)
 
 add_subdirectory(tests)
-
-# file(GLOB_RECURSE tests_srcs CONFIGURE_DEPENDS tests/*.cpp)
-# add_executable(test)
-# target_sources(test PUBLIC ${tests_srcs})
-

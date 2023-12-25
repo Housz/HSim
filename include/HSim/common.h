@@ -8,3 +8,4 @@
 #include <vector>
 #include <limits>
 #include <utility>
+#include <memory>
