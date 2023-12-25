@@ -27,17 +27,18 @@ namespace HSim
 
         // setter, getter
     public:
-        T operator()(size_t i, size_t j, size_t k)
+        T& operator()(size_t i, size_t j, size_t k)
         {
             return dataAt(i, j, k);
         }
 
-        T dataAt(size_t i, size_t j, size_t k)
+        T& dataAt(size_t i, size_t j, size_t k)
         {
+            assert( i<_size.x && j<_size.y && k<_size.z);
             return _data[i + j * sizeX() + k * sizeX() * sizeY()];
         }
 
-        T operator()(size_t i)
+        T& operator()(size_t i)
         {
             return _data[i];
         }
@@ -47,6 +48,11 @@ namespace HSim
         size_t sizeY() { return _size.y; }
         size_t sizeZ() { return _size.z; }
 
+        void resize(size_t x, size_t y, size_t z)
+        {   
+            _size = {x, y, z};
+            _data.resize(_size.x * _size.y * _size.z);
+        }
 
         void clear()
         {

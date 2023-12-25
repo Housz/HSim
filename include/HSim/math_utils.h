@@ -5,5 +5,7 @@
 namespace HSim
 {
     
+	// barycentric
+	// barycentric()
     
 } // namespace HSim
