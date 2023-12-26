@@ -85,13 +85,13 @@ namespace HSim
 
         T& operator()(size_t i, size_t j)
         {
-            assert(i<3 && j <3);
-            return container[i + j*3];
+            assert(i<3 && j<3);
+            return container[i*3 + j];
         }
 
         T& operator()(size_t i)
         {
-            assert(i<3 && j <3);
+            assert(i<9);
             return container[i];
         }
 
@@ -181,15 +181,17 @@ namespace HSim
 
         // mul n
         template <typename T1>
-        Mat33<T> add(T1 value)
+        Mat33<T> mul(T1 value)
         {
             Mat33<T> m;
             for (size_t i = 0; i < 9; i++)
             {
-                m(i) *= value;
+                m(i) = container[i] * value;
             }
             return m;
         }
+
+
 
         
         // mul m
@@ -244,6 +246,32 @@ namespace HSim
 
 
     // mat * n
+    template <typename T1, typename T2>
+    Mat33<T1> operator*(Mat33<T1>& m_, T2 value)
+    {
+        // Mat33<T1> m;
+        // for (size_t i = 0; i < 9; i++)
+        // {
+        //     m(i) = m_(i) * value;
+        // }
+        // return m;
+        return m_.mul(value);
+    }
+
+    template <typename T1, typename T2>
+    Mat33<T1> operator*(T2 value, Mat33<T1>& m_)
+    {
+        // Mat33<T1> m;
+        // for (size_t i = 0; i < 9; i++)
+        // {
+        //     m(i) = m_(i) * value;
+        // }
+        // return m;
+        return m_.mul(value);
+    }
+ 
+
+
     // n * mat
     // mat * mat
     // v * mat

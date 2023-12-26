@@ -218,7 +218,7 @@ namespace HSim
         }
 
         template <typename T1>
-        Mat<T, M, N> mul(T1 value)
+        Mat<T, M, N> mul(T1 value) const
         {
             Mat<T, M, N> m;
 
@@ -232,7 +232,7 @@ namespace HSim
         }
 
         template <typename T1>
-        Mat<T, M, N> mul(Mat<T1, M, N> &m_)
+        Mat<T, M, N> mul(Mat<T1, M, N> &m_) const
         {
             Mat<T, M, N> m;
             parallelFor(size_t(0), M, [&](size_t i){
@@ -334,6 +334,11 @@ namespace HSim
         }
         
 		std::vector<T>& operator[] (size_t i)
+		{
+			return container[i];
+		}
+
+		std::vector<T> operator[] (size_t i) const
 		{
 			return container[i];
 		}
@@ -478,20 +483,21 @@ namespace HSim
 
     // n * mat
     template <typename T1, typename T2, size_t M, size_t N>
-    Mat<T2, M, N> operator*(T1 value, Mat<T2, M, N>& m_)
+    Mat<T2, M, N> operator*(T1 value, const Mat<T2, M, N>& m_)
     {
         return m_.mul(value);
     }
 
+    // mat * n
     template <typename T1, typename T2, size_t M, size_t N>
-    Mat<T1, M, N> operator*(Mat<T1, M, N>& m_, T2 value)
+    Mat<T1, M, N> operator*(const Mat<T1, M, N>& m_, T2 value)
     {
         return m_.mul(value);
     }
 
     // matC(m x n) = matA(m x p) * matB(p x n)
     template <typename T1, typename T2, size_t M, size_t N, size_t P>
-    Mat<T1, M, N> operator*(Mat<T1, M, P> A, Mat<T2, P, N> B)
+    Mat<T1, M, N> operator*(const Mat<T1, M, P> &A, const Mat<T2, P, N> &B)
     {
         Mat<T1, M, N> C;
 
@@ -509,7 +515,8 @@ namespace HSim
                             {
                                 for (size_t col = r.begin(); col < r.end(); col++)
                                 {
-                                    local_sum += A[i][col] * B[col][j];
+                                    // local_sum += A[i][col] * B[col][j];
+                                    local_sum += A(i, col) * B(col, j);
                                 }
                                 return local_sum;
                             },
