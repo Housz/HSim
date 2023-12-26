@@ -20,4 +20,15 @@ add_subdirectory(examples)
 
 add_subdirectory(tests)
 
-# todo speed up compile
+if (WIN32)
+	add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
+endif()
+
+if (NOT MSVC)
+	find_program(CCACHE_PROGRAM ccache)
+	if (CCACHE PROGRAM)
+		message(STATUS "Found CCache: sCCACHE_PROGRAM]")
+		set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${CCACHE_PROGRAM})
+		set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${CCACHE_PROGRAM})
+	endif()
+endif()

@@ -2,6 +2,7 @@
 
 #include <HSim/common.h>
 #include <HSim/vec.h>
+#include <HSim/array2.h>
 #include <HSim/parallel.h>
 
 namespace HSim
@@ -19,7 +20,7 @@ namespace HSim
     public:
         std::vector<std::vector<T>> container;
 
-        // to-do array2 container
+        // HSim::Array2<T> container;
 
         // std::vector<T> container(M*N); 
 
@@ -377,11 +378,11 @@ namespace HSim
         }
 
         // m * n
-        template <typename T1>
-        Mat<T, M, N> operator*(T1 value)
-        {
-            return mul(value);
-        }
+        // template <typename T1>
+        // Mat<T, M, N> operator*(T1 value)
+        // {
+        //     return mul(value);
+        // }
 
         // Mat() * m
         // template <typename T1>
@@ -477,7 +478,13 @@ namespace HSim
 
     // n * mat
     template <typename T1, typename T2, size_t M, size_t N>
-    Mat<T2, M, N> operator*(T1 value, Mat<T2, M, N> m_)
+    Mat<T2, M, N> operator*(T1 value, Mat<T2, M, N>& m_)
+    {
+        return m_.mul(value);
+    }
+
+    template <typename T1, typename T2, size_t M, size_t N>
+    Mat<T1, M, N> operator*(Mat<T1, M, N>& m_, T2 value)
     {
         return m_.mul(value);
     }
@@ -490,9 +497,9 @@ namespace HSim
 
         tbb::parallel_for(tbb::blocked_range2d<size_t>(0, M, 0, N),
             [&](tbb::blocked_range2d<size_t> rA){
-                for(size_t i = rA.rows().begin(); i < rA.rows().end(); i++)
+                for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
                 {
-                    for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
+                    for(size_t i = rA.rows().begin(); i < rA.rows().end(); i++)
                     {
                         // C[i][j]
                         T1 sum = parallelReduce(

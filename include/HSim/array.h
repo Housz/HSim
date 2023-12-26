@@ -4,7 +4,11 @@
 
 namespace HSim
 {
-    
+    /**
+     * @brief 2D/3D array base class
+     * 
+     * @tparam T 
+     */
     template <typename T>
     class Array
     {

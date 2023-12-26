@@ -5,7 +5,6 @@
 
 namespace HSim
 {
-
     template <typename T>
     class Array3 : public Array<T>
     {
@@ -43,7 +42,7 @@ namespace HSim
             return _data[i];
         }
 
-        Vec3i size() { return _size; }
+        Size3 size() { return _size; }
         size_t sizeX() { return _size.x; }
         size_t sizeY() { return _size.y; }
         size_t sizeZ() { return _size.z; }
@@ -61,7 +60,7 @@ namespace HSim
         }
 
     public:
-        Vec3i _size;
+        Size3 _size;
     };
 
 } // namespace HSim
