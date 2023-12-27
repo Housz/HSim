@@ -42,7 +42,7 @@ namespace HSim
             x = x_;
             y = y_;
         }
-        void set(Vec2 &v_)
+        void set(const Vec2 &v_)
         {
             x = v_.x;
             y = v_.y;
@@ -90,26 +90,26 @@ namespace HSim
         //// new_vec2 = this_vec2 (operator) parameters
 
         // add
-        Vec2<T> add(T a_) { return Vec2<T>(x + a_, y + a_); }
-        Vec2<T> add(Vec2<T> &v_) { return Vec2<T>(x + v_.x, y + v_.y); }
+        Vec2<T> add(T a_) const { return Vec2<T>(x + a_, y + a_); }
+        Vec2<T> add(const Vec2<T> &v_) const  { return Vec2<T>(x + v_.x, y + v_.y); }
 
         // sub
-        Vec2<T> sub(T a_) { return Vec2<T>(x - a_, y - a_); }
-        Vec2<T> sub(Vec2<T> &v_) { return Vec2<T>(x - v_.x, y - v_.y); }
+        Vec2<T> sub(T a_) const { return Vec2<T>(x - a_, y - a_); }
+        Vec2<T> sub(const Vec2<T> &v_) const  { return Vec2<T>(x - v_.x, y - v_.y); }
 
         // mul
-        Vec2<T> mul(T a_) { return Vec2<T>(x * a_, y * a_); }
-        Vec2<T> mul(Vec2<T> &v_) { return Vec2<T>(x * v_.x, y * v_.y); }
+        Vec2<T> mul(T a_) const { return Vec2<T>(x * a_, y * a_); }
+        Vec2<T> mul(const Vec2<T> &v_) const { return Vec2<T>(x * v_.x, y * v_.y); }
 
         // div
-        Vec2<T> div(T a_) { return Vec2<T>(x / a_, y / a_); }
-        Vec2<T> div(Vec2<T> &v_) { return Vec2<T>(x / v_.x, y / v_.y); }
+        Vec2<T> div(T a_) const { return Vec2<T>(x / a_, y / a_); }
+        Vec2<T> div(const Vec2<T> &v_) const { return Vec2<T>(x / v_.x, y / v_.y); }
 
         // dot
-        T dot(Vec2<T> &v_) { return x * v_.x + y * v_.y; }
+        T dot(const Vec2<T> &v_) const { return x * v_.x + y * v_.y; }
 
         // cross
-        T cross(Vec2<T> &v_) { return x * v_.y - v_.x * y; }
+        T cross(const Vec2<T> &v_) const { return x * v_.y - v_.x * y; }
 
         //// this_vec2 = this_vec2 (operator) parameters
 
@@ -118,7 +118,7 @@ namespace HSim
             x += a_;
             y += a_;
         }
-        void add_self(Vec2<T> &v_)
+        void add_self(const Vec2<T> &v_)
         {
             x += v_.x;
             y += v_.y;
@@ -129,7 +129,7 @@ namespace HSim
             x -= a_;
             y -= a_;
         }
-        void sub_self(Vec2<T> &v_)
+        void sub_self(const Vec2<T> &v_)
         {
             x -= v_.x;
             y -= v_.y;
@@ -140,7 +140,7 @@ namespace HSim
             x *= a_;
             y *= a_;
         }
-        void mul_self(Vec2<T> &v_)
+        void mul_self(const Vec2<T> &v_)
         {
             x *= v_.x;
             y *= v_.y;
@@ -151,7 +151,7 @@ namespace HSim
             x /= a_;
             y /= a_;
         }
-        void div_self(Vec2<T> &v_)
+        void div_self(const Vec2<T> &v_)
         {
             x /= v_.x;
             y /= v_.y;
@@ -160,6 +160,24 @@ namespace HSim
         //// Operators
 
         T &operator[](size_t i)
+        {
+            assert(i < 2);
+            return (&x)[i];
+        }
+
+        T operator[](size_t i) const
+        {
+            assert(i < 2);
+            return (&x)[i];
+        }
+
+        T &operator()(size_t i)
+        {
+            assert(i < 2);
+            return (&x)[i];
+        }
+
+        T operator()(size_t i) const
         {
             assert(i < 2);
             return (&x)[i];
@@ -179,35 +197,36 @@ namespace HSim
         }
 
 
-        Vec2 operator+(Vec2<T> &v_) { return add(v_); }
+        Vec2 operator+(const Vec2<T> &v_) const { return add(v_); }
 
-        Vec2 operator-(Vec2<T> &v_) { return sub(v_); }
+        Vec2 operator-(const Vec2<T> &v_) const { return sub(v_); }
+        Vec2 operator-() const { return mul(-1); }
 
-        Vec2 operator*(Vec2<T> &v_) { return mul(v_); }
+        Vec2 operator*(const Vec2<T> &v_) const { return mul(v_); }
         Vec2 operator*(T a_) { return mul(a_); }
 
-        Vec2 operator/(Vec2<T> &v_) { return div(v_); }
-        Vec2 operator/(T a_) { return div(a_); }
+        Vec2 operator/(const Vec2<T> &v_) const { return div(v_); }
+        Vec2 operator/(T a_) const { return div(a_); }
 
-        Vec2 &operator+=(Vec2<T> &v_)
+        Vec2 &operator+=(const Vec2<T> &v_)
         {
             add_self(v_);
             return (*this);
         }
 
-        Vec2 &operator-=(Vec2<T> &v_)
+        Vec2 &operator-=(const Vec2<T> &v_)
         {
             sub_self(v_);
             return (*this);
         }
 
-        Vec2 &operator*=(Vec2<T> &v_)
+        Vec2 &operator*=(const Vec2<T> &v_)
         {
             mul_self(v_);
             return (*this);
         }
 
-        Vec2 &operator/=(Vec2<T> &v_)
+        Vec2 &operator/=(const Vec2<T> &v_)
         {
             div_self(v_);
             return (*this);
@@ -232,7 +251,7 @@ namespace HSim
         return os;
     }
 
-        // n * v
+    // n * v
     template <typename T1, typename T2>
     Vec2<T1> operator*(T2 n, Vec2<T1>& v)
     {

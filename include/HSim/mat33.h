@@ -248,9 +248,10 @@ namespace HSim
             return *this;
         }
         
-        Mat33<T> operator-()
+        Mat33<T> operator-() const
         {
-            return (*this) * -1;
+            // return (*this) * -1;
+            return mul(-1);
         }
 
 
@@ -383,7 +384,8 @@ namespace HSim
     template <typename T1, typename T2>
     Mat33<T1> operator-(T1 value, const Mat33<T2> &m_)
     {
-        return (-1*m_).add(value);
+        // return (-1*m_).add(value);
+        return -m_.add(value);
     }
 
     // mat * n
@@ -406,7 +408,32 @@ namespace HSim
         return m1.mul(m2);
     }
 
-    
+    template <typename T1, typename T2>
+    Vec3<T2> operator*(const Mat33<T1> &m_, const Vec3<T2> &v_)
+    {
+        Vec3<T2> v
+        (
+            m_(0)*v_(0) + m_(1)*v_(1) + m_(2)*v_(2),
+            m_(3)*v_(0) + m_(4)*v_(1) + m_(5)*v_(2),
+            m_(6)*v_(0) + m_(7)*v_(1) + m_(8)*v_(2)
+        );
+
+        return v;
+    }
+
+    template <typename T1, typename T2>
+    Vec3<T2> operator*(const Vec3<T1> &v_, const Mat33<T2> &m_)
+    {
+        Vec3<T2> v
+        (
+            m_(0)*v_(0) + m_(1)*v_(1) + m_(2)*v_(2),
+            m_(3)*v_(0) + m_(4)*v_(1) + m_(5)*v_(2),
+            m_(6)*v_(0) + m_(7)*v_(1) + m_(8)*v_(2)
+        );
+
+        return v;
+    }
+
     // v * mat
     // mat * v
 

@@ -1,4 +1,5 @@
 #include <HSim/mat33.h>
+#include <HSim/vec3.h>
 
 int main()
 {
@@ -13,7 +14,7 @@ int main()
     std::cout << m3;
 
 // mul
-#define MUL
+// #define MUL
 #ifdef MUL
     std::cout << m3 * 2;
     std::cout << 2 * m3;
@@ -50,8 +51,14 @@ int main()
     std::cout << -m2 * 2;
 #endif 
 
+// mul v
+#define VEC
+#ifdef VEC  
+    HSim::Vec3f v(1, 2, 3);
+    std::cout << -m2 * v;
+    std::cout << -v * m2;
 
-
+#endif 
 
 
 
