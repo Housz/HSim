@@ -160,7 +160,7 @@ namespace HSim
         }
 
         template <typename T1>
-        void add_self(Mat<T1, M, N> &m_)
+        void add_self(const Mat<T1, M, N> &m_)
         {
             parallelFor(size_t(0), M, [&](size_t i){
                 parallelFor(size_t(0), N, [&](size_t j){
@@ -416,7 +416,7 @@ namespace HSim
         }
 
         template <typename T1>
-        Mat<T, M, N>& operator+=(Mat<T1, M, N> &m_)
+        Mat<T, M, N>& operator+=(const Mat<T1, M, N> &m_)
         {
             add_self(m_);
             return *this;

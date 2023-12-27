@@ -40,15 +40,20 @@ namespace HSim
         template <typename T1>
         friend std::ostream &operator<<(std::ostream &, Mat33<T1> &);
 
-
         // setter, getter
     public:
         void set(T v) { container.fill(v); }
         void set(T m00, T m01, T m02, T m10, T m11, T m12, T m20, T m21, T m22)
         {
-            container[0] = m00; container[1] = m01; container[2] = m02;
-            container[3] = m10; container[4] = m11; container[5] = m12;
-            container[6] = m20; container[7] = m21; container[8] = m22;
+            container[0] = m00;
+            container[1] = m01;
+            container[2] = m02;
+            container[3] = m10;
+            container[4] = m11;
+            container[5] = m12;
+            container[6] = m20;
+            container[7] = m21;
+            container[8] = m22;
         }
 
         template <typename T1>
@@ -56,8 +61,8 @@ namespace HSim
         {
             for (auto iter = list.begin(); iter < list.end(); iter++)
             {
-                container[iter-list.begin()] = *iter;
-            }   
+                container[iter - list.begin()] = *iter;
+            }
         }
 
         // template <typename T1>
@@ -72,7 +77,10 @@ namespace HSim
         template <typename T1>
         void set(const Mat33<T1> &m_)
         {
-            container = m_.container;
+            for (size_t i = 0; i < 9; i++)
+            {
+                container[i] = T(m_(i));
+            }
         }
 
         template <typename T1>
@@ -83,44 +91,74 @@ namespace HSim
             container[8] = value;
         }
 
-        T& operator()(size_t i, size_t j)
+        void setIdentity()
         {
-            assert(i<3 && j<3);
-            return container[i*3 + j];
+            container[0] = 1;
+            container[4] = 1;
+            container[8] = 1;
         }
 
-        T& operator()(size_t i)
+        void setZero()
         {
-            assert(i<9);
+            container.fill(0);
+        }
+
+        T &operator()(size_t i, size_t j)
+        {
+            assert(i < 3 && j < 3);
+            return container[i * 3 + j];
+        }
+
+        T operator()(size_t i, size_t j) const
+        {
+            assert(i < 3 && j < 3);
+            return container[i * 3 + j];
+        }
+
+        T &operator()(size_t i)
+        {
+            assert(i < 9);
             return container[i];
         }
 
-    // operator
+        T operator()(size_t i) const
+        {
+            assert(i < 9);
+            return container[i];
+        }
+
+        // operator
     public:
+
+        template <typename T1>
+        Mat33<T> &operator=(const Mat33<T1> &m_)
+        {
+            set(m_);
+        }
 
         // add n
         template <typename T1>
-        Mat33<T> add(T1 value)
+        Mat33<T> add(T1 value) const
         {
             Mat33<T> m;
             for (size_t i = 0; i < 9; i++)
             {
-                m(i) += value;
+                m(i) = container[i] + T(value);
             }
             return m;
         }
         // add mat
         template <typename T1>
-        Mat33<T> add(Mat33<T1> m_)
+        Mat33<T> add(const Mat33<T1> &m_) const
         {
             Mat33<T> m;
             for (size_t i = 0; i < 9; i++)
             {
-                m.container[i] += m_(i);
+                m(i) = container[i] + m_(i);
             }
             return m;
         }
-        // addself n 
+        // addself n
         template <typename T1>
         void add_self(T1 value)
         {
@@ -129,10 +167,9 @@ namespace HSim
                 container[i] += value;
             }
         }
-
         // addself mat
         template <typename T1>
-        void add(Mat33<T1> m_)
+        void add_self(const Mat33<T1> &m_)
         {
             for (size_t i = 0; i < 9; i++)
             {
@@ -140,48 +177,86 @@ namespace HSim
             }
         }
 
-        template <typename T1>
-        Mat33<T>& operator=(const Mat33<T1>& m_)
-        {
-            set(m_);
-        }
-
-        // mat + n
-        template <typename T1>
-        Mat33<T> operator+(T1 value)
-        {
-            return add(value);
-        }
-        // mat + mat
-        template <typename T1>
-        Mat33<T> operator+(Mat33<T1>& m_)
-        {
-            return add(m_);
-        }
         // += n
         template <typename T1>
-        Mat33<T>& operator+=(T1 value)
+        Mat33<T> &operator+=(T1 value)
         {
             add_self(value);
             return *this;
         }
         // += mat
         template <typename T1>
-        Mat33<T>& operator+=(Mat33<T1>& m_)
+        Mat33<T> &operator+=(const Mat33<T1> &m_)
         {
             add_self(m_);
             return *this;
         }
 
+        // sub n
+        template <typename T1>
+        Mat33<T> sub(T1 value) const
+        {
+            Mat33<T> m;
+            for (size_t i = 0; i < 9; i++)
+            {
+                m(i) = container[i] - T(value);
+            }
+            return m;
+        }
+        // sub mat
+        template <typename T1>
+        Mat33<T> sub(const Mat33<T1> &m_) const
+        {
+            Mat33<T> m;
+            for (size_t i = 0; i < 9; i++)
+            {
+                m(i) = container[i] - m_(i);
+            }
+            return m;
+        }
+        // subself n
+        template <typename T1>
+        void sub_self(T1 value)
+        {
+            for (size_t i = 0; i < 9; i++)
+            {
+                container[i] -= value;
+            }
+        }
+        // subself mat
+        template <typename T1>
+        void sub_self(const Mat33<T1> &m_)
+        {
+            for (size_t i = 0; i < 9; i++)
+            {
+                container[i] -= m_(i);
+            }
+        }
 
-        // sub
-        // sub
-        // subself
-        // subself
+        // -= n
+        template <typename T1>
+        Mat33<T> &operator-=(T1 value)
+        {
+            sub_self(value);
+            return *this;
+        }
+        // -= mat
+        template <typename T1>
+        Mat33<T> &operator-=(const Mat33<T1> &m_)
+        {
+            sub_self(m_);
+            return *this;
+        }
+        
+        Mat33<T> operator-()
+        {
+            return (*this) * -1;
+        }
+
 
         // mul n
         template <typename T1>
-        Mat33<T> mul(T1 value)
+        Mat33<T> mul(T1 value) const
         {
             Mat33<T> m;
             for (size_t i = 0; i < 9; i++)
@@ -190,42 +265,78 @@ namespace HSim
             }
             return m;
         }
+        // mul mat
+        template <typename T1>
+        Mat33<T> mul(const Mat33<T1> &m_) const
+        {
+            Mat33<T> m(
+                container[0] * m_.container[0] + container[1] * m_.container[3] + container[2] * m_.container[6],
+                container[0] * m_.container[1] + container[1] * m_.container[4] + container[2] * m_.container[7],
+                container[0] * m_.container[2] + container[1] * m_.container[5] + container[2] * m_.container[8],
 
+                container[3] * m_.container[0] + container[4] * m_.container[3] + container[5] * m_.container[6],
+                container[3] * m_.container[1] + container[4] * m_.container[4] + container[5] * m_.container[7],
+                container[3] * m_.container[2] + container[4] * m_.container[5] + container[5] * m_.container[8],
 
+                container[6] * m_.container[0] + container[7] * m_.container[3] + container[8] * m_.container[6],
+                container[6] * m_.container[1] + container[7] * m_.container[4] + container[8] * m_.container[7],
+                container[6] * m_.container[2] + container[7] * m_.container[5] + container[8] * m_.container[8]
+                );
+            return m;
+        }
+        // mulself n
+        template <typename T1>
+        void mul_self(T1 value)
+        {
+            for (size_t i = 0; i < 9; i++)
+            {
+                container[i] *= value;
+            }
+        }
 
-        
-        // mul m
-        // mul v3
-        // v3 mul m33 in v3.h
-        // mulself n 
-        // mulself m
+        // mulself mat
+        template <typename T1>
+        void mul_self(const Mat33<T1> &m_)
+        {
+            this->set(
+            container[0] * m_.container[0] + container[1] * m_.container[3] + container[2] * m_.container[6],
+            container[0] * m_.container[1] + container[1] * m_.container[4] + container[2] * m_.container[7],
+            container[0] * m_.container[2] + container[1] * m_.container[5] + container[2] * m_.container[8],
 
-        // div
+            container[3] * m_.container[0] + container[4] * m_.container[3] + container[5] * m_.container[6],
+            container[3] * m_.container[1] + container[4] * m_.container[4] + container[5] * m_.container[7],
+            container[3] * m_.container[2] + container[4] * m_.container[5] + container[5] * m_.container[8],
+
+            container[6] * m_.container[0] + container[7] * m_.container[3] + container[8] * m_.container[6],
+            container[6] * m_.container[1] + container[7] * m_.container[4] + container[8] * m_.container[7],
+            container[6] * m_.container[2] + container[7] * m_.container[5] + container[8] * m_.container[8]
+            );
+        }
+        // *= n
+        template <typename T1>
+        Mat33<T> &operator*=(T1 value)
+        {
+            mul_self(value);
+            return *this;
+        }
+        // *= mat
+        template <typename T1>
+        Mat33<T> &operator*=(const Mat33<T1> &m_)
+        {
+            mul_self(m_);
+            return *this;
+        }
+
+        // div : deprecated
         // div
         // divself
         // divself
-
-
-        // operator + n
-        // operator + m
-        // operator m1 + m2
-
-        // operator - n
-        // operator - m
-        // operator m1 - m2
-
-
-        // operator * v
-        // operator * m
-        // operator m1 * m2
-
-
 
         // data
     public:
         std::array<T, 9> container;
     };
-    
+
     template <typename T1>
     std::ostream &operator<<(std::ostream &os, Mat33<T1> &m)
     {
@@ -237,43 +348,65 @@ namespace HSim
         return os;
     }
 
-    // n * mat
-    // template <typename T1, typename T2>
-    // Mat33<T2> operator*(T1 value, Mat33<T2> &m_)
-    // {
-    //     return m_.mul(value);
-    // }
+    // mat + mat
+    template <typename T1, typename T2>
+    Mat33<T1> operator+(const Mat33<T1> &m1, const Mat33<T2> &m2)
+    {
+        return m1.add(m2);
+    }
+    // mat + n
+    template <typename T1, typename T2>
+    Mat33<T1> operator+(const Mat33<T1> &m_, T2 value)
+    {
+        return m_.add(value);
+    }
+    // n + mat
+    template <typename T1, typename T2>
+    Mat33<T1> operator+(T1 value, const Mat33<T2> &m_)
+    {
+        return m_.add(value);
+    }
 
+    // mat - mat
+    template <typename T1, typename T2>
+    Mat33<T1> operator-(const Mat33<T1> &m1, const Mat33<T2> &m2)
+    {
+        return m1.sub(m2);
+    }
+    // mat - n
+    template <typename T1, typename T2>
+    Mat33<T1> operator-(const Mat33<T1> &m_, T2 value)
+    {
+        return m_.sub(value);
+    }
+    // n - mat
+    template <typename T1, typename T2>
+    Mat33<T1> operator-(T1 value, const Mat33<T2> &m_)
+    {
+        return (-1*m_).add(value);
+    }
 
     // mat * n
     template <typename T1, typename T2>
-    Mat33<T1> operator*(Mat33<T1>& m_, T2 value)
+    Mat33<T1> operator*(const Mat33<T1> &m_, T2 value)
     {
-        // Mat33<T1> m;
-        // for (size_t i = 0; i < 9; i++)
-        // {
-        //     m(i) = m_(i) * value;
-        // }
-        // return m;
         return m_.mul(value);
     }
-
-    template <typename T1, typename T2>
-    Mat33<T1> operator*(T2 value, Mat33<T1>& m_)
-    {
-        // Mat33<T1> m;
-        // for (size_t i = 0; i < 9; i++)
-        // {
-        //     m(i) = m_(i) * value;
-        // }
-        // return m;
-        return m_.mul(value);
-    }
- 
-
-
     // n * mat
+    template <typename T1, typename T2>
+    Mat33<T2> operator*(T1 value, const Mat33<T2> &m_)
+    {
+        return m_.mul(value);
+    }
+
     // mat * mat
+    template <typename T1, typename T2>
+    Mat33<T1> operator*(const Mat33<T1> &m1, const Mat33<T2> &m2)
+    {
+        return m1.mul(m2);
+    }
+
+    
     // v * mat
     // mat * v
 
