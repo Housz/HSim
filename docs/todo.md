@@ -31,4 +31,4 @@
 - [ ] VDB writer
 
 ## current road map
-mat44(transform3) -> surface3 -> im/ex surface3, mesh3 -> gridsolver3
+mat33(transform3) -> surface3 -> im/ex surface3, mesh3 -> gridsolver3

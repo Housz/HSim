@@ -52,7 +52,7 @@ int main()
 #endif 
 
 // mul v
-#define VEC
+// #define VEC
 #ifdef VEC  
     HSim::Vec3f v(1, 2, 3);
     std::cout << -m2 * v;
@@ -61,10 +61,28 @@ int main()
 #endif 
 
 
+// trans
+// #define TRANS
+#ifdef TRANS
+    m2.setIdentity();
+    std::cout << m2;
+    m2.transpose();
+    std::cout << m2;
+    std::cout << m2.determinant() << std::endl;
+    m2.invert();
+    std::cout << m2;
+#endif 
 
-    // HSim::Mat33f m3 {{1,2,3},{4,5,6},{7,8,9}};
-    // std::cout << m3;
 
+// set
+#define SET
+#ifdef SET
+    std::cout << m;
+    m.setCol(0, {-1, -1, -1});
+    std::cout << m;
+    m.setRow(0, {-2, -2, -2});
+    std::cout << m;
+#endif
 
 
 

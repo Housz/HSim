@@ -20,9 +20,10 @@ namespace HSim
     template <typename T>
     class Mat33
     {
+    // constructor
     public:
         Mat33() { container.fill(0); };
-        ~Mat33(){};
+        ~Mat33() {};
 
         Mat33(T v) { set(v); }
 
@@ -35,25 +36,19 @@ namespace HSim
         // Mat33(const std::initializer_list<std::initializer_list<T1>> &list) { set(list); }
 
         template <typename T1>
-        Mat33(Mat33<T1> &m) { set(m); }
+        Mat33(const Mat33<T1> &m) { set(m); }
 
         template <typename T1>
         friend std::ostream &operator<<(std::ostream &, Mat33<T1> &);
 
-        // setter, getter
+    // setter, getter
     public:
         void set(T v) { container.fill(v); }
         void set(T m00, T m01, T m02, T m10, T m11, T m12, T m20, T m21, T m22)
         {
-            container[0] = m00;
-            container[1] = m01;
-            container[2] = m02;
-            container[3] = m10;
-            container[4] = m11;
-            container[5] = m12;
-            container[6] = m20;
-            container[7] = m21;
-            container[8] = m22;
+            container[0] = m00; container[1] = m01; container[2] = m02;
+            container[3] = m10; container[4] = m11; container[5] = m12;
+            container[6] = m20; container[7] = m21; container[8] = m22;
         }
 
         template <typename T1>
@@ -93,6 +88,7 @@ namespace HSim
 
         void setIdentity()
         {
+            set(0);
             container[0] = 1;
             container[4] = 1;
             container[8] = 1;
@@ -101,6 +97,20 @@ namespace HSim
         void setZero()
         {
             container.fill(0);
+        }
+
+        void setRow(size_t i, const Vec3<T>& r)
+        {
+            container[i * 3 + 0] = r[0]; 
+            container[i * 3 + 1] = r[1]; 
+            container[i * 3 + 2] = r[2]; 
+        }
+
+        void setCol(size_t j, const Vec3<T>& c)
+        {
+            container[j + 3 * 0] = c[0];
+            container[j + 3 * 1] = c[1];
+            container[j + 3 * 2] = c[2];
         }
 
         T &operator()(size_t i, size_t j)
@@ -328,10 +338,79 @@ namespace HSim
             return *this;
         }
 
-        // div : deprecated
-        // div
-        // divself
-        // divself
+        // div n
+        template <typename T1>
+        Mat33<T> div(T1 value) const
+        {
+            Mat33<T> m;
+            for (size_t i = 0; i < 9; i++)
+            {
+                m(i) = container[i] / T(value);
+            }
+            return m;
+        }
+        // divself n
+        template <typename T1>
+        void div_self(T1 value)
+        {
+            for (size_t i = 0; i < 9; i++)
+            {
+                container[i] /= value;
+            }
+        }
+        // /= n
+        template <typename T1>
+        Mat33<T> &operator/=(T1 value)
+        {
+            div_self(value);
+            return *this;
+        }
+
+
+        // m = m^-1
+        void invert()
+        {
+            T det = determinant();
+
+            assert(det != 0);
+            
+            Mat33<T> m;
+            m(0) = container[4] * container[8] - container[5] * container[7];
+            m(1) = container[2] * container[7] - container[1] * container[8];
+            m(2) = container[1] * container[5] - container[2] * container[4];
+            m(3) = container[5] * container[6] - container[3] * container[8];
+            m(4) = container[0] * container[8] - container[2] * container[6];
+            m(5) = container[2] * container[3] - container[0] * container[5];
+            m(6) = container[3] * container[7] - container[4] * container[6];
+            m(7) = container[1] * container[6] - container[0] * container[7];
+            m(8) = container[0] * container[4] - container[1] * container[3];
+            m /= det;
+
+            set(m);
+        }
+
+        // m = m^T
+        void transpose()
+        {
+            std::swap(container[1], container[3]);
+            std::swap(container[2], container[6]);
+            std::swap(container[5], container[7]);
+        }
+
+        T determinant() const
+        {
+            return container[0] * container[4] * container[8] -
+                   container[0] * container[5] * container[7] +
+                   container[1] * container[5] * container[6] -
+                   container[1] * container[3] * container[8] +
+                   container[2] * container[3] * container[7] -
+                   container[2] * container[4] * container[6];
+        }
+
+        T trace() const
+        {
+            return container[0] + container[4] + container[8];
+        }
 
         // data
     public:
@@ -386,6 +465,13 @@ namespace HSim
     {
         // return (-1*m_).add(value);
         return -m_.add(value);
+    }
+
+    // mat / n
+    template <typename T1, typename T2>
+    Mat33<T1> operator/(const Mat33<T1> &m_, T2 value)
+    {
+        return m_.div(value);
     }
 
     // mat * n
