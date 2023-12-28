@@ -520,9 +520,6 @@ namespace HSim
         return v;
     }
 
-    // v * mat
-    // mat * v
-
     using Mat33i = Mat33<int>;
     using Mat33f = Mat33<float>;
     using Mat33d = Mat33<double>;
