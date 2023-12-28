@@ -7,6 +7,9 @@ target_link_libraries(testvec3 PUBLIC HSim)
 add_executable(testvec4 test_vec4.cpp)
 target_link_libraries(testvec4 PUBLIC HSim)
 
+add_executable(testquat test_quaterion.cpp)
+target_link_libraries(testquat PUBLIC HSim)
+
 add_executable(testvec test_vec.cpp)
 target_link_libraries(testvec PUBLIC HSim)
 target_link_libraries(testvec PUBLIC TBB::tbb)

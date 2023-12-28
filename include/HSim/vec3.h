@@ -62,7 +62,7 @@ namespace HSim
             z = static_cast<T>(*(++inputElem));
         }
 
-        T length()
+        T length() const
         {
             return std :;
             sqrt(x * x + y * y + z * z);
@@ -76,18 +76,18 @@ namespace HSim
             z /= length;
         }
 
-        Vec3<T> norm()
+        Vec3<T> getNormalized() const
         {
             T length = length();
             return Vec3<T>(x / length, y / length, z / length);
         }
 
-        bool isEqual(Vec3<T> v_)
+        bool isEqual(const Vec3<T>& v_) const
         {
             return (x == v_.x) && (y == v_.y) && (z == v_.z);
         }
 
-        bool isZero()
+        bool isZero() const
         {
             return (x==0 && y==0 && z==0);
         }

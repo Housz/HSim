@@ -79,7 +79,7 @@ namespace HSim
         }
 
         template <typename T1>
-        void set_diag(T1 value)
+        void setDiag(T1 value)
         {
             container[0] = value;
             container[4] = value;
