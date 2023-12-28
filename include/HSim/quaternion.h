@@ -1,6 +1,8 @@
 #pragma once
 
 #include <HSim/vec3.h>
+#include <HSim/mat33.h>
+#include <HSim/mat44.h>
 
 namespace HSim
 {
@@ -20,7 +22,6 @@ namespace HSim
 
         // setter, getter
     public:
-
         void set(T w_, T x_, T y_, T z_)
         {
             w = w_;
@@ -39,7 +40,7 @@ namespace HSim
         }
 
         /**
-         * @brief
+         * @brief set quaternion from rotation axis and angle
          *
          * normalized axis: u, angle: a
          *
@@ -70,6 +71,63 @@ namespace HSim
                 z = normalizedAxis.z * _sin;
             }
         }
+
+        // void set(const Vec3<T>& from, const Vec3<T>& to);
+
+        // void set(
+        //     const Vec3<T>& rotationBasis0,
+        //     const Vec3<T>& rotationBasis1,
+        //     const Vec3<T>& rotationBasis2);
+
+        /**
+         * @brief 3x3 rotation matrix to quaternion
+         * https://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+         * @param mat
+         */
+        void set(const Mat33<T> &m)
+        {
+            const T eps = std::numeric_limits<T>::epsilon();
+            const T quater = static_cast<T>(0.25);
+
+            T onePlusTrace = m.trace() + 1;
+
+            if (onePlusTrace > eps)
+            {
+                T S = std::sqrt(onePlusTrace) * 2;
+                w = quater * S;
+                x = (m(2, 1) - m(1, 2)) / S;
+                y = (m(0, 2) - m(2, 0)) / S;
+                z = (m(1, 0) - m(0, 1)) / S;
+            }
+            else if (m(0, 0) > m(1, 1) && m(0, 0) > m(2, 2))
+            {
+                T S = std::sqrt(1 + m(0, 0) - m(1, 1) - m(2, 2)) * 2;
+                w = (m(2, 1) - m(1, 2)) / S;
+                x = quater * S;
+                y = (m(0, 1) + m(1, 0)) / S;
+                z = (m(0, 2) + m(2, 0)) / S;
+            }
+            else if (m(1, 1) > m(2, 2))
+            {
+                T S = std::sqrt(1 + m(1, 1) - m(0, 0) - m(2, 2)) * 2;
+                w = (m(0, 2) - m(2, 0)) / S;
+                x = (m(0, 1) + m(1, 0)) / S;
+                y = quater * S;
+                z = (m(1, 2) + m(2, 1)) / S;
+            }
+            else
+            {
+                T S = std::sqrt(1 + m(2, 2) - m(0, 0) - m(1, 1)) * 2;
+                w = (m(1, 0) - m(0, 1)) / S;
+                x = (m(0, 2) + m(2, 0)) / S;
+                y = (m(1, 2) + m(2, 1)) / S;
+                z = quater * S;
+            }
+        }
+    
+    // operators
+    public:
+        
 
     public:
         T w; // real
