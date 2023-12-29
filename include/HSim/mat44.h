@@ -145,6 +145,7 @@ namespace HSim
         Mat44<T> &operator=(const Mat44<T1> &m_)
         {
             set(m_);
+            return *this;
         }
 
         // add n

@@ -144,6 +144,7 @@ namespace HSim
         Mat33<T> &operator=(const Mat33<T1> &m_)
         {
             set(m_);
+            return *this;
         }
 
         // add n

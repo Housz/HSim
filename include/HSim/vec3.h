@@ -64,22 +64,21 @@ namespace HSim
 
         T length() const
         {
-            return std :;
-            sqrt(x * x + y * y + z * z);
+            return std::sqrt(x * x + y * y + z * z);
         }
 
         void normalize()
         {
-            T length = length();
-            x /= length;
-            y /= length;
-            z /= length;
+            T len = length();
+            x /= len;
+            y /= len;
+            z /= len;
         }
 
         Vec3<T> getNormalized() const
         {
-            T length = length();
-            return Vec3<T>(x / length, y / length, z / length);
+            T len = length();
+            return Vec3<T>(x / len, y / len, z / len);
         }
 
         bool isEqual(const Vec3<T>& v_) const
@@ -204,9 +203,9 @@ namespace HSim
         }
 
         template <typename U>
-        Vec3 &operator=(const std::initializer_list<U> &list)
+        Vec3 &operator=(const std::initializer_list<U> &list_)
         {
-            set(list);
+            set(list_);
             return (*this);
         }
 

@@ -66,15 +66,15 @@ namespace HSim
 
         void normalize()
         {
-            T length = length();
-            x /= length;
-            y /= length;
+            T len = len();
+            x /= len;
+            y /= len;
         }
 
         Vec2<T> getNormalized() const
         {
-            T length = length();
-            return Vec2<T>(x / length, y / length);
+            T len = length();
+            return Vec2<T>(x / len, y / len);
         }
 
         bool isEqual(const Vec2<T>& v_)
