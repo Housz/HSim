@@ -33,7 +33,7 @@ namespace HSim
         Vec4(const Vec3<T> &v_, T w_) { set(v_, w_); }
         Vec4(const Vec3<T> &v_) : x(0), y(0), z(0), w(0) { set(v_); }
         template <typename U>
-        Vec4(const std::initializer_list<U> &list) { set(list); }
+        Vec4(const std::initializer_list<U> &list) : x(0), y(0), z(0), w(0) { set(list); }
 
         void set(T x_)
         {

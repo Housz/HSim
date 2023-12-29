@@ -47,12 +47,65 @@ namespace HSim
 			return m;
 		}
 
+	// transform operators
 	public:
-		Quaternion<T> orientation;
-		Vec3<T> translation;
+		/**
+		 * @brief transform position (P_w) in world to position (P_l) in local
+		 * 
+		 * transform M_wl, orientation R_wl, translation T_wl
+		 * M_wl = T_wl * R_wl
+		 * M_lw = M_wl^-1 = (T_wl * R_wl)^-1 = R_wl^-1 * T_wl^-1 = R_lw * T_lw
+		 * 
+		 * P_l = M_lw * P_w = (R_lw * T_lw) * P_w
+		 * 
+		 * @param positionInWorld : P_l
+		 * @return Vec3<T> : P_w
+		 */
+		Vec3<T> toLocal(const Vec3<T>& positionInWorld) const
+		{
+			auto R_lw = orientation.inverse();
+			auto T_lw = -translation;
+			return R_lw * (T_lw + positionInWorld);
+		}
 
-		// Mat33<T> orientationMatrix;
-		// Mat44<T> transformMatrix;
+		Vec3<T> inverse_mul(const Vec3<T>& p) const
+		{
+			return toLocal(p);
+		}
+
+		/**
+		 * @brief transform position (P_l) in local to position (P_w) in world
+		 * 
+		 * transform M_wl, orientation R_wl, translation T_wl
+		 * M_wl = T_wl * R_wl
+		 * M_lw = M_wl^-1 = (T_wl * R_wl)^-1 = R_wl^-1 * T_wl^-1 = R_lw * T_lw
+		 * 
+		 * P_w = M_wl * P_w = (T_wl * R_wl) * P_l
+		 * 
+		 * @param positionInLocal : P_w
+		 * @return Vec3<T> : P_l
+		 */
+		Vec3<T> toWorld(const Vec3<T>& positionInLocal) const
+		{
+			// auto R_wl = orientation;
+			// auto T_wl = translation;
+
+			// return T_wl + R_wl * positionInLocal;
+
+			auto T_wl = getTransformMatrix();
+			Vec4<T> v4(positionInLocal, 1);
+			auto v = T_wl * v4;
+			return Vec3<T>(v.x, v.y, v.z);
+		}
+
+		Vec3<T> mul(const Vec3<T>& p) const
+		{
+			return toWorld(p);
+		}
+
+	public:
+		Quaternion<T> orientation; // or rotation
+		Vec3<T> translation;
 	};
 
 	

@@ -4,10 +4,19 @@
 int main()
 {
 
-	HSim::Vec4f v4(1, 2, 3, 4); 
+	HSim::Vec4f v(1, 2, 3, 4); 
+	std::cout << v;
+	std::cout << 2 * v;
+
+	HSim::Vec4f v1({1});
+	HSim::Vec4f v2({1, 2});
+	HSim::Vec4f v3 = {1, 2, 3};
+	HSim::Vec4f v4 = {1, 2, 3, 4};
+
+	std::cout << v1; std::cout << v2; std::cout << v3; std::cout << v4;
+
+	v4.set({-1, -2});
 	std::cout << v4;
-	std::cout << 2 * v4;
-	// std::cout << HSim::vec3d({1, 2, 3});
 	
 	return 0;
 }
