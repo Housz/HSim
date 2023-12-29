@@ -29,7 +29,7 @@ namespace HSim
          */
         Vec3() : x(0), y(0), z(0) {}
         Vec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
-        Vec3(Vec3 &v_) : x(v_.x), y(v_.y), z(v_.z) {}
+        Vec3(const Vec3 &v_) : x(v_.x), y(v_.y), z(v_.z) {}
         template <typename U>
         Vec3(const std::initializer_list<U> &list) { set(list); }
 

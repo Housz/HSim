@@ -15,6 +15,10 @@ int main()
 	HSim::Mat44f m2(m);
 	auto m3(m2);
 
+    HSim::Mat33f m33 = { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    HSim::Mat44f m4(m33);
+    std::cout << m4;
+
 // mul
 // #define MUL
 #ifdef MUL
@@ -28,7 +32,7 @@ int main()
 #endif 
 
 // add
-#define ADD
+// #define ADD
 #ifdef ADD
     std::cout << m2 + m3;
     m2 += m3;
@@ -40,7 +44,7 @@ int main()
 #endif 
 
 // sub
-#define SUB
+// #define SUB
 #ifdef SUB
     std::cout << m2 - m3;
     m2 -= m3;
@@ -84,5 +88,6 @@ int main()
     m.setRow(0, {-2, -2, -2, -2});
     std::cout << m;
 #endif
+
 	return 0;
 }

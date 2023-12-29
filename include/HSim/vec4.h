@@ -1,8 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <algorithm>
 #include <HSim/common.h>
+#include <HSim/vec3.h>
 
 namespace HSim
 {
@@ -30,7 +29,9 @@ namespace HSim
          */
         Vec4() : x(0), y(0), z(0), w(0) {}
         Vec4(T x_, T y_, T z_, T w_) : x(x_), y(y_), z(z_), w(w_) {}
-        Vec4(Vec4 &v_) : x(v_.x), y(v_.y), z(v_.z), w(v_.w) {}
+        Vec4(const Vec4 &v_) : x(v_.x), y(v_.y), z(v_.z), w(v_.w) {}
+        Vec4(const Vec3<T> &v_, T w_) { set(v_, w_); }
+        Vec4(const Vec3<T> &v_) : x(0), y(0), z(0), w(0) { set(v_); }
         template <typename U>
         Vec4(const std::initializer_list<U> &list) { set(list); }
 
@@ -55,16 +56,50 @@ namespace HSim
             z = v_.z;
             w = v_.w;
         }
+
+        void set(const Vec3<T> &v_, T w_)
+        {
+            x = v_.x;
+            y = v_.y;
+            z = v_.z;
+            w = w_;
+        }
+
+        void set(const Vec3<T> &v_)
+        {
+            x = v_.x;
+            y = v_.y;
+            z = v_.z;
+        }
+
         template <typename U>
         void set(const std::initializer_list<U> &list)
         {
-            assert(list.size() >= 4);
+            assert(list.size() <= 4);
 
             auto inputElem = list.begin();
-            x = static_cast<T>(*inputElem);
-            y = static_cast<T>(*(++inputElem));
-            z = static_cast<T>(*(++inputElem));
-            w = static_cast<T>(*(++inputElem));
+            if (list.size() == 1)
+            {
+                x = static_cast<T>(*inputElem);
+            }
+            else if (list.size() == 2)
+            {
+                x = static_cast<T>(*inputElem);
+                y = static_cast<T>(*(++inputElem));
+            }
+            else if (list.size() == 3)
+            {
+                x = static_cast<T>(*inputElem);
+                y = static_cast<T>(*(++inputElem));
+                z = static_cast<T>(*(++inputElem));
+            }
+            else if (list.size() == 4)
+            {
+                x = static_cast<T>(*inputElem);
+                y = static_cast<T>(*(++inputElem));
+                z = static_cast<T>(*(++inputElem));
+                w = static_cast<T>(*(++inputElem));
+            }
         }
 
         T length()
@@ -95,7 +130,7 @@ namespace HSim
 
         bool isZero()
         {
-            return (x==0 && y==0 && z==0 && w==0);
+            return (x == 0 && y == 0 && z == 0 && w == 0);
         }
 
         //// new_Vec3 = this_Vec3 (operator) parameters
@@ -192,13 +227,13 @@ namespace HSim
             assert(i < 4);
             return (&x)[i];
         }
-        
+
         T operator[](size_t i) const
         {
             assert(i < 4);
             return (&x)[i];
         }
-        
+
         T &operator()(size_t i)
         {
             assert(i < 4);
@@ -270,7 +305,6 @@ namespace HSim
     using Vec4f = Vec4<float>;
     using Vec4d = Vec4<double>;
 
-
     template <typename T1>
     std::ostream &operator<<(std::ostream &os, Vec4<T1> &v_)
     {
@@ -278,13 +312,11 @@ namespace HSim
         return os;
     }
 
-
     // n * v
     template <typename T1, typename T2>
-    Vec4<T1> operator*(T2 n, const Vec4<T1>& v)
+    Vec4<T1> operator*(T2 n, const Vec4<T1> &v)
     {
         return v.mul((T1)n);
     }
-    
 
 } // namespace HSim
