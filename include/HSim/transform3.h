@@ -14,7 +14,16 @@ namespace HSim
 		Transform3() {};
 		~Transform3() {};
 
+		Transform3(const Transform3<T>& transform_) { set(transform_); }
+
 		Transform3(const Quaternion<T>& orientation_, const Vec3<T>& translation_) : orientation(orientation_), translation(translation_){}
+
+		template <typename T1>
+		void set(const Transform3<T1>& transform_)
+		{
+			orientation = transform_.orientation;
+			translation = transform_.translation_;
+		}
 		
 		void set(const Quaternion<T>& orientation_, const Vec3<T>& translation_)
 		{
@@ -49,6 +58,7 @@ namespace HSim
 
 	// transform operators
 	public:
+	
 		/**
 		 * @brief transform position (P_w) in world to position (P_l) in local
 		 * 
@@ -87,15 +97,15 @@ namespace HSim
 		 */
 		Vec3<T> toWorld(const Vec3<T>& positionInLocal) const
 		{
-			// auto R_wl = orientation;
-			// auto T_wl = translation;
+			auto R_wl = orientation;
+			auto T_wl = translation;
 
-			// return T_wl + R_wl * positionInLocal;
+			return T_wl + R_wl * positionInLocal;
 
-			auto T_wl = getTransformMatrix();
-			Vec4<T> v4(positionInLocal, 1);
-			auto v = T_wl * v4;
-			return Vec3<T>(v.x, v.y, v.z);
+			// auto T_wl = getTransformMatrix();
+			// Vec4<T> v4(positionInLocal, 1);
+			// auto v = T_wl * v4;
+			// return Vec3<T>(v);
 		}
 
 		Vec3<T> mul(const Vec3<T>& p) const

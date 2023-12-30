@@ -5,6 +5,8 @@
 
 namespace HSim
 {
+    template <typename T>
+    class Vec3;
 
     /**
      * @brief 3-D vector
@@ -75,30 +77,28 @@ namespace HSim
         template <typename U>
         void set(const std::initializer_list<U> &list)
         {
-            assert(list.size() <= 4);
-
-            auto inputElem = list.begin();
+            auto iter = list.begin();
             if (list.size() == 1)
             {
-                x = static_cast<T>(*inputElem);
+                x = static_cast<T>(*iter);
             }
             else if (list.size() == 2)
             {
-                x = static_cast<T>(*inputElem);
-                y = static_cast<T>(*(++inputElem));
+                x = static_cast<T>(*iter);
+                y = static_cast<T>(*(++iter));
             }
             else if (list.size() == 3)
             {
-                x = static_cast<T>(*inputElem);
-                y = static_cast<T>(*(++inputElem));
-                z = static_cast<T>(*(++inputElem));
+                x = static_cast<T>(*iter);
+                y = static_cast<T>(*(++iter));
+                z = static_cast<T>(*(++iter));
             }
-            else if (list.size() == 4)
+            else
             {
-                x = static_cast<T>(*inputElem);
-                y = static_cast<T>(*(++inputElem));
-                z = static_cast<T>(*(++inputElem));
-                w = static_cast<T>(*(++inputElem));
+                x = static_cast<T>(*iter);
+                y = static_cast<T>(*(++iter));
+                z = static_cast<T>(*(++iter));
+                w = static_cast<T>(*(++iter));
             }
         }
 

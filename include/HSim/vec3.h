@@ -3,11 +3,12 @@
 #include <iostream>
 #include <algorithm>
 #include <HSim/common.h>
-// #include <HSim/vec4.h>
+#include <HSim/vec4.h>
 
 namespace HSim
 {
-
+    template <typename T>
+    class Vec4;
     /**
      * @brief 3-D vector
      *
@@ -31,7 +32,7 @@ namespace HSim
         Vec3() : x(0), y(0), z(0) {}
         Vec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
         Vec3(const Vec3 &v_) : x(v_.x), y(v_.y), z(v_.z) {}
-        // Vec3(const Vec4<T> &v_) : x(v_.x), y(v_.y), z(v_.z) {}
+        Vec3(const Vec4<T> &v_) : x(v_.x), y(v_.y), z(v_.z) {}
         template <typename U>
         Vec3(const std::initializer_list<U> &list) { set(list); }
 
@@ -54,22 +55,33 @@ namespace HSim
             z = v_.z;
         }
 
-        // void set(const Vec4<T> &v_)
-        // {
-        //     x = v_.x;
-        //     y = v_.y;
-        //     z = v_.z;
-        // }
+        void set(const Vec4<T> &v_)
+        {
+            x = v_.x;
+            y = v_.y;
+            z = v_.z;
+        }
 
         template <typename U>
         void set(const std::initializer_list<U> &list)
         {
-            assert(list.size() >= 3);
+            auto iter = list.begin();
 
-            auto inputElem = list.begin();
-            x = static_cast<T>(*inputElem);
-            y = static_cast<T>(*(++inputElem));
-            z = static_cast<T>(*(++inputElem));
+            if (list.size() == 1)
+            {
+                x = static_cast<T>(*iter);
+            }
+            else if (list.size() == 2)
+            {
+                x = static_cast<T>(*iter);
+                y = static_cast<T>(*(++iter));
+            }
+            else
+            {
+                x = static_cast<T>(*iter);
+                y = static_cast<T>(*(++iter));
+                z = static_cast<T>(*(++iter));
+            }
         }
 
         T length() const
@@ -258,6 +270,11 @@ namespace HSim
         bool operator==(const Vec3<T> &v_) const { return isEqual(v_); }
 
         bool operator!=(const Vec3<T> &v_) const { return !isEqual(v_); }
+
+        T distanceTo(const Vec3<T> &v_) const
+        {
+            return sub(v_).length();
+        }
 
     }; // class Vec3
 
