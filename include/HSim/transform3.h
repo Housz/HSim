@@ -118,6 +118,8 @@ namespace HSim
 		Vec3<T> translation;
 	};
 
+	using SE3f = Transform3<float>;
+	using SE3d = Transform3<double>;
 	
 
 } // namespace HSim

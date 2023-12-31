@@ -128,6 +128,14 @@ namespace HSim
             return (x == v_.x) && (y == v_.y) && (z == v_.z) && (w == v_.w);
         }
 
+        bool isSimilar(const Vec4<T> v_) const
+        {
+            return (std::fabs(x - v_.x) < EPSILON) &&
+                   (std::fabs(y - v_.y) < EPSILON) &&
+                   (std::fabs(z - v_.z) < EPSILON) &&
+                   (std::fabs(w - v_.w) < EPSILON);
+        }
+
         bool isZero()
         {
             return (x == 0 && y == 0 && z == 0 && w == 0);

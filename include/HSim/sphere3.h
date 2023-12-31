@@ -21,10 +21,26 @@ namespace HSim
 		Sphere3(const Sphere3<T>& sphere_) 
 		: Surface3<T>(sphere_.transform), center(sphere_.center), radius(sphere_.radius) {}
 
+		void setCenter(const Vec3<T> center_) { center = center_; }
+		void setRadius(const T radius_) { radius = radius_; }
+		void setTransform(const Transform3<T> transform_) { transform = transform_; }
+
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const override
 		{
-			
+			return center + radius * closestNormalLocal(positionInLocal_);
+		}
+
+		Vec3<T> closestNormalLocal(const Vec3<T>& positionInLocal_) const override
+		{
+			if (center.isSimilar(positionInLocal_))
+			{
+				return Vec3<T>(1, 0, 0); // ?
+			}
+			else
+			{
+				return (positionInLocal_ - center).getNormalized();
+			}
 		}
 
 	public:

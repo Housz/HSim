@@ -14,19 +14,25 @@ namespace HSim
 
 		Surface3(const Transform3<T>& transform_) : transform(transform_) {}
 
-		template <typename T1>
-		Vec3<T1> closestPosition(const Vec3<T1>& positionInWorld_) const
+		Vec3<T> closestPosition(const Vec3<T>& positionInWorld_) const
 		{
 			return transform.toWorld(closestPositionLocal(transform.toLocal(positionInWorld_)));
 		}
 
-		T closestDistance(const Vec3<T1>& positionInWorld_) const
+		T closestDistance(const Vec3<T>& positionInWorld_) const
 		{
 			return closestDistanceLocal(transform.toLocal(positionInWorld_));
 		}
 
+		Vec3<T> closestNormal(const Vec3<T>& positionInWorld_) const
+		{
+			return transform.toWorld(closestNormalLocal(transform.toLocal(positionInWorld_)));
+		}
+
 	public:
 		virtual Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const = 0;
+
+		virtual Vec3<T> closestNormalLocal(const Vec3<T>& positionInLocal_) const = 0;
 
 		T closestDistanceLocal(const Vec3<T>& positionInLocal_) const 
 		{
