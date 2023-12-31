@@ -114,8 +114,8 @@ namespace HSim
 		}
 
 	public:
-		Quaternion<T> orientation; // or rotation
-		Vec3<T> translation;
+		Quaternion<T> orientation = {1, 0, 0, 0}; // or rotation
+		Vec3<T> translation = {0, 0, 0};
 	};
 
 	using SE3f = Transform3<float>;

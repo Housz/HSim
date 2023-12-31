@@ -25,6 +25,12 @@ namespace HSim
 		void setRadius(const T radius_) { radius = radius_; }
 		void setTransform(const Transform3<T> transform_) { transform = transform_; }
 
+		// center in world frame;
+		Vec3<T> getCenter() const
+		{
+			return transform.toWorld(center);
+		}
+
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const override
 		{
@@ -44,6 +50,7 @@ namespace HSim
 		}
 
 	public:
+		// center in local frame;
 		Vec3<T> center = {0, 0, 0};
 		T radius = 1;
 	};
