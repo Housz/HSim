@@ -11,6 +11,8 @@ namespace HSim
 	public:
 		GridFluidSolver3() {}
 		~GridFluidSolver3() {}
+
+		GridFluidSolver3(const Size3& resolution_, const Vec3<T> gridSpacing_ = {0, 0, 0}, const Vec3<T> gridOrigin_ = {0, 0, 0});
 	
 	// solvers
 	public:
