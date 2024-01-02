@@ -17,6 +17,22 @@ namespace HSim
 	// solvers
 	public:
 		
+		// computeExforces()
+		// computeViscosity()
+		// computePressure()
+		// computeAdvection()
+
+		// advanceTimeStep(timeInterval)
+		// {
+			// beginTimeStep()
+
+			// 1 computeExforces()
+			// 2 computeViscosity()
+			// 3 computePressure()
+			// 4 computeAdvection()
+
+			// endTimeStep()
+		// }
 
 	// setter, getter
 	public:

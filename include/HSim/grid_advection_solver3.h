@@ -1,6 +1,8 @@
 #pragma once 
 
 #include <HSim/common.h>
+#include <HSim/scalar_grid3.h>
+#include <HSim/vector_field3.h>
 
 namespace HSim
 {
@@ -12,6 +14,17 @@ namespace HSim
 	public:
 		GridAdvectionSolver3() {};
 		~GridAdvectionSolver3() {};
+
+	public:
+		// virtual void advect( 
+		// 	const ScalarGrid3<T>& input,
+		// 	const VectorField3<T>& flow,
+		// 	T dt,
+		// 	ScalarGrid3<T>* output,
+		// 	const ScalarField3& boundarySdf
+        //     = ConstantScalarField3(kMaxD)
+		//  ) = 0;
+
 	};
 	
 	template <typename T>
