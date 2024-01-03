@@ -28,6 +28,14 @@ int main()
 #define PLANE3
 #ifdef PLANE3
 
+	HSim::Plane3<float> plane;
+	plane.transform.translation = {0, 1, 0};
+
+	HSim::Vec3<float> p(2, 2, 0);
+
+	std::cout << plane.closestPosition(p);
+	std::cout << plane.closestDistance(p);
+
 
 
 #endif

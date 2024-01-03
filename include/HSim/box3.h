@@ -7,7 +7,7 @@
 namespace HSim
 {
 	template <typename T>
-	class Box3 : Surface3<T>
+	class Box3 : public Surface3<T>
 	{
 	public:
 		Box3() {};
@@ -21,7 +21,7 @@ namespace HSim
 		/**
 		 * @brief set Box3 with any two points
 		 */
-		set(const Vec3<T>& p1, const Vec3<T>& p2)
+		void set(const Vec3<T>& p1, const Vec3<T>& p2)
 		{
 			lowerCorner = {std::min(p1.x, p2.x), std::min(p1.y, p2.y), std::min(p1.z, p2.z)};
 			upperCorner = {std::max(p1.x, p2.x), std::max(p1.y, p2.y), std::max(p1.z, p2.z)};
@@ -60,14 +60,14 @@ namespace HSim
 		Vec3<T> upperCorner = {1, 1, 1};
 	};
 
-	template <typename T>
-	using Box3_Ptr = std::make_shared<Box3<T>>;
+	// template <typename T>
+	// using Box3_Ptr = std::make_shared<Box3<T>>;
 
+	// template <typename T>
+	// class BoundingBox3 : public Box3<T>
+	// {
 
-	class BoundingBox3 : Box3
-	{
-
-	}
+	// };
 
 	
 } // namespace HSim

@@ -3,41 +3,6 @@
 namespace HSim
 {
 
-
-
-	template <typename T>
-	class Animation
-	{
-	public:
-		Animation(){};
-		~Animation(){};
-
-	public:
-		void update(Frame<T> frame) = 0;
-	};
-
-
-
-
-	template <typename T>
-	class PhysicsAnimation : Animation<T>
-	{
-	public:
-		PhysicsAnimation() {};
-		~PhysicsAnimation() {};
-	
-	public:
-		Frame<T> currentFrame;
-		// fixed sub time steps
-		size_t nmbSubTimeSteps = 1;
-		T currentTime = 0.0;
-
-	};
-
-	template <typename T>
-	using PhysicsAnimationPtr = std::shared_ptr<PhysicsAnimation<T>>;
-	
-
 	template <typename T>
 	class Frame
 	{
@@ -61,7 +26,7 @@ namespace HSim
 			index += delta;
 		}
 
-		Frame& operator++()
+		Frame &operator++()
 		{
 			advance();
 			return *this;
@@ -78,6 +43,33 @@ namespace HSim
 		// Time interval between two frames.
 		T timeInterval = 1.0 / 60;
 	};
-	
+
+	template <typename T>
+	class Animation
+	{
+	public:
+		Animation(){};
+		~Animation(){};
+
+	public:
+		void update(Frame<T> frame) = 0;
+	};
+
+	template <typename T>
+	class PhysicsAnimation : Animation<T>
+	{
+	public:
+		PhysicsAnimation(){};
+		~PhysicsAnimation(){};
+
+	public:
+		Frame<T> currentFrame;
+		// fixed sub time steps
+		size_t nmbSubTimeSteps = 1;
+		T currentTime = 0.0;
+	};
+
+	template <typename T>
+	using PhysicsAnimationPtr = std::shared_ptr<PhysicsAnimation<T>>;
 
 } // namespace HSim

@@ -6,7 +6,7 @@
 namespace HSim
 {
 	template <typename T>
-	class Plane3 : Surface3<T>
+	class Plane3 : public Surface3<T>
 	{
 	public:
 		Plane3() {};
@@ -41,12 +41,13 @@ namespace HSim
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const override
 		{
-			
+			Vec3<T> r = positionInLocal_ - point;
+			return point + r - normal.dot(r)*normal;
 		}
 
 		Vec3<T> closestNormalLocal(const Vec3<T>& positionInLocal_) const override
 		{
-
+			return normal;
 		}
 
 	// data
@@ -54,10 +55,11 @@ namespace HSim
 		// plane normal
 		Vec3<T> normal = {0, 1, 0};
 		// A point on the plane
-		Vec3<T> point;
+		Vec3<T> point = {0, 0, 0};
 
 	};
 	
-	
+	// template <typename T>
+	// using Plane3_Ptr = std::make_shared<Plane3<T>>;
 
 } // namespace HSim

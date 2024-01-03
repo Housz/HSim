@@ -43,7 +43,7 @@ namespace HSim
 		Transform3<T> transform;
 	};
 
-	template <typename T>
-	using Surface3_Ptr = std::make_shared<Surface3<T>>;
+	// template <typename T>
+	// using Surface3_Ptr = std::make_shared<Surface3<T>>;
 	
 } // namespace HSim
