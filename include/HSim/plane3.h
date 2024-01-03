@@ -27,17 +27,21 @@ namespace HSim
 		}
 
 		Plane3(const Vec3<T> p1, const Vec3<T> p2, const Vec3<T> p3, const Transform3<T>& transform_)
+		: transform(transform_)
 		{
+			auto v12 = p2 - p1;
+			auto v13 = p3 - p1;
 
+			normal = v12.cross(v13).getNormalized();
+			point = p1;
 		}
-
 
 	
 	// Inherited from Surface3
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const override
 		{
-
+			
 		}
 
 		Vec3<T> closestNormalLocal(const Vec3<T>& positionInLocal_) const override
