@@ -142,7 +142,7 @@ namespace HSim
         T dot(const Vec3<T> &v_) const { return x * v_.x + y * v_.y + z * v_.z; }
 
         // cross
-        T cross(const Vec3<T> &v_) const { return y * v_.z - v_.y * z, z * v_.x - v_.z * x, x * v_.y - v_.x * y; }
+        Vec3<T> cross(const Vec3<T> &v_) const { return Vec3<T>(y * v_.z - v_.y * z, z * v_.x - v_.z * x, x * v_.y - v_.x * y); }
 
         //// this_Vec3 = this_Vec3 (operator) parameters
 

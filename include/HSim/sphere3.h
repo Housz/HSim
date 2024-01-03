@@ -31,6 +31,7 @@ namespace HSim
 			return transform.toWorld(center);
 		}
 
+	// Inherited from Surface3
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const override
 		{
@@ -49,6 +50,7 @@ namespace HSim
 			}
 		}
 
+	// data
 	public:
 		// center in local frame;
 		Vec3<T> center = {0, 0, 0};

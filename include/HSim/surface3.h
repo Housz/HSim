@@ -9,7 +9,7 @@ namespace HSim
 	class Surface3
 	{
 	public:
-		Surface3(){};
+		Surface3() {};
 		~Surface3(){};
 
 		Surface3(const Transform3<T>& transform_) : transform(transform_) {}
@@ -42,5 +42,8 @@ namespace HSim
 	public:
 		Transform3<T> transform;
 	};
+
+	template <typename T>
+	using Surface3_Ptr = std::make_shared<Surface3<T>>;
 	
 } // namespace HSim
