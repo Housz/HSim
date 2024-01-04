@@ -50,7 +50,7 @@ namespace HSim
 		T height() const { return upperCorner.y - lowerCorner.y; }
 		T depth() const { return upperCorner.z - lowerCorner.z; }
 
-		bool isInsideLocal(const Vec3<T> &positionInLocal_) const
+		bool _isInsideLocal(const Vec3<T> &positionInLocal_) const
 		{
 			auto p_ = positionInLocal_;
 			if (p_.x < lowerCorner.x || p_.y < lowerCorner.y || p_.z < lowerCorner.z ||
@@ -62,17 +62,17 @@ namespace HSim
 				return true;
 		}
 
-		bool isInsideWorld(const Vec3<T> &positionInWorld_) const
-		{
-			return isInsideLocal(transform.toLocal(positionInWorld_));
-		}
+		// bool isInsideWorld(const Vec3<T> &positionInWorld_) const
+		// {
+		// 	return isInsideLocal(transform.toLocal(positionInWorld_));
+		// }
 
 		// Inherited from Surface3
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const override
 		{
 			// if positionInLocal_ is inside this box
-			if (isInsideLocal(positionInLocal_))
+			if (_isInsideLocal(positionInLocal_))
 			{
 				Plane3<T> planes[6] = {
 					Plane3<T>({1, 0, 0}, upperCorner), // right

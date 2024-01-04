@@ -1,5 +1,6 @@
 #pragma once
 
+#include <HSim/common.h>
 #include <HSim/vec3.h>
 
 namespace HSim
@@ -76,5 +77,8 @@ namespace HSim
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
 	};
+
+	template <typename T>
+	using AABB3_Ptr = std::shared_ptr<AABB3<T>>;
 
 } // namespace HSim

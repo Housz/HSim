@@ -29,6 +29,17 @@ namespace HSim
 			return transform.toWorld(closestNormalLocal(transform.toLocal(positionInWorld_)));
 		}
 
+		bool isInsideWorld(const Vec3<T> &positionInWorld_) const
+		{
+			return isInsideLocal(transform.toLocal(positionInWorld_));
+		}
+		bool isInside(const Vec3<T> &positionInWorld_) const
+		{
+			return isInsideLocal(transform.toLocal(positionInWorld_));
+		}
+		
+
+	// in local frame
 	public:
 		virtual Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const = 0;
 
@@ -38,12 +49,21 @@ namespace HSim
 		{
 			return positionInLocal_.distanceTo(closestPositionLocal(positionInLocal_));
 		}
+
+		bool isInsideLocal(const Vec3<T>& positionInLocal_) const 
+		{
+			auto closestPosition = closestPositionLocal(positionInLocal_);
+			auto closestNormal = closestNormalLocal(positionInLocal_);
+			
+			auto r = positionInLocal_ - closestPosition;
+			return r.dot(closestNormal) < 0.0;
+		}
 	
 	public:
 		Transform3<T> transform;
 	};
 
-	// template <typename T>
-	// using Surface3_Ptr = std::make_shared<Surface3<T>>;
+	template <typename T>
+	using Surface3_Ptr = std::shared_ptr<Surface3<T>>;
 	
 } // namespace HSim

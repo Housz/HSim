@@ -2,6 +2,7 @@
 #include <HSim/plane3.h>
 #include <HSim/box3.h>
 #include <HSim/aabb3.h>
+#include <memory>
 
 
 int main()
@@ -41,12 +42,12 @@ int main()
 
 #endif
 
-// #define BOX3
+#define BOX3
 #ifdef BOX3
 	HSim::Vec3<float> lower(0, 0, 0);
 	HSim::Vec3<float> upper(5, 5, 5);
 	HSim::Box3<float> box(lower, upper);
-	
+
 	// box.transform.translation = {2, 0, 0};
 
 	std::cout << box.isInsideWorld({1, 1, 1}) << std::endl;
@@ -58,7 +59,7 @@ int main()
 
 #endif
 
-#define boundingbox
+// #define boundingbox
 #ifdef boundingbox
 
 	HSim::AABB3<float> aabb1({0, 0, 0}, {2, 2, 2});
@@ -69,6 +70,12 @@ int main()
 	std::cout << aabb1.isOverlap(aabb2) << std::endl;
 	std::cout << aabb2.isOverlap(aabb3) << std::endl;
 	std::cout << aabb1.isInside({1, 1, 1}) << std::endl;
+
+	HSim::Vec3<float> lower(0, 0, 0);
+	HSim::Vec3<float> upper(5, 5, 5);
+	// HSim::AABB3Ptr<float> a = std::make_shared<HSim::AABB3<float>>({0, 0, 0}, {2, 2, 2}); error
+	HSim::AABB3_Ptr<float> a = std::make_shared<HSim::AABB3<float>>(lower, upper);
+	std::cout << a->upperCorner;
 
 #endif 
 

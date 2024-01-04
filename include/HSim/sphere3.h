@@ -57,5 +57,7 @@ namespace HSim
 		T radius = 1;
 	};
 	
+	template <typename T>
+	using Sphere3_Ptr = std::shared_ptr<Sphere3<T>>;
 	
 } // namespace HSim
