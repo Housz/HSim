@@ -1,6 +1,7 @@
 #include <HSim/sphere3.h>
 #include <HSim/plane3.h>
 #include <HSim/box3.h>
+#include <HSim/aabb3.h>
 
 
 int main()
@@ -40,7 +41,7 @@ int main()
 
 #endif
 
-#define BOX3
+// #define BOX3
 #ifdef BOX3
 	HSim::Vec3<float> lower(0, 0, 0);
 	HSim::Vec3<float> upper(5, 5, 5);
@@ -56,6 +57,20 @@ int main()
 	std::cout << box.closestNormal({6, 2, 2}) << std::endl;
 
 #endif
+
+#define boundingbox
+#ifdef boundingbox
+
+	HSim::AABB3<float> aabb1({0, 0, 0}, {2, 2, 2});
+	HSim::AABB3<float> aabb2({1, 1, 1}, {3, 3, 3});
+	HSim::AABB3<float> aabb3({-1, -1, -1}, {0, 0, 0});
+
+
+	std::cout << aabb1.isOverlap(aabb2) << std::endl;
+	std::cout << aabb2.isOverlap(aabb3) << std::endl;
+	std::cout << aabb1.isInside({1, 1, 1}) << std::endl;
+
+#endif 
 
 	return 0;
 }

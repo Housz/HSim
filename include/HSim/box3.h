@@ -23,6 +23,8 @@ namespace HSim
 		Box3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_, const Transform3<T> transform_)
 			: lowerCorner(lowerCorner_), upperCorner(upperCorner_), transform(transform_) {}
 
+		Box3(const Box3<T>& box_) : lowerCorner(box_.lowerCorner), upperCorner(box_.upperCorner) {  }
+
 		/**
 		 * @brief set Box3 with any two points
 		 */
@@ -137,13 +139,5 @@ namespace HSim
 
 	// template <typename T>
 	// using Box3_Ptr = std::make_shared<Box3<T>>;
-
-	template <typename T>
-	class BoundingBox3 : public Box3<T>
-	{
-	public:
-		BoundingBox3() {}
-		~BoundingBox3() {}
-	};
 
 } // namespace HSim
