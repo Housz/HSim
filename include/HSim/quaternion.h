@@ -10,8 +10,9 @@ namespace HSim
     class Quaternion
     {
     public:
-        Quaternion(){};
-        ~Quaternion(){};
+        Quaternion() {};
+        ~Quaternion() {};
+        Quaternion(const Quaternion<T>& q_) { set(q_); }
         Quaternion(T w_, T x_, T y_, T z_) : w(w_), x(x_), y(y_), z(z_) {}
         Quaternion(const std::initializer_list<T> &list) { set(list); }
         Quaternion(T w_, const Vec3<T> &u_) : w(w_), x(u_.x), y(u_.y), z(u_.z) {}
@@ -28,6 +29,11 @@ namespace HSim
             x = x_;
             y = y_;
             z = z_;
+        }
+
+        void set(const Quaternion<T>& q_)
+        {
+            w = q_.w; x = q_.x; y = q_.y; z = q_.z;
         }
 
         void set(const std::initializer_list<T> &list_)
@@ -296,7 +302,7 @@ namespace HSim
 
         Quaternion<T>& operator=(const Quaternion<T>& q_)
         {
-            set(q);
+            set(q_);
             return *this;
         }
 

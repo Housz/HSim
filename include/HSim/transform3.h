@@ -22,7 +22,7 @@ namespace HSim
 		void set(const Transform3<T1>& transform_)
 		{
 			orientation = transform_.orientation;
-			translation = transform_.translation_;
+			translation = transform_.translation;
 		}
 		
 		void set(const Quaternion<T>& orientation_, const Vec3<T>& translation_)

@@ -52,7 +52,7 @@ namespace HSim
 		~Animation(){};
 
 	public:
-		void update(Frame<T> frame) = 0;
+		virtual void update(Frame<T> frame) = 0;
 	};
 
 	template <typename T>

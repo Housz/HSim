@@ -14,6 +14,9 @@ namespace HSim
 
 		Plane3(const Transform3<T>& transform_) : transform(transform_) {}
 
+		Plane3(const Vec3<T> normal_, const Vec3<T> point_)
+		: normal(normal_), point(point_) {}
+
 		Plane3(const Vec3<T> normal_, const Vec3<T> point_, const Transform3<T>& transform_)
 		: normal(normal_), point(point_), transform(transform_) {}
 

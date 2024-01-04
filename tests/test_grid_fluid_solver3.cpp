@@ -2,7 +2,7 @@
 
 int main()
 {
-	HSim::GridFluidSolver3<float> solver;
+	// HSim::GridFluidSolver3<float> solver;
 	
 	return 0;
 }

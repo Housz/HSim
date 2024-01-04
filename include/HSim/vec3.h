@@ -298,13 +298,11 @@ namespace HSim
         return os;
     }
 
-
     // n * v
     template <typename T1, typename T2>
     Vec3<T1> operator*(T2 n, const Vec3<T1>& v)
     {
         return v.mul((T1)n);
     }
-    
 
 } // namespace HSim
