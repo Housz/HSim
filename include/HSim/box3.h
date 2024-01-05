@@ -78,9 +78,9 @@ namespace HSim
 					Plane3<T>({1, 0, 0}, upperCorner), // right
 					Plane3<T>({0, 1, 0}, upperCorner), // up
 					Plane3<T>({0, 0, 1}, upperCorner), // front
-					Plane3<T>({1, 0, 0}, lowerCorner), // left
-					Plane3<T>({0, 1, 0}, lowerCorner), // down
-					Plane3<T>({0, 0, 1}, lowerCorner)  // back
+					Plane3<T>({-1, 0, 0}, lowerCorner), // left
+					Plane3<T>({0, -1, 0}, lowerCorner), // down
+					Plane3<T>({0, 0, -1}, lowerCorner)  // back
 				};
 
 				Vec3<T> closestPosition = planes[0].closestPositionLocal(positionInLocal_);
@@ -112,9 +112,9 @@ namespace HSim
 				Plane3<T>({1, 0, 0}, upperCorner), // right
 				Plane3<T>({0, 1, 0}, upperCorner), // up
 				Plane3<T>({0, 0, 1}, upperCorner), // front
-				Plane3<T>({1, 0, 0}, lowerCorner), // left
-				Plane3<T>({0, 1, 0}, lowerCorner), // down
-				Plane3<T>({0, 0, 1}, lowerCorner)  // back
+				Plane3<T>({-1, 0, 0}, lowerCorner), // left
+				Plane3<T>({0, -1, 0}, lowerCorner), // down
+				Plane3<T>({0, 0, -1}, lowerCorner)  // back
 			};
 
 			auto closestNormal = planes[0].normal;
