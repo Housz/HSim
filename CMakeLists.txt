@@ -21,8 +21,8 @@ add_library(HSim OBJECT ${source})
 target_include_directories(HSim PUBLIC include)
 
 add_subdirectory(examples)
-
 add_subdirectory(tests)
+add_subdirectory(HSimulator)
 
 if (WIN32)
 	add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
