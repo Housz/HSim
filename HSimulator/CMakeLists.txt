@@ -1,14 +1,22 @@
 cmake_minimum_required(VERSION 3.26)
 
-add_executable(HSimulator main.cpp)
+add_executable(HSimulator)
+
 target_link_libraries(HSimulator PUBLIC glfw)
 target_link_libraries(HSimulator PUBLIC glad::glad)
-target_link_libraries(main PUBLIC glm::glm)
-
+target_link_libraries(HSimulator PUBLIC glm::glm)
 target_link_libraries(HSimulator PUBLIC imgui::imgui)
+# target_link_libraries(HSimulator PRIVATE Stb)
+
+# file(COPY resources DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+file(COPY resources DESTINATION ${CMAKE_CURRENT_LIST_DIR}/../build/out/bin)
+
 
 target_link_libraries(HSimulator PUBLIC HSim)
 
-file(GLOB_RECURSE source CONFIGURE_DEPENDS GUI/*.h GUI/*.cpp)
-add_library(HSimulator OBJECT ${source})
-target_include_directories(HSimulator PUBLIC include)
+aux_source_directory(. sources)
+aux_source_directory(GUI sources)
+aux_source_directory(IO sources)
+
+target_sources(HSimulator PUBLIC ${sources})
+
