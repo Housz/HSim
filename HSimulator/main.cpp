@@ -97,8 +97,6 @@ GLFWwindow *initGLFW()
     }
     else
     {
-        std::cout << sizeof(images[0].width);
-
         glfwSetWindowIcon(window, 1, images);
         stbi_image_free(images[0].pixels);
     }
@@ -177,7 +175,7 @@ void initImGuiFrame()
     ImGui::NewFrame();
 }
 
-void renderImGui()
+void renderImGui(HSim::Shader &shader)
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -206,10 +204,27 @@ void render(GLFWwindow *window)
     HSim::Shader shader("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
     shader.use();
 
+    float uniformValueR = 0.5f;
+    float uniformValueG = 0.5f;
+    float uniformValueB = 0.5f;
+
     while (!glfwWindowShouldClose(window))
     {
         initImGuiFrame();
-        ImGui::ShowDemoWindow(); // Show demo window! :)
+        // ImGui::ShowDemoWindow(); // Show demo window! :)
+
+        ImGui::Begin("Shader Settings");
+
+        // 使用滑动条控制Uniform变量
+        ImGui::SliderFloat("R", &uniformValueR, 0.0f, 1.0f);
+        ImGui::SliderFloat("G", &uniformValueG, 0.0f, 1.0f);
+        ImGui::SliderFloat("B", &uniformValueB, 0.0f, 1.0f);
+
+        // 更新Shader的Uniform变量
+        // shader.setFloat("your_uniform_name", uniformValue);
+        shader.setFloat4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
+
+        ImGui::End();
 
         // input
         // -----
@@ -217,11 +232,10 @@ void render(GLFWwindow *window)
 
         // set uniforms in shader
         // -----
-        double timeValue = glfwGetTime();
-        float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
-        float redValue = static_cast<float>(cos(timeValue) / 2.0 + 0.5);
-        // int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        shader.setFloat4("ourColor", redValue, greenValue, 0.0f, 0.0f);
+        // double timeValue = glfwGetTime();
+        // float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
+        // float redValue = static_cast<float>(cos(timeValue) / 2.0 + 0.5);
+        // shader.setFloat4("ourColor", redValue, greenValue, 0.0f, 0.0f);
 
         // render
         // ------
@@ -235,7 +249,7 @@ void render(GLFWwindow *window)
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
 
-        renderImGui();
+        renderImGui(shader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
