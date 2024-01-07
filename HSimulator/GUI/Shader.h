@@ -1,3 +1,6 @@
+/**
+ * reference: https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_s.h
+ */
 #pragma once
 
 #include <string>
@@ -89,7 +92,50 @@ namespace HSim
 			glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 		}
 
-		
+		// ------------------------------------------------------------------------
+		void setInt(const std::string &name, int value) const
+		{
+			glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+		}
+		// ------------------------------------------------------------------------
+		void setFloat(const std::string &name, float value) const
+		{
+			glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+		}
+
+		void setFloat4(const std::string &name, float value0, float value1, float value2, float value3) const
+		{
+			glUniform4f(glGetUniformLocation(ID, name.c_str()), value0, value1, value2, value3);
+		}
+
+	private:
+		// utility function for checking shader compilation/linking errors.
+		// ------------------------------------------------------------------------
+		void checkCompileErrors(unsigned int shader, std::string type)
+		{
+			int success;
+			char infoLog[1024];
+			if (type != "PROGRAM")
+			{
+				glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+				if (!success)
+				{
+					glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+					std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+							  << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				}
+			}
+			else
+			{
+				glGetProgramiv(shader, GL_LINK_STATUS, &success);
+				if (!success)
+				{
+					glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+					std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
+							  << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				}
+			}
+		}
 
 	public:
 		unsigned int ID;

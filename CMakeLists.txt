@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project(HSim)
 
 find_package(OpenVDB CONFIG REQUIRED)
@@ -11,14 +14,14 @@ find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
-find_package(Stb REQUIRED)
+
+# if (NOT CMAKE_BUILD_TYPE)
+# 	set (CMAKE_BUILD_TYPE Debug)
+# endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY file(COPY resources DESTINATION ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
-)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
-
-
 
 file(GLOB_RECURSE source CONFIGURE_DEPENDS include/*.h src/*.cpp)
 

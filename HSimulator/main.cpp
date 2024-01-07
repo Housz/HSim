@@ -13,12 +13,14 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb_image.h>
+
+#include <GUI/shader.h>
 
 #include <HSim/vec3.h>
 
@@ -84,39 +86,22 @@ GLFWwindow *initGLFW()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // // 加载图标
-    // int width, height, channels;
-    // const char *imagePath = "./resources/imgs/nobita64.png"; // 替换为你的图像路径
-    // GLFWimage* image = stbi_load(imagePath, &width, &height, &channels, STBI_rgb_alpha);
-
-    // if (!image)
-    // {
-    //     fprintf(stderr, "Failed to load image\n");
-    //     glfwTerminate();
-    //     // return -1;
-    // }
-
-    // // 设置窗口图标
-    // GLFWimage glfwImage;
-    // glfwImage.pixels = image;
-    // glfwImage.width = width;
-    // glfwImage.height = height;
-
-    // glfwSetWindowIcon(window, 1, &glfwImage);
-
-    // 释放图像内存
-
     GLFWimage images[1];
-    // images[0].pixels = stbi_load("resources\\imgs\\nobita64.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
-    images[0].pixels = stbi_load("D:\\projects\\HSim\\HSimulator\\resources\\imgs\\nobita64.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
-    // images[0] = load_icon("resources/imgs/nobita64.png");
-    // images[1] = load_icon("resources/imgs/nobita32.png");
+    images[0].pixels = stbi_load("./resources/imgs/nobita64.png", &images[0].width, &images[0].height, 0, 4); // rgba channels
 
-    std::cout << sizeof( images[0].width);
+    if (!images[0].pixels)
+    {
+        fprintf(stderr, "Failed to load icon image\n");
+        // glfwTerminate();
+        // return -1;
+    }
+    else
+    {
+        std::cout << sizeof(images[0].width);
 
-    glfwSetWindowIcon(window, 1, images);
-    stbi_image_free(images[0].pixels);
-
+        glfwSetWindowIcon(window, 1, images);
+        stbi_image_free(images[0].pixels);
+    }
 
     return window;
 }
@@ -130,55 +115,6 @@ void initGLAD()
         std::cout << "Failed to initialize GLAD" << std::endl;
         // return -1;
     }
-}
-
-unsigned int buildShader()
-{
-    // build and compile our shader program
-    // ------------------------------------
-    // vertex shader
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
-                  << infoLog << std::endl;
-    }
-    // fragment shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
-                  << infoLog << std::endl;
-    }
-    // link shaders
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
-                  << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return shaderProgram;
 }
 
 unsigned int initData()
@@ -266,6 +202,10 @@ void render(GLFWwindow *window)
 {
     // render loop
     // -----------
+
+    HSim::Shader shader("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
+    shader.use();
+
     while (!glfwWindowShouldClose(window))
     {
         initImGuiFrame();
@@ -275,7 +215,13 @@ void render(GLFWwindow *window)
         // -----
         processInput(window);
 
-        auto shaderProgram = buildShader();
+        // set uniforms in shader
+        // -----
+        double timeValue = glfwGetTime();
+        float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
+        float redValue = static_cast<float>(cos(timeValue) / 2.0 + 0.5);
+        // int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        shader.setFloat4("ourColor", redValue, greenValue, 0.0f, 0.0f);
 
         // render
         // ------
@@ -283,16 +229,6 @@ void render(GLFWwindow *window)
         glClear(GL_COLOR_BUFFER_BIT);
 
         auto VAO = initData();
-
-        // activate the shader before any calls to glUniform
-        glUseProgram(shaderProgram);
-
-        // update shader uniform
-        double timeValue = glfwGetTime();
-        float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
-        float redValue = static_cast<float>(cos(timeValue) / 2.0 + 0.5);
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-        glUniform4f(vertexColorLocation, redValue, greenValue, 0.0f, 1.0f);
 
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         // glDrawArrays(GL_TRIANGLES, 0, 6);

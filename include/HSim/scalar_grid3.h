@@ -13,9 +13,14 @@ namespace HSim
 		ScalarGrid3(){};
 		~ScalarGrid3(){};
 
-		ScalarGrid3(size_t, size_t, size_t);
-		ScalarGrid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1});
-		
+		ScalarGrid3(size_t x, size_t y, size_t z)
+			: Grid3<T>(x, y, z)
+		{
+		}
+		ScalarGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
+			: Grid3<T>(resolution, origin, gridSpacing)
+		{
+		}
 
 		// setter getter
 	public:
@@ -73,17 +78,6 @@ namespace HSim
 		std::fill(_data.begin(), _data.end(), value);
 	}
 
-	template <typename T>
-	ScalarGrid3<T>::ScalarGrid3(size_t x, size_t y, size_t z)
-	:Grid3<T>(x, y, z)
-	{
-	}
-
-	template <typename T>
-	ScalarGrid3<T>::ScalarGrid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1})
-	:Grid3<T>(resolution, origin, gridSpacing)
-	{
-	}
 
 	/**
 	 * @brief Gradient (Central Finite Difference)
@@ -100,15 +94,15 @@ namespace HSim
 
 		Vec3<T> grad;
 
-		T left 	= dataAt((i > 0) ? i - 1 : i, j, k);
+		T left = dataAt((i > 0) ? i - 1 : i, j, k);
 		T right = dataAt((i + 1 < sizeX) ? i + 1 : i, j, k);
-		T down 	= dataAt(i, (j > 0) ? j - 1 : j, k);
-		T up 	= dataAt(i, (j + 1 < sizeY) ? j + 1 : j, k);
-		T back 	= dataAt(i, j, (k > 0) ? k - 1 : k);
+		T down = dataAt(i, (j > 0) ? j - 1 : j, k);
+		T up = dataAt(i, (j + 1 < sizeY) ? j + 1 : j, k);
+		T back = dataAt(i, j, (k > 0) ? k - 1 : k);
 		T front = dataAt(i, j, (k + 1 < sizeY) ? k + 1 : k);
 
 		grad.x = (right - left) / (2 * deltaX());
-		grad.y = (up 	- down) / (2 * deltaY());
+		grad.y = (up - down) / (2 * deltaY());
 		grad.z = (front - back) / (2 * deltaZ());
 
 		return grad;
@@ -127,26 +121,25 @@ namespace HSim
 		size_t sizeZ = _gridResolution.z;
 		assert(i < sizeX && j < sizeY && k < sizeZ);
 
-		T center= dataAt(i, j, k);
+		T center = dataAt(i, j, k);
 
-		T left 	= dataAt((i > 0) ? i - 1 : i, j, k);
+		T left = dataAt((i > 0) ? i - 1 : i, j, k);
 		T right = dataAt((i + 1 < sizeX) ? i + 1 : i, j, k);
-		T down 	= dataAt(i, (j > 0) ? j - 1 : j, k);
-		T up 	= dataAt(i, (j + 1 < sizeY) ? j + 1 : j, k);
-		T back 	= dataAt(i, j, (k > 0) ? k - 1 : k);
+		T down = dataAt(i, (j > 0) ? j - 1 : j, k);
+		T up = dataAt(i, (j + 1 < sizeY) ? j + 1 : j, k);
+		T back = dataAt(i, j, (k > 0) ? k - 1 : k);
 		T front = dataAt(i, j, (k + 1 < sizeY) ? k + 1 : k);
-		
+
 		// d2f/dx2
-		T ddx = ( right - 2*center + left ) / ( deltaX() * deltaX());
+		T ddx = (right - 2 * center + left) / (deltaX() * deltaX());
 		// d2f/dx2
-		T ddy = ( up 	- 2*center + down ) / ( deltaY() * deltaY());
+		T ddy = (up - 2 * center + down) / (deltaY() * deltaY());
 		// d2f/dx2
-		T ddz = ( front - 2*center + back ) / ( deltaZ() * deltaZ());
+		T ddz = (front - 2 * center + back) / (deltaZ() * deltaZ());
 
 		T laplacian = ddx + ddy + ddz;
 
 		return laplacian;
-		
 	}
 
 } // namespace HSim
