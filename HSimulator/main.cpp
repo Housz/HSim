@@ -31,17 +31,6 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
-float x = 0.5f;;
-float y = 0.5f;;
-float z = 0.5f;;
-
-float vertices[] = {
-    // 0.5f, 0.5f, 0.0f,   // top right
-    x, y, z,   // top right
-    0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f, // bottom left
-    -0.5f, 0.5f, 0.0f   // top left
-};
 unsigned int indices[] = {
     // note that we start from 0!
     0, 1, 3, // first Triangle
@@ -102,7 +91,7 @@ void initGLAD()
     }
 }
 
-unsigned int initData()
+unsigned int initData(float *vertices, size_t size)
 {
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -112,7 +101,7 @@ unsigned int initData()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -136,12 +125,11 @@ unsigned int initData()
     return VAO;
 }
 
-void updateData(float* vertices, unsigned int* indices)
+void updateData(float *vertices, unsigned int *indices)
 {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 }
 
 void initImGui(GLFWwindow *window)
@@ -203,11 +191,16 @@ void render(GLFWwindow *window)
     float uniformValueG = 0.5f;
     float uniformValueB = 0.5f;
 
+    float f = 0.5f;
+
+    float x = 0.5f;
+    float y = 0.5f;
+    float z = 0.5f;
+
     while (!glfwWindowShouldClose(window))
     {
         initImGuiFrame();
         // ImGui::ShowDemoWindow(); // Show demo window! :)
-
 
         ImGui::Begin("Shader Settings");
 
@@ -220,8 +213,20 @@ void render(GLFWwindow *window)
         ImGui::SliderFloat("y", &y, 0.0f, 1.0f);
         ImGui::SliderFloat("z", &z, 0.0f, 1.0f);
 
-        updateData(vertices, indices);
+        float vertices[] = {
+            // 0.5f, 0.5f, 0.0f,   // top right
+            x, y, z,            // top right
+            0.5f, -0.5f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f, // bottom left
+            -0.5f, 0.5f, 0.0f   // top left
+        };
 
+
+        std::cout << vertices[0];
+
+        ImGui::SliderFloat("f", &f, 0.0f, 1.0f);
+
+        // updateData(vertices, indices);
 
         // 更新Shader的Uniform变量
         // shader.setFloat("your_uniform_name", uniformValue);
@@ -242,10 +247,10 @@ void render(GLFWwindow *window)
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        auto VAO = initData();
+        auto VAO = initData(vertices, sizeof(vertices));
 
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         // glDrawArrays(GL_TRIANGLES, 0, 6);
