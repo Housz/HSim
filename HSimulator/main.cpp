@@ -31,9 +31,13 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
+float x = 0.5f;;
+float y = 0.5f;;
+float z = 0.5f;;
 
 float vertices[] = {
-    0.5f, 0.5f, 0.0f,   // top right
+    // 0.5f, 0.5f, 0.0f,   // top right
+    x, y, z,   // top right
     0.5f, -0.5f, 0.0f,  // bottom right
     -0.5f, -0.5f, 0.0f, // bottom left
     -0.5f, 0.5f, 0.0f   // top left
@@ -132,6 +136,14 @@ unsigned int initData()
     return VAO;
 }
 
+void updateData(float* vertices, unsigned int* indices)
+{
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+}
+
 void initImGui(GLFWwindow *window)
 {
     // Setup Dear ImGui context
@@ -196,12 +208,20 @@ void render(GLFWwindow *window)
         initImGuiFrame();
         // ImGui::ShowDemoWindow(); // Show demo window! :)
 
+
         ImGui::Begin("Shader Settings");
 
         // 使用滑动条控制Uniform变量
         ImGui::SliderFloat("R", &uniformValueR, 0.0f, 1.0f);
         ImGui::SliderFloat("G", &uniformValueG, 0.0f, 1.0f);
         ImGui::SliderFloat("B", &uniformValueB, 0.0f, 1.0f);
+
+        ImGui::SliderFloat("x", &x, 0.0f, 1.0f);
+        ImGui::SliderFloat("y", &y, 0.0f, 1.0f);
+        ImGui::SliderFloat("z", &z, 0.0f, 1.0f);
+
+        updateData(vertices, indices);
+
 
         // 更新Shader的Uniform变量
         // shader.setFloat("your_uniform_name", uniformValue);
