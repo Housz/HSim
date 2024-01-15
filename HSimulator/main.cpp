@@ -24,7 +24,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-#include <GUI/shader.h>
+#include "renderer/shader.h"
 
 #include <HSim/vec3.h>
 

@@ -16,6 +16,7 @@ target_link_libraries(HSimulator PUBLIC HSim)
 aux_source_directory(. sources)
 aux_source_directory(GUI sources)
 aux_source_directory(IO sources)
+aux_source_directory(renderer sources)
 
 target_sources(HSimulator PUBLIC ${sources})
 
