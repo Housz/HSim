@@ -18,6 +18,7 @@ aux_source_directory(GUI sources)
 aux_source_directory(IO sources)
 aux_source_directory(renderer sources)
 aux_source_directory(scene sources)
+aux_source_directory(config sources)
 
 target_sources(HSimulator PUBLIC ${sources})
 

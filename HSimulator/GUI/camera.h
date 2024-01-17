@@ -1,3 +1,4 @@
+// Ref: https://github.com/peridyno/
 #pragma once
 
 #include <glm/glm.hpp>
@@ -7,9 +8,9 @@
 // #include <Quat.h>
 
 #include <HSim/quaternion.h>
+#include <HSim/ray3.h>
 
-
-#include "Primitive/Primitive3D.h"
+// #include "Primitive/Primitive3D.h"
 
 namespace HSim
 {
@@ -53,7 +54,7 @@ namespace HSim
 		virtual Vec3f getEyePos() const = 0;
 		virtual Vec3f getTargetPos() const = 0;
 
-		TRay3D<float> castRayInWorldSpace(float x, float y);
+		Ray3<float> castRayInWorldSpace(float x, float y);
 
 		void setUnitScale(float unit) { mUnitScale = unit; }
 
