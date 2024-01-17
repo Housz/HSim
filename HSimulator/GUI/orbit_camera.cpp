@@ -215,7 +215,9 @@ namespace HSim
 		float rotAngle = mRotAngle;
 		Vec3f rotAxis = mRotAxis;
 
-		oldQuat.toRotationAxis(rotAngle, rotAxis);
+		// oldQuat.toRotationAxis(rotAngle, rotAxis);
+		rotAngle = oldQuat.angle();
+		rotAxis = oldQuat.axis();
 
 		return oldQuat;
 	}
@@ -237,7 +239,12 @@ namespace HSim
 		getCoordSystem(viewDir, upDir, rightDir);
 		Vec3f targetPos = mEyePos + mFocusDist * viewDir;
 
-		return glm::lookAt(mEyePos.data_ * mUnitScale, targetPos.data_ * mUnitScale, upDir.data_);
+		// return glm::lookAt(mEyePos.data_ * mUnitScale, targetPos.data_ * mUnitScale, upDir.data_);
+		
+		return glm::lookAt(
+			glm::vec3(mEyePos.x, mEyePos.y, mEyePos.z) * mUnitScale, 
+			glm::vec3(targetPos.x, targetPos.y, targetPos.z) * mUnitScale, 
+			glm::vec3(upDir.x, upDir.y, upDir.z));
 	}
 
 	glm::mat4 OrbitCamera::getProjMat()
@@ -252,7 +259,8 @@ namespace HSim
 		}
 		else
 		{
-			float half_depth = (mEyePos - mTargetPos).norm() * mUnitScale;
+			// float half_depth = (mEyePos - mTargetPos).norm() * mUnitScale;
+			float half_depth = (mEyePos - mTargetPos).length() * mUnitScale;
 			projection = glm::ortho(-half_depth * aspect, half_depth * aspect, -half_depth, half_depth, -5.0f * half_depth, 5.0f * half_depth);
 		}
 

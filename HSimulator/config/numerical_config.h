@@ -1,8 +1,8 @@
 // 
 
-using precision = float; 
+using PRECISION = float; 
 
 #ifdef DOUBLE_PRECISION
-	using precision = double; 
+	using PRECISION = double; 
 #endif
 
