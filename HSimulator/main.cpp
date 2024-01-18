@@ -378,53 +378,7 @@ void render(GLFWwindow *window)
 //     return 0;
 // }
 
-#include <scene/scene_graph.h>
-#include <HSim/box3.h>
 
-// void callback(HSim::GameObject_ptr go)
-// {
-//     if (go->surface_ptr != nullptr)
-//     {
-//         go->surface_ptr->serialize();
-//     }
-// }
-
-int main()
-{
-    HSim::SceneGraph sg;
-
-    auto root = std::make_shared<HSim::GameObject>();
-    auto box = std::make_shared<HSim::Box3<float>>();
-    root->surface_ptr = box;
-
-    auto go1 = std::make_shared<HSim::GameObject>();
-    auto go2 = std::make_shared<HSim::GameObject>();
-    auto go3 = std::make_shared<HSim::GameObject>();
-
-    go1->surface_ptr = box;
-    go2->surface_ptr = box;
-    go3->surface_ptr = box;
-
-    root->children.push_back(go1);
-    root->children.push_back(go2);
-    root->children.push_back(go3);
-
-    std::function<void(HSim::GameObject_ptr)> callback = [](HSim::GameObject_ptr go)
-    {
-        if (go->surface_ptr != nullptr)
-        {
-            go->surface_ptr->serialize();
-        }
-    };
-
-    sg.root = root;
-
-    // std::function<void(HSim::GameObject_ptr)> f = callback;
-
-    sg.traverse(callback);
-
-    return 0;
-}
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -504,4 +458,53 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
         fov = 1.0f;
     if (fov > 45.0f)
         fov = 45.0f;
+}
+
+
+
+
+#include <scene/scene_graph.h>
+#include <HSim/box3.h>
+
+// void callback(HSim::GameObject_ptr go)
+// {
+//     if (go->surface_ptr != nullptr)
+//     {
+//         go->surface_ptr->serialize();
+//     }
+// }
+
+int main()
+{
+    HSim::SceneGraph sg;
+
+    auto root = std::make_shared<HSim::GameObject>();
+    auto box = std::make_shared<HSim::Box3<float>>();
+    root->surface_ptr = box;
+
+    auto go1 = std::make_shared<HSim::GameObject>();
+    auto go2 = std::make_shared<HSim::GameObject>();
+    auto go3 = std::make_shared<HSim::GameObject>();
+
+    go1->surface_ptr = box;
+    go2->surface_ptr = box;
+    // go3->surface_ptr = box;
+
+    root->children.push_back(go1);
+    root->children.push_back(go2);
+    root->children.push_back(go3);
+
+    std::function<void(HSim::GameObject_ptr)> callback = [](HSim::GameObject_ptr go)
+    {
+        if (go->surface_ptr != nullptr)
+        {
+            go->surface_ptr->serialize();
+        }
+    };
+
+    sg.root = root;
+
+    sg.traverse(callback);
+
+    return 0;
 }

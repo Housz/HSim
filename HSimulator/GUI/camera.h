@@ -77,5 +77,7 @@ namespace HSim
 		float mUnitScale = 1.0f;
 	};
 
+	using Camera_ptr = std::shared_ptr<Camera>;
+
 }
 

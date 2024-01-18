@@ -68,4 +68,6 @@ namespace HSim
 		float mZoomSpeed = 1.0f;
 	};
 
+	using OrbitCamera_ptr = std::shared_ptr<OrbitCamera>;
+
 } // namespace HSim

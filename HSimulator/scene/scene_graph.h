@@ -21,5 +21,7 @@ namespace HSim
 
 	};
 
+	using SceneGraph_ptr = std::shared_ptr<SceneGraph>;
+
 
 } // namespace HSim
