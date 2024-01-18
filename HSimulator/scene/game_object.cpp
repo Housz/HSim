@@ -8,11 +8,23 @@ HSim::GameObject::~GameObject()
 {
 }
 
-void HSim::GameObject::traverse(std::function<void(GameObject&)> callback)
+bool HSim::GameObject::isLeaf()
 {
 	if (children.empty())
 	{
-		callback(this);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void HSim::GameObject::traverseChildren(std::function<void(GameObject_ptr)> &callback)
+{
+	for (auto child : children)
+	{
+		callback(child);
 	}
 	
 }

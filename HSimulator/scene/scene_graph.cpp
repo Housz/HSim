@@ -8,19 +8,24 @@ HSim::SceneGraph::~SceneGraph()
 {
 }
 
-void HSim::SceneGraph::traverse(std::function<void(GameObject&)> callback)
+void HSim::SceneGraph::traverse(std::function<void(GameObject_ptr)>& callback)
 {
-	// root->traverse(callback);
-	// callback(root);
+	traverse(callback, root);
+}
 
-	// if (root.empty())
-	// {
-	// 	return;
-	// }
-	// else
-	// {
-	// 	traverse()
-	// }
-	
-	
+void HSim::SceneGraph::traverse(std::function<void(GameObject_ptr)> &callback, GameObject_ptr go)
+{
+	callback(go);
+
+	if (go->isLeaf())
+	{
+		return;
+	}
+	else
+	{
+		for (auto child : go->children)
+		{
+			traverse(callback, child);
+		}
+	}
 }

@@ -8,9 +8,7 @@
 
 namespace HSim
 {
-
-	using GameObject_ptr = std::shared_ptr<GameObject>;
-
+	
 	class GameObject
 	{
 	public:
@@ -18,11 +16,13 @@ namespace HSim
 		~GameObject();
 
 	public:
-		GameObject_ptr parent;
-		std::vector<GameObject_ptr> children;
+		std::shared_ptr<GameObject> parent;
+		std::vector<std::shared_ptr<GameObject>> children;
+
+		bool isLeaf();
 
 	public:
-		void traverse(std::function<void(GameObject&)> callback);
+		void traverseChildren(std::function<void(std::shared_ptr<GameObject>)>& callback);
 
 	public:
 		Transform3<PRECISION> transform;
@@ -34,7 +34,7 @@ namespace HSim
 
 	};
 
-	// using GameObject_ptr = std::shared_ptr<GameObject>;
+	using GameObject_ptr = std::shared_ptr<GameObject>;
 	
 	
 	

@@ -133,6 +133,12 @@ namespace HSim
 		}
 
 	public:
+		void serialize() const override
+		{
+			std::cout << "box\n";
+		}
+
+	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
 	};

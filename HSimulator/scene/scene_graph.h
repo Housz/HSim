@@ -11,11 +11,13 @@ namespace HSim
 		~SceneGraph();
 
 	public:
-		void traverse(std::function<void(GameObject&)> callback);
+		void traverse(std::function<void(GameObject_ptr)>& callback);
 
 	public:
+		void traverse(std::function<void(GameObject_ptr)>& callback, GameObject_ptr go);
+		
+	public:
 		GameObject_ptr root;
-
 
 	};
 

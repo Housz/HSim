@@ -23,4 +23,3 @@ aux_source_directory(config sources)
 target_sources(HSimulator PUBLIC ${sources})
 
 target_include_directories(HSimulator PUBLIC .)
-

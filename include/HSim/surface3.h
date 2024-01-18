@@ -37,6 +37,9 @@ namespace HSim
 		{
 			return isInsideLocal(transform.toLocal(positionInWorld_));
 		}
+
+	public:
+		virtual void serialize() const {};
 		
 
 	// in local frame
