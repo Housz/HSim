@@ -63,6 +63,7 @@ namespace HSim
 		void setProjectionType(ProjectionType type) { mProjectionType = type; }
 		ProjectionType projectionType() { return mProjectionType; }
 
+
 	protected:
 		float mNear = 0.01f;
 		float mFar = 10.0f;
