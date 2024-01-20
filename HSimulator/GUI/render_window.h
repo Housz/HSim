@@ -27,10 +27,6 @@ namespace HSim
 
 		void mainLoop();
 
-		// glfw
-	public:
-		GLFWwindow *glfwWindow = nullptr;
-
 		// interactions
 	public:
 		void initCallbacks();
@@ -71,8 +67,12 @@ namespace HSim
 			//todo selection state update 
 		}
 
+	// glfw
 	public:
-		std::string mWindowTitle;
+		GLFWwindow *glfwWindow = nullptr;
+
+	public:
+		std::string windowTitle;
 
 	public:
 		Renderer_ptr renderer; // mainloop(): call renderer.draw(sceneptr)
@@ -80,6 +80,10 @@ namespace HSim
 		RenderParams renderParams;
 
 		OrbitCamera_ptr camera;
+	
+	public:
+		SceneGraph_ptr scene;
+
 	};
 
 	using RenderWindow_ptr = std::shared_ptr<RenderWindow>;

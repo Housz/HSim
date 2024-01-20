@@ -10,6 +10,11 @@ namespace HSim
 	public:
 		Renderer();
 		~Renderer();
+
+		void init();
+	
+	
+
 	};
 
 	using Renderer_ptr = std::shared_ptr<Renderer>;

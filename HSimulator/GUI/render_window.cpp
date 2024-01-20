@@ -2,23 +2,85 @@
 
 HSim::RenderWindow::RenderWindow()
 {
+
 }
 
 HSim::RenderWindow::~RenderWindow()
 {
 	// imgui clean
-	
+
 	// glfw destroy
+}
+
+static void glfw_error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
 void HSim::RenderWindow::init(size_t width, size_t height)
 {
 	//glfw create window
+	windowTitle = std::string("HSimulator");
+
+	glfwSetErrorCallback(glfw_error_callback);
+	if (!glfwInit())
+		return;
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
+	glfwWindow = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
+
+	if (glfwWindow == NULL)
+		return;
+
+	initCallbacks();
+
+	glfwMakeContextCurrent(glfwWindow);
+		
+	if (!gladLoadGL()) {
+		std::cout << "Failed to load GLAD!" << std::endl;
+		//SPDLOG_CRITICAL("Failed to load GLAD!");
+		exit(-1);
+	}
+
+	glfwSwapInterval(1); // Enable vsync
+
+	glfwSetWindowUserPointer(glfwWindow, this);
+
+// imgui
+
+	// Get Context scale
+	float xscale, yscale;
+	glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &xscale, &yscale);
+
+	// initialize rendering engine
+	renderer->init();
+
+	camera->setWidth(width);
+	camera->setHeight(height);
 }
 
 void HSim::RenderWindow::mainLoop()
 {
 	// renderer.draw()
+
+	// main loop
+	while (!glfwWindowShouldClose(glfwWindow))
+	{
+		glfwPollEvents();
+
+		if (animationToggle)
+		{
+			// advance ani
+		}
+
+		
+		
+
+	}
 
 
 }

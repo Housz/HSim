@@ -1,4 +1,4 @@
-#include "game_object.h"
+#include <scene/game_object.h>
 
 HSim::GameObject::GameObject()
 {

@@ -1,4 +1,4 @@
-#include "scene_graph.h"
+#include <scene/scene_graph.h>
 
 HSim::SceneGraph::SceneGraph()
 {
