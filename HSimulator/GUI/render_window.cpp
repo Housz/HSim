@@ -77,7 +77,15 @@ void HSim::RenderWindow::mainLoop()
 			// advance ani
 		}
 
-		
+		// camera
+		camera->viewportWidth();
+		camera->viewportHeight();
+
+		// renderer draw scenegraph;
+
+		// imgui
+
+
 		
 
 	}

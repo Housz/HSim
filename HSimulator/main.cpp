@@ -122,7 +122,19 @@ void initGLAD()
     glEnable(GL_DEPTH_TEST);
 }
 
-unsigned int initData(float *vertices, size_t size)
+void setVBO(float *vertices, size_t size)
+{
+    unsigned int VBO;
+
+    glGenBuffers(1, &VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+}
+
+
+
+void bindData(float *vertices, size_t size)
 {
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -152,8 +164,6 @@ unsigned int initData(float *vertices, size_t size)
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-    return VAO;
 }
 
 void updateData(float *vertices, unsigned int *indices)
@@ -212,7 +222,51 @@ void cleanupGLFW()
 
 void render(GLFWwindow *window)
 {
-    float vertices[] = {
+    float vertices1[] = {
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+        };
+
+    float vertices2[] = {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
         0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
         0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
@@ -253,17 +307,25 @@ void render(GLFWwindow *window)
         0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
         0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
         -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f
+        };
 
-    // render loop
-    // -----------
+    for (size_t i = 0; i < sizeof(vertices2); i++)
+    {
+        vertices2[i] += 1;
+    }
+    
 
-    HSim::Shader shader("./resources/shaders/camera.vs", "./resources/shaders/camera.fs");
-    // shader.use();
+    HSim::Shader shader1("./resources/shaders/camera.vs", "./resources/shaders/camera.fs");
+    HSim::Shader shader2("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
 
     float uniformValueR = 0.5f;
     float uniformValueG = 0.5f;
     float uniformValueB = 0.5f;
+
+    float uniformLightX = 5.f;
+    float uniformLightY = 5.f;
+    float uniformLightZ = 5.f;
 
     float f = 0.5f;
 
@@ -271,13 +333,20 @@ void render(GLFWwindow *window)
     float y = 0.5f;
     float z = 0.5f;
 
+    // render loop
+    // -----------
     while (!glfwWindowShouldClose(window))
     {
+
+        // std::cout << cameraPos.x << " " <<  cameraPos.y << " " << cameraPos.z << " \n" ;
+
         // per-frame time logic
         // --------------------
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+
 
         initImGuiFrame();
         // ImGui::ShowDemoWindow(); // Show demo window! :)
@@ -289,9 +358,14 @@ void render(GLFWwindow *window)
         ImGui::SliderFloat("G", &uniformValueG, 0.0f, 1.0f);
         ImGui::SliderFloat("B", &uniformValueB, 0.0f, 1.0f);
 
-        ImGui::SliderFloat("x", &x, 0.0f, 1.0f);
-        ImGui::SliderFloat("y", &y, 0.0f, 1.0f);
-        ImGui::SliderFloat("z", &z, 0.0f, 1.0f);
+        ImGui::SliderFloat("LX", &uniformLightX, 0.0f, 1.0f);
+        ImGui::SliderFloat("LY", &uniformLightY, 0.0f, 1.0f);
+        ImGui::SliderFloat("LZ", &uniformLightZ, 0.0f, 1.0f);
+
+        // ImGui::SliderFloat("x", &x, 0.0f, 1.0f);
+        ImGui::SliderFloat("x", vertices1 + 0, 0.0f, 1.0f);
+        ImGui::SliderFloat("y", vertices1 + 1, 0.0f, 1.0f);
+        ImGui::SliderFloat("z", vertices1 + 2, 0.0f, 1.0f);
 
         // float vertices[] = {
         //     // 0.5f, 0.5f, 0.0f,   // top right
@@ -307,7 +381,6 @@ void render(GLFWwindow *window)
 
         // 更新Shader的Uniform变量
         // shader.setFloat("your_uniform_name", uniformValue);
-        shader.setFloat4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
 
         ImGui::End();
 
@@ -327,19 +400,44 @@ void render(GLFWwindow *window)
         glClearColor(f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        auto VAO = initData(vertices, sizeof(vertices));
 
-        shader.use();
+// obj1
+        shader1.use(); // glUseProgram(ID);
+        shader1.setVec4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
+
+        shader1.setVec3("lightPos", uniformLightX, uniformLightY, uniformLightZ);
+
+        // VBO ------------------------------------------------------------------------
+        setVBO(vertices1, sizeof(vertices1));
+        // VBO ------------------------------------------------------------------------
+
+        // VAO ------------------------------------------------------------------------
+        unsigned int VAO1;
+
+        glGenVertexArrays(1, &VAO1);
+        glBindVertexArray(VAO1);
+
+        // VAO layout 0
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(0);
+
+        // VAO layout 1
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        // VAO ------------------------------------------------------------------------
+
+        shader1.setVec3("viewPos", cameraPos);
 
         // pass projection matrix to shader (note that in this case it could change every frame)
         glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        shader.setMat4("projection", projection);
+        shader1.setMat4("projection", projection);
 
         // camera/view transformation
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-        shader.setMat4("view", view);
+        shader1.setMat4("view", view);
 
-        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+
         // glDrawArrays(GL_TRIANGLES, 0, 6);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
@@ -349,36 +447,72 @@ void render(GLFWwindow *window)
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         float angle = 10.f;
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-        shader.setMat4("model", model);
+        shader1.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        renderImGui(shader);
+
+// obj2
+        shader2.use(); // glUseProgram(ID);
+        shader2.setFloat4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
+
+        // bindData(vertices2, sizeof(vertices2));
+
+        // VBO ------------------------------------------------------------------------
+        setVBO(vertices2, sizeof(vertices2));
+        // VBO ------------------------------------------------------------------------
+
+        // VAO ------------------------------------------------------------------------
+        unsigned int VAO2;
+
+        glGenVertexArrays(1, &VAO2);
+        glBindVertexArray(VAO2);
+
+        // VAO layout 0
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+        glEnableVertexAttribArray(0);
+        // VAO ------------------------------------------------------------------------
+
+        // pass projection matrix to shader (note that in this case it could change every frame)
+        shader2.setMat4("projection", projection);
+
+        // camera/view transformation
+        shader2.setMat4("view", view);
+
+        shader2.setMat4("model", model);
+
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
+
+        renderImGui(shader1);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
+
+        // call event handler
         glfwPollEvents();
     }
 }
 
-// int main()
-// {
-//     auto window = initGLFW();
+int main()
+{
+    auto window = initGLFW();
 
-//     initImGui(window);
+    initImGui(window);
 
-//     initGLAD();
+    initGLAD();
 
-//     render(window);
+    render(window);
 
-//     cleanupImGui();
+    cleanupImGui();
 
-//     cleanupGLFW();
+    cleanupGLFW();
 
-//     return 0;
-// }
-
-
+    return 0;
+}
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -460,9 +594,6 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
         fov = 45.0f;
 }
 
-
-
-
 #include <scene/scene_graph.h>
 #include <HSim/box3.h>
 
@@ -474,7 +605,7 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 //     }
 // }
 
-int main()
+int _main()
 {
     HSim::SceneGraph sg;
 
