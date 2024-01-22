@@ -52,8 +52,8 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 960;
+const unsigned int SCR_HEIGHT = 720;
 
 unsigned int indices[] = {
     // note that we start from 0!
@@ -66,8 +66,8 @@ GLFWwindow *initGLFW()
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
@@ -335,15 +335,16 @@ void render(GLFWwindow *window)
 
     auto root = std::make_shared<HSim::GameObject>();
     auto box = std::make_shared<HSim::Box3<float>>();
-    root->surface_ptr = box;
+    // root->surface_ptr = box;
 
     auto go1 = std::make_shared<HSim::GameObject>();
     auto go2 = std::make_shared<HSim::GameObject>();
     auto go3 = std::make_shared<HSim::GameObject>();
 
     go1->surface_ptr = box;
+    root->drawable = false;
     go1->drawable = true;
-    go2->surface_ptr = box;
+    // go2->surface_ptr = box;
     go2->drawable = false;
     go3->drawable = false;
 
@@ -366,7 +367,6 @@ void render(GLFWwindow *window)
             auto surface = go->surface_ptr;
             surface->draw();
         }
-        
     };
 
     sg.root = root;
@@ -377,8 +377,6 @@ void render(GLFWwindow *window)
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-
-        sg.traverse(callback);
 
         // std::cout << cameraPos.x << " " <<  cameraPos.y << " " << cameraPos.z << " \n" ;
 
@@ -440,7 +438,7 @@ void render(GLFWwindow *window)
         glClearColor(f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // obj1
+        // // obj1
         shader1.use(); // glUseProgram(ID);
         shader1.setVec4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
 
@@ -539,17 +537,204 @@ void render(GLFWwindow *window)
     }
 }
 
+void checkGLError()
+{
+    GLenum error = glGetError();
+    while (error != GL_NO_ERROR)
+    {
+        switch (error)
+        {
+        case GL_INVALID_ENUM:
+            printf("OpenGL错误：无效的枚举值\n");
+            break;
+        case GL_INVALID_VALUE:
+            printf("OpenGL错误：无效的参数值\n");
+            break;
+        case GL_INVALID_OPERATION:
+            printf("OpenGL错误：无效的操作\n");
+            break;
+        case GL_STACK_OVERFLOW:
+            printf("OpenGL错误：堆栈溢出\n");
+            break;
+        case GL_STACK_UNDERFLOW:
+            printf("OpenGL错误：堆栈下溢\n");
+            break;
+        case GL_OUT_OF_MEMORY:
+            printf("OpenGL错误：内存不足\n");
+            break;
+        // 可根据需要添加其他错误类型的处理
+        default:
+            printf("未知的OpenGL错误\n");
+            break;
+        }
+        error = glGetError();
+    }
+}
+
+void renderBox(GLFWwindow *window)
+{
+    // auto box = std::make_shared<HSim::Box3<float>>();
+
+    HSim::Shader shader("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
+
+    HSim::Vec3f lowerCorner = {0, 0, 0};
+    HSim::Vec3f upperCorner = {1, 1, 1};
+
+    float boxvertices[] = {
+        // front
+        lowerCorner.x, lowerCorner.y, lowerCorner.z, // LD
+        upperCorner.x, lowerCorner.y, lowerCorner.z, // RD
+        upperCorner.x, upperCorner.y, lowerCorner.z, // RU
+        lowerCorner.x, upperCorner.y, lowerCorner.z, // LU
+
+        // back
+        lowerCorner.x, lowerCorner.y, upperCorner.z, // LD
+        upperCorner.x, lowerCorner.y, upperCorner.z, // RD
+        upperCorner.x, upperCorner.y, upperCorner.z, // RU
+        lowerCorner.x, upperCorner.y, upperCorner.z  // LU
+    };
+
+
+    unsigned int boxindices[] = {
+        0, 1, 2, // front
+        2, 3, 0,
+
+        4, 5, 6, // back
+        6, 7, 4,
+
+        0, 3, 7, // left
+        7, 4, 0,
+
+        1, 2, 6, // right
+        6, 5, 1,
+
+        0, 1, 5, // down
+        5, 4, 0,
+
+        2, 3, 7, // up
+        7, 6, 2};
+
+    // while (!glfwWindowShouldClose(window))
+    // {
+    //     processInput(window);
+
+    //     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //     shader.use(); // glUseProgram(ID);
+    //     shader.setFloat4("ourColor", 0.5, 0.1, 0.3, 0.0f);
+
+    //     unsigned int vboID;
+    //     glGenBuffers(1, &vboID);
+
+    //     glBindBuffer(GL_ARRAY_BUFFER, vboID);
+    //     glBufferData(GL_ARRAY_BUFFER, sizeof(boxvertices), boxvertices, GL_STATIC_DRAW);
+
+    //     unsigned int eboID;
+    //     glGenBuffers(1, &eboID);
+
+    //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+    //     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(boxindices), boxindices, GL_STATIC_DRAW);
+
+    //     unsigned int vaoID;
+    //     glGenVertexArrays(1, &vaoID);
+    //     glBindVertexArray(vaoID);
+
+    //     // VAO layout 0
+    //     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    //     glEnableVertexAttribArray(0);
+
+    //     // pass projection matrix to shader (note that in this case it could change every frame)
+    //     glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    //     shader.setMat4("projection", projection);
+
+    //     // camera/view transformation
+    //     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    //     shader.setMat4("view", view);
+
+    //     // calculate the model matrix for each object and pass it to shader before drawing
+    //     glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    //     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+    //     float angle = 10.f;
+    //     model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+    //     shader.setMat4("model", model);
+
+    //     // glBindVertexArray(vaoID);
+    //     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    //     // glBindVertexArray(0);
+
+    //     glfwSwapBuffers(window);
+
+    //     glfwPollEvents();
+
+    // }
+    unsigned int vboID;
+    glGenBuffers(1, &vboID);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vboID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(boxvertices), boxvertices, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &eboID);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(boxindices), boxindices, GL_STATIC_DRAW);
+
+    unsigned int vaoID;
+    glGenVertexArrays(1, &vaoID);
+    glBindVertexArray(vaoID);
+
+    // VAO layout 0
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        processInput(window);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        shader.use(); // glUseProgram(ID);
+        shader.setFloat4("ourColor", 0.5, 0.1, 0.3, 0.0f);
+
+        // pass projection matrix to shader (note that in this case it could change every frame)
+        glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        shader.setMat4("projection", projection);
+
+        // camera/view transformation
+        glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        shader.setMat4("view", view);
+
+        // calculate the model matrix for each object and pass it to shader before drawing
+        glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        float angle = 10.f;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        shader.setMat4("model", model);
+
+        glBindVertexArray(vaoID);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, boxindices);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+}
+
 int main()
 {
     auto window = initGLFW();
 
-    initImGui(window);
+    // initImGui(window);
 
     initGLAD();
 
-    render(window);
+    // render(window);
+    renderBox(window);
 
-    cleanupImGui();
+    // cleanupImGui();
 
     cleanupGLFW();
 
