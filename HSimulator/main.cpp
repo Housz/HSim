@@ -345,6 +345,7 @@ void render(GLFWwindow *window)
     go1->drawable = true;
     go2->surface_ptr = box;
     go2->drawable = false;
+    go3->drawable = false;
 
     // go3->surface_ptr = box;
 
@@ -354,10 +355,18 @@ void render(GLFWwindow *window)
 
     std::function<void(HSim::GameObject_ptr)> callback = [](HSim::GameObject_ptr go)
     {
-        if (go->surface_ptr != nullptr)
+        // if (go->surface_ptr != nullptr)
+        // {
+        //     go->surface_ptr->serialize();
+        // }
+
+        if (go->surface_ptr != nullptr && go->drawable)
         {
             go->surface_ptr->serialize();
+            auto surface = go->surface_ptr;
+            surface->draw();
         }
+        
     };
 
     sg.root = root;
@@ -368,6 +377,8 @@ void render(GLFWwindow *window)
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+
+        sg.traverse(callback);
 
         // std::cout << cameraPos.x << " " <<  cameraPos.y << " " << cameraPos.z << " \n" ;
 

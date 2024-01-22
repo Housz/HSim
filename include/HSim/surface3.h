@@ -50,6 +50,8 @@ namespace HSim
 		
 		virtual size_t toVAO() const { return 0; }
 
+		virtual void draw() const {}
+
 	// in local frame
 	public:
 		virtual Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const = 0;

@@ -207,6 +207,14 @@ namespace HSim
 			return vaoID;
 		}
 
+		void draw() const override
+		{
+			toVBO();
+			toEBO();
+			toVAO();
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		}
+
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
