@@ -11,7 +11,7 @@ namespace HSim
 		Collider3() {};
 		~Collider3() {};
 
-		void resolveCollision()
+		void resolveCollision() {}
 
 	public:
 

@@ -4,7 +4,7 @@
 
 namespace HSim
 {
-	class SceneGraph
+	class SceneGraph : public std::enable_shared_from_this<SceneGraph>
 	{
 	public:
 		SceneGraph();

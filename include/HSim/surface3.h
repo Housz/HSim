@@ -3,6 +3,9 @@
 #include <HSim/common.h>
 #include <HSim/transform3.h>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace HSim
 {
 	template <typename T>
@@ -39,8 +42,13 @@ namespace HSim
 		}
 
 	public:
-		virtual void serialize() const {};
+		virtual void serialize() const {}
+
+		virtual size_t toVBO() const { return 0; }
 		
+		virtual size_t toEBO() const { return 0; }
+		
+		virtual size_t toVAO() const { return 0; }
 
 	// in local frame
 	public:

@@ -25,8 +25,10 @@
 #include <stb_image.h>
 
 #include "renderer/shader.h"
+#include <scene/scene_graph.h>
 
 #include <HSim/vec3.h>
+#include <HSim/box3.h>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -132,8 +134,6 @@ void setVBO(float *vertices, size_t size)
     glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
-
-
 void bindData(float *vertices, size_t size)
 {
     unsigned int VBO, VAO;
@@ -223,48 +223,47 @@ void cleanupGLFW()
 void render(GLFWwindow *window)
 {
     float vertices1[] = {
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
 
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-        };
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f};
 
     float vertices2[] = {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -307,14 +306,12 @@ void render(GLFWwindow *window)
         0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
         0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
         -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f
-        };
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f};
 
     for (size_t i = 0; i < sizeof(vertices2); i++)
     {
         vertices2[i] += 1;
     }
-    
 
     HSim::Shader shader1("./resources/shaders/camera.vs", "./resources/shaders/camera.fs");
     HSim::Shader shader2("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
@@ -333,6 +330,40 @@ void render(GLFWwindow *window)
     float y = 0.5f;
     float z = 0.5f;
 
+    // scene test
+    HSim::SceneGraph sg;
+
+    auto root = std::make_shared<HSim::GameObject>();
+    auto box = std::make_shared<HSim::Box3<float>>();
+    root->surface_ptr = box;
+
+    auto go1 = std::make_shared<HSim::GameObject>();
+    auto go2 = std::make_shared<HSim::GameObject>();
+    auto go3 = std::make_shared<HSim::GameObject>();
+
+    go1->surface_ptr = box;
+    go1->drawable = true;
+    go2->surface_ptr = box;
+    go2->drawable = false;
+
+    // go3->surface_ptr = box;
+
+    root->children.push_back(go1);
+    root->children.push_back(go2);
+    root->children.push_back(go3);
+
+    std::function<void(HSim::GameObject_ptr)> callback = [](HSim::GameObject_ptr go)
+    {
+        if (go->surface_ptr != nullptr)
+        {
+            go->surface_ptr->serialize();
+        }
+    };
+
+    sg.root = root;
+
+    // sg.traverse(callback);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -345,8 +376,6 @@ void render(GLFWwindow *window)
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
-
 
         initImGuiFrame();
         // ImGui::ShowDemoWindow(); // Show demo window! :)
@@ -400,8 +429,7 @@ void render(GLFWwindow *window)
         glClearColor(f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-// obj1
+        // obj1
         shader1.use(); // glUseProgram(ID);
         shader1.setVec4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
 
@@ -422,7 +450,7 @@ void render(GLFWwindow *window)
         glEnableVertexAttribArray(0);
 
         // VAO layout 1
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
         // VAO ------------------------------------------------------------------------
@@ -437,7 +465,6 @@ void render(GLFWwindow *window)
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         shader1.setMat4("view", view);
 
-
         // glDrawArrays(GL_TRIANGLES, 0, 6);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
@@ -448,10 +475,12 @@ void render(GLFWwindow *window)
         float angle = 10.f;
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
         shader1.setMat4("model", model);
+
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-
-// obj2
+        // obj2
         shader2.use(); // glUseProgram(ID);
         shader2.setFloat4("ourColor", uniformValueR, uniformValueG, uniformValueB, 0.0f);
 
@@ -480,11 +509,13 @@ void render(GLFWwindow *window)
 
         shader2.setMat4("model", model);
 
+        // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glPointSize(10.0f);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
-
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         renderImGui(shader1);
 
@@ -618,7 +649,10 @@ int _main()
     auto go3 = std::make_shared<HSim::GameObject>();
 
     go1->surface_ptr = box;
+    go1->drawable = true;
     go2->surface_ptr = box;
+    go2->drawable = false;
+
     // go3->surface_ptr = box;
 
     root->children.push_back(go1);
