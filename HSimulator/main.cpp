@@ -26,6 +26,7 @@
 
 #include "renderer/shader.h"
 #include <scene/scene_graph.h>
+#include <scene/helper_object.h>
 
 #include <HSim/vec3.h>
 #include <HSim/box3.h>
@@ -706,7 +707,7 @@ void renderScene(GLFWwindow *window)
 
             // update transform
             surface->transform.translation.x = r;
-            r+=0.001;
+            // r+=0.001;
 
             surface->serialize();
         }
@@ -726,12 +727,16 @@ void renderScene(GLFWwindow *window)
 
     sg.root = root;
 
-    // sg.traverse(callback);
+    HSim::GroundHelper ground;
+    ground.init(10, 10);
+
     while (!glfwWindowShouldClose(window))
     {
         currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+
+        std::cout << "fps: " << 1 / deltaTime << std::endl;
 
         processInput(window);
 
@@ -761,6 +766,8 @@ void renderScene(GLFWwindow *window)
         sg.traverse(callback_serialize);
 
         sg.traverse(callback_draw);
+
+        ground.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
