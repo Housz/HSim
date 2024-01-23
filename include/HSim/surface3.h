@@ -42,7 +42,7 @@ namespace HSim
 		}
 
 	public:
-		virtual void serialize() const {}
+		virtual void serialize() {}
 
 		virtual size_t toVBO() const { return 0; }
 		

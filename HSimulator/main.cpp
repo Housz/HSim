@@ -330,49 +330,6 @@ void render(GLFWwindow *window)
     float y = 0.5f;
     float z = 0.5f;
 
-    // scene test
-    HSim::SceneGraph sg;
-
-    auto root = std::make_shared<HSim::GameObject>();
-    auto box = std::make_shared<HSim::Box3<float>>();
-    // root->surface_ptr = box;
-
-    auto go1 = std::make_shared<HSim::GameObject>();
-    auto go2 = std::make_shared<HSim::GameObject>();
-    auto go3 = std::make_shared<HSim::GameObject>();
-
-    go1->surface_ptr = box;
-    root->drawable = false;
-    go1->drawable = true;
-    // go2->surface_ptr = box;
-    go2->drawable = false;
-    go3->drawable = false;
-
-    // go3->surface_ptr = box;
-
-    root->children.push_back(go1);
-    root->children.push_back(go2);
-    root->children.push_back(go3);
-
-    std::function<void(HSim::GameObject_ptr)> callback = [](HSim::GameObject_ptr go)
-    {
-        // if (go->surface_ptr != nullptr)
-        // {
-        //     go->surface_ptr->serialize();
-        // }
-
-        if (go->surface_ptr != nullptr && go->drawable)
-        {
-            go->surface_ptr->serialize();
-            auto surface = go->surface_ptr;
-            surface->draw();
-        }
-    };
-
-    sg.root = root;
-
-    // sg.traverse(callback);
-
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -474,10 +431,6 @@ void render(GLFWwindow *window)
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         shader1.setMat4("view", view);
 
-        // glDrawArrays(GL_TRIANGLES, 0, 6);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // glBindVertexArray(0); // no need to unbind it every time
-
         // calculate the model matrix for each object and pass it to shader before drawing
         glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -537,45 +490,12 @@ void render(GLFWwindow *window)
     }
 }
 
-void checkGLError()
-{
-    GLenum error = glGetError();
-    while (error != GL_NO_ERROR)
-    {
-        switch (error)
-        {
-        case GL_INVALID_ENUM:
-            printf("OpenGL错误：无效的枚举值\n");
-            break;
-        case GL_INVALID_VALUE:
-            printf("OpenGL错误：无效的参数值\n");
-            break;
-        case GL_INVALID_OPERATION:
-            printf("OpenGL错误：无效的操作\n");
-            break;
-        case GL_STACK_OVERFLOW:
-            printf("OpenGL错误：堆栈溢出\n");
-            break;
-        case GL_STACK_UNDERFLOW:
-            printf("OpenGL错误：堆栈下溢\n");
-            break;
-        case GL_OUT_OF_MEMORY:
-            printf("OpenGL错误：内存不足\n");
-            break;
-        // 可根据需要添加其他错误类型的处理
-        default:
-            printf("未知的OpenGL错误\n");
-            break;
-        }
-        error = glGetError();
-    }
-}
-
 void renderBox(GLFWwindow *window)
 {
     // auto box = std::make_shared<HSim::Box3<float>>();
 
-    HSim::Shader shader("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
+    // HSim::Shader shader("./resources/shaders/vert.glsl", "./resources/shaders/frag.glsl");
+    HSim::Shader shader("./resources/shaders/camera.vs", "./resources/shaders/camera.fs");
 
     HSim::Vec3f lowerCorner = {0, 0, 0};
     HSim::Vec3f upperCorner = {1, 1, 1};
@@ -594,6 +514,59 @@ void renderBox(GLFWwindow *window)
         lowerCorner.x, upperCorner.y, upperCorner.z  // LU
     };
 
+    float vertices_all[] = {
+        // 底部面
+        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+        upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+        // 顶部面
+        lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+        upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+        lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+        lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+        // 其他四个面
+        lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+        upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+        upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+
+        upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+        lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+        lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+
+        lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+        upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+        upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+
+        upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+        lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+        lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+
+        // 左侧面
+        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+        lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+        lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+
+        lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+        lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+
+        // 右侧面
+        upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+        upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+
+        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+        upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+        upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f};
 
     unsigned int boxindices[] = {
         0, 1, 2, // front
@@ -614,84 +587,39 @@ void renderBox(GLFWwindow *window)
         2, 3, 7, // up
         7, 6, 2};
 
-    // while (!glfwWindowShouldClose(window))
-    // {
-    //     processInput(window);
-
-    //     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    //     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //     shader.use(); // glUseProgram(ID);
-    //     shader.setFloat4("ourColor", 0.5, 0.1, 0.3, 0.0f);
-
-    //     unsigned int vboID;
-    //     glGenBuffers(1, &vboID);
-
-    //     glBindBuffer(GL_ARRAY_BUFFER, vboID);
-    //     glBufferData(GL_ARRAY_BUFFER, sizeof(boxvertices), boxvertices, GL_STATIC_DRAW);
-
-    //     unsigned int eboID;
-    //     glGenBuffers(1, &eboID);
-
-    //     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-    //     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(boxindices), boxindices, GL_STATIC_DRAW);
-
-    //     unsigned int vaoID;
-    //     glGenVertexArrays(1, &vaoID);
-    //     glBindVertexArray(vaoID);
-
-    //     // VAO layout 0
-    //     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-    //     glEnableVertexAttribArray(0);
-
-    //     // pass projection matrix to shader (note that in this case it could change every frame)
-    //     glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    //     shader.setMat4("projection", projection);
-
-    //     // camera/view transformation
-    //     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-    //     shader.setMat4("view", view);
-
-    //     // calculate the model matrix for each object and pass it to shader before drawing
-    //     glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    //     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-    //     float angle = 10.f;
-    //     model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-    //     shader.setMat4("model", model);
-
-    //     // glBindVertexArray(vaoID);
-    //     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-    //     // glBindVertexArray(0);
-
-    //     glfwSwapBuffers(window);
-
-    //     glfwPollEvents();
-
-    // }
     unsigned int vboID;
     glGenBuffers(1, &vboID);
 
     glBindBuffer(GL_ARRAY_BUFFER, vboID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(boxvertices), boxvertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_all), vertices_all, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &eboID);
+    // unsigned int eboID;
+    // glGenBuffers(1, &eboID);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(boxindices), boxindices, GL_STATIC_DRAW);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(boxindices), boxindices, GL_STATIC_DRAW);
 
     unsigned int vaoID;
     glGenVertexArrays(1, &vaoID);
     glBindVertexArray(vaoID);
 
     // VAO layout 0
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
+
+    // VAO layout 1
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     while (!glfwWindowShouldClose(window))
     {
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         processInput(window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -699,7 +627,9 @@ void renderBox(GLFWwindow *window)
 
         shader.use(); // glUseProgram(ID);
         shader.setFloat4("ourColor", 0.5, 0.1, 0.3, 0.0f);
+        shader.setVec3("lightPos", 5, 5, 5);
 
+        shader.setVec3("viewPos", cameraPos);
         // pass projection matrix to shader (note that in this case it could change every frame)
         glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         shader.setMat4("projection", projection);
@@ -716,7 +646,109 @@ void renderBox(GLFWwindow *window)
         shader.setMat4("model", model);
 
         glBindVertexArray(vaoID);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, boxindices);
+        // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, boxindices);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+}
+
+void renderScene(GLFWwindow *window)
+{
+    HSim::Shader shader("./resources/shaders/camera.vs", "./resources/shaders/camera.fs");
+
+    // scene test
+    HSim::SceneGraph sg;
+
+    auto root = std::make_shared<HSim::GameObject>();
+    auto box1 = std::make_shared<HSim::Box3<float>>();
+    HSim::Vec3<float> lower(1, 1, 1);
+	HSim::Vec3<float> upper(5, 5, 5);
+    auto box2 = std::make_shared<HSim::Box3<float>>(lower, upper);
+    // root->surface_ptr = box;
+
+    auto go1 = std::make_shared<HSim::GameObject>();
+    auto go2 = std::make_shared<HSim::GameObject>();
+    auto go3 = std::make_shared<HSim::GameObject>();
+
+    go1->surface_ptr = box1;
+
+    go3->surface_ptr = box2;
+
+    root->drawable = false;
+    go1->drawable = true;
+    // go2->surface_ptr = box;
+    go2->drawable = false;
+    go3->drawable = true;
+
+    // go3->surface_ptr = box;
+
+    root->children.push_back(go1);
+    root->children.push_back(go2);
+    root->children.push_back(go3);
+
+    std::function<void(HSim::GameObject_ptr)> callback_serialize = [](HSim::GameObject_ptr go)
+    {
+        if (go->surface_ptr != nullptr && go->drawable)
+        {
+            std::cout << "box" << std::endl;
+
+            auto surface = go->surface_ptr;
+
+            surface->serialize();
+        }
+    };
+
+    std::function<void(HSim::GameObject_ptr)> callback_draw = [](HSim::GameObject_ptr go)
+    {
+        if (go->surface_ptr != nullptr && go->drawable)
+        {
+            std::cout << "drawcallback" << std::endl;
+
+            auto surface = go->surface_ptr;
+
+            surface->draw();
+        }
+    };
+
+    sg.root = root;
+
+    sg.traverse(callback_serialize);
+
+    // sg.traverse(callback);
+    while (!glfwWindowShouldClose(window))
+    {
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        processInput(window);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        shader.use(); // glUseProgram(ID);
+        shader.setFloat4("ourColor", 0.5, 0.1, 0.3, 0.0f);
+        shader.setVec3("lightPos", 20, 20, 20);
+
+        shader.setVec3("viewPos", cameraPos);
+        // pass projection matrix to shader (note that in this case it could change every frame)
+        glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        shader.setMat4("projection", projection);
+
+        // camera/view transformation
+        glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        shader.setMat4("view", view);
+
+        // calculate the model matrix for each object and pass it to shader before drawing
+        glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        float angle = 10.f;
+        model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+        shader.setMat4("model", model);
+
+        sg.traverse(callback_draw);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -732,7 +764,8 @@ int main()
     initGLAD();
 
     // render(window);
-    renderBox(window);
+    // renderBox(window);
+    renderScene(window);
 
     // cleanupImGui();
 
@@ -759,7 +792,10 @@ void processInput(GLFWwindow *window)
 
     float cameraSpeed = static_cast<float>(2.5 * deltaTime);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        std::cout << "w\n";
         cameraPos += cameraSpeed * cameraFront;
+    }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         cameraPos -= cameraSpeed * cameraFront;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)

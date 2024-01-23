@@ -133,9 +133,17 @@ namespace HSim
 		}
 
 	public:
-		void serialize() const override
+		unsigned int vaoID;
+
+		void serialize() override
 		{
-			std::cout << "box\n";
+			std::cout << "serialize" << std::endl;
+
+			auto vboID = toVBO();
+			vaoID = toVAO();
+
+			std::cout << vaoID << std::endl;
+
 		}
 
 		size_t toVBO() const override
@@ -144,25 +152,71 @@ namespace HSim
 			glGenBuffers(1, &vboID);
 
 			float vertices[] = {
-				// front
-				lowerCorner.x, lowerCorner.y, lowerCorner.z, // LD
-				upperCorner.x, lowerCorner.y, lowerCorner.z, // RD
-				upperCorner.x, upperCorner.y, lowerCorner.z, // RU
-				lowerCorner.x, upperCorner.y, lowerCorner.z, // LU
 
-				// back
-				lowerCorner.x, lowerCorner.y, upperCorner.z, // LD
-				upperCorner.x, lowerCorner.y, upperCorner.z, // RD
-				upperCorner.x, upperCorner.y, upperCorner.z, // RU
-				lowerCorner.x, upperCorner.y, upperCorner.z	 // LU
-			};
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+
+				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+
+
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+
+
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f};
 
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+
+
+			std::cout << "vbo" << std::endl;
+
 			return vboID;
 		}
 
+		// Deprecated
 		size_t toEBO() const override
 		{
 			unsigned int eboID;
@@ -185,8 +239,7 @@ namespace HSim
 				5, 4, 0,
 
 				2, 3, 7, // up
-				7, 6, 2
-			};
+				7, 6, 2};
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -201,18 +254,38 @@ namespace HSim
 			glBindVertexArray(vaoID);
 
 			// VAO layout 0
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
 			glEnableVertexAttribArray(0);
 
+			// VAO layout 1
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+			glEnableVertexAttribArray(1);
+
+			// unbind
+    		glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+		
 			return vaoID;
 		}
 
+
+
+
+
 		void draw() const override
 		{
-			toVBO();
-			toEBO();
-			toVAO();
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			// toVBO();
+			// toEBO();
+			// toVAO();
+
+			std::cout << vaoID << std::endl;
+
+			glBindVertexArray(vaoID);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+			// unbind
+			glBindVertexArray(0);
 		}
 
 	public:
