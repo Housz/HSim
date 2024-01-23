@@ -67,10 +67,11 @@ namespace HSim
 
 			length = (GLuint)indices.size() * 4;
 
-
 			glBindVertexArray(vao);
 
-			glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, NULL);
+			glLineWidth(3.0f);
+
+			glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, 0);
 
 			glBindVertexArray(0);
 

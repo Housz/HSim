@@ -54,8 +54,8 @@ float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
 // settings
-const unsigned int SCR_WIDTH = 960;
-const unsigned int SCR_HEIGHT = 720;
+unsigned int SCR_WIDTH = 960;
+unsigned int SCR_HEIGHT = 720;
 
 unsigned int indices[] = {
     // note that we start from 0!
@@ -517,7 +517,6 @@ void renderBox(GLFWwindow *window)
     };
 
     float vertices_all[] = {
-        // 底部面
         lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
         upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
         upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
@@ -526,7 +525,7 @@ void renderBox(GLFWwindow *window)
         lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
         lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 
-        // 顶部面
+
         lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
         upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
         upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
@@ -535,7 +534,7 @@ void renderBox(GLFWwindow *window)
         lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
         lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 
-        // 其他四个面
+
         lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
         upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
         upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
@@ -552,7 +551,7 @@ void renderBox(GLFWwindow *window)
         lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
         lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
 
-        // 左侧面
+
         lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
         lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
         lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
@@ -561,7 +560,7 @@ void renderBox(GLFWwindow *window)
         lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
         lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
 
-        // 右侧面
+
         upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
         upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
         upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
@@ -799,6 +798,8 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
+    SCR_WIDTH = width;
+    SCR_HEIGHT = height;
     glViewport(0, 0, width, height);
 }
 
