@@ -206,10 +206,18 @@ namespace HSim
 				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
 				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f};
 
+			// transform
+			for (size_t i = 0; i < sizeof(vertices)/sizeof(float); i+=3)
+			{
+				// vertices[i], vertices[i+1], vertices[i+2]
+				auto v = transform.mul({vertices[i], vertices[i+1], vertices[i+2]});
+				vertices[i] = v[0];
+				vertices[i+1] = v[1];
+				vertices[i+2] = v[2];
+			}
+			
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-
 
 			std::cout << "vbo" << std::endl;
 

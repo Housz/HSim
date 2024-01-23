@@ -48,6 +48,7 @@ float lastY = 600.0 / 2.0;
 float fov = 45.0f;
 
 // timing
+float currentFrame = 0.0f;
 float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
@@ -664,8 +665,13 @@ void renderScene(GLFWwindow *window)
     auto root = std::make_shared<HSim::GameObject>();
     auto box1 = std::make_shared<HSim::Box3<float>>();
     HSim::Vec3<float> lower(1, 1, 1);
-	HSim::Vec3<float> upper(5, 5, 5);
+    HSim::Vec3<float> upper(5, 5, 5);
     auto box2 = std::make_shared<HSim::Box3<float>>(lower, upper);
+    // box1->transform.translation = {2, 0, 0};
+    HSim::Vec3f axis(0, 0, 1);
+    float angle = PI_QUARTER;
+    HSim::Quaternionf orientation(axis, angle);
+    box1->transform.orientation = orientation;
     // root->surface_ptr = box;
 
     auto go1 = std::make_shared<HSim::GameObject>();
@@ -687,24 +693,30 @@ void renderScene(GLFWwindow *window)
     root->children.push_back(go1);
     root->children.push_back(go2);
     root->children.push_back(go3);
+    
+    float r = 0;
 
-    std::function<void(HSim::GameObject_ptr)> callback_serialize = [](HSim::GameObject_ptr go)
+    std::function<void(HSim::GameObject_ptr)> callback_serialize = [&](HSim::GameObject_ptr go)
     {
         if (go->surface_ptr != nullptr && go->drawable)
         {
-            std::cout << "box" << std::endl;
+            std::cout << "callback_serialize" << std::endl;
 
             auto surface = go->surface_ptr;
+
+            // update transform
+            surface->transform.translation.x = r;
+            r+=0.001;
 
             surface->serialize();
         }
     };
 
-    std::function<void(HSim::GameObject_ptr)> callback_draw = [](HSim::GameObject_ptr go)
+    std::function<void(HSim::GameObject_ptr)> callback_draw = [&](HSim::GameObject_ptr go)
     {
         if (go->surface_ptr != nullptr && go->drawable)
         {
-            std::cout << "drawcallback" << std::endl;
+            std::cout << "callback_draw" << std::endl;
 
             auto surface = go->surface_ptr;
 
@@ -714,12 +726,10 @@ void renderScene(GLFWwindow *window)
 
     sg.root = root;
 
-    sg.traverse(callback_serialize);
-
     // sg.traverse(callback);
     while (!glfwWindowShouldClose(window))
     {
-        float currentFrame = static_cast<float>(glfwGetTime());
+        currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -747,6 +757,8 @@ void renderScene(GLFWwindow *window)
         float angle = 10.f;
         model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
         shader.setMat4("model", model);
+
+        sg.traverse(callback_serialize);
 
         sg.traverse(callback_draw);
 
