@@ -65,31 +65,32 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 
 void HSim::RenderWindow::mainLoop()
 {
+	std::cout << "window.mainLoop()" << std::endl;
 	// renderer.draw()
 
 	// main loop
-	while (!glfwWindowShouldClose(glfwWindow))
-	{
-		glfwPollEvents();
+	// while (!glfwWindowShouldClose(glfwWindow))
+	// {
+	// 	glfwPollEvents();
 
-		if (animationToggle)
-		{
-			// advance ani
-		}
+	// 	if (animationToggle)
+	// 	{
+	// 		// advance ani
+	// 	}
 
-		// camera
-		camera->viewportWidth();
-		camera->viewportHeight();
+	// 	// camera
+	// 	camera->viewportWidth();
+	// 	camera->viewportHeight();
 
-		// renderer draw scenegraph;
+	// 	// renderer draw scenegraph;
 
-		// imgui
-
-		
+	// 	// imgui
 
 		
 
-	}
+		
+
+	// }
 
 
 }

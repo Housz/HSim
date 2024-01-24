@@ -18,7 +18,7 @@ void HSim::App::init(size_t width, size_t height)
 
 void HSim::App::mainLoop()
 {
-	
+	window->mainLoop();
 }
 
 void HSim::App::setScene(SceneGraph_ptr scene_)
@@ -30,4 +30,5 @@ void HSim::App::setScene(SceneGraph_ptr scene_)
 
 void HSim::App::setWindowTitle(const std::string &title_)
 {
+
 }
