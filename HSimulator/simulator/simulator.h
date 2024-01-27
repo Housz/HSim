@@ -12,6 +12,10 @@ namespace HSim
 		~Simulator();
 
 	public:
+		void init();
+		void setScene(SceneGraph_ptr scene_);
+
+	public:
 		SceneGraph_ptr scene;
 	};
 	using Simulator_ptr = std::shared_ptr<Simulator>;

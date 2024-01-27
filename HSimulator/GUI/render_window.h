@@ -3,10 +3,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+// #define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include <GUI/orbit_camera.h>
 #include <GUI/input.h>
 #include <renderer/renderer.h>
 #include <renderer/render_params.h>
+#include <scene/scene_graph.h>
+#include <scene/helper_object.h>
 
 namespace HSim
 {
@@ -26,6 +31,8 @@ namespace HSim
 		void init(size_t width, size_t height);
 
 		void mainLoop();
+
+		void setScene(SceneGraph_ptr scene_);
 
 		// interactions
 	public:
@@ -63,6 +70,7 @@ namespace HSim
 
 		void toggleAnimation()
 		{
+			std::cout << "toggleAnimation to : " << animationToggle << std::endl;
 			animationToggle = !animationToggle;
 			//todo selection state update 
 		}

@@ -24,8 +24,11 @@ void HSim::App::mainLoop()
 void HSim::App::setScene(SceneGraph_ptr scene_)
 {
 	scene = scene_;
-	window->scene = scene;
-	simulator->scene = scene;
+	// window->scene = scene;
+	window->setScene(scene_);
+
+	// simulator->scene = scene;
+	simulator->setScene(scene_);
 }
 
 void HSim::App::setWindowTitle(const std::string &title_)

@@ -2,7 +2,6 @@
 
 HSim::RenderWindow::RenderWindow()
 {
-
 }
 
 HSim::RenderWindow::~RenderWindow()
@@ -12,14 +11,21 @@ HSim::RenderWindow::~RenderWindow()
 	// glfw destroy
 }
 
-static void glfw_error_callback(int error, const char* description)
+static void glfw_error_callback(int error, const char *description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
 void HSim::RenderWindow::init(size_t width, size_t height)
 {
-	//glfw create window
+	renderer = std::make_shared<Renderer>();
+
+	camera = std::make_shared<OrbitCamera>();
+
+	std::cout << "renderwinodw init" << std::endl;
+
+
+	// glfw create window
 	windowTitle = std::string("HSimulator");
 
 	glfwSetErrorCallback(glfw_error_callback);
@@ -27,30 +33,61 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 		return;
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	// glfwWindowHint(GLFW_SAMPLES, 4);
 
 	glfwWindow = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
 
+	// if (glfwWindow == NULL)
+	// 	return;
+
 	if (glfwWindow == NULL)
-		return;
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		// return -1;
+	}
+
+	GLFWimage images[1];
+	images[0].pixels = stbi_load("./resources/imgs/nobita64.png", &images[0].width, &images[0].height, 0, 4); // rgba channels
+
+	if (!images[0].pixels)
+	{
+		fprintf(stderr, "Failed to load icon image\n");
+		// glfwTerminate();
+		// return -1;
+	}
+	else
+	{
+		glfwSetWindowIcon(glfwWindow, 1, images);
+		stbi_image_free(images[0].pixels);
+	}
 
 	initCallbacks();
 
 	glfwMakeContextCurrent(glfwWindow);
-		
-	if (!gladLoadGL()) {
-		std::cout << "Failed to load GLAD!" << std::endl;
-		//SPDLOG_CRITICAL("Failed to load GLAD!");
+
+	// if (!gladLoadGL()) {
+	// 	std::cout << "Failed to load GLAD!" << std::endl;
+	// 	//SPDLOG_CRITICAL("Failed to load GLAD!");
+	// 	exit(-1);
+	// }
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+
 		exit(-1);
+		// return -1;
 	}
+	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapInterval(1); // Enable vsync
 
 	glfwSetWindowUserPointer(glfwWindow, this);
 
-// imgui
+	// imgui
 
 	// Get Context scale
 	float xscale, yscale;
@@ -65,32 +102,48 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 
 void HSim::RenderWindow::mainLoop()
 {
-	std::cout << "window.mainLoop()" << std::endl;
-	// renderer.draw()
+	std::cout << "window.mainLoop() in" << std::endl;
 
-	// main loop
-	// while (!glfwWindowShouldClose(glfwWindow))
-	// {
-	// 	glfwPollEvents();
 
-	// 	if (animationToggle)
-	// 	{
-	// 		// advance ani
-	// 	}
+	// opengl main loop
+	while (!glfwWindowShouldClose(glfwWindow))
+	{
+		// std::cout << "main loop" << std::endl;
 
-	// 	// camera
-	// 	camera->viewportWidth();
-	// 	camera->viewportHeight();
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// 	// renderer draw scenegraph;
+		if (animationToggle)
+		{
+			// advance ani
+		}
 
-	// 	// imgui
+	
+		// camera state -> renderParams
 
+		renderParams.width = camera->viewportWidth();
+		renderParams.height = camera->viewportHeight();
+		renderParams.transforms.model = glm::mat4(1);
+		renderParams.transforms.view = camera->getViewMat();
+		renderParams.transforms.proj = camera->getProjMat();
+
+		// renderer draw scenegraph;
+		// renderer draw(scenegraph, renderParams)
+		renderer->draw(renderParams);
 		
-
 		
+		// imgui
 
-	// }
+		// ground.draw();
+		
+		glfwSwapBuffers(glfwWindow);
+		glfwPollEvents();
+	}
+}
+
+void HSim::RenderWindow::setScene(SceneGraph_ptr scene_)
+{
+	this->scene = scene_;
 
 
 }
@@ -156,19 +209,20 @@ void HSim::RenderWindow::mouseButtonCallback(GLFWwindow *window, int button, int
 	mouseEvent.x = (float)xpos;
 	mouseEvent.y = (float)ypos;
 
-// scene handle event
+	// scene handle event
 	// auto activeScene = SceneGraphFactory::instance()->active();
 
 	// activeScene->onMouseEvent(mouseEvent);
 
 	if (action == GLFW_PRESS)
 	{
+		std::cout << "GLFW_PRESS" << std::endl;
 		// if(mOpenCameraRotate)
 		camera->registerPoint((float)xpos, (float)ypos);
 		// activeWindow->setButtonState(GLFW_DOWN);
 		activeWindow->buttonState = GLFW_DOWN;
 
-// imgui
+		// imgui
 		// activeWindow->imWindow()->mousePressEvent(mouseEvent);
 	}
 	else
@@ -176,10 +230,11 @@ void HSim::RenderWindow::mouseButtonCallback(GLFWwindow *window, int button, int
 
 	if (action == GLFW_RELEASE)
 	{
+		std::cout << "GLFW_RELEASE" << std::endl;
 		// activeWindow->setButtonState(GLFW_UP);
 		activeWindow->buttonState = GLFW_UP;
 
-// imgui
+		// imgui
 		// activeWindow->imWindow()->mouseReleaseEvent(mouseEvent);
 	}
 
@@ -204,65 +259,76 @@ void HSim::RenderWindow::mouseButtonCallback(GLFWwindow *window, int button, int
 
 void HSim::RenderWindow::keyboardCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-	RenderWindow* activeWindow = (RenderWindow*)glfwGetWindowUserPointer(window);
+	RenderWindow *activeWindow = (RenderWindow *)glfwGetWindowUserPointer(window);
 
 	HKeyboardEvent keyEvent;
 	keyEvent.keyType = (HKeyboardType)key;
 	keyEvent.keyActionType = (HActionType)action;
 	keyEvent.mdkeyBits = (HModifierKeyBits)mods;
 
-// scene handle event
+	// scene handle event
 	// auto activeScene = SceneGraphFactory::instance()->active();
 	// activeScene->onKeyboardEvent(keyEvent);
 
 	if (action != GLFW_PRESS)
-	return;
+		return;
 
 	switch (key)
 	{
-		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(window, GLFW_TRUE);
-			break;
-		case GLFW_KEY_SPACE:
-			activeWindow->toggleAnimation();
-			break;
-		case GLFW_KEY_LEFT:
-			break;
-		case GLFW_KEY_RIGHT:
-			break;
-		case GLFW_KEY_UP:
-			break;
-		case GLFW_KEY_DOWN:
-			break;
-		case GLFW_KEY_PAGE_UP:
-			break;
-		case GLFW_KEY_PAGE_DOWN:
-			break;
-		case GLFW_KEY_N:
-// scene update 
-			// activeScene->takeOneFrame();
-			// activeScene->updateGraphicsContext();
-			break;
-		case GLFW_KEY_F1:
-// imgui
-			// activeWindow->toggleImGUI();
-			break;
-		default:
-			break;
+	case GLFW_KEY_ESCAPE:
+		std::cout << "GLFW_KEY_ESCAPE" << std::endl;
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+		break;
+	case GLFW_KEY_SPACE:
+		std::cout << "GLFW_KEY_SPACE" << std::endl;
+		activeWindow->toggleAnimation();
+		break;
+	case GLFW_KEY_LEFT:
+		std::cout << "GLFW_KEY_LEFT" << std::endl;
+		break;
+	case GLFW_KEY_RIGHT:
+		std::cout << "GLFW_KEY_RIGHT" << std::endl;
+		break;
+	case GLFW_KEY_UP:
+		std::cout << "GLFW_KEY_UP" << std::endl;
+		break;
+	case GLFW_KEY_DOWN:
+		std::cout << "GLFW_KEY_DOWN" << std::endl;
+		break;
+	case GLFW_KEY_PAGE_UP:
+		std::cout << "GLFW_KEY_PAGE_UP" << std::endl;
+		break;
+	case GLFW_KEY_PAGE_DOWN:
+		std::cout << "GLFW_KEY_PAGE_DOWN" << std::endl;
+		break;
+	case GLFW_KEY_N:
+		std::cout << "GLFW_KEY_N" << std::endl;
+		// scene update
+		// activeScene->takeOneFrame();
+		// activeScene->updateGraphicsContext();
+		break;
+	case GLFW_KEY_F1:
+		std::cout << "GLFW_KEY_F1" << std::endl;
+		// imgui
+		// activeWindow->toggleImGUI();
+		break;
+	default:
+		break;
 	}
-
 }
 
 void HSim::RenderWindow::reshapeCallback(GLFWwindow *window, int w, int h)
 {
-	RenderWindow* activeWindow = (RenderWindow*)glfwGetWindowUserPointer(window);
+	std::cout << "reshape: w = " << w << "  h = " << h << std::endl;
+	RenderWindow *activeWindow = (RenderWindow *)glfwGetWindowUserPointer(window);
 	activeWindow->camera->setWidth(w);
 	activeWindow->camera->setHeight(h);
 }
 
 void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double y)
 {
-	RenderWindow* activeWindow = (RenderWindow*)glfwGetWindowUserPointer(window);
+	// std::cout << "cursorPos: x = " << x << "  y = " << y << std::endl;
+	RenderWindow *activeWindow = (RenderWindow *)glfwGetWindowUserPointer(window);
 	auto camera = activeWindow->camera;
 
 	HMouseEvent mouseEvent;
@@ -274,64 +340,65 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 	mouseEvent.x = (float)x;
 	mouseEvent.y = (float)y;
 
-// scene handle event
+	// scene handle event
 	// auto activeScene = SceneGraphFactory::instance()->active();
 	// activeScene->onMouseEvent(mouseEvent);
-	
+
 	if (activeWindow->buttonType == GLFW_MOUSE_BUTTON_LEFT &&
 		activeWindow->buttonState == GLFW_DOWN &&
-		activeWindow->mdkeyBits == GLFW_MOD_ALT 
+		activeWindow->mdkeyBits == GLFW_MOD_ALT
 		// &&!activeWindow->mImWindow.cameraLocked()
-		) 
+	)
 	{
 		camera->rotateToPoint(x, y);
 	}
 	else if (
 		activeWindow->buttonType == GLFW_MOUSE_BUTTON_MIDDLE &&
-		activeWindow->buttonState == GLFW_DOWN && 
-		activeWindow->mdkeyBits == GLFW_MOD_ALT 
+		activeWindow->buttonState == GLFW_DOWN &&
+		activeWindow->mdkeyBits == GLFW_MOD_ALT
 		// && !activeWindow->mImWindow.cameraLocked()
-		) 
+	)
 	{
 		camera->translateToPoint(x, y);
 	}
 	else if (
 		activeWindow->buttonType == GLFW_MOUSE_BUTTON_RIGHT &&
 		activeWindow->buttonState == GLFW_DOWN &&
-		activeWindow->mdkeyBits == GLFW_MOD_ALT 
+		activeWindow->mdkeyBits == GLFW_MOD_ALT
 		// && !activeWindow->mImWindow.cameraLocked()
-		)////
+		) ////
 	{
-		if (activeWindow->mCursorTempX != -1) 
+		if (activeWindow->mCursorTempX != -1)
 		{
 			camera->zoom(-0.005 * (x - activeWindow->mCursorTempX));
 			activeWindow->mCursorTempX = x;
 		}
 	}
-	// activeWindow->imWindow()->mouseMoveEvent(mouseEvent); 	
-}	
+	// activeWindow->imWindow()->mouseMoveEvent(mouseEvent);
+}
 
 void HSim::RenderWindow::scrollCallback(GLFWwindow *window, double offsetX, double OffsetY)
 {
-	RenderWindow* activeWindow = (RenderWindow*)glfwGetWindowUserPointer(window);
+	std::cout << "scroll: offsetX = " << offsetX << " offsetY = " << OffsetY << std::endl;
+	RenderWindow *activeWindow = (RenderWindow *)glfwGetWindowUserPointer(window);
 	auto camera = activeWindow->camera;
 
-// imgui
+	// imgui
 	// if (!activeWindow->mImWindow.cameraLocked())
 	// {
-		int state = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
-		int altState = glfwGetKey(window, GLFW_KEY_LEFT_ALT);
-		//If the left control key is pressed, slow the zoom speed. 
-		if (state == GLFW_PRESS && altState == GLFW_PRESS)
-			camera->zoom(-0.1*OffsetY);
-		else if (altState == GLFW_PRESS)
-			camera->zoom(-OffsetY);
+	int state = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL);
+	int altState = glfwGetKey(window, GLFW_KEY_LEFT_ALT);
+	// If the left control key is pressed, slow the zoom speed.
+	if (state == GLFW_PRESS && altState == GLFW_PRESS)
+		camera->zoom(-0.1 * OffsetY);
+	else if (altState == GLFW_PRESS)
+		camera->zoom(-OffsetY);
 	// }
-
-	
 }
 
 void HSim::RenderWindow::cursorEnterCallback(GLFWwindow *window, int entered)
 {
 	// todo
+
+	// cursor in window
 }

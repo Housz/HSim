@@ -16,6 +16,9 @@ namespace HSim
 	class Shader
 	{
 	public:
+		Shader() {}
+		~Shader() {}
+
 		// constructor generates the shader on the fly
 		// ------------------------------------------------------------------------
 		Shader(const char *vertexPath, const char *fragmentPath)
@@ -77,7 +80,6 @@ namespace HSim
 			glDeleteShader(vertex);
 			glDeleteShader(fragment);
 		}
-		~Shader(){};
 
 		// activate the shader
 		// ------------------------------------------------------------------------

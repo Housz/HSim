@@ -15,7 +15,7 @@ namespace HSim
 	public:
 		void draw()
 		{
-			std::cout << "GroundHelper" << std::endl;
+			// std::cout << "GroundHelper" << std::endl;
 
 			std::vector<glm::vec3> vertices;
 			std::vector<glm::uvec4> indices;

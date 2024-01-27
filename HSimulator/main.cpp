@@ -51,7 +51,7 @@ int main()
 
 	// app.setScene(createScene());
 
-	// app.mainLoop();
+	app.mainLoop();
 
 	return 0;
 }

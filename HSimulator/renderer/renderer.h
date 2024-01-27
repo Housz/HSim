@@ -1,6 +1,10 @@
 #pragma once 
 
 #include <scene/scene_graph.h>
+#include <scene/helper_object.h>
+#include <renderer/render_params.h>
+#include <renderer/shader.h>
+
 
 namespace HSim
 {
@@ -11,9 +15,25 @@ namespace HSim
 		Renderer();
 		~Renderer();
 
+	public:		
 		void init();
-	
-	
+
+		void setScene(SceneGraph_ptr scene_);
+
+	public: 
+		void draw(RenderParams renderParams);
+
+	// drawable objects
+	public:
+		SceneGraph_ptr scene;
+
+		HSim::GroundHelper ground;
+
+	// shader
+	public:
+		HSim::Shader shader;
+
+		// HSim::Shader shader2;
 
 	};
 
