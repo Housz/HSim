@@ -16,6 +16,9 @@ namespace HSim
 	public:
 		void traverse(std::function<void(GameObject_ptr)>& callback, GameObject_ptr go);
 		
+
+		void draw();
+
 	public:
 		GameObject_ptr root;
 

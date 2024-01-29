@@ -8,6 +8,8 @@ HSim::SceneGraph_ptr createScene()
 	auto sg = std::make_shared<HSim::SceneGraph>();
 
 	auto root = std::make_shared<HSim::GameObject>();
+	sg->root = root;
+
 	auto box1 = std::make_shared<HSim::Box3<float>>();
 	HSim::Vec3<float> lower(1, 1, 1);
 	HSim::Vec3<float> upper(5, 5, 5);
@@ -47,9 +49,8 @@ int main()
 	HSim::App app;
 
 	app.init(1920, 1080);
-	// app.setWindowTitle("Demo APP");
 
-	// app.setScene(createScene());
+	app.setScene(createScene());
 
 	app.mainLoop();
 

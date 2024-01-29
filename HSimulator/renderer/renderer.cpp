@@ -43,4 +43,6 @@ void HSim::Renderer::draw(RenderParams renderParams)
 	// std::cout << 
 
 	ground.draw();
+
+	this->scene->draw();
 }

@@ -143,6 +143,8 @@ void HSim::RenderWindow::mainLoop()
 void HSim::RenderWindow::setScene(SceneGraph_ptr scene_)
 {
 	this->scene = scene_;
+
+	this->renderer->setScene(scene_);
 }
 
 void HSim::RenderWindow::initCallbacks()
