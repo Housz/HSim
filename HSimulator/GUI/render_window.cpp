@@ -18,12 +18,14 @@ static void glfw_error_callback(int error, const char *description)
 
 void HSim::RenderWindow::init(size_t width, size_t height)
 {
+	this->width = width;
+	this->height = height;
+
 	renderer = std::make_shared<Renderer>();
 
 	camera = std::make_shared<OrbitCamera>();
 
 	std::cout << "renderwinodw init" << std::endl;
-
 
 	// glfw create window
 	windowTitle = std::string("HSimulator");
@@ -96,14 +98,13 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 	// initialize rendering engine
 	renderer->init();
 
-	camera->setWidth(width);
-	camera->setHeight(height);
+	camera->setWidth(this->width);
+	camera->setHeight(this->height);
 }
 
 void HSim::RenderWindow::mainLoop()
 {
 	std::cout << "window.mainLoop() in" << std::endl;
-
 
 	// opengl main loop
 	while (!glfwWindowShouldClose(glfwWindow))
@@ -118,7 +119,6 @@ void HSim::RenderWindow::mainLoop()
 			// advance ani
 		}
 
-	
 		// camera state -> renderParams
 
 		renderParams.width = camera->viewportWidth();
@@ -130,12 +130,11 @@ void HSim::RenderWindow::mainLoop()
 		// renderer draw scenegraph;
 		// renderer draw(scenegraph, renderParams)
 		renderer->draw(renderParams);
-		
-		
+
 		// imgui
 
 		// ground.draw();
-		
+
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
 	}
@@ -144,8 +143,6 @@ void HSim::RenderWindow::mainLoop()
 void HSim::RenderWindow::setScene(SceneGraph_ptr scene_)
 {
 	this->scene = scene_;
-
-
 }
 
 void HSim::RenderWindow::initCallbacks()
@@ -350,19 +347,21 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 		// &&!activeWindow->mImWindow.cameraLocked()
 	)
 	{
+		std::cout << "camera->rotateToPoint(x, y);" << x << " " << y << std::endl;
 		camera->rotateToPoint(x, y);
 	}
 	else if (
-		activeWindow->buttonType == GLFW_MOUSE_BUTTON_MIDDLE &&
+		activeWindow->buttonType == GLFW_MOUSE_BUTTON_RIGHT &&
 		activeWindow->buttonState == GLFW_DOWN &&
 		activeWindow->mdkeyBits == GLFW_MOD_ALT
 		// && !activeWindow->mImWindow.cameraLocked()
 	)
 	{
+		std::cout << "camera->translateToPoint(x, y);" << std::endl;
 		camera->translateToPoint(x, y);
 	}
 	else if (
-		activeWindow->buttonType == GLFW_MOUSE_BUTTON_RIGHT &&
+		activeWindow->buttonType == GLFW_MOUSE_BUTTON_MIDDLE &&
 		activeWindow->buttonState == GLFW_DOWN &&
 		activeWindow->mdkeyBits == GLFW_MOD_ALT
 		// && !activeWindow->mImWindow.cameraLocked()
@@ -370,6 +369,8 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 	{
 		if (activeWindow->mCursorTempX != -1)
 		{
+			std::cout << "camera->zoom(-0.005 * (x - activeWindow->mCursorTempX));" << std::endl;
+
 			camera->zoom(-0.005 * (x - activeWindow->mCursorTempX));
 			activeWindow->mCursorTempX = x;
 		}

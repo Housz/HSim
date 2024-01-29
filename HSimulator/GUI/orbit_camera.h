@@ -45,7 +45,7 @@ namespace HSim
 
 		Quaternionf getQuaternion(float yaw, float pitch) const;
 
-	private:
+	public:
 		float mRegX = 0.5f;
 		float mRegY = 0.5f;
 
@@ -61,10 +61,10 @@ namespace HSim
 		Vec3f mEyePos;
 		Vec3f mTargetPos;
 
-		float mFocusDistMax = 10.0f;
+		float mFocusDistMax = 100.0f;
 		float mFocusDistMin = 0.1f;
 
-		float mSpeed = 2.0;
+		float mSpeed = 3.0;
 		float mZoomSpeed = 1.0f;
 	};
 

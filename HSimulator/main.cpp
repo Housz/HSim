@@ -46,7 +46,7 @@ int main()
 {
 	HSim::App app;
 
-	app.init(800, 600);
+	app.init(1920, 1080);
 	// app.setWindowTitle("Demo APP");
 
 	// app.setScene(createScene());

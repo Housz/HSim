@@ -88,6 +88,9 @@ namespace HSim
 		RenderParams renderParams;
 
 		OrbitCamera_ptr camera;
+
+		size_t width = 1920;
+		size_t height = 1080;
 	
 	public:
 		SceneGraph_ptr scene;

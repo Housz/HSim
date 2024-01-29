@@ -10,7 +10,7 @@ namespace HSim
 		mEyePos = Vec3f(0.0f, 0.0f, 3.0f);
 		mFov = 0.90f;
 
-		this->setClipFar(20.0f);
+		this->setClipFar(500.0f);
 	}
 
 	Vec3f OrbitCamera::getEyePos() const
@@ -205,12 +205,19 @@ namespace HSim
 		Vec3f rotaxis = pos1.cross(pos2);
 		rotaxis.normalize();
 		float rotangle = 2 * sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-		return Quaternionf(rotangle, rotaxis);
+		// return Quaternionf(rotangle, rotaxis);
+		return Quaternionf(rotaxis, rotangle);
 	}
 
 	Quaternionf OrbitCamera::getQuaternion(float yaw, float pitch) const
 	{
-		Quaternionf oldQuat = Quaternionf(pitch, Vec3f(1.0f, 0.0f, 0.0f)) * Quaternionf(yaw, Vec3f(0.0f, 1.0f, 0.0f));
+		// Quaternionf oldQuat = Quaternionf(pitch, Vec3f(1.0f, 0.0f, 0.0f)) * Quaternionf(yaw, Vec3f(0.0f, 1.0f, 0.0f));
+
+		// auto axis = Vec3f(1.0f, 0.0f, 0.0f) * Quaternionf(Vec3f(0.0f, 1.0f, 0.0f), yaw);
+		// Quaternionf oldQuat = Quaternionf(axis, pitch);
+
+		Quaternionf oldQuat = Quaternionf(Vec3f(1.0f, 0.0f, 0.0f), pitch) * Quaternionf(Vec3f(0.0f, 1.0f, 0.0f), yaw);
+
 
 		float rotAngle = mRotAngle;
 		Vec3f rotAxis = mRotAxis;
@@ -276,6 +283,7 @@ namespace HSim
 		float dy = ty - mRegY;
 		Quaternionf q = getQuaternion(mRegX, mRegY, tx, ty);
 		rotate(mSpeed * dx, -mSpeed * dy);
+		// rotate(mSpeed * dx, mSpeed * dy);
 
 		registerPoint(x, y);
 	}
