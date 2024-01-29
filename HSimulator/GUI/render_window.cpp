@@ -106,6 +106,8 @@ void HSim::RenderWindow::mainLoop()
 {
 	std::cout << "window.mainLoop() in" << std::endl;
 
+	scene->serialize();
+
 	// opengl main loop
 	while (!glfwWindowShouldClose(glfwWindow))
 	{
@@ -129,6 +131,7 @@ void HSim::RenderWindow::mainLoop()
 
 		// renderer draw scenegraph;
 		// renderer draw(scenegraph, renderParams)
+
 		renderer->draw(renderParams);
 
 		// imgui

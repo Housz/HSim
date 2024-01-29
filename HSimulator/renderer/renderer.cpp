@@ -44,5 +44,8 @@ void HSim::Renderer::draw(RenderParams renderParams)
 
 	ground.draw();
 
+	std::unique_lock<std::mutex> lk(mtx);
+	this->scene->serialize();
+	lk.unlock();
 	this->scene->draw();
 }

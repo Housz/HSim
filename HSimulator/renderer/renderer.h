@@ -1,5 +1,8 @@
 #pragma once 
 
+#include <HSim/common.h>
+#include <app/mtx.h>
+
 #include <scene/scene_graph.h>
 #include <scene/helper_object.h>
 #include <renderer/render_params.h>

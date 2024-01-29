@@ -1,4 +1,8 @@
+#include <thread>
+
 #include <string>
+
+#include <HSim/common.h>
 
 #include <scene/scene_graph.h>
 #include <GUI/render_window.h>

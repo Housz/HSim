@@ -18,8 +18,7 @@ HSim::SceneGraph_ptr createScene()
 	HSim::Vec3f axis(0, 0, 1);
 	float angle = PI_QUARTER;
 	HSim::Quaternionf orientation(axis, angle);
-	box1->transform.orientation = orientation;
-	// root->surface_ptr = box;
+	// box1->transform.orientation = orientation;
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	auto go2 = std::make_shared<HSim::GameObject>();

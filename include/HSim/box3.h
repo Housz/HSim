@@ -138,12 +138,12 @@ namespace HSim
 		void serialize() override
 		{
 			std::cout << "serialize" << std::endl;
+			std::cout << transform.translation ;
 
 			auto vboID = toVBO();
 			vaoID = toVAO();
 
 			std::cout << vaoID << std::endl;
-
 		}
 
 		size_t toVBO() const override
