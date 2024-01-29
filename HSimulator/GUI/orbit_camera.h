@@ -64,7 +64,7 @@ namespace HSim
 		float mFocusDistMax = 100.0f;
 		float mFocusDistMin = 0.1f;
 
-		float mSpeed = 3.0;
+		float mSpeed = 4.0;
 		float mZoomSpeed = 1.0f;
 	};
 

@@ -38,6 +38,8 @@ void HSim::Renderer::draw(RenderParams renderParams)
 	shader.setMat4("view", renderParams.transforms.view);
 	shader.setMat4("model", renderParams.transforms.model);
 
+
+	glViewport(0, 0, renderParams.width, renderParams.height);
 	// std::cout << 
 
 	ground.draw();
