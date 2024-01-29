@@ -26,8 +26,8 @@ void HSim::Renderer::draw(RenderParams renderParams)
 {
 	// std::cout << "renderer draw" << std::endl;
 	shader.use();
-	shader.setFloat4("ourColor", 0.5, 0.1, 0.3, 0.0f);
-	shader.setVec3("lightPos", 20, 20, 20);
+	shader.setFloat4("ourColor", 0.5, 0.5, 0.5, 0.0f);
+	shader.setVec3("lightPos", 100, 80, 100);
 	// shader.setVec3("viewPos", cameraPos);
 
 		// 	renderParams.transforms.model = glm::mat4(1);

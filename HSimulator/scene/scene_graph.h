@@ -20,7 +20,7 @@ namespace HSim
 		void draw();
 
 	public:
-		GameObject_ptr root;
+		GameObject_ptr root = nullptr;
 
 	};
 
