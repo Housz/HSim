@@ -41,6 +41,7 @@ void HSim::Simulator::mainLoop()
 		}
 	};
 
+	// main loop
 	for (;;)
 	{
 		std::cout << "simulator update" << std::endl;

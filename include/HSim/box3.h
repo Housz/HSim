@@ -132,6 +132,10 @@ namespace HSim
 			return closestNormal;
 		}
 
+	public:
+		Vec3<T> lowerCorner = {0, 0, 0};
+		Vec3<T> upperCorner = {1, 1, 1};
+
 		// for rendering
 	public:
 		unsigned int vaoID = 0;
@@ -153,9 +157,9 @@ namespace HSim
 				}
 
 				// std::unique_lock<std::mutex> lk(mtx);
-				
-				std::cout << "serialize" << std::endl;
-				std::cout << transform.translation;
+
+				// std::cout << "serialize" << std::endl;
+				// std::cout << transform.translation;
 
 				vboID = toVBO();
 				vaoID = toVAO();
@@ -324,10 +328,6 @@ namespace HSim
 			// unbind
 			glBindVertexArray(0);
 		}
-
-	public:
-		Vec3<T> lowerCorner = {0, 0, 0};
-		Vec3<T> upperCorner = {1, 1, 1};
 	};
 
 	// template <typename T>
