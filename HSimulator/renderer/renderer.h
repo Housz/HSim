@@ -8,6 +8,8 @@
 #include <scene/helper_object.h>
 #include <renderer/render_params.h>
 #include <renderer/shader.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 namespace HSim

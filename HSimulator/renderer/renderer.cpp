@@ -27,25 +27,24 @@ void HSim::Renderer::draw(RenderParams renderParams)
 	// std::cout << "renderer draw" << std::endl;
 	shader.use();
 	shader.setFloat4("ourColor", 0.5, 0.5, 0.5, 0.0f);
-	shader.setVec3("lightPos", 100, 80, 100);
-	// shader.setVec3("viewPos", cameraPos);
+	shader.setVec3("lightPos", 20, 15, 15);
 
-		// 	renderParams.transforms.model = glm::mat4(1);
-		// renderParams.transforms.view = camera->getViewMat();
-		// renderParams.transforms.proj
+	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+	shader.setVec3("viewPos", cameraPosition);
+
 
 	shader.setMat4("projection", renderParams.transforms.proj);
 	shader.setMat4("view", renderParams.transforms.view);
 	shader.setMat4("model", renderParams.transforms.model);
 
-
 	glViewport(0, 0, renderParams.width, renderParams.height);
-	// std::cout << 
+
 
 	ground.draw();
+	
 
-	std::unique_lock<std::mutex> lk(mtx);
+	// std::unique_lock<std::mutex> lk(mtx);
 	this->scene->serialize();
-	lk.unlock();
+	// lk.unlock();
 	this->scene->draw();
 }

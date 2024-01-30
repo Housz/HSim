@@ -29,7 +29,7 @@ void HSim::Simulator::mainLoop()
 
 			std::unique_lock<std::mutex> lk(mtx);
 
-			surface->transform.translation.x += 1;
+			surface->transform.translation.x += .01;
 
 			surface->updated = true;
 			
