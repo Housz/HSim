@@ -1,3 +1,3 @@
 #include <app/mtx.h>
 
-std::mutex mtx;
+// std::mutex mtx;

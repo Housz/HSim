@@ -132,16 +132,46 @@ namespace HSim
 			return closestNormal;
 		}
 
+		// for rendering
 	public:
-		unsigned int vaoID;
+		unsigned int vaoID = 0;
+		unsigned int vboID = 0;
+
+		// std::queue<unsigned int> vaoBuffer;
+		// std::queue<unsigned int> vboBuffer;
 
 		void serialize() override
 		{
-			std::cout << "serialize" << std::endl;
-			std::cout << transform.translation ;
+			if (this->updated)
+			{
 
-			auto vboID = toVBO();
-			vaoID = toVAO();
+				if (vaoID && vboID)
+				{
+					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
+					glDeleteBuffers(1, &vboID);
+					glDeleteVertexArrays(1, &vaoID);
+				}
+
+				// std::unique_lock<std::mutex> lk(mtx);
+				
+				std::cout << "serialize" << std::endl;
+				std::cout << transform.translation;
+
+				vboID = toVBO();
+				vaoID = toVAO();
+
+				updated = false;
+
+				// lk.unlock();
+			}
+			else
+			{
+				std::cout << "------- pass -------" << std::endl;
+				return;
+			}
+
+			// vaoBuffer.push(vaoID);
+			// vboBuffer.push(vboID);
 
 			std::cout << vaoID << std::endl;
 		}
@@ -161,7 +191,6 @@ namespace HSim
 				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 
-
 				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
@@ -169,7 +198,6 @@ namespace HSim
 				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-
 
 				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
 				upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
@@ -179,7 +207,6 @@ namespace HSim
 				lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
 				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
 
-
 				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
 				upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
 				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
@@ -188,7 +215,6 @@ namespace HSim
 				lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
 				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
 
-
 				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
 				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
 				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
@@ -196,7 +222,6 @@ namespace HSim
 				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
 				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
 				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
-
 
 				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
 				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
@@ -207,15 +232,15 @@ namespace HSim
 				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f};
 
 			// transform
-			for (size_t i = 0; i < sizeof(vertices)/sizeof(float); i+=3)
+			for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)
 			{
 				// vertices[i], vertices[i+1], vertices[i+2]
-				auto v = transform.mul({vertices[i], vertices[i+1], vertices[i+2]});
+				auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
 				vertices[i] = v[0];
-				vertices[i+1] = v[1];
-				vertices[i+2] = v[2];
+				vertices[i + 1] = v[1];
+				vertices[i + 2] = v[2];
 			}
-			
+
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -270,15 +295,11 @@ namespace HSim
 			glEnableVertexAttribArray(1);
 
 			// unbind
-    		glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
-		
+
 			return vaoID;
 		}
-
-
-
-
 
 		void draw() const override
 		{
@@ -287,6 +308,14 @@ namespace HSim
 			// toVAO();
 
 			std::cout << vaoID << std::endl;
+
+			// if (!vaoBuffer.empty())
+			// {
+			// 	if (vaoBuffer.size() == 1)
+			// 	{
+
+			// 	}
+			// }
 
 			glBindVertexArray(vaoID);
 

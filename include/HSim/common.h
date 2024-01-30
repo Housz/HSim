@@ -10,6 +10,7 @@
 #include <utility>
 #include <memory>
 #include <array>
+#include <queue>
 #include <thread>
 #include <mutex>
 

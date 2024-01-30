@@ -3,6 +3,8 @@
 #include <HSim/common.h>
 #include <HSim/transform3.h>
 
+#include <HSim/lock.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -41,7 +43,10 @@ namespace HSim
 			return isInsideLocal(transform.toLocal(positionInWorld_));
 		}
 
+	// for rendering
 	public:
+		bool updated = false;
+
 		virtual void serialize() {}
 
 		virtual size_t toVBO() const { return 0; }

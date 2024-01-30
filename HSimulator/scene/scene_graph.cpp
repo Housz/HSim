@@ -30,9 +30,10 @@ void HSim::SceneGraph::traverse(std::function<void(GameObject_ptr)> &callback, G
 		}
 	}
 }
+
 void HSim::SceneGraph::serialize()
 {
-    float r = 0;
+    // float r = 0;
 
 	std::function<void(HSim::GameObject_ptr)> callback_serialize = [&](HSim::GameObject_ptr go)
 	{
@@ -53,9 +54,9 @@ void HSim::SceneGraph::serialize()
 	this->traverse(callback_serialize);
 
 }
+
 void HSim::SceneGraph::draw()
 {
-
 
 	std::function<void(HSim::GameObject_ptr)> callback_draw = [&](HSim::GameObject_ptr go)
 	{
@@ -68,7 +69,6 @@ void HSim::SceneGraph::draw()
 			surface->draw();
 		}
 	};
-
 
 	this->traverse(callback_draw);
 }

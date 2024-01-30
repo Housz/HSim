@@ -29,7 +29,9 @@ void HSim::Simulator::mainLoop()
 
 			std::unique_lock<std::mutex> lk(mtx);
 
-			surface->transform.translation.x += 0.001;
+			surface->transform.translation.x += 1;
+
+			surface->updated = true;
 			
 			lk.unlock();
 
@@ -43,6 +45,6 @@ void HSim::Simulator::mainLoop()
 	{
 		std::cout << "simulator update" << std::endl;
 		scene->traverse(callback_anim);
-		std::this_thread::sleep_for(std::chrono::microseconds(1000));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }

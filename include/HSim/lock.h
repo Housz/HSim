@@ -2,4 +2,4 @@
 
 #include <mutex>
 
-// extern std::mutex mtx;
+extern std::mutex mtx;

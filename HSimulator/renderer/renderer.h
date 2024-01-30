@@ -1,7 +1,8 @@
 #pragma once 
 
 #include <HSim/common.h>
-#include <app/mtx.h>
+// #include <app/mtx.h>
+#include <HSim/lock.h>
 
 #include <scene/scene_graph.h>
 #include <scene/helper_object.h>
