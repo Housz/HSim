@@ -62,16 +62,21 @@ namespace HSim
 	public:
 		unsigned int vaoID = 0;
 		unsigned int vboID = 0;
+		unsigned int eboID = 0;
+
+		const int numSectors = 30;
+		const int numStacks = 30;
 
 		void serialize() override
 		{
 			if (this->updated)
 			{
-				if (vaoID && vboID)
+				if (vaoID && vboID && eboID)
 				{
 					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
 					glDeleteBuffers(1, &vboID);
 					glDeleteVertexArrays(1, &vaoID);
+					glDeleteBuffers(1, &eboID);
 				}
 
 				// std::unique_lock<std::mutex> lk(mtx);
@@ -81,6 +86,7 @@ namespace HSim
 
 				vboID = toVBO();
 				vaoID = toVAO();
+				eboID = toEBO();
 
 				updated = false;
 
@@ -98,21 +104,48 @@ namespace HSim
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
 
-			const int numSlices = 30;
-			const int numStacks = 30;
-			float vertices[(numSlices + 1) * (numStacks + 1) * 3 * 2];
+			float vertices[(30 + 1) * (30 + 1) * 3 * 2];
+
+			std::cout << " numStacks " << numStacks << std::endl;
 
 			int index = 0;
+
+			for (size_t stack = 0; stack <= numStacks; stack++)
+			{
+				float phi = PI_HALF - PI * ((float)stack / numStacks);
+				float y = radius * std::sin(phi);
+
+				for (size_t sector = 0; sector <= numSectors; sector++)
+				{
+					float theta = PI_DOUBLE * ((float)sector / numSectors);
+
+					float x = radius * std::cos(phi) * std::sin(theta);
+					float z = radius * std::cos(phi) * std::cos(theta);
+
+					// position
+					vertices[index++] = x;
+					vertices[index++] = y;
+					vertices[index++] = z;
+
+					// norm
+					vertices[index++] = x / radius;
+					vertices[index++] = y / radius;
+					vertices[index++] = z / radius;
+				}
+			}
+
+			std::cout << "index: " << index << std::endl;
+
 			// for (int stack = 0; stack <= numStacks; ++stack)
 			// {
 			// 	for (int slice = 0; slice <= numSlices; ++slice)
 			// 	{
-			// 		float theta = stack * PI / numStacks;
-			// 		float phi = slice * 2 * PI / numSlices;
+			// 		float phi = stack * PI / numStacks;
+			// 		float theta = slice * 2 * PI / numSlices;
 
-			// 		float x = radius * std::sin(theta) * std::cos(phi);
+			// 		float x = radius * std::sin(theta) * std::sin(phi);
 			// 		float y = radius * std::cos(theta);
-			// 		float z = radius * std::sin(theta) * std::sin(phi);
+			// 		float z = radius * std::sin(theta) * std::cos(phi);
 
 			// 		// position
 			// 		vertices[index++] = x;
@@ -126,28 +159,28 @@ namespace HSim
 			// 	}
 			// }
 
-			for (int i = 0; i <= numStacks; ++i)
-			{
-				float stackAngle = PI / 2.0f - i * PI / numStacks; // 纬度角度
+			// for (int i = 0; i <= numStacks; ++i)
+			// {
+			// 	float stackAngle = PI / 2.0f - i * PI / numStacks; // 纬度角度
 
-				for (int j = 0; j <= numSlices; ++j)
-				{
-					float sectorAngle = j * 2.0f * PI / numSlices; // 经度角度
+			// 	for (int j = 0; j <= numSlices; ++j)
+			// 	{
+			// 		float sectorAngle = j * 2.0f * PI / numSlices; // 经度角度
 
-					float x = radius * std::cos(sectorAngle) * std::sin(stackAngle);
-					float y = radius * std::cos(stackAngle);
-					float z = radius * std::sin(sectorAngle) * std::sin(stackAngle);
+			// 		float x = radius * std::cos(sectorAngle) * std::sin(stackAngle);
+			// 		float y = radius * std::cos(stackAngle);
+			// 		float z = radius * std::sin(sectorAngle) * std::sin(stackAngle);
 
-					vertices[index++] = x;
-					vertices[index++] = y;
-					vertices[index++] = z;
+			// 		vertices[index++] = x;
+			// 		vertices[index++] = y;
+			// 		vertices[index++] = z;
 
-					// norm
-					vertices[index++] = x / radius;
-					vertices[index++] = y / radius;
-					vertices[index++] = z / radius;
-				}
-			}
+			// 		// norm
+			// 		vertices[index++] = x / radius;
+			// 		vertices[index++] = y / radius;
+			// 		vertices[index++] = z / radius;
+			// 	}
+			// }
 
 			// transform
 			for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)
@@ -167,10 +200,59 @@ namespace HSim
 			return vboID;
 		}
 
-		// Deprecated
 		size_t toEBO() const override
 		{
-			return 0;
+			// float indices[];
+
+			// k1--k1+1
+			// |  / |
+			// | /  |
+			// k2--k2+1
+
+			std::vector<int> indices;
+
+			int k1, k2;
+
+			for (size_t i = 0; i <= numStacks; ++i)
+			{
+				k1 = i * (numSectors + 1);
+				k2 = k1 + numSectors + 1;
+
+				for (size_t j = 0; j <= numSectors; j++)
+				{
+					indices.push_back(k1);
+					indices.push_back(k2);
+					indices.push_back(k1 + 1);
+
+					indices.push_back(k1 + 1);
+					indices.push_back(k2);
+					indices.push_back(k2 + 1);
+
+					// if (i != 0)
+					// {
+					// 	indices.push_back(k1);
+					// 	indices.push_back(k2);
+					// 	indices.push_back(k1 + 1);
+					// }
+
+					// if (i != (numStacks - 1))
+					// {
+					// 	indices.push_back(k1 + 1);
+					// 	indices.push_back(k2);
+					// 	indices.push_back(k2 + 1);
+					// }
+				}
+			}
+
+			std::cout << "indices.size()" << indices.size() << std::endl;
+
+			unsigned int eboID;
+			glGenBuffers(1, &eboID);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size(), indices.data(), GL_STATIC_DRAW);
+
+			return eboID;
 		}
 
 		size_t toVAO() const override
@@ -179,11 +261,11 @@ namespace HSim
 			glGenVertexArrays(1, &vaoID);
 			glBindVertexArray(vaoID);
 
-			// VAO layout 0
+			// VAO layout 0 (positions)
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
 			glEnableVertexAttribArray(0);
 
-			// VAO layout 1
+			// VAO layout 1 (normals)
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 			glEnableVertexAttribArray(1);
 
@@ -199,10 +281,12 @@ namespace HSim
 			std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
-
+			// glPointSize(10.0f);
 			// glDrawArrays(GL_TRIANGLES, 0, 36);
-			glDrawArrays(GL_POINTS, 0, (30 + 1) * (30 + 1));
+			// glDrawArrays(GL_POINTS, 0, (30 + 1) * (30 + 1));
 			// glDrawArrays(GL_TRIANGLE_FAN, 0, (30 + 1) * (30 + 1) / 3);
+
+			glDrawElements(GL_TRIANGLES, (numStacks + 1) * (numSectors + 1) * 3 * 2, GL_UNSIGNED_INT, 0);
 
 			// unbind
 			glBindVertexArray(0);
