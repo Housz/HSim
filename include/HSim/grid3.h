@@ -105,6 +105,9 @@ namespace HSim
         Vec3i _gridResolution;
         Vec3<T> _girdOrigin = Vec3<T>(0, 0, 0);
         Vec3<T> _gridSpacing = Vec3<T>(1, 1, 1);
+
+    public: 
+        draw() {}
     };
 
 } // namespace HSim
