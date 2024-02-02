@@ -94,7 +94,7 @@ namespace HSim
 			}
 			else
 			{
-				std::cout << "------- pass -------" << std::endl;
+				std::cout << "------- pass sphere serialize -------" << std::endl;
 				return;
 			}
 		}
@@ -104,7 +104,7 @@ namespace HSim
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
 
-			float vertices[(30 + 1) * (30 + 1) * 3 * 2];
+			float vertices[(30 + 1) * (30 + 1) * 3];
 
 			std::cout << " numStacks " << numStacks << std::endl;
 
@@ -209,48 +209,50 @@ namespace HSim
 			// | /  |
 			// k2--k2+1
 
-			std::vector<int> indices;
+			// std::vector<int> indices;
+			unsigned int indices[5220];
 
 			int k1, k2;
-
-			for (size_t i = 0; i <= numStacks; ++i)
+			int index = 0;
+			for (size_t i = 0; i < numStacks; ++i)
 			{
 				k1 = i * (numSectors + 1);
 				k2 = k1 + numSectors + 1;
 
-				for (size_t j = 0; j <= numSectors; j++)
+				for (size_t j = 0; j < numSectors; j++)
 				{
-					indices.push_back(k1);
-					indices.push_back(k2);
-					indices.push_back(k1 + 1);
+					if (i != 0)
+					{
+						// indices.push_back(k1);
+						// indices.push_back(k2);
+						// indices.push_back(k1 + 1);
+						indices[index++] = k1;
+						indices[index++] = k2;
+						indices[index++] = k1 + 1;
+					}
 
-					indices.push_back(k1 + 1);
-					indices.push_back(k2);
-					indices.push_back(k2 + 1);
-
-					// if (i != 0)
-					// {
-					// 	indices.push_back(k1);
-					// 	indices.push_back(k2);
-					// 	indices.push_back(k1 + 1);
-					// }
-
-					// if (i != (numStacks - 1))
-					// {
-					// 	indices.push_back(k1 + 1);
-					// 	indices.push_back(k2);
-					// 	indices.push_back(k2 + 1);
-					// }
+					if (i != (numStacks - 1))
+					{
+						// indices.push_back(k1 + 1);
+						// indices.push_back(k2);
+						// indices.push_back(k2 + 1);
+						indices[index++] = k1+1;
+						indices[index++] = k2;
+						indices[index++] = k2 + 1;
+					}
 				}
 			}
 
-			std::cout << "indices.size()" << indices.size() << std::endl;
+			std::cout << "indices " << sizeof(indices) / sizeof(int) << std::endl;
+
+			// std::cout << "indices.size()" << indices.size() << std::endl;
 
 			unsigned int eboID;
 			glGenBuffers(1, &eboID);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size(), indices.data(), GL_STATIC_DRAW);
+			// glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 			return eboID;
 		}
@@ -276,8 +278,17 @@ namespace HSim
 			return vaoID;
 		}
 
-		void draw() const override
+		void draw() override
 		{
+			if (!vboID || !eboID || !vaoID)
+			{
+				vboID = toVBO();
+				eboID = toEBO();
+				vaoID = toVAO();
+
+				std::cout << "init draw" << std::endl;
+			}
+			
 			std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
@@ -286,7 +297,8 @@ namespace HSim
 			// glDrawArrays(GL_POINTS, 0, (30 + 1) * (30 + 1));
 			// glDrawArrays(GL_TRIANGLE_FAN, 0, (30 + 1) * (30 + 1) / 3);
 
-			glDrawElements(GL_TRIANGLES, (numStacks + 1) * (numSectors + 1) * 3 * 2, GL_UNSIGNED_INT, 0);
+			std::cout << "(numStacks ) * (numSectors - 1) * 2 * 3 : " << (numStacks ) * (numSectors - 1) * 2 * 3 << std::endl;
+			glDrawElements(GL_TRIANGLES, (numStacks) * (numSectors - 1) * 2 * 3, GL_UNSIGNED_INT, 0);
 
 			// unbind
 			glBindVertexArray(0);

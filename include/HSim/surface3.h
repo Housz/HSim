@@ -78,7 +78,7 @@ namespace HSim
 
 		virtual size_t toVAO() const { return 0; }
 
-		virtual void draw() const {}
+		virtual void draw() {}
 	};
 
 	template <typename T>

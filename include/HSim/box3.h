@@ -148,7 +148,6 @@ namespace HSim
 		{
 			if (this->updated)
 			{
-
 				if (vaoID && vboID)
 				{
 					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
@@ -305,11 +304,20 @@ namespace HSim
 			return vaoID;
 		}
 
-		void draw() const override
+		void draw() override
 		{
 			// toVBO();
 			// toEBO();
 			// toVAO();
+
+			if (!vaoID || !vboID)
+			{
+				vboID = toVBO();
+				vaoID = toVAO();
+
+				std::cout << "init draw" << std::endl;
+			}
+			
 
 			std::cout << vaoID << std::endl;
 
