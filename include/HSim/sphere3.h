@@ -104,7 +104,7 @@ namespace HSim
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
 
-			float vertices[(30 + 1) * (30 + 1) * 3];
+			float vertices[(30 + 1) * (30 + 1) * 2 * 3];
 
 			std::cout << " numStacks " << numStacks << std::endl;
 
@@ -112,6 +112,7 @@ namespace HSim
 
 			for (size_t stack = 0; stack <= numStacks; stack++)
 			{
+				
 				float phi = PI_HALF - PI * ((float)stack / numStacks);
 				float y = radius * std::sin(phi);
 
@@ -126,8 +127,8 @@ namespace HSim
 					vertices[index++] = x;
 					vertices[index++] = y;
 					vertices[index++] = z;
-
-					// norm
+					
+					// norm (smooth shading)
 					vertices[index++] = x / radius;
 					vertices[index++] = y / radius;
 					vertices[index++] = z / radius;
@@ -212,7 +213,7 @@ namespace HSim
 			// std::vector<int> indices;
 			unsigned int indices[5220];
 
-			int k1, k2;
+			unsigned int k1, k2;
 			int index = 0;
 			for (size_t i = 0; i < numStacks; ++i)
 			{
@@ -236,7 +237,7 @@ namespace HSim
 						// indices.push_back(k1 + 1);
 						// indices.push_back(k2);
 						// indices.push_back(k2 + 1);
-						indices[index++] = k1+1;
+						indices[index++] = k1 + 1;
 						indices[index++] = k2;
 						indices[index++] = k2 + 1;
 					}
@@ -274,6 +275,7 @@ namespace HSim
 			// unbind
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
+   		 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 			return vaoID;
 		}
@@ -289,6 +291,8 @@ namespace HSim
 				std::cout << "init draw" << std::endl;
 			}
 			
+			std::cout << vboID << std::endl;
+			std::cout << eboID << std::endl;
 			std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);

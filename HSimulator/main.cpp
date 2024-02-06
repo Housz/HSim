@@ -37,8 +37,8 @@ HSim::SceneGraph_ptr createScene()
 
 	root->drawable = false;
 	go1->drawable = false;
-	go2->drawable = true;;
-	go3->drawable = true;
+	go2->drawable = false;
+	go3->drawable = false;
 
 	// go3->surface_ptr = box;
 

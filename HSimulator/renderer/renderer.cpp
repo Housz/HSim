@@ -15,6 +15,8 @@ void HSim::Renderer::init()
 
 	// init ground helper
 	ground.init(10, 10);
+
+
 }
 
 void HSim::Renderer::setScene(SceneGraph_ptr scene_)
@@ -39,9 +41,8 @@ void HSim::Renderer::draw(RenderParams renderParams)
 
 	glViewport(0, 0, renderParams.width, renderParams.height);
 
-
+	sphere.draw();
 	ground.draw();
-	
 
 	// std::unique_lock<std::mutex> lk(mtx);
 	this->scene->serialize();

@@ -44,7 +44,7 @@ void HSim::Simulator::mainLoop()
 	// main loop
 	for (;;)
 	{
-		std::cout << "simulator update" << std::endl;
+		// std::cout << "simulator update" << std::endl;
 		// scene->traverse(callback_anim);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
