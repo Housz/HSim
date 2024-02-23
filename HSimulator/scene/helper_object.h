@@ -103,7 +103,6 @@ namespace HSim
 		void draw()
 		{
 			std::vector<float> vertices;
-			std::vector<float> normals;
 			std::vector<unsigned int> indices;
 
 			size_t numSectors = 30;
@@ -114,46 +113,38 @@ namespace HSim
 			for (size_t stack = 0; stack <= numStacks; stack++)
 			{
 				float phi = PI_HALF - PI * ((float)stack / numStacks);
-				// std::cout << "phi : " << phi << std::endl;
 				float y = radius * std::sin(phi);
 
 				for (size_t sector = 0; sector <= numSectors; sector++)
 				{
 					float theta = PI_DOUBLE * ((float)sector / numSectors);
 
-					// std::cout << "theta : " << theta << std::endl;
-
-
 					float x = radius * std::cos(phi) * std::sin(theta);
 					float z = radius * std::cos(phi) * std::cos(theta);
 
+					// position for layout 0
 					vertices.push_back(x);
 					vertices.push_back(y);
 					vertices.push_back(z);
 
-					// std::cout << "xyz : " << x << " " << y << " " << z << " " << std::endl;
-
-
+					// position for layout 1
 					vertices.push_back(x / radius);
 					vertices.push_back(y / radius);
 					vertices.push_back(z / radius);
 				}
-				// std::cout << "theta :                                 --------" << std::endl;
-
 			}
-			// std::cout << "phi :                                 --------" << std::endl;
 
-
+			// indices
+			//  k1--k1+1
+			//  |  / |
+			//  | /  |
+			//  k2--k2+1
 			unsigned int k1, k2;
 
 			for (size_t i = 0; i < numStacks; ++i)
 			{
 				k1 = i * (numSectors + 1);
 				k2 = k1 + numSectors + 1;
-
-				// std::cout << k1 << "  " << k1+1 << std::endl;
-				// std::cout << k2 << "  " << k2+1 << std::endl;
-				// std::cout << std::endl;
 
 				for (size_t j = 0; j < numSectors; j++, k1++, k2++)
 				{
@@ -169,13 +160,9 @@ namespace HSim
 						indices.push_back(k1 + 1);
 						indices.push_back(k2);
 						indices.push_back(k2 + 1);
-
-
 					}
 				}
 			}
-
-			// std::cout << "indices.size(): " << indices.size() << std::endl;
 
 			unsigned int vao;
 			glGenVertexArrays(1, &vao);
@@ -185,10 +172,11 @@ namespace HSim
 			glGenBuffers(1, &vbo);
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-			
+
+			// layout 0: positions
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
-
+			// layout 1: normals
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
@@ -207,8 +195,7 @@ namespace HSim
 			glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
 			// glPointSize(10.0f);
-			// std::cout << "vertices.size()  " << vertices.size() << std::endl;
-			// glDrawArrays(GL_POINTS, 0, vertices.size()/3);
+			// glDrawArrays(GL_POINTS, 0, vertices.size()/6);
 
 			glBindVertexArray(0);
 		}

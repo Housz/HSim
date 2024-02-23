@@ -64,8 +64,11 @@ namespace HSim
 		unsigned int vboID = 0;
 		unsigned int eboID = 0;
 
-		const int numSectors = 30;
-		const int numStacks = 30;
+		std::vector<float> vertices;
+		std::vector<unsigned int> indices;
+
+		int numSectors = 30;
+		int numStacks = 30;
 
 		void serialize() override
 		{
@@ -84,6 +87,9 @@ namespace HSim
 				// std::cout << "serialize" << std::endl;
 				// std::cout << transform.translation;
 
+				vertices.clear();
+				indices.clear();
+
 				vboID = toVBO();
 				vaoID = toVAO();
 				eboID = toEBO();
@@ -99,20 +105,11 @@ namespace HSim
 			}
 		}
 
-		size_t toVBO() const override
+		size_t toVBO() override
 		{
-			unsigned int vboID;
-			glGenBuffers(1, &vboID);
-
-			float vertices[(30 + 1) * (30 + 1) * 2 * 3];
-
-			std::cout << " numStacks " << numStacks << std::endl;
-
-			int index = 0;
-
+			vertices.clear();
 			for (size_t stack = 0; stack <= numStacks; stack++)
 			{
-				
 				float phi = PI_HALF - PI * ((float)stack / numStacks);
 				float y = radius * std::sin(phi);
 
@@ -123,68 +120,22 @@ namespace HSim
 					float x = radius * std::cos(phi) * std::sin(theta);
 					float z = radius * std::cos(phi) * std::cos(theta);
 
-					// position
-					vertices[index++] = x;
-					vertices[index++] = y;
-					vertices[index++] = z;
-					
-					// norm (smooth shading)
-					vertices[index++] = x / radius;
-					vertices[index++] = y / radius;
-					vertices[index++] = z / radius;
+					// position for layout 0
+					vertices.push_back(x);
+					vertices.push_back(y);
+					vertices.push_back(z);
+
+					// position for layout 1
+					vertices.push_back(x / radius);
+					vertices.push_back(y / radius);
+					vertices.push_back(z / radius);
 				}
 			}
 
-			std::cout << "index: " << index << std::endl;
-
-			// for (int stack = 0; stack <= numStacks; ++stack)
-			// {
-			// 	for (int slice = 0; slice <= numSlices; ++slice)
-			// 	{
-			// 		float phi = stack * PI / numStacks;
-			// 		float theta = slice * 2 * PI / numSlices;
-
-			// 		float x = radius * std::sin(theta) * std::sin(phi);
-			// 		float y = radius * std::cos(theta);
-			// 		float z = radius * std::sin(theta) * std::cos(phi);
-
-			// 		// position
-			// 		vertices[index++] = x;
-			// 		vertices[index++] = y;
-			// 		vertices[index++] = z;
-
-			// 		// norm
-			// 		vertices[index++] = x / radius;
-			// 		vertices[index++] = y / radius;
-			// 		vertices[index++] = z / radius;
-			// 	}
-			// }
-
-			// for (int i = 0; i <= numStacks; ++i)
-			// {
-			// 	float stackAngle = PI / 2.0f - i * PI / numStacks; // 纬度角度
-
-			// 	for (int j = 0; j <= numSlices; ++j)
-			// 	{
-			// 		float sectorAngle = j * 2.0f * PI / numSlices; // 经度角度
-
-			// 		float x = radius * std::cos(sectorAngle) * std::sin(stackAngle);
-			// 		float y = radius * std::cos(stackAngle);
-			// 		float z = radius * std::sin(sectorAngle) * std::sin(stackAngle);
-
-			// 		vertices[index++] = x;
-			// 		vertices[index++] = y;
-			// 		vertices[index++] = z;
-
-			// 		// norm
-			// 		vertices[index++] = x / radius;
-			// 		vertices[index++] = y / radius;
-			// 		vertices[index++] = z / radius;
-			// 	}
-			// }
+			// std::cout << "index: " << index << std::endl;
 
 			// transform
-			for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)
+			for (size_t i = 0; i < vertices.size(); i += 3)
 			{
 				// vertices[i], vertices[i+1], vertices[i+2]
 				auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
@@ -193,16 +144,20 @@ namespace HSim
 				vertices[i + 2] = v[2];
 			}
 
+			unsigned int vboID;
+			glGenBuffers(1, &vboID);
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-			std::cout << "vbo" << std::endl;
+			// std::cout << "vbo" << std::endl;
 
 			return vboID;
 		}
 
-		size_t toEBO() const override
+		size_t toEBO() override
 		{
+			indices.clear();
+			
 			// float indices[];
 
 			// k1--k1+1
@@ -210,72 +165,58 @@ namespace HSim
 			// | /  |
 			// k2--k2+1
 
-			// std::vector<int> indices;
-			unsigned int indices[5220];
+			// unsigned int indices[5220];
 
 			unsigned int k1, k2;
-			int index = 0;
+
 			for (size_t i = 0; i < numStacks; ++i)
 			{
 				k1 = i * (numSectors + 1);
 				k2 = k1 + numSectors + 1;
 
-				for (size_t j = 0; j < numSectors; j++)
+				for (size_t j = 0; j < numSectors; j++, k1++, k2++)
 				{
 					if (i != 0)
 					{
-						// indices.push_back(k1);
-						// indices.push_back(k2);
-						// indices.push_back(k1 + 1);
-						indices[index++] = k1;
-						indices[index++] = k2;
-						indices[index++] = k1 + 1;
+						indices.push_back(k1);
+						indices.push_back(k2);
+						indices.push_back(k1 + 1);
 					}
 
 					if (i != (numStacks - 1))
 					{
-						// indices.push_back(k1 + 1);
-						// indices.push_back(k2);
-						// indices.push_back(k2 + 1);
-						indices[index++] = k1 + 1;
-						indices[index++] = k2;
-						indices[index++] = k2 + 1;
+						indices.push_back(k1 + 1);
+						indices.push_back(k2);
+						indices.push_back(k2 + 1);
 					}
 				}
 			}
 
-			std::cout << "indices " << sizeof(indices) / sizeof(int) << std::endl;
-
-			// std::cout << "indices.size()" << indices.size() << std::endl;
-
 			unsigned int eboID;
 			glGenBuffers(1, &eboID);
-
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-			// glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
 			return eboID;
 		}
 
-		size_t toVAO() const override
+		size_t toVAO() override
 		{
 			unsigned int vaoID;
 			glGenVertexArrays(1, &vaoID);
 			glBindVertexArray(vaoID);
 
-			// VAO layout 0 (positions)
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 0: positions
 			glEnableVertexAttribArray(0);
-
-			// VAO layout 1 (normals)
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 1: normals
 			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
 			// unbind
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindVertexArray(0);
-   		 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			return vaoID;
 		}
@@ -284,27 +225,24 @@ namespace HSim
 		{
 			if (!vboID || !eboID || !vaoID)
 			{
+				vertices.clear();
+				indices.clear();
+
 				vboID = toVBO();
 				eboID = toEBO();
 				vaoID = toVAO();
 
 				std::cout << "init draw" << std::endl;
 			}
-			
+
 			std::cout << vboID << std::endl;
 			std::cout << eboID << std::endl;
 			std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
-			// glPointSize(10.0f);
-			// glDrawArrays(GL_TRIANGLES, 0, 36);
-			// glDrawArrays(GL_POINTS, 0, (30 + 1) * (30 + 1));
-			// glDrawArrays(GL_TRIANGLE_FAN, 0, (30 + 1) * (30 + 1) / 3);
 
-			std::cout << "(numStacks ) * (numSectors - 1) * 2 * 3 : " << (numStacks ) * (numSectors - 1) * 2 * 3 << std::endl;
-			glDrawElements(GL_TRIANGLES, (numStacks) * (numSectors - 1) * 2 * 3, GL_UNSIGNED_INT, 0);
+			glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
-			// unbind
 			glBindVertexArray(0);
 		}
 	};

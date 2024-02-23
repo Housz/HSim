@@ -179,7 +179,7 @@ namespace HSim
 			std::cout << vaoID << std::endl;
 		}
 
-		size_t toVBO() const override
+		size_t toVBO() override
 		{
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
@@ -253,7 +253,7 @@ namespace HSim
 		}
 
 		// Deprecated
-		size_t toEBO() const override
+		size_t toEBO() override
 		{
 			unsigned int eboID;
 			glGenBuffers(1, &eboID);
@@ -283,7 +283,7 @@ namespace HSim
 			return eboID;
 		}
 
-		size_t toVAO() const override
+		size_t toVAO() override
 		{
 			unsigned int vaoID;
 			glGenVertexArrays(1, &vaoID);

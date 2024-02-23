@@ -72,11 +72,11 @@ namespace HSim
 
 		virtual void serialize() {}
 
-		virtual size_t toVBO() const { return 0; }
+		virtual size_t toVBO() { return 0; }
 
-		virtual size_t toEBO() const { return 0; }
+		virtual size_t toEBO() { return 0; }
 
-		virtual size_t toVAO() const { return 0; }
+		virtual size_t toVAO() { return 0; }
 
 		virtual void draw() {}
 	};

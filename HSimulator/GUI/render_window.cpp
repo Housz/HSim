@@ -352,7 +352,7 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 		// &&!activeWindow->mImWindow.cameraLocked()
 	)
 	{
-		std::cout << "camera->rotateToPoint(x, y);" << x << " " << y << std::endl;
+		// std::cout << "camera->rotateToPoint(x, y);" << x << " " << y << std::endl;
 		camera->rotateToPoint(x, y);
 	}
 	else if (
