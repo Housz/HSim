@@ -198,6 +198,7 @@ namespace HSim
 			// glDrawArrays(GL_POINTS, 0, vertices.size()/6);
 
 			glBindVertexArray(0);
+
 		}
 	};
 

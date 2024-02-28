@@ -28,7 +28,15 @@
 - [ ] Web Viewer: 3d scalar field
 - [ ] Web Viewer: 2d vector field
 - [ ] Web Viewer: 3d vector field
+
+
+- [x] OpenGL Viewer
+- [x] OpenGL box, sphere vis
+- [ ] OpenGL Particle vis
+
+## IO
 - [ ] VDB writer
+- [ ] OBJ Reader
 
 ## current road map
 mat33(transform3) -> surface3 -> im/ex surface3, mesh3 -> gridsolver3
