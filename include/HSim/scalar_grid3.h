@@ -46,6 +46,16 @@ namespace HSim
 		// data
 	public:
 		std::vector<T> _data;
+
+		// for rendering
+	public:
+		// draw boundary
+		
+		// draw grid
+
+		// draw data
+		// put all data to a VBO, glDrawArrays() 
+
 	};
 
 	template <typename T>
