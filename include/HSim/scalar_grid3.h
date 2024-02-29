@@ -47,11 +47,21 @@ namespace HSim
 	public:
 		std::vector<T> _data;
 
+
 		// for rendering
 	public:
 		// draw boundary
+		void drawBoundary() override 
+		{
+			std::cout << "drawBoundary scalar_grid3" << std::endl;
+		}
+
 		
 		// draw grid
+		void drawGrid() override
+		{
+			std::cout << "drawGrid scalar_grid3" << std::endl;
+		}
 
 		// draw data
 		// put all data to a VBO, glDrawArrays() 

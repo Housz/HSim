@@ -28,6 +28,13 @@ namespace HSim
 		{
 			return _origin + _gridSpacing * 0.5;
 		}
+	
+	// for rendering
+	public:
+		void drawData()
+		{
+			std::cout << "drawData cell_center_scalar_grid" << std::endl;
+		}
 
 	};
 

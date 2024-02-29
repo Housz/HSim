@@ -2,6 +2,7 @@
 
 #include <HSim/common.h>
 #include <HSim/vec3.h>
+#include <HSim/aabb3.h>
 #include <HSim/parallel.h>
 
 namespace HSim
@@ -36,7 +37,7 @@ namespace HSim
         Grid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1}):
         _gridResolution(resolution), _girdOrigin(origin), _gridSpacing(gridSpacing)
         {}
-        
+
 
     public:
         /**
@@ -106,8 +107,12 @@ namespace HSim
         Vec3<T> _girdOrigin = Vec3<T>(0, 0, 0);
         Vec3<T> _gridSpacing = Vec3<T>(1, 1, 1);
 
+        AABB3_Ptr<T> aabb = std::make_shared<AABB3<T>>(_girdOrigin, _girdOrigin + _gridResolution * _gridSpacing);
+
     public: 
-        draw() {}
+        virtual void drawBoundary() {}
+        virtual void drawGrid() {}
+        virtual void drawData() {}
     };
 
 } // namespace HSim

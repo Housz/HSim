@@ -40,7 +40,9 @@ namespace HSim
 		bool drawable = false;
 		std::shared_ptr<Surface3<PRECISION>> surface_ptr = nullptr;
 
-		// field3 ptr		
+		// field3 ptr
+		
+		
 
 	// local transform
 	public:

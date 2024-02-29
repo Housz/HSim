@@ -123,76 +123,94 @@ namespace HSim
         //// new_Vec3 = this_Vec3 (operator) parameters
 
         // add
-        Vec3<T> add(T a_) const { return Vec3<T>(x + a_, y + a_, z + a_); }
-        Vec3<T> add(const Vec3<T> &v_) const { return Vec3<T>(x + v_.x, y + v_.y, z + v_.z); }
+        template <typename T1>
+        Vec3<T> add(T1 a_) const { return Vec3<T>(x + a_, y + a_, z + a_); }
+        template <typename T1>
+        Vec3<T> add(const Vec3<T1> &v_) const { return Vec3<T>(x + v_.x, y + v_.y, z + v_.z); }
 
         // sub
-        Vec3<T> sub(T a_) const { return Vec3<T>(x - a_, y - a_, z - a_); }
-        Vec3<T> sub(const Vec3<T> &v_) const { return Vec3<T>(x - v_.x, y - v_.y, z - v_.z); }
+        template <typename T1>
+        Vec3<T> sub(T1 a_) const { return Vec3<T>(x - a_, y - a_, z - a_); }
+
+        template <typename T1>
+        Vec3<T> sub(const Vec3<T1> &v_) const { return Vec3<T>(x - v_.x, y - v_.y, z - v_.z); }
 
         // mul
-        Vec3<T> mul(T a_) const { return Vec3<T>(x * a_, y * a_, z * a_); }
-        Vec3<T> mul(const Vec3<T> &v_) const { return Vec3<T>(x * v_.x, y * v_.y, z * v_.z); }
+        template <typename T1>
+        Vec3<T> mul(T1 a_) const { return Vec3<T>(x * a_, y * a_, z * a_); }
+        template <typename T1>
+        Vec3<T> mul(const Vec3<T1> &v_) const { return Vec3<T>(x * v_.x, y * v_.y, z * v_.z); }
 
         // div
-        Vec3<T> div(T a_) const { return Vec3<T>(x / a_, y / a_, z / a_); }
-        Vec3<T> div(const Vec3<T> &v_) const { return Vec3<T>(x / v_.x, y / v_.y, z / v_.z); }
+        template <typename T1>
+        Vec3<T> div(T1 a_) const { return Vec3<T>(x / a_, y / a_, z / a_); }
+        template <typename T1>
+        Vec3<T> div(const Vec3<T1> &v_) const { return Vec3<T>(x / v_.x, y / v_.y, z / v_.z); }
 
         // dot
-        T dot(const Vec3<T> &v_) const { return x * v_.x + y * v_.y + z * v_.z; }
+        template <typename T1>
+        T dot(const Vec3<T1> &v_) const { return x * v_.x + y * v_.y + z * v_.z; }
 
         // cross
-        Vec3<T> cross(const Vec3<T> &v_) const { return Vec3<T>(y * v_.z - v_.y * z, z * v_.x - v_.z * x, x * v_.y - v_.x * y); }
+        template <typename T1>
+        Vec3<T> cross(const Vec3<T1> &v_) const { return Vec3<T>(y * v_.z - v_.y * z, z * v_.x - v_.z * x, x * v_.y - v_.x * y); }
 
         //// this_Vec3 = this_Vec3 (operator) parameters
 
-        void add_self(T a_)
+        template <typename T1>
+        void add_self(T1 a_)
         {
             x += a_;
             y += a_;
             z += a_;
         }
-        void add_self(const Vec3<T> &v_)
+        template <typename T1>
+        void add_self(const Vec3<T1> &v_)
         {
             x += v_.x;
             y += v_.y;
             z += v_.z;
         }
 
-        void sub_self(T a_)
+        template <typename T1>
+        void sub_self(T1 a_)
         {
             x -= a_;
             y -= a_;
             z -= a_;
         }
-        void sub_self(const Vec3<T> &v_)
+        template <typename T1>
+        void sub_self(const Vec3<T1> &v_)
         {
             x -= v_.x;
             y -= v_.y;
             z -= v_.z;
         }
 
-        void mul_self(T a_)
+        template <typename T1>
+        void mul_self(T1 a_)
         {
             x *= a_;
             y *= a_;
             z *= a_;
         }
-
-        void mul_self(const Vec3<T> &v_)
+        template <typename T1>
+        void mul_self(const Vec3<T1> &v_)
         {
             x *= v_.x;
             y *= v_.y;
             z *= v_.z;
         }
 
-        void div_self(T a_)
+        template <typename T1>
+        void div_self(T1 a_)
         {
             x /= a_;
             y /= a_;
             z /= a_;
         }
-        void div_self(const Vec3<T> &v_)
+        template <typename T1>
+        void div_self(const Vec3<T1> &v_)
         {
             x /= v_.x;
             y /= v_.y;
@@ -238,37 +256,48 @@ namespace HSim
             return (*this);
         }
 
-        Vec3 operator+(const Vec3<T> &v_) const { return add(v_); }
+        template <typename T1>
+        Vec3 operator+(const Vec3<T1> &v_) const { return add(v_); }
 
-        Vec3 operator-(const Vec3<T> &v_) const { return sub(v_); }
+        template <typename T1>
+        Vec3 operator-(const Vec3<T1> &v_) const { return sub(v_); }
 
         Vec3 operator-() const { return mul(-1); }
 
-        Vec3 operator*(const Vec3<T> &v_) const { return mul(v_); }
-        Vec3 operator*(T a_) const { return mul(a_); }
+        template <typename T1>
+        Vec3 operator*(const Vec3<T1> &v_) const { return mul(v_); }
+        template <typename T1>
+        Vec3 operator*(T1 a_) const { return mul(a_); }
 
-        Vec3 operator/(const Vec3<T> &v_) const { return div(v_); }
-        Vec3 operator/(T a_) const { return div(a_); }
+        template <typename T1>
+        Vec3 operator/(const Vec3<T1> &v_) const { return div(v_); }
+        template <typename T1>
+        Vec3 operator/(T1 a_) const { return div(a_); }
 
-        Vec3 &operator+=(const Vec3<T> &v_)
+        template <typename T1>
+        Vec3 &operator+=(const Vec3<T1> &v_)
         {
             add_self(v_);
             return (*this);
         }
 
-        Vec3 &operator-=(const Vec3<T> &v_)
+        template <typename T1>
+        Vec3 &operator-=(const Vec3<T1> &v_)
         {
             sub_self(v_);
             return (*this);
         }
 
-        Vec3 &operator*=(const Vec3<T> &v_)
+        template <typename T1>
+        Vec3 &operator*=(const Vec3<T1> &v_)
         {
             mul_self(v_);
             return (*this);
         }
 
-        Vec3 &operator/=(const Vec3<T> &v_)
+
+        template <typename T1>
+        Vec3 &operator/=(const Vec3<T1> &v_)
         {
             div_self(v_);
             return (*this);

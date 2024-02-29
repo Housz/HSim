@@ -28,12 +28,15 @@ HSim::SceneGraph_ptr createScene()
 	auto go1 = std::make_shared<HSim::GameObject>();
 	auto go2 = std::make_shared<HSim::GameObject>();
 	auto go3 = std::make_shared<HSim::GameObject>();
+	auto go4 = std::make_shared<HSim::GameObject>();
 
 	go1->surface_ptr = box1;
 
 	go2->surface_ptr = sphere1;
 
 	go3->surface_ptr = box2;
+
+	
 
 
 	root->drawable = false;

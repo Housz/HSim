@@ -16,10 +16,10 @@ namespace HSim
 		~AABB3(){};
 
 		AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
-		: lowerCorner(lowerCorner_), upperCorner(upperCorner_) {}
+			: lowerCorner(lowerCorner_), upperCorner(upperCorner_) {}
 
-		AABB3(const AABB3<T>& boundingBox_)
-		: lowerCorner(boundingBox_.lowerCorner), upperCorner(boundingBox_.upperCorner) {}
+		AABB3(const AABB3<T> &boundingBox_)
+			: lowerCorner(boundingBox_.lowerCorner), upperCorner(boundingBox_.upperCorner) {}
 
 		/**
 		 * @brief set BoundingBox3 with any two points
@@ -76,6 +76,117 @@ namespace HSim
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
+
+
+		// for rendering
+	public:
+		unsigned int vaoID = 0;
+		unsigned int vboID = 0;
+
+		size_t toVBO() 
+		{
+			unsigned int vboID;
+			glGenBuffers(1, &vboID);
+
+			float vertices[] = {
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+
+				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f};
+
+			glBindBuffer(GL_ARRAY_BUFFER, vboID);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+			std::cout << "AABB vbo " << std::endl;
+
+			return vboID;
+		}
+
+		size_t toVAO() 
+		{
+			unsigned int vaoID;
+			glGenVertexArrays(1, &vaoID);
+			glBindVertexArray(vaoID);
+
+			// VAO layout 0
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			glEnableVertexAttribArray(0);
+
+			// VAO layout 1
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+			glEnableVertexAttribArray(1);
+
+			// unbind
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+
+			return vaoID;
+		}
+
+		void draw() 
+		{
+			if (!vaoID || !vboID)
+			{
+				vboID = toVBO();
+				vaoID = toVAO();
+
+				std::cout << "init draw" << std::endl;
+			}
+
+			std::cout << vaoID << std::endl;
+
+			glBindVertexArray(vaoID);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+
+			// unbind
+			glBindVertexArray(0);
+		}
+
+
 	};
 
 	template <typename T>
