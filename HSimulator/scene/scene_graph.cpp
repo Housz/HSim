@@ -68,6 +68,14 @@ void HSim::SceneGraph::draw()
 
 			surface->draw();
 		}
+
+		if (go->grid_ptr != nullptr && go->drawable)
+		{
+			std::cout << "callback_draw" << std::endl;
+			auto grid = go->grid_ptr;
+			grid->drawBoundary();
+		}
+		
 	};
 
 	this->traverse(callback_draw);

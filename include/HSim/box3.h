@@ -247,7 +247,7 @@ namespace HSim
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-			std::cout << "vbo" << std::endl;
+			std::cout << "box vbo" << std::endl;
 
 			return vboID;
 		}

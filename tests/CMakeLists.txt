@@ -53,6 +53,9 @@ target_link_libraries(test_grid_fluid_solver3 PUBLIC HSim)
 add_executable(testsurface test_surface3.cpp)
 target_link_libraries(testsurface PUBLIC HSim)
 
+add_executable(testaabb3 test_aabb3.cpp)
+target_link_libraries(testaabb3 PUBLIC HSim)
+
 add_executable(testgl test_gl.cpp)
 target_link_libraries(testgl PUBLIC glfw)
 target_link_libraries(testgl PUBLIC glad::glad)

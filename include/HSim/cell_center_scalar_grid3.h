@@ -13,27 +13,43 @@ namespace HSim
 		~CellCenterScalarGrid3() {}
 
 		CellCenterScalarGrid3(size_t x, size_t y, size_t z) 
-		: Grid3(x, y, z) {}
+		: ScalarGrid3<T>(x, y, z) {}
 
 		CellCenterScalarGrid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1})
-		: Grid3(resolution, origin, gridSpacing) {}
+		: ScalarGrid3<T>(resolution, origin, gridSpacing) {}
 
 	public:
 		Vec3i dataSize() override
 		{
-			return _resolution;
+			return _gridResolution;
 		}
 
 		Vec3<T> dataOrigin() override
 		{
-			return _origin + _gridSpacing * 0.5;
+			return _girdOrigin + _gridSpacing * 0.5;
 		}
 	
 	// for rendering
 	public:
-		void drawData()
+		// draw boundary
+		void drawBoundary() override 
 		{
-			std::cout << "drawData cell_center_scalar_grid" << std::endl;
+			std::cout << "drawBoundary cell_center_scalar_grid3" << std::endl;
+			this->aabb->draw();
+		}
+
+		
+		// draw grid
+		void drawGrid() override
+		{
+			std::cout << "drawGrid cell_center_scalar_grid3" << std::endl;
+		}
+
+		// draw data
+		// put all data to a VBO, glDrawArrays() 
+		void drawData() override
+		{
+			std::cout << "drawData cell_center_scalar_grid3" << std::endl;
 		}
 
 	};

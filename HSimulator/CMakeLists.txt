@@ -6,6 +6,7 @@ target_link_libraries(HSimulator PUBLIC glfw)
 target_link_libraries(HSimulator PUBLIC glad::glad)
 target_link_libraries(HSimulator PUBLIC glm::glm)
 target_link_libraries(HSimulator PUBLIC imgui::imgui)
+target_link_libraries(HSimulator PUBLIC TBB::tbb)
 # target_link_libraries(HSimulator PRIVATE Stb)
 
 file(COPY resources DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/Debug)

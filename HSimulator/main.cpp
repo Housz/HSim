@@ -1,7 +1,10 @@
+#include <iostream>
+
 #include <app/app.h>
 #include <scene/scene_graph.h>
 #include <HSim/box3.h>
 #include <HSim/sphere3.h>
+#include <HSim/cell_center_scalar_grid3.h>
 
 HSim::SceneGraph_ptr createScene()
 {
@@ -22,8 +25,10 @@ HSim::SceneGraph_ptr createScene()
 	HSim::Quaternionf orientation(axis, angle);
 	// box1->transform.orientation = orientation;
 
-
 	auto sphere1 = std::make_shared<HSim::Sphere3<float>>();
+
+	size_t n = 10;
+	auto grid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	auto go2 = std::make_shared<HSim::GameObject>();
@@ -31,24 +36,28 @@ HSim::SceneGraph_ptr createScene()
 	auto go4 = std::make_shared<HSim::GameObject>();
 
 	go1->surface_ptr = box1;
-
 	go2->surface_ptr = sphere1;
-
 	go3->surface_ptr = box2;
 
-	
+	go4->grid_ptr = grid;
 
+	// std::cout << grid->gridResolution();
+	// std::cout << grid->aabb->lowerCorner;
+	// std::cout << grid->aabb->upperCorner;
+	grid->test();
 
 	root->drawable = false;
-	go1->drawable = false;
+	go1->drawable = true;
 	go2->drawable = false;
 	go3->drawable = false;
 
-	// go3->surface_ptr = box;
+	go4->drawable = true;
+
 
 	root->children.push_back(go1);
 	root->children.push_back(go2);
 	root->children.push_back(go3);
+	root->children.push_back(go4);
 
 	return sg;
 }

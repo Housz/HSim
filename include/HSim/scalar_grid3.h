@@ -51,20 +51,24 @@ namespace HSim
 		// for rendering
 	public:
 		// draw boundary
-		void drawBoundary() override 
+		virtual void drawBoundary() override 
 		{
 			std::cout << "drawBoundary scalar_grid3" << std::endl;
 		}
 
 		
 		// draw grid
-		void drawGrid() override
+		virtual void drawGrid() override
 		{
 			std::cout << "drawGrid scalar_grid3" << std::endl;
 		}
 
 		// draw data
 		// put all data to a VBO, glDrawArrays() 
+		virtual void drawData() override
+		{
+			std::cout << "drawData scalar_grid3" << std::endl;
+		}
 
 	};
 

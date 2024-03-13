@@ -107,8 +107,18 @@ namespace HSim
         Vec3<T> _girdOrigin = Vec3<T>(0, 0, 0);
         Vec3<T> _gridSpacing = Vec3<T>(1, 1, 1);
 
+        void test() 
+        {
+            std::cout << "--------------------------------------------------\n";
+            std::cout << _girdOrigin + _gridResolution * _gridSpacing;
+            std::cout << aabb->lowerCorner;
+            std::cout << aabb->upperCorner;
+
+        }
+
         AABB3_Ptr<T> aabb = std::make_shared<AABB3<T>>(_girdOrigin, _girdOrigin + _gridResolution * _gridSpacing);
 
+    // for rendering
     public: 
         virtual void drawBoundary() {}
         virtual void drawGrid() {}

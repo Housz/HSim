@@ -3,6 +3,7 @@
 #include <HSim/transform3.h>
 #include <HSim/surface3.h>
 #include <HSim/field3.h>
+#include <HSim/grid3.h>
 
 #include <config/numerical_config.h>
 
@@ -38,10 +39,12 @@ namespace HSim
 	// geometrical elements
 	public:
 		bool drawable = false;
+
+		// surface ptr
 		std::shared_ptr<Surface3<PRECISION>> surface_ptr = nullptr;
 
-		// field3 ptr
-		
+		// grid ptr
+		std::shared_ptr<Grid3<PRECISION>> grid_ptr = nullptr;
 		
 
 	// local transform

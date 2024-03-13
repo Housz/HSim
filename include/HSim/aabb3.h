@@ -16,7 +16,14 @@ namespace HSim
 		~AABB3(){};
 
 		AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
-			: lowerCorner(lowerCorner_), upperCorner(upperCorner_) {}
+			: lowerCorner(lowerCorner_), upperCorner(upperCorner_)
+		{
+            // std::cout << "--------------------------------------------------\n";
+			// std::cout << lowerCorner;
+			// std::cout << upperCorner;
+			// std::cout << lowerCorner_;
+			// std::cout << upperCorner_;
+		}
 
 		AABB3(const AABB3<T> &boundingBox_)
 			: lowerCorner(boundingBox_.lowerCorner), upperCorner(boundingBox_.upperCorner) {}
@@ -77,13 +84,12 @@ namespace HSim
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
 
-
 		// for rendering
 	public:
 		unsigned int vaoID = 0;
 		unsigned int vboID = 0;
 
-		size_t toVBO() 
+		size_t toVBO()
 		{
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
@@ -145,7 +151,7 @@ namespace HSim
 			return vboID;
 		}
 
-		size_t toVAO() 
+		size_t toVAO()
 		{
 			unsigned int vaoID;
 			glGenVertexArrays(1, &vaoID);
@@ -166,8 +172,12 @@ namespace HSim
 			return vaoID;
 		}
 
-		void draw() 
+		void draw()
 		{
+			// std::cout << "AABB draw" << std::endl;
+			// std::cout << lowerCorner;
+			// std::cout << upperCorner;
+
 			if (!vaoID || !vboID)
 			{
 				vboID = toVBO();
@@ -185,8 +195,6 @@ namespace HSim
 			// unbind
 			glBindVertexArray(0);
 		}
-
-
 	};
 
 	template <typename T>
