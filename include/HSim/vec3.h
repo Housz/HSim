@@ -31,8 +31,10 @@ namespace HSim
          */
         Vec3() : x(0), y(0), z(0) {}
         Vec3(T x_, T y_, T z_) : x(x_), y(y_), z(z_) {}
-        Vec3(const Vec3 &v_) : x(v_.x), y(v_.y), z(v_.z) {}
-        Vec3(const Vec4<T> &v_) : x(v_.x), y(v_.y), z(v_.z) {}
+        template <typename U>
+        Vec3(const Vec3<U> &v_) : x(v_.x), y(v_.y), z(v_.z) {}
+        template <typename U>
+        Vec3(const Vec4<U> &v_) : x(v_.x), y(v_.y), z(v_.z) {}
         template <typename U>
         Vec3(const std::initializer_list<U> &list) { set(list); }
 
@@ -103,7 +105,7 @@ namespace HSim
             return Vec3<T>(x / len, y / len, z / len);
         }
 
-        bool isEqual(const Vec3<T>& v_) const
+        bool isEqual(const Vec3<T> &v_) const
         {
             return (x == v_.x) && (y == v_.y) && (z == v_.z);
         }
@@ -117,7 +119,7 @@ namespace HSim
 
         bool isZero() const
         {
-            return (x==0 && y==0 && z==0);
+            return (x == 0 && y == 0 && z == 0);
         }
 
         //// new_Vec3 = this_Vec3 (operator) parameters
@@ -224,13 +226,13 @@ namespace HSim
             assert(i < 3);
             return (&x)[i];
         }
-        
+
         T operator[](size_t i) const
         {
             assert(i < 3);
             return (&x)[i];
         }
-        
+
         T &operator()(size_t i)
         {
             assert(i < 3);
@@ -295,7 +297,6 @@ namespace HSim
             return (*this);
         }
 
-
         template <typename T1>
         Vec3 &operator/=(const Vec3<T1> &v_)
         {
@@ -327,9 +328,16 @@ namespace HSim
         return os;
     }
 
+    template <typename T1>
+    std::ostream &operator<<(std::ostream &os, const Vec3<T1> &v_)
+    {
+        os << "x: " << v_.x << " y: " << v_.y << " z: " << v_.z << std::endl;
+        return os;
+    }
+
     // n * v
     template <typename T1, typename T2>
-    Vec3<T1> operator*(T2 n, const Vec3<T1>& v)
+    Vec3<T1> operator*(T2 n, const Vec3<T1> &v)
     {
         return v.mul((T1)n);
     }

@@ -18,15 +18,12 @@ namespace HSim
 		AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
 			: lowerCorner(lowerCorner_), upperCorner(upperCorner_)
 		{
-            // std::cout << "--------------------------------------------------\n";
-			// std::cout << lowerCorner;
-			// std::cout << upperCorner;
-			// std::cout << lowerCorner_;
-			// std::cout << upperCorner_;
 		}
 
 		AABB3(const AABB3<T> &boundingBox_)
-			: lowerCorner(boundingBox_.lowerCorner), upperCorner(boundingBox_.upperCorner) {}
+			: lowerCorner(boundingBox_.lowerCorner), upperCorner(boundingBox_.upperCorner)
+		{
+		}
 
 		/**
 		 * @brief set BoundingBox3 with any two points
@@ -190,7 +187,9 @@ namespace HSim
 
 			glBindVertexArray(vaoID);
 
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			// unbind
 			glBindVertexArray(0);

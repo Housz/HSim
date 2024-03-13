@@ -21,29 +21,33 @@ namespace HSim
 
         /**
          * @brief Construct a new Grid3 object by a grid resolution.
-         * 
+         *
          * @param x resolution.x
          * @param y resolution.y
          * @param z resolution.z
          */
-        Grid3(size_t x, size_t y, size_t z) { _gridResolution = {x, y, z}; }
+        Grid3(size_t x, size_t y, size_t z)
+        {
+            _gridResolution = {x, y, z};
+            computeAABB();
+        }
         /**
          * @brief Construct a new Grid3 object by gird resolution, grid origin and grid spacing.
-         * 
-         * @param resolution 
-         * @param origin 
-         * @param gridSpacing 
+         *
+         * @param resolution
+         * @param origin
+         * @param gridSpacing
          */
-        Grid3(Vec3i resolution, Vec3<T> origin={0, 0, 0}, Vec3<T> gridSpacing={1, 1, 1}):
-        _gridResolution(resolution), _girdOrigin(origin), _gridSpacing(gridSpacing)
-        {}
-
+        Grid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1}) : _gridResolution(resolution), _girdOrigin(origin), _gridSpacing(gridSpacing)
+        {
+            computeAABB();
+        }
 
     public:
         /**
          * @brief gird resolution
-         * 
-         * @return Vec3i 
+         *
+         * @return Vec3i
          */
         Vec3i gridResolution() { return _gridResolution; }
         void setGridResolution(Vec3i r) { _gridResolution = r; }
@@ -53,16 +57,16 @@ namespace HSim
 
         /**
          * @brief grid origin, the position (x, y, z) of the grid origin
-         * 
-         * @return Vec3<T> 
+         *
+         * @return Vec3<T>
          */
         Vec3<T> gridOrigin() { return _girdOrigin; }
         void setGridOrigin(Vec3<T> origin) { _girdOrigin = origin; }
 
         /**
          * @brief The spacing of the grid in the x, y and z directions
-         * 
-         * @return Vec3<T> 
+         *
+         * @return Vec3<T>
          */
         Vec3<T> gridSpacing() { return _gridSpacing; }
         void setGridSpacing(Vec3<T> gs) { _gridSpacing = gs; }
@@ -107,19 +111,16 @@ namespace HSim
         Vec3<T> _girdOrigin = Vec3<T>(0, 0, 0);
         Vec3<T> _gridSpacing = Vec3<T>(1, 1, 1);
 
-        void test() 
+        AABB3_Ptr<T> aabb = std::make_shared<AABB3<T>>();
+        
+        void computeAABB()
         {
-            std::cout << "--------------------------------------------------\n";
-            std::cout << _girdOrigin + _gridResolution * _gridSpacing;
-            std::cout << aabb->lowerCorner;
-            std::cout << aabb->upperCorner;
-
+            aabb->setLowerCorner(_girdOrigin);
+            aabb->setUpperCorner(_girdOrigin + _gridResolution * _gridSpacing);
         }
 
-        AABB3_Ptr<T> aabb = std::make_shared<AABB3<T>>(_girdOrigin, _girdOrigin + _gridResolution * _gridSpacing);
-
-    // for rendering
-    public: 
+        // for rendering
+    public:
         virtual void drawBoundary() {}
         virtual void drawGrid() {}
         virtual void drawData() {}

@@ -41,13 +41,8 @@ HSim::SceneGraph_ptr createScene()
 
 	go4->grid_ptr = grid;
 
-	// std::cout << grid->gridResolution();
-	// std::cout << grid->aabb->lowerCorner;
-	// std::cout << grid->aabb->upperCorner;
-	grid->test();
-
 	root->drawable = false;
-	go1->drawable = true;
+	go1->drawable = false;
 	go2->drawable = false;
 	go3->drawable = false;
 
