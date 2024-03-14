@@ -56,7 +56,6 @@ namespace HSim
 
 			auto func = [&](size_t i, size_t j, size_t k)
 			{
-				// (*grid)(i, j, k) = dice_roll;
 				auto data = this->dataAt(i, j, k);
 				if (data > 0)
 				{
@@ -65,34 +64,34 @@ namespace HSim
 					vertices.push_back(j);
 					vertices.push_back(k);
 
-					// normal
-					vertices.push_back(1);
-					vertices.push_back(0);
-					vertices.push_back(0);
 				}
 			};
 
+
 			this->forEachCell(func);
+
 
 			unsigned int vbo;
 			glGenBuffers(1, &vbo);
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
-			// layout 0: positions
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
-			// layout 1: normals
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
-				
 			unsigned int vao;
 			glGenVertexArrays(1, &vao);
 			glBindVertexArray(vao);
+			
+			// layout 0: positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+			// layout 1: normals
+			// glEnableVertexAttribArray(1);
+			// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+
 
 			glBindVertexArray(0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			// glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			glBindVertexArray(vao);
 
@@ -100,7 +99,7 @@ namespace HSim
 			std::cout << "vertices.size() " << vertices.size() << std::endl;
 
 			glPointSize(10.0f);
-			glDrawArrays(GL_POINTS, 0, vertices.size()/6);
+			glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
 			glBindVertexArray(0);
 		}
 	};
