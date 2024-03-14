@@ -11,7 +11,7 @@ HSim::Renderer::~Renderer()
 void HSim::Renderer::init()
 {
 	// init shader
-	shader = HSim::Shader("./resources/shaders/camera.vs", "./resources/shaders/camera.fs");
+	shader = HSim::Shader("./resources/shaders/basic.vs", "./resources/shaders/basic.fs");
 
 	// init ground helper
 	ground.init(10, 10);
@@ -41,7 +41,7 @@ void HSim::Renderer::draw(RenderParams renderParams)
 
 	glViewport(0, 0, renderParams.width, renderParams.height);
 
-	sphere.draw();
+	// sphere.draw();
 	ground.draw();
 
 	// std::unique_lock<std::mutex> lk(mtx);

@@ -16,10 +16,13 @@ namespace HSim
 		ScalarGrid3(size_t x, size_t y, size_t z)
 			: Grid3<T>(x, y, z)
 		{
+			_data.resize(x*y*z);
 		}
+
 		ScalarGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
 			: Grid3<T>(resolution, origin, gridSpacing)
 		{
+			_data.resize(x*y*z);
 		}
 
 		// setter getter

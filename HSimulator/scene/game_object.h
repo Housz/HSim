@@ -3,7 +3,9 @@
 #include <HSim/transform3.h>
 #include <HSim/surface3.h>
 #include <HSim/field3.h>
-#include <HSim/grid3.h>
+// #include <HSim/grid3.h>
+// #include <HSim/scalar_grid3.h>
+#include <HSim/cell_center_scalar_grid3.h>
 
 #include <config/numerical_config.h>
 

@@ -74,6 +74,8 @@ void HSim::SceneGraph::draw()
 			std::cout << "callback_draw" << std::endl;
 			auto grid = go->grid_ptr;
 			grid->drawBoundary();
+			
+			grid->drawData();
 		}
 		
 	};

@@ -32,12 +32,30 @@ void HSim::Simulator::mainLoop()
 			surface->transform.translation.x += .01;
 
 			surface->updated = true;
-			
+
 			lk.unlock();
 
 			std::cout << surface->transform.translation;
 
 			// surface->serialize();
+		}
+
+		if (go->grid_ptr != nullptr && go->drawable)
+		{
+			auto grid = std::dynamic_pointer_cast<HSim::CellCenterScalarGrid3<PRECISION>>(go->grid_ptr);
+
+			std::default_random_engine generator;
+			std::uniform_int_distribution<int> distribution(-5, 5);
+
+			auto fillGrid = [&](size_t i, size_t j, size_t k)
+			{
+				int dice_roll = distribution(generator);
+
+				(*grid)(i, j, k) = dice_roll;
+			};
+
+			grid->parallelForEachCell(fillGrid);
+
 		}
 	};
 
@@ -45,7 +63,7 @@ void HSim::Simulator::mainLoop()
 	for (;;)
 	{
 		// std::cout << "simulator update" << std::endl;
-		// scene->traverse(callback_anim);
+		scene->traverse(callback_anim);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }
