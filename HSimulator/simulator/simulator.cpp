@@ -56,6 +56,8 @@ void HSim::Simulator::mainLoop()
 
 			grid->parallelForEachCell(fillGrid);
 
+			grid->updated = true;
+
 		}
 	};
 

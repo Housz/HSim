@@ -124,6 +124,7 @@ namespace HSim
         virtual void drawBoundary() {}
         virtual void drawGrid() {}
         virtual void drawData() {}
+        bool updated = false;
     };
 
 } // namespace HSim

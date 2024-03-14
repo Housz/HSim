@@ -35,7 +35,7 @@ namespace HSim
 		void drawBoundary() override
 		{
 			std::cout << "drawBoundary cell_center_scalar_grid3" << std::endl;
-			this->aabb->draw();
+			this->aabb->draw(); // set an updated flag?
 		}
 
 		// draw grid
@@ -51,7 +51,6 @@ namespace HSim
 		{
 			std::cout << "drawData cell_center_scalar_grid3" << std::endl;
 
-			// vbo
 			std::vector<float> vertices;
 
 			auto func = [&](size_t i, size_t j, size_t k)
@@ -59,17 +58,13 @@ namespace HSim
 				auto data = this->dataAt(i, j, k);
 				if (data > 0)
 				{
-					// std::cout << "data  " << data << std::endl;
 					vertices.push_back(i);
 					vertices.push_back(j);
 					vertices.push_back(k);
-
 				}
 			};
 
-
 			this->forEachCell(func);
-
 
 			unsigned int vbo;
 			glGenBuffers(1, &vbo);
@@ -88,7 +83,6 @@ namespace HSim
 			// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
 
-
 			glBindVertexArray(0);
 			// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			// glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -96,7 +90,7 @@ namespace HSim
 			glBindVertexArray(vao);
 
 			std::cout << "data vao " << vao << " vbo " << vbo << std::endl;
-			std::cout << "vertices.size() " << vertices.size() << std::endl;
+			// std::cout << "vertices.size() " << vertices.size() << std::endl;
 
 			glPointSize(10.0f);
 			glDrawArrays(GL_POINTS, 0, vertices.size() / 3);

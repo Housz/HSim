@@ -16,6 +16,15 @@ namespace HSim
 		void draw()
 		{
 			// std::cout << "GroundHelper" << std::endl;
+			if (vaoID && vboID)
+			{
+				glBindVertexArray(vaoID);
+				glLineWidth(1.0f);
+				glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, 0);
+				glBindVertexArray(0);
+
+				return;
+			}
 
 			std::vector<glm::vec3> vertices;
 			std::vector<glm::uvec4> indices;
@@ -70,11 +79,14 @@ namespace HSim
 
 			glBindVertexArray(vao);
 
-			glLineWidth(3.0f);
+			glLineWidth(1.0f);
 
 			glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, 0);
 
 			glBindVertexArray(0);
+
+			vaoID = vao;
+			vboID = vbo;
 		}
 
 		void init(float length, size_t divisions)
@@ -83,6 +95,9 @@ namespace HSim
 
 		// GLuint vao;
 		size_t length;
+
+		GLuint vaoID = 0;
+		GLuint vboID = 0;
 	};
 
 	class AABBHelper
@@ -198,7 +213,6 @@ namespace HSim
 			// glDrawArrays(GL_POINTS, 0, vertices.size()/6);
 
 			glBindVertexArray(0);
-
 		}
 	};
 

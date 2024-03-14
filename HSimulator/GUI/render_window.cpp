@@ -113,7 +113,8 @@ void HSim::RenderWindow::mainLoop()
 	{
 		// std::cout << "main loop" << std::endl;
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(.667f, 0.8f, 1.f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (animationToggle)
