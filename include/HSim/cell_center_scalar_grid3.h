@@ -92,7 +92,7 @@ namespace HSim
 			std::cout << "data vao " << vao << " vbo " << vbo << std::endl;
 			// std::cout << "vertices.size() " << vertices.size() << std::endl;
 
-			glPointSize(10.0f);
+			glPointSize(4.0f);
 			glDrawArrays(GL_POINTS, 0, vertices.size() / 3);
 			glBindVertexArray(0);
 		}

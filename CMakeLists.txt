@@ -9,6 +9,7 @@ find_package(OpenVDB CONFIG REQUIRED)
 find_package(TBB REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(benchmark REQUIRED)
+find_package(tinyobjloader REQUIRED)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
@@ -32,9 +33,22 @@ target_link_libraries(HSim PUBLIC glfw)
 target_link_libraries(HSim PUBLIC glad::glad)
 target_link_libraries(HSim PUBLIC glm::glm)
 
-add_subdirectory(examples)
-add_subdirectory(tests)
-add_subdirectory(HSimulator)
+
+option(BUILD_HSIMULATOR "build tests" OFF)
+if(BUILD_HSIMULATOR)
+	add_subdirectory(HSimulator)
+endif()
+
+option(BUILD_EXAMPLES "build tests" OFF)
+if(BUILD_TESTS)
+	add_subdirectory(examples)
+endif()
+
+option(BUILD_TESTS "build tests" OFF)
+if(BUILD_TESTS)
+	add_subdirectory(tests)
+endif()
+
 
 
 ##############################################################################

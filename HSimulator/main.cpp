@@ -27,7 +27,7 @@ HSim::SceneGraph_ptr createScene()
 
 	auto sphere1 = std::make_shared<HSim::Sphere3<float>>();
 
-	size_t n = 10;
+	size_t n = 1;
 	auto grid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
 
 	auto go1 = std::make_shared<HSim::GameObject>();

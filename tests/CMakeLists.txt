@@ -62,8 +62,12 @@ target_link_libraries(testgl PUBLIC glad::glad)
 target_link_libraries(testgl PUBLIC imgui::imgui)
 target_link_libraries(testgl PUBLIC HSim)
 
-
-
+add_executable(testtinyobjloader test_tinyobjloader.cpp)
+target_link_libraries(testtinyobjloader PUBLIC glfw)
+target_link_libraries(testtinyobjloader PUBLIC glad::glad)
+target_link_libraries(testtinyobjloader PUBLIC imgui::imgui)
+target_link_libraries(testtinyobjloader PUBLIC tinyobjloader::tinyobjloader)
+target_link_libraries(testtinyobjloader PUBLIC HSim)
 
 
 add_subdirectory(benchmarks)
