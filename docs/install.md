@@ -8,6 +8,7 @@ vcpkg install glfw3:x64-windows
 vcpkg install glad:x64-windows
 vcpkg install glm:x64-windows
 vcpkg install stb:x64-windows
+vcpkg install tinyobjloader:x64-windows
 vcpkg.exe install imgui[core,glfw-binding,opengl3-binding]:x64-windows  --recurse
 ```
 

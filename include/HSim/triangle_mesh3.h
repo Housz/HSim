@@ -24,19 +24,19 @@ namespace HSim
 
 	// manipulators
 	public:
-		void addPoint(const Vec3<T>& point)
+		void addPoint(const Vec3<T>& point_)
 		{
-			_points.push_back(point);
+			points.push_back(point_);
 		} 
 
-		void addNormal(const Vec3<T>& normal)
+		void addNormal(const Vec3<T>& normal_)
 		{
-			_normals.push_back(normal);
+			normals.push_back(normal_);
 		}
 
-		void addUv(const Vec2<T>& uv)
+		void addUv(const Vec2<T>& uv_)
 		{
-			_uvs.push_back(uv);
+			uvs.push_back(uv_);
 		}
 
 		// void addTriangle()
@@ -51,18 +51,18 @@ namespace HSim
 		// Transform3<T> transform Inherited from Surface3;
 
 		// points
-		std::vector<Vec3<T>> _points;
+		std::vector<Vec3<T>> points;
 		// normals
-		std::vector<Vec3<T>> _normals;
+		std::vector<Vec3<T>> normals;
 		// uvs
-		std::vector<Vec2<T>> _uvs;
+		std::vector<Vec2<T>> uvs;
 
 		// pointIndices
-		std::vector<Vec3ui> _pointIndices;
+		std::vector<Vec3ui> pointIndices;
 		// normalIndices
-		std::vector<Vec3ui> _normalIndices;
+		std::vector<Vec3ui> normalIndices;
 		// uvIndices
-		std::vector<Vec3ui> _uvIndices;
+		std::vector<Vec3ui> uvIndices;
 
 	
 	// for rendering
