@@ -242,6 +242,7 @@ namespace HSim
     using Vec2f = Vec2<float>;
     using Vec2d = Vec2<double>;
 
+    using Vec2ui = Vec2<size_t>;
     using Size2 = Vec2<int>;
     
     template <typename T1>

@@ -70,4 +70,13 @@ target_link_libraries(testtinyobjloader PUBLIC tinyobjloader::tinyobjloader)
 target_link_libraries(testtinyobjloader PUBLIC HSim)
 
 
+add_executable(testtrimesh3 test_trianglemesh3.cpp)
+target_link_libraries(testtrimesh3 PUBLIC glfw)
+target_link_libraries(testtrimesh3 PUBLIC glad::glad)
+target_link_libraries(testtrimesh3 PUBLIC tinyobjloader::tinyobjloader)
+target_link_libraries(testtrimesh3 PUBLIC HSim)
+
+
+
+
 add_subdirectory(benchmarks)

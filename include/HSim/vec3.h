@@ -314,11 +314,12 @@ namespace HSim
         }
 
     }; // class Vec3
-
+    
     using Vec3i = Vec3<int>;
     using Vec3f = Vec3<float>;
     using Vec3d = Vec3<double>;
-
+    
+    using Vec3ui = Vec3<size_t>;
     using Size3 = Vec3<int>;
 
     template <typename T1>
