@@ -131,13 +131,64 @@ namespace HSim
         Vec3<T> add(T1 a_) const { return Vec3<T>(x + a_, y + a_, z + a_); }
         template <typename T1>
         Vec3<T> add(const Vec3<T1> &v_) const { return Vec3<T>(x + v_.x, y + v_.y, z + v_.z); }
+        template <typename T1>
+        Vec3<T> add(const std::initializer_list<T1> &list_) const 
+        {
+            assert(list_.size() > 0);
+
+            auto iter = list_.begin();
+
+            if (list_.size() == 1)
+            {
+                T x_ = static_cast<T>(*iter);
+                return Vec3<T>(x + x_, y, z);
+            }
+            else if (list_.size() == 2)
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                return Vec3<T>(x + x_, y + y_, z);
+            }
+            else
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                T z_ = static_cast<T>(*(++iter));
+                return Vec3<T>(x + x_, y + y_, z + z_);
+            }
+        }
 
         // sub
         template <typename T1>
         Vec3<T> sub(T1 a_) const { return Vec3<T>(x - a_, y - a_, z - a_); }
-
         template <typename T1>
         Vec3<T> sub(const Vec3<T1> &v_) const { return Vec3<T>(x - v_.x, y - v_.y, z - v_.z); }
+        template <typename T1>
+        Vec3<T> sub(const std::initializer_list<T1> &list_) const 
+        {
+            assert(list_.size() > 0);
+
+            auto iter = list_.begin();
+
+            if (list_.size() == 1)
+            {
+                T x_ = static_cast<T>(*iter);
+                return Vec3<T>(x - x_, y, z);
+            }
+            else if (list_.size() == 2)
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                return Vec3<T>(x - x_, y + y_, z);
+            }
+            else
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                T z_ = static_cast<T>(*(++iter));
+                return Vec3<T>(x - x_, y - y_, z - z_);
+            }
+        }
 
         // mul
         template <typename T1>
@@ -175,6 +226,35 @@ namespace HSim
             y += v_.y;
             z += v_.z;
         }
+        template <typename T1>
+        void add_self(const std::initializer_list<T1> &list_) const 
+        {
+            assert(list_.size() > 0);
+
+            auto iter = list_.begin();
+
+            if (list_.size() == 1)
+            {
+                T x_ = static_cast<T>(*iter);
+                x + x_;
+            }
+            else if (list_.size() == 2)
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                x + x_;
+                y + y_;
+            }
+            else
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                T z_ = static_cast<T>(*(++iter));
+                x + x_;
+                y + y_; 
+                z + z_;
+            }
+        }
 
         template <typename T1>
         void sub_self(T1 a_)
@@ -189,6 +269,35 @@ namespace HSim
             x -= v_.x;
             y -= v_.y;
             z -= v_.z;
+        }
+        template <typename T1>
+        void sub_self(const std::initializer_list<T1> &list_) const 
+        {
+            assert(list_.size() > 0);
+
+            auto iter = list_.begin();
+
+            if (list_.size() == 1)
+            {
+                T x_ = static_cast<T>(*iter);
+                x - x_;
+            }
+            else if (list_.size() == 2)
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                x - x_;
+                y - y_;
+            }
+            else
+            {
+                T x_ = static_cast<T>(*iter);
+                T y_ = static_cast<T>(*(++iter));
+                T z_ = static_cast<T>(*(++iter));
+                x - x_;
+                y - y_; 
+                z - z_;
+            }
         }
 
         template <typename T1>
@@ -262,10 +371,13 @@ namespace HSim
 
         template <typename T1>
         Vec3 operator+(const Vec3<T1> &v_) const { return add(v_); }
+        template <typename T1>
+        Vec3 operator+(const std::initializer_list<T1> &list_) const { return add(list_); }
 
         template <typename T1>
         Vec3 operator-(const Vec3<T1> &v_) const { return sub(v_); }
-
+        template <typename T1>
+        Vec3 operator-(const std::initializer_list<T1> &list_) const { return sub(list_); }
         Vec3 operator-() const { return mul(-1); }
 
         template <typename T1>
@@ -284,11 +396,23 @@ namespace HSim
             add_self(v_);
             return (*this);
         }
+        template <typename T1>
+        Vec3 &operator+=(const std::initializer_list<T1> &list_)
+        {
+            add_self(list_);
+            return (*this);
+        }
 
         template <typename T1>
         Vec3 &operator-=(const Vec3<T1> &v_)
         {
             sub_self(v_);
+            return (*this);
+        }
+        template <typename T1>
+        Vec3 &operator-=(const std::initializer_list<T1> &list_)
+        {
+            sub_self(list_);
             return (*this);
         }
 
@@ -340,9 +464,23 @@ namespace HSim
 
     // n * v
     template <typename T1, typename T2>
-    Vec3<T1> operator*(T2 n, const Vec3<T1> &v)
+    Vec3<T1> operator*(T1 n, const Vec3<T2> &v)
     {
         return v.mul((T1)n);
+    }
+
+    // {initializer_list} + v
+    template <typename T1, typename T2>
+    Vec3<T1> operator+(const std::initializer_list<T1> &list_, const Vec3<T2> &v)
+    {
+        return v.add(list_);
+    }
+
+    // {initializer_list} - v
+    template <typename T1, typename T2>
+    Vec3<T1> operator-(const std::initializer_list<T1> &list_, const Vec3<T2> &v)
+    {
+        return (-v).add(list_);
     }
 
 } // namespace HSim

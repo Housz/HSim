@@ -10,5 +10,11 @@ int main()
 	std::cout << aabb->lowerCorner;
 	std::cout << aabb->upperCorner;
 
+	for (size_t i = 0; i < 8; i++)
+	{
+		std::cout << aabb->corners(i);
+	}
+	
+
 	return 0;
 }

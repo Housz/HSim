@@ -50,6 +50,31 @@ namespace HSim
 		T height() const { return upperCorner.y - lowerCorner.y; }
 		T depth() const { return upperCorner.z - lowerCorner.z; }
 
+		/**
+		 *    4--------7
+		 *   /        /|
+		 *  /        / |
+		 * 5--------6  |
+		 * |        |  |
+		 * |   0    |  3
+		 * |        | /
+		 * |        |/
+		 * 1--------2
+		 */
+		Vec3<T> corners(size_t i) const
+		{
+			assert(i <= 7);
+
+			if (i == 0) { return lowerCorner; }
+			if (i == 1) { return lowerCorner + Vec3<T>(0, 0, depth()); }
+			if (i == 2) { return lowerCorner + Vec3<T>(width(), 0, depth()); }
+			if (i == 3) { return lowerCorner + Vec3<T>(width(), 0, 0); }
+			if (i == 4) { return lowerCorner + Vec3<T>(0, height(), 0); }
+			if (i == 5) { return lowerCorner + Vec3<T>(0, height(), depth()); }
+			if (i == 6) { return lowerCorner + Vec3<T>(width(), height(), depth()); }
+			if (i == 7) { return lowerCorner + Vec3<T>(width(), height(), 0); }
+		}
+
 	public:
 		bool isOverlap(const AABB3<T> &b_) const
 		{
@@ -79,7 +104,7 @@ namespace HSim
 
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
-		Vec3<T> upperCorner = {1, 1, 1};
+		Vec3<T> upperCorner = {0, 0, 0};
 
 		// for rendering
 	public:

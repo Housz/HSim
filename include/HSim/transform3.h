@@ -4,6 +4,7 @@
 #include <HSim/vec3.h>
 #include <HSim/mat33.h>
 #include <HSim/mat44.h>
+#include <HSim/aabb3.h>
 
 namespace HSim
 {
@@ -111,6 +112,20 @@ namespace HSim
 		Vec3<T> mul(const Vec3<T>& p) const
 		{
 			return toWorld(p);
+		}
+
+		AABB3<T> toWorld(const AABB3<T>& aabb3InLocal) const
+		{
+			AABB3<T> aabb3InWorld;
+			for (size_t i = 0; i < 8; i++)
+			{
+				auto cornerInLocal = aabb3InLocal.corners(i);
+				auto cornerInWorld = toWorld(cornerInLocal);
+
+				aabb3InLocal.lowerCorner = min(aabb3InLocal.lowerCorner, cornerInWorld);
+				aabb3InLocal.upperCorner = min(aabb3InLocal.upperCorner, cornerInWorld);
+			}
+			return aabb3InWorld;
 		}
 
 	public:

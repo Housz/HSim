@@ -43,6 +43,11 @@ namespace HSim
 			return isInsideLocal(transform.toLocal(positionInWorld_));
 		}
 
+		AABB3<T> AABB()
+		{
+			return transform.toWorld(AABBLocal());
+		}
+
 		// in local frame
 	public:
 		virtual Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const = 0;
@@ -62,6 +67,8 @@ namespace HSim
 			auto r = positionInLocal_ - closestPosition;
 			return r.dot(closestNormal) < 0.0;
 		}
+
+		virtual AABB3<T> AABBLocal() const = 0;
 
 	public:
 		Transform3<T> transform;
