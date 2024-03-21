@@ -138,6 +138,18 @@ namespace HSim
 			return aabb;
 		}
 
+		bool intersectedLocal(const Ray3<T>& ray) const override
+        {
+            return false;
+        }    
+
+        IntersectionInfo interactLocal(const Ray3<T>& ray) const override
+        {
+            IntersectionInfo intersectionInfo;
+
+            return intersectionInfo;
+        }
+
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};

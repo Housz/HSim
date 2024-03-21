@@ -18,7 +18,44 @@ namespace HSim
 		
 		Vec3f position;
 		Vec3f normal; 
+
+		// https://cloud.tencent.com/developer/ask/sof/109333199
+        inline friend std::ostream &operator<<(std::ostream &, IntersectionInfo &);
 	};
+
+	inline std::ostream &operator<<(std::ostream &os, IntersectionInfo &info)
+	{
+		if (info.isIntersected)
+		{
+			os << "isIntersected: " << "true" << "\n"
+				<< "distance: " << info.distance << "\n"
+				<< "position: " << info.position << "\n"
+				<< "normal: " << info.normal << "\n";
+		}
+		else
+		{
+			os << "isIntersected: " << "false" << "\n";
+		}
+		
+		return os;
+	}
+
+	inline std::ostream &operator<<(std::ostream &os, const IntersectionInfo &info)
+	{
+		if (info.isIntersected)
+		{
+			os << "isIntersected: " << "true" << "\n"
+				<< "distance: " << info.distance << "\n"
+				<< "position: " << info.position << "\n"
+				<< "normal: " << info.normal << "\n";
+		}
+		else
+		{
+			os << "isIntersected: " << "false" << "\n";
+		}
+		
+		return os;
+	}
 
 	template <typename T>
 	class Surface3

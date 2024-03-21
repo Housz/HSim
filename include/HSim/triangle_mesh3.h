@@ -67,6 +67,18 @@ namespace HSim
 			return aabb;
 		}
 
+		bool intersectedLocal(const Ray3<T>& ray) const override
+        {
+            return false;
+        }    
+
+        IntersectionInfo interactLocal(const Ray3<T>& ray) const override
+        {
+            IntersectionInfo intersectionInfo;
+
+            return intersectionInfo;
+        }
+
 
 	// data
 	public:

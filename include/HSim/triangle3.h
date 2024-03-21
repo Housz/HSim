@@ -207,7 +207,129 @@ namespace HSim
             aabb.merge(points[2]);
 
             return aabb;
-        }        
+        } 
+
+        bool intersectedLocal(const Ray3<T>& ray) const override
+        {
+            // https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
+
+            auto A = points[0];
+            auto B = points[1];
+            auto C = points[2];
+            auto origin = ray.origin;
+            auto direction = ray.direction;
+
+            auto AB = B - A;
+            auto AC = C - A;
+
+            auto ray_cross_AC = direction.cross(AC);
+            auto det = AB.dot(ray_cross_AC);
+
+            // The ray is parallel to the triangle.
+            if (det > -EPSILON && det < EPSILON)
+            {
+                return false;
+            }
+
+            auto inv_det = 1.0 / det;
+            auto s = origin - A;
+            auto u = inv_det * s.dot(AC);
+
+            if (u < 0 || u > 1)
+            {
+                return false;
+            }
+
+            auto s_cross_AB = s.cross(AB);
+            auto v = inv_det * direction.dot(s_cross_AB);
+
+            if (v < 0 || u + v > 1)
+            {
+                return false;
+            }
+
+            auto t = inv_det * AC.dot(s_cross_AB);
+
+            if (t > EPSILON)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }    
+
+        IntersectionInfo interactLocal(const Ray3<T>& ray) const override
+        {
+            // https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
+
+            IntersectionInfo intersectionInfo;
+
+            auto A = points[0];
+            auto B = points[1];
+            auto C = points[2];
+            auto origin = ray.origin;
+            auto direction = ray.direction;
+
+            auto AB = B - A;
+            auto AC = C - A;
+
+            auto ray_cross_AC = direction.cross(AC);
+            auto det = AB.dot(ray_cross_AC);
+
+            // The ray is parallel to the triangle.
+            if (det > -EPSILON && det < EPSILON)
+            {
+                return intersectionInfo;
+            }
+
+            auto inv_det = 1.0 / det;
+            auto s = origin - A;
+            auto u = inv_det * s.dot(AC);
+
+            if (u < 0 || u > 1)
+            {
+                return intersectionInfo;
+            }
+
+            auto s_cross_AB = s.cross(AB);
+            auto v = inv_det * direction.dot(s_cross_AB);
+
+            if (v < 0 || u + v > 1)
+            {
+                return intersectionInfo;
+            }
+
+            auto t = inv_det * AC.dot(s_cross_AB);
+
+            if (t > EPSILON)
+            {
+                auto P = ray.pointAt(t);
+                auto ab = (B - A).cross(P - A);
+                auto bc = (C - B).cross(P - B);
+                auto ca = (A - C).cross(P - A);
+                
+                auto ta = ( 0.5 * bc.length() ) / area();
+                auto tb = ( 0.5 * ca.length() ) / area();
+                auto tc = ( 0.5 * ab.length() ) / area();
+
+                auto ANormal = normals[0];
+                auto BNormal = normals[1];
+                auto CNormal = normals[2];
+
+                intersectionInfo.isIntersected = true;
+                intersectionInfo.distance = t;
+                intersectionInfo.position = P;
+                intersectionInfo.normal = (ta * ANormal + tb * BNormal + tc * CNormal).getNormalized();
+
+                return intersectionInfo;
+            }
+            else
+            {
+                return intersectionInfo;
+            }
+        }
 
     // data
     public:
