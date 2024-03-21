@@ -132,6 +132,12 @@ namespace HSim
 			return closestNormal;
 		}
 
+		AABB3<T> AABBLocal() const override
+		{
+			AABB3<T> aabb(lowerCorner, upperCorner);
+			return aabb;
+		}
+
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};

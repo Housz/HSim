@@ -53,6 +53,23 @@ namespace HSim
 			return normal;
 		}
 
+		AABB3<T> AABBLocal() const override
+		{
+			// todo
+			AABB3<T> aabb;
+			return aabb;
+		}
+
+		bool intersectedLocal(const Ray3<T>& ray) const override
+		{
+			
+		}
+
+		IntersectionInfo interactLocal(const Ray3<T>& ray) const override
+		{
+
+		}
+
 	// data
 	public:
 		// plane normal

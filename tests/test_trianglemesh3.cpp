@@ -10,7 +10,7 @@ int main()
 
 	tri.points[0] = {0, 0, 0};
 	tri.points[1] = {1, 0, 0};
-	tri.points[2] = {0, 1., 0};
+	tri.points[2] = {0, 1., 1};
 
 	tri.normals[0] = {0, 0, 1};
 	tri.normals[1] = {0, 0, 1};
@@ -23,6 +23,9 @@ int main()
 	// std::cout << tri.closestDistanceLocal(p_local);
 	// std::cout << tri.closestNormalLocal(p_local);
 	// std::cout << tri.barycentricCoords(p_local);
+
+	std::cout << tri.AABBLocal().lowerCorner;
+	std::cout << tri.AABBLocal().upperCorner;
 
 	return 0;
 }

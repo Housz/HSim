@@ -45,6 +45,28 @@ namespace HSim
 	// IO .obj file
 	public:
 
+	// in local frame
+	public:
+		Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const override
+		{
+			// todo
+			return {0, 0, 0};
+		}
+
+		Vec3<T> closestNormalLocal(const Vec3<T> &positionInLocal_) const override
+		{
+			// todo
+			return {0, 0, 0};
+		}
+
+		AABB3<T> AABBLocal() const override
+		{
+			// todo
+			AABB3 aabb;
+
+			return aabb;
+		}
+
 
 	// data
 	public:

@@ -75,6 +75,28 @@ namespace HSim
 			if (i == 7) { return lowerCorner + Vec3<T>(width(), height(), 0); }
 		}
 
+		void merge(const Vec3<T>& p_)
+		{
+			lowerCorner.x = std::min(lowerCorner.x, p_.x);
+			lowerCorner.y = std::min(lowerCorner.y, p_.y);
+			lowerCorner.z = std::min(lowerCorner.z, p_.z);
+
+			upperCorner.x = std::max(upperCorner.x, p_.x);
+			upperCorner.y = std::max(upperCorner.y, p_.y);
+			upperCorner.z = std::max(upperCorner.z, p_.z);
+		}	
+
+		void merge(const AABB3<T>& aabb_)
+		{
+			lowerCorner.x = std::min(lowerCorner.x, aabb_.lowerCorner.x);
+			lowerCorner.y = std::min(lowerCorner.y, aabb_.lowerCorner.y);
+			lowerCorner.z = std::min(lowerCorner.z, aabb_.lowerCorner.z);
+
+			upperCorner.x = std::max(upperCorner.x, aabb_.upperCorner.x);
+			upperCorner.y = std::max(upperCorner.y, aabb_.upperCorner.y);
+			upperCorner.z = std::max(upperCorner.z, aabb_.upperCorner.z);
+		}
+
 	public:
 		bool isOverlap(const AABB3<T> &b_) const
 		{

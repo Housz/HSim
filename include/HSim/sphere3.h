@@ -52,6 +52,15 @@ namespace HSim
 			}
 		}
 
+		AABB3<T> AABBLocal() const override
+		{
+			AABB3<T> aabb;
+			auto offset = {radius, radius, radius};
+			aabb.lowerCorner = center - offset;
+			aabb.upperCorner = center + offset;
+			return aabb;
+		}
+
 		// data
 	public:
 		// center in local frame;
@@ -59,6 +68,7 @@ namespace HSim
 		T radius = 1;
 
 		// for rendering
+		// todo
 	public:
 		unsigned int vaoID = 0;
 		unsigned int vboID = 0;

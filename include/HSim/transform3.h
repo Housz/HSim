@@ -5,6 +5,7 @@
 #include <HSim/mat33.h>
 #include <HSim/mat44.h>
 #include <HSim/aabb3.h>
+#include <HSim/ray3.h>
 
 namespace HSim
 {
@@ -122,10 +123,34 @@ namespace HSim
 				auto cornerInLocal = aabb3InLocal.corners(i);
 				auto cornerInWorld = toWorld(cornerInLocal);
 
-				aabb3InLocal.lowerCorner = min(aabb3InLocal.lowerCorner, cornerInWorld);
-				aabb3InLocal.upperCorner = min(aabb3InLocal.upperCorner, cornerInWorld);
+				aabb3InWorld.lowerCorner = min(aabb3InWorld.lowerCorner, cornerInWorld);
+				aabb3InWorld.upperCorner = min(aabb3InWorld.upperCorner, cornerInWorld);
 			}
 			return aabb3InWorld;
+		}
+
+		AABB3<T> toLocal(const AABB3<T>& aabb3InWorld) const
+		{
+			AABB3<T> aabb3InLocal;
+			for (size_t i = 0; i < 8; i++)
+			{
+				auto cornerInWorld = aabb3InLocal.corners(i);
+				auto cornerLocal = toLocal(cornerInWorld);
+
+				aabb3InLocal.lowerCorner = min(aabb3InLocal.lowerCorner, cornerLocal);
+				aabb3InLocal.upperCorner = min(aabb3InLocal.upperCorner, cornerLocal);
+			}
+			return aabb3InLocal;
+		}
+
+		Ray3<T> toWorld(const Ray3<T>& rayInLocal) const
+		{
+			return Ray3<T>(toWorld(rayInLocal.origin), toWorld(rayInLocal.direction));
+		}
+
+		Ray3<T> toLocal(const Ray3<T>& rayInWorld) const
+		{
+			return Ray3<T>(toLocal(rayInWorld.origin), toLocal(rayInWorld.direction));
 		}
 
 	public:

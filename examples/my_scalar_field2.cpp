@@ -30,7 +30,7 @@ public:
         return grad;
     }
 
-	// to do
+	// todo
     T laplacian(const Vec2i& pos) override
     {
         return 0;

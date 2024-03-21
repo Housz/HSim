@@ -25,14 +25,14 @@ public:
 		return std::sin(pos.x * scalar) * std::sin(pos.y * scalar) * std::sin(pos.z * scalar);
 	}
 
-	// to do
+	// todo
 	Vec3<T> gradient(const Vec3i &pos) override
 	{
 		Vec3<T> grad;
 		return grad;
 	}
 
-	// to do
+	// todo
 	T laplacian(const Vec3i &pos) override
 	{
 		return 0;

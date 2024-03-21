@@ -201,6 +201,13 @@ namespace HSim
             return (ta * ANormal + tb * BNormal + tc * CNormal).getNormalized();
         }
 
+        AABB3<T> AABBLocal() const override
+        {
+            AABB3<T> aabb(points[0], points[1]);
+            aabb.merge(points[2]);
+
+            return aabb;
+        }        
 
     // data
     public:

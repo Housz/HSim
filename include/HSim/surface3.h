@@ -2,6 +2,7 @@
 
 #include <HSim/common.h>
 #include <HSim/transform3.h>
+#include <HSim/ray3.h>
 
 #include <HSim/lock.h>
 
@@ -10,6 +11,15 @@
 
 namespace HSim
 {
+	struct IntersectionInfo
+	{
+		bool isIntersected = false;
+		float distance = MAX_FLOAT;
+		
+		Vec3f position;
+		Vec3f normal; 
+	};
+
 	template <typename T>
 	class Surface3
 	{
@@ -48,6 +58,20 @@ namespace HSim
 			return transform.toWorld(AABBLocal());
 		}
 
+		bool intersected(const Ray3<T>& ray) 
+		{
+			return intersectedLocal(transform.toLocal(ray));
+		}
+
+		IntersectionInfo interact(const Ray3<T>& ray)
+		{
+			auto interactionInfoLocal = interactLocal(transform.toLocal(ray));
+			IntersectionInfo interactionInfo;
+			interactionInfo.position = transform.toWorld(interactionInfoLocal.position);
+			interactionInfo.normal = transform.toWorld(interactionInfoLocal.normal);
+			return interactionInfo;
+		}
+
 		// in local frame
 	public:
 		virtual Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const = 0;
@@ -69,6 +93,10 @@ namespace HSim
 		}
 
 		virtual AABB3<T> AABBLocal() const = 0;
+
+		virtual bool intersectedLocal(const Ray3<T>& ray) const = 0;
+
+		virtual IntersectionInfo interactLocal(const Ray3<T>& ray) const = 0;
 
 	public:
 		Transform3<T> transform;
