@@ -243,6 +243,9 @@ namespace HSim
 		}
 	};
 
+	using AABB3f = AABB3<float>;
+	using AABB3d = AABB3<double>;
+
 	template <typename T>
 	using AABB3_Ptr = std::shared_ptr<AABB3<T>>;
 

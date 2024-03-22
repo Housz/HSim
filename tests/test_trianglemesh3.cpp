@@ -2,10 +2,15 @@
 
 #include <HSim/triangle3.h>
 
+// #define TRIANGLE3
+
+#define TRIMESH
+
 int main()
 {
 	// test triangle3
 
+#ifdef TRIANGLE3
 	HSim::Triangle3<float> tri;
 
 	tri.points[0] = {0, 0, 0};
@@ -32,12 +37,16 @@ int main()
 	HSim::Ray3f ray({0.5, 0.5, 1.}, {0, 0, -1});
 	// HSim::Ray3f ray({0.5, 0.5, 1.}, {1, 0, 0});
 	auto intersectionInfo = tri.interactLocal(ray);
-	// std::cout << intersectionInfo.isIntersected << std::endl;
-	// std::cout << intersectionInfo.normal << std::endl;
-	// std::cout << intersectionInfo.position << std::endl;
-	// std::cout << intersectionInfo.distance << std::endl;
-
 	std::cout << intersectionInfo;
+#endif
+
+	#ifdef TRIMESH
+
+	HSim::TriangleMesh3f mesh;
+
+	mesh.readOBJ("spot_triangulated.obj");
+
+	#endif
 
 	return 0;
 }
