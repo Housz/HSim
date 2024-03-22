@@ -467,7 +467,7 @@ namespace HSim
     typedef Vec<double> Vecd;
 
     template <typename T1>
-    std::ostream &operator<<(std::ostream &os, Vec<T1> &v_)
+    inline std::ostream &operator<<(std::ostream &os, Vec<T1> &v_)
     {
         for (auto &&i : v_)
         {

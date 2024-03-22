@@ -314,7 +314,7 @@ namespace HSim
     using Vec4d = Vec4<double>;
 
     template <typename T1>
-    std::ostream &operator<<(std::ostream &os, Vec4<T1> &v_)
+    inline std::ostream &operator<<(std::ostream &os, Vec4<T1> &v_)
     {
         os << "x: " << v_.x << " y: " << v_.y << " z: " << v_.z << " w: " << v_.w << std::endl;
         return os;
@@ -322,7 +322,7 @@ namespace HSim
 
     // n * v
     template <typename T1, typename T2>
-    Vec4<T1> operator*(T2 n, const Vec4<T1> &v)
+    inline Vec4<T1> operator*(T2 n, const Vec4<T1> &v)
     {
         return v.mul((T1)n);
     }

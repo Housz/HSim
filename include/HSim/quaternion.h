@@ -320,20 +320,20 @@ namespace HSim
     };
 
     template <typename T1>
-    std::ostream &operator<<(std::ostream &os, Quaternion<T1> &q)
+    inline std::ostream &operator<<(std::ostream &os, Quaternion<T1> &q)
     {
         os << q.w << " " << q.x << " " << q.y << " " << q.z << std::endl;
         return os;
     }
 
     template <typename T1, typename T2>
-    Vec3<T2> operator*(const Quaternion<T1>& q, const Vec3<T2>& v)
+    inline Vec3<T2> operator*(const Quaternion<T1>& q, const Vec3<T2>& v)
     {
         return q.mul(v);
     }    
 
     template <typename T1, typename T2>
-    Quaternion<T1> operator*(const Quaternion<T1>& q1, const Quaternion<T2>& q2)
+    inline Quaternion<T1> operator*(const Quaternion<T1>& q1, const Quaternion<T2>& q2)
     {
         return q1.mul(q2);
     }   

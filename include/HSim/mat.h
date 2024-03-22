@@ -467,7 +467,7 @@ namespace HSim
     };
 
     template <typename T1, size_t M1, size_t N1>
-    std::ostream &operator<<(std::ostream &os, Mat<T1, M1, N1> &m_)
+    inline std::ostream &operator<<(std::ostream &os, Mat<T1, M1, N1> &m_)
     {
         for (size_t i = 0; i < M1; i++)
         {
@@ -483,21 +483,21 @@ namespace HSim
 
     // n * mat
     template <typename T1, typename T2, size_t M, size_t N>
-    Mat<T2, M, N> operator*(T1 value, const Mat<T2, M, N>& m_)
+    inline Mat<T2, M, N> operator*(T1 value, const Mat<T2, M, N>& m_)
     {
         return m_.mul(value);
     }
 
     // mat * n
     template <typename T1, typename T2, size_t M, size_t N>
-    Mat<T1, M, N> operator*(const Mat<T1, M, N>& m_, T2 value)
+    inline Mat<T1, M, N> operator*(const Mat<T1, M, N>& m_, T2 value)
     {
         return m_.mul(value);
     }
 
     // matC(m x n) = matA(m x p) * matB(p x n)
     template <typename T1, typename T2, size_t M, size_t N, size_t P>
-    Mat<T1, M, N> operator*(const Mat<T1, M, P> &A, const Mat<T2, P, N> &B)
+    inline Mat<T1, M, N> operator*(const Mat<T1, M, P> &A, const Mat<T2, P, N> &B)
     {
         Mat<T1, M, N> C;
 

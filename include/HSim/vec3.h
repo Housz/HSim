@@ -449,14 +449,14 @@ namespace HSim
     using Size3 = Vec3<int>;
 
     template <typename T1>
-    std::ostream &operator<<(std::ostream &os, Vec3<T1> &v_)
+    inline std::ostream &operator<<(std::ostream &os, Vec3<T1> &v_)
     {
         os << "x: " << v_.x << " y: " << v_.y << " z: " << v_.z << std::endl;
         return os;
     }
 
     template <typename T1>
-    std::ostream &operator<<(std::ostream &os, const Vec3<T1> &v_)
+    inline std::ostream &operator<<(std::ostream &os, const Vec3<T1> &v_)
     {
         os << "x: " << v_.x << " y: " << v_.y << " z: " << v_.z << std::endl;
         return os;
@@ -464,21 +464,21 @@ namespace HSim
 
     // n * v
     template <typename T1, typename T2>
-    Vec3<T1> operator*(T1 n, const Vec3<T2> &v)
+    inline Vec3<T1> operator*(T1 n, const Vec3<T2> &v)
     {
         return v.mul((T1)n);
     }
 
     // {initializer_list} + v
     template <typename T1, typename T2>
-    Vec3<T1> operator+(const std::initializer_list<T1> &list_, const Vec3<T2> &v)
+    inline Vec3<T1> operator+(const std::initializer_list<T1> &list_, const Vec3<T2> &v)
     {
         return v.add(list_);
     }
 
     // {initializer_list} - v
     template <typename T1, typename T2>
-    Vec3<T1> operator-(const std::initializer_list<T1> &list_, const Vec3<T2> &v)
+    inline Vec3<T1> operator-(const std::initializer_list<T1> &list_, const Vec3<T2> &v)
     {
         return (-v).add(list_);
     }

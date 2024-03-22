@@ -419,7 +419,7 @@ namespace HSim
     };
 
     template <typename T1>
-    std::ostream &operator<<(std::ostream &os, Mat33<T1> &m)
+    inline std::ostream &operator<<(std::ostream &os, Mat33<T1> &m)
     {
         os << m(0, 0) << " " << m(0, 1) << " " << m(0, 2) << std::endl;
         os << m(1, 0) << " " << m(1, 1) << " " << m(1, 2) << std::endl;
@@ -431,38 +431,38 @@ namespace HSim
 
     // mat + mat
     template <typename T1, typename T2>
-    Mat33<T1> operator+(const Mat33<T1> &m1, const Mat33<T2> &m2)
+    inline Mat33<T1> operator+(const Mat33<T1> &m1, const Mat33<T2> &m2)
     {
         return m1.add(m2);
     }
     // mat + n
     template <typename T1, typename T2>
-    Mat33<T1> operator+(const Mat33<T1> &m_, T2 value)
+    inline Mat33<T1> operator+(const Mat33<T1> &m_, T2 value)
     {
         return m_.add(value);
     }
     // n + mat
     template <typename T1, typename T2>
-    Mat33<T1> operator+(T1 value, const Mat33<T2> &m_)
+    inline Mat33<T1> operator+(T1 value, const Mat33<T2> &m_)
     {
         return m_.add(value);
     }
 
     // mat - mat
     template <typename T1, typename T2>
-    Mat33<T1> operator-(const Mat33<T1> &m1, const Mat33<T2> &m2)
+    inline Mat33<T1> operator-(const Mat33<T1> &m1, const Mat33<T2> &m2)
     {
         return m1.sub(m2);
     }
     // mat - n
     template <typename T1, typename T2>
-    Mat33<T1> operator-(const Mat33<T1> &m_, T2 value)
+    inline Mat33<T1> operator-(const Mat33<T1> &m_, T2 value)
     {
         return m_.sub(value);
     }
     // n - mat
     template <typename T1, typename T2>
-    Mat33<T1> operator-(T1 value, const Mat33<T2> &m_)
+    inline Mat33<T1> operator-(T1 value, const Mat33<T2> &m_)
     {
         // return (-1*m_).add(value);
         return -m_.add(value);
@@ -470,33 +470,33 @@ namespace HSim
 
     // mat / n
     template <typename T1, typename T2>
-    Mat33<T1> operator/(const Mat33<T1> &m_, T2 value)
+    inline Mat33<T1> operator/(const Mat33<T1> &m_, T2 value)
     {
         return m_.div(value);
     }
 
     // mat * n
     template <typename T1, typename T2>
-    Mat33<T1> operator*(const Mat33<T1> &m_, T2 value)
+    inline Mat33<T1> operator*(const Mat33<T1> &m_, T2 value)
     {
         return m_.mul(value);
     }
     // n * mat
     template <typename T1, typename T2>
-    Mat33<T2> operator*(T1 value, const Mat33<T2> &m_)
+    inline Mat33<T2> operator*(T1 value, const Mat33<T2> &m_)
     {
         return m_.mul(value);
     }
 
     // mat * mat
     template <typename T1, typename T2>
-    Mat33<T1> operator*(const Mat33<T1> &m1, const Mat33<T2> &m2)
+    inline Mat33<T1> operator*(const Mat33<T1> &m1, const Mat33<T2> &m2)
     {
         return m1.mul(m2);
     }
 
     template <typename T1, typename T2>
-    Vec3<T2> operator*(const Mat33<T1> &m_, const Vec3<T2> &v_)
+    inline Vec3<T2> operator*(const Mat33<T1> &m_, const Vec3<T2> &v_)
     {
         Vec3<T2> v
         (
@@ -509,7 +509,7 @@ namespace HSim
     }
 
     template <typename T1, typename T2>
-    Vec3<T2> operator*(const Vec3<T1> &v_, const Mat33<T2> &m_)
+    inline Vec3<T2> operator*(const Vec3<T1> &v_, const Mat33<T2> &m_)
     {
         Vec3<T2> v
         (

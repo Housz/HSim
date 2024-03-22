@@ -13,14 +13,6 @@ namespace HSim
 		
 		Ray3(const Vec3<T>& origin_, const Vec3<T>& direction_) : origin(origin_), direction(direction_.getNormalized()) {}
 
-		// template<typename T1, typename T2>
-		// Ray3(const std::initializer_list<T1> &origin_list, const std::initializer_list<T2> &direction_list)
-		// : origin(origin_list) 
-		// { 
-		// 	direction = direction_list; 
-		// 	direction.normalize(); 
-		// }
-
 		template<typename T1>
 		Ray3(const Ray3<T1>& ray_) : origin(ray_.origin), direction(ray_.direction) {}
 
