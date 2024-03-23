@@ -46,6 +46,8 @@ int main()
 
 	mesh.readOBJ("spot_triangulated.obj");
 
+	std::cout << mesh.points[0];
+
 	#endif
 
 	return 0;

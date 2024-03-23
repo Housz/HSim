@@ -49,7 +49,14 @@ namespace HSim
 
 		void addTriangle(const Triangle3<T> &triangle_)
 		{
+			// todo
+
+			// if has normals
+			// if has uvs
+
+			
 		}
+		
 
 		// getters setters
 	public:
@@ -102,6 +109,33 @@ namespace HSim
 
 			return tri;
 		}
+
+		bool hasNormal() const
+		{
+			return normals.size() > 0;
+		}
+
+		bool hasUV() const
+		{
+			return uvs.size() > 0;
+		}
+
+		size_t numPoints() const 
+		{
+			return points.size();
+		}
+
+		size_t numNormals() const
+		{
+			return normals.size();
+		}
+
+		size_t numUVs() const
+		{
+			return uvs.size();
+		}
+
+
 
 		// IO .obj file
 	public:
@@ -163,11 +197,41 @@ namespace HSim
 			}
 
 			// Read faces (triangles)
-			for (auto& shape : shapes)
+			for (auto &shape : shapes)
 			{
-				
-			}
+				for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); ++f)
+				{
+					const size_t fv = shape.mesh.num_face_vertices[f];
 
+					if (fv == 3)
+					{
+						if (!attrib.vertices.empty())
+						{
+							addPointTriangle(
+								{shape.mesh.indices[idx].vertex_index,
+								 shape.mesh.indices[idx + 1].vertex_index,
+								 shape.mesh.indices[idx + 2].vertex_index});
+						}
+
+						if (!attrib.normals.empty())
+						{
+							addNormalTriangle(
+								{shape.mesh.indices[idx].normal_index,
+								 shape.mesh.indices[idx + 1].normal_index,
+								 shape.mesh.indices[idx + 2].normal_index});
+						}
+
+						if (!attrib.texcoords.empty())
+						{
+							addUvTriangle({shape.mesh.indices[idx].texcoord_index,
+										   shape.mesh.indices[idx + 1].texcoord_index,
+										   shape.mesh.indices[idx + 2].texcoord_index});
+						}
+					} // if (fv == 3)
+
+					idx += fv;
+				}
+			}
 
 			return true;
 		}
