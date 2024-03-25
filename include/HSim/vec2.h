@@ -28,7 +28,8 @@ namespace HSim
          */
         Vec2() : x(0), y(0) {}
         Vec2(T x_, T y_) : x(x_), y(y_) {}
-        Vec2(const Vec2 &v_) : x(v_.x), y(v_.y) {}
+        template <typename U>
+        Vec2(const Vec2<U> &v_) : x(v_.x), y(v_.y) {}
         template <typename U>
         Vec2(const std::initializer_list<U> &list) { set(list); }
 

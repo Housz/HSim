@@ -49,14 +49,50 @@ namespace HSim
 
 		void addTriangle(const Triangle3<T> &triangle_)
 		{
-			// todo
 
-			// if has normals
-			// if has uvs
+			auto pointIndex = points.size();
+			addPoint(triangle_.points[0]);
+			addPoint(triangle_.points[1]);
+			addPoint(triangle_.points[2]);
+			pointIndices.push_back({pointIndex, pointIndex + 1, pointIndex + 2});
 
-			
+			if (!empty() && hasNormal())
+			{
+				assert(triangle_.normals.size() == 3);
+
+				auto normalIndex = normals.size();
+				addNormal(triangle_.normals[0]);
+				addNormal(triangle_.normals[1]);
+				addNormal(triangle_.normals[2]);
+				normalIndices.push_back({normalIndex, normalIndex + 1, normalIndex + 2});
+			}
+
+			if (!empty() && hasUV())
+			{
+				assert(triangle_.uvs.size() == 3);
+
+				auto uvIndex = uvs.size();
+				addUV(triangle_.uvs[0]);
+				addUV(triangle_.uvs[1]);
+				addUV(triangle_.uvs[2]);
+				uvIndices.push_back({uvIndex, uvIndex + 1, uvIndex + 2});
+			}
 		}
-		
+
+		void addTrianglePointIndices(const Vec3ui &trianglePointIndices)
+		{
+			pointIndices.push_back(trianglePointIndices);
+		}
+
+		void addTriangleNormalIndices(const Vec3ui &triangleNormalIndices)
+		{
+			normalIndices.push_back(triangleNormalIndices);
+		}
+
+		void addTriangleUVIndices(const Vec3ui &triangleUVIndices)
+		{
+			uvIndices.push_back(triangleUVIndices);
+		}
 
 		// getters setters
 	public:
@@ -120,7 +156,12 @@ namespace HSim
 			return uvs.size() > 0;
 		}
 
-		size_t numPoints() const 
+		bool empty() const
+		{
+			return points.empty();
+		}
+
+		size_t numPoints() const
 		{
 			return points.size();
 		}
@@ -134,8 +175,6 @@ namespace HSim
 		{
 			return uvs.size();
 		}
-
-
 
 		// IO .obj file
 	public:
@@ -199,6 +238,8 @@ namespace HSim
 			// Read faces (triangles)
 			for (auto &shape : shapes)
 			{
+				size_t idx = 0;
+
 				for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); ++f)
 				{
 					const size_t fv = shape.mesh.num_face_vertices[f];
@@ -207,7 +248,7 @@ namespace HSim
 					{
 						if (!attrib.vertices.empty())
 						{
-							addPointTriangle(
+							addTrianglePointIndices(
 								{shape.mesh.indices[idx].vertex_index,
 								 shape.mesh.indices[idx + 1].vertex_index,
 								 shape.mesh.indices[idx + 2].vertex_index});
@@ -215,7 +256,7 @@ namespace HSim
 
 						if (!attrib.normals.empty())
 						{
-							addNormalTriangle(
+							addTriangleNormalIndices(
 								{shape.mesh.indices[idx].normal_index,
 								 shape.mesh.indices[idx + 1].normal_index,
 								 shape.mesh.indices[idx + 2].normal_index});
@@ -223,9 +264,9 @@ namespace HSim
 
 						if (!attrib.texcoords.empty())
 						{
-							addUvTriangle({shape.mesh.indices[idx].texcoord_index,
-										   shape.mesh.indices[idx + 1].texcoord_index,
-										   shape.mesh.indices[idx + 2].texcoord_index});
+							addTriangleUVIndices({shape.mesh.indices[idx].texcoord_index,
+												  shape.mesh.indices[idx + 1].texcoord_index,
+												  shape.mesh.indices[idx + 2].texcoord_index});
 						}
 					} // if (fv == 3)
 
@@ -234,7 +275,8 @@ namespace HSim
 			}
 
 			return true;
-		}
+
+		} // readOBJ
 
 		// in local frame
 	public:
@@ -290,13 +332,90 @@ namespace HSim
 
 		// for rendering
 	public:
+		unsigned int vaoID = 0;
+		unsigned int vboID = 0;
+		unsigned int eboID = 0;
+
+		// points flatten
+
+		void serialize() override
+		{
+			// if (this->updated)
+			// {
+			// 	if (vaoID && vboID && eboID)
+			// 	{
+			// 		std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
+			// 		glDeleteBuffers(1, &vboID);
+			// 		glDeleteVertexArrays(1, &vaoID);
+			// 		glDeleteBuffers(1, &eboID);
+			// 	}
+
+			// 	vertices.clear();
+			// 	indices.clear();
+
+			// 	vboID = toVBO();
+			// 	vaoID = toVAO();
+			// 	eboID = toEBO();
+
+			// 	updated = false;
+
+			// 	// lk.unlock();
+			// }
+			// else
+			// {
+			// 	std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
+			// 	return;
+			// }
+		}
+
+		size_t toVBO() override
+		{
+			unsigned int vboID;
+			glGenBuffers(1, &vboID);
+
+
+
+
+			return vboID;
+		}
+
+		size_t toEBO() override
+		{
+			unsigned int eboID;
+			glGenBuffers(1, &eboID);
+
+			return eboID;			
+		}
+
+		size_t toVAO() override
+		{
+			unsigned int vaoID;
+			glGenVertexArrays(1, &vaoID);
+			glBindVertexArray(vaoID);
+
+			return vaoID;
+		}
+
+		void draw() override
+		{
+			// if (!vboID || !eboID || !vaoID)
+			// {
+			// 	vertices.clear();
+			// 	indices.clear();
+
+			// 	vboID = toVBO();
+			// 	eboID = toEBO();
+			// 	vaoID = toVAO();
+
+			// 	std::cout << "triangle_mesh init draw" << std::endl;
+			// }
+
+
+		}
+
 	};
 
 	using TriangleMesh3f = TriangleMesh3<float>;
 	using TriangleMesh3d = TriangleMesh3<double>;
-
-	// ORM to .obj
-
-	// to VAO  VBO EBO
 
 } // namespace HSim
