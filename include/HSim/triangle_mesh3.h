@@ -338,6 +338,11 @@ namespace HSim
 
 		// points flatten
 
+		std::vector<T> flatten(const std::vector<Vec3<T>>& v_)
+		{
+			
+		}
+
 		void serialize() override
 		{
 			// if (this->updated)
