@@ -336,41 +336,80 @@ namespace HSim
 		unsigned int vboID = 0;
 		unsigned int eboID = 0;
 
-		// points flatten
+		std::vector<T> vertices;
+		std::vector<size_t> indices;
 
-		std::vector<T> flatten(const std::vector<Vec3<T>>& v_)
+		// flatten
+		template <typename U>
+		std::vector<U> flatten(const std::vector<Vec3<U>> &v_)
 		{
-			
+			std::vector<U> v;
+			for (auto element : v_)
+			{
+				v.push_back(element.x);
+				v.push_back(element.y);
+				v.push_back(element.z);
+			}
+			return v;
+		}
+
+// https://github.com/tinyobjloader/tinyobjloader/blob/release/examples/viewer/viewer.cc
+		void buildVertices()
+		{
+			vertices.clear();
+
+			for (size_t i = 0; i < numPoints(); i++)
+			{
+				auto point = points[i];
+
+				vertices.push_back(point.x);
+				vertices.push_back(point.y);
+				vertices.push_back(point.z);
+
+				if (hasNormal())
+				{
+					auto normal = normals[i];
+					vertices.push_back(normal.x);
+					vertices.push_back(normal.y);
+					vertices.push_back(normal.z);
+				}
+				else
+				{
+
+				}
+			}
+		}
+
+		void buildIndices()
+		{
 		}
 
 		void serialize() override
 		{
-			// if (this->updated)
-			// {
-			// 	if (vaoID && vboID && eboID)
-			// 	{
-			// 		std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
-			// 		glDeleteBuffers(1, &vboID);
-			// 		glDeleteVertexArrays(1, &vaoID);
-			// 		glDeleteBuffers(1, &eboID);
-			// 	}
+			if (this->updated)
+			{
+				if (vaoID && vboID && eboID)
+				{
+					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
+					glDeleteBuffers(1, &vboID);
+					glDeleteVertexArrays(1, &vaoID);
+					glDeleteBuffers(1, &eboID);
+				}
 
-			// 	vertices.clear();
-			// 	indices.clear();
+				vertices.clear();
+				indices.clear();
 
-			// 	vboID = toVBO();
-			// 	vaoID = toVAO();
-			// 	eboID = toEBO();
+				vboID = toVBO();
+				vaoID = toVAO();
+				eboID = toEBO();
 
-			// 	updated = false;
-
-			// 	// lk.unlock();
-			// }
-			// else
-			// {
-			// 	std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
-			// 	return;
-			// }
+				updated = false;
+			}
+			else
+			{
+				std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
+				return;
+			}
 		}
 
 		size_t toVBO() override
@@ -378,10 +417,9 @@ namespace HSim
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
 
+			vertices
 
-
-
-			return vboID;
+				return vboID;
 		}
 
 		size_t toEBO() override
@@ -389,7 +427,7 @@ namespace HSim
 			unsigned int eboID;
 			glGenBuffers(1, &eboID);
 
-			return eboID;			
+			return eboID;
 		}
 
 		size_t toVAO() override
@@ -414,10 +452,7 @@ namespace HSim
 
 			// 	std::cout << "triangle_mesh init draw" << std::endl;
 			// }
-
-
 		}
-
 	};
 
 	using TriangleMesh3f = TriangleMesh3<float>;

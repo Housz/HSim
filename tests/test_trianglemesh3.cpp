@@ -88,7 +88,16 @@ int main()
 	auto data = mesh.pointIndices.data();
 	std::cout << data[0];
 
+	// auto flattenedPoints = mesh.flatten(mesh.points);
+	// std::cout << flattenedPoints[0] << std::endl;
+	// auto flattenedPointIndices = mesh.flatten(mesh.pointIndices);
+	// std::cout << flattenedPointIndices[0] << std::endl;
+
+
+
 	#endif
+
+
 
 	return 0;
 }
