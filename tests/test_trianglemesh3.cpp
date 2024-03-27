@@ -32,7 +32,6 @@ int main()
 	// std::cout << tri.AABBLocal().lowerCorner;
 	// std::cout << tri.AABBLocal().upperCorner;
 
-
 	// intersection
 	HSim::Ray3f ray({0.5, 0.5, 1.}, {0, 0, -1});
 	// HSim::Ray3f ray({0.5, 0.5, 1.}, {1, 0, 0});
@@ -40,11 +39,12 @@ int main()
 	std::cout << intersectionInfo;
 #endif
 
-	#ifdef TRIMESH
+#ifdef TRIMESH
 
 	HSim::TriangleMesh3f mesh;
 
-	mesh.readOBJ("spot_triangulated.obj");
+	// mesh.readOBJ("spot_triangulated.obj");
+	mesh.readOBJ("cube.obj");
 
 	// std::cout << mesh.points[0];
 
@@ -71,33 +71,28 @@ int main()
 	tri.normals[1] = {0, 0, 1};
 	tri.normals[2] = {0, 0, 1};
 
-	mesh.addTriangle(tri);
+	// mesh.addTriangle(tri);
 
-	std::cout << std::endl;
-	std::cout << mesh.pointIndices[mesh.pointIndices.size()-1];
-	std::cout << mesh.uvIndices[mesh.pointIndices.size()-1];
-	std::cout << mesh.points[mesh.pointIndices[mesh.pointIndices.size()-1][0]];
-	std::cout << mesh.points[mesh.pointIndices[mesh.pointIndices.size()-1][1]];
-	std::cout << mesh.points[mesh.pointIndices[mesh.pointIndices.size()-1][2]];
-	std::cout << mesh.uvs[mesh.uvIndices[mesh.pointIndices.size()-1][0]];
-	std::cout << mesh.uvs[mesh.uvIndices[mesh.pointIndices.size()-1][1]];
-	std::cout << mesh.uvs[mesh.uvIndices[mesh.pointIndices.size()-1][2]];
-
-	std::cout << std::endl;
-	
-	auto data = mesh.pointIndices.data();
-	std::cout << data[0];
+	// show the last triangle abc
+	// std::cout << std::endl;
+	// std::cout << mesh.pointIndices[mesh.pointIndices.size()-1];
+	// std::cout << mesh.uvIndices[mesh.pointIndices.size()-1];
+	// std::cout << mesh.points[mesh.pointIndices[mesh.pointIndices.size()-1][0]];
+	// std::cout << mesh.points[mesh.pointIndices[mesh.pointIndices.size()-1][1]];
+	// std::cout << mesh.points[mesh.pointIndices[mesh.pointIndices.size()-1][2]];
+	// std::cout << mesh.uvs[mesh.uvIndices[mesh.pointIndices.size()-1][0]];
+	// std::cout << mesh.uvs[mesh.uvIndices[mesh.pointIndices.size()-1][1]];
+	// std::cout << mesh.uvs[mesh.uvIndices[mesh.pointIndices.size()-1][2]];
+	// std::cout << std::endl;
 
 	// auto flattenedPoints = mesh.flatten(mesh.points);
 	// std::cout << flattenedPoints[0] << std::endl;
 	// auto flattenedPointIndices = mesh.flatten(mesh.pointIndices);
 	// std::cout << flattenedPointIndices[0] << std::endl;
+	
 
 
-
-	#endif
-
-
+#endif
 
 	return 0;
 }

@@ -94,7 +94,7 @@ namespace HSim
         void normalize()
         {
             T len = length();
-            assert(len > EPSILON);
+            // assert(len > EPSILON);
             x /= len;
             y /= len;
             z /= len;

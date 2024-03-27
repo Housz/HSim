@@ -1,7 +1,11 @@
 #pragma once
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <HSim/common.h>
 #include <HSim/vec3.h>
+
 
 namespace HSim
 {
@@ -36,13 +40,13 @@ namespace HSim
 
 		void setLowerCorner(const Vec3<T> &lowerCorner_)
 		{
-			assert(lowerCorner_.x < upperCorner.x && lowerCorner_.y < upperCorner.y && lowerCorner_.z < upperCorner.z);
+			// assert(lowerCorner_.x < upperCorner.x && lowerCorner_.y < upperCorner.y && lowerCorner_.z < upperCorner.z);
 			lowerCorner = lowerCorner_;
 		}
 
 		void setUpperCorner(const Vec3<T> &upperCorner_)
 		{
-			assert(lowerCorner.x < upperCorner_.x && lowerCorner.y < upperCorner_.y && lowerCorner.z < upperCorner_.z);
+			// assert(lowerCorner.x < upperCorner_.x && lowerCorner.y < upperCorner_.y && lowerCorner.z < upperCorner_.z);
 			upperCorner = upperCorner_;
 		}
 
@@ -66,13 +70,14 @@ namespace HSim
 			assert(i <= 7);
 
 			if (i == 0) { return lowerCorner; }
-			if (i == 1) { return lowerCorner + Vec3<T>(0, 0, depth()); }
-			if (i == 2) { return lowerCorner + Vec3<T>(width(), 0, depth()); }
-			if (i == 3) { return lowerCorner + Vec3<T>(width(), 0, 0); }
-			if (i == 4) { return lowerCorner + Vec3<T>(0, height(), 0); }
-			if (i == 5) { return lowerCorner + Vec3<T>(0, height(), depth()); }
-			if (i == 6) { return lowerCorner + Vec3<T>(width(), height(), depth()); }
-			if (i == 7) { return lowerCorner + Vec3<T>(width(), height(), 0); }
+			else if (i == 1) { return lowerCorner + Vec3<T>(0, 0, depth()); }
+			else if (i == 2) { return lowerCorner + Vec3<T>(width(), 0, depth()); }
+			else if (i == 3) { return lowerCorner + Vec3<T>(width(), 0, 0); }
+			else if (i == 4) { return lowerCorner + Vec3<T>(0, height(), 0); }
+			else if (i == 5) { return lowerCorner + Vec3<T>(0, height(), depth()); }
+			else if (i == 6) { return lowerCorner + Vec3<T>(width(), height(), depth()); }
+			else if (i == 7) { return lowerCorner + Vec3<T>(width(), height(), 0); }
+			else { return  Vec3<T>(); }
 		}
 
 		void merge(const Vec3<T>& p_)

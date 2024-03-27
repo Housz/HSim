@@ -112,9 +112,13 @@ namespace HSim
         Vec3<T> _gridSpacing = Vec3<T>(1, 1, 1);
 
         AABB3_Ptr<T> aabb = std::make_shared<AABB3<T>>();
-        
+
         void computeAABB()
         {
+            std::cout << "aabb:\n";
+            std::cout << _girdOrigin;
+            std::cout << _girdOrigin + _gridResolution * _gridSpacing;
+
             aabb->setLowerCorner(_girdOrigin);
             aabb->setUpperCorner(_girdOrigin + _gridResolution * _gridSpacing);
         }

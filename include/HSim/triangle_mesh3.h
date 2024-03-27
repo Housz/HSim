@@ -138,10 +138,35 @@ namespace HSim
 			return uvs[i];
 		}
 
-		Triangle3<T> trianlge(size_t t) const
+		Triangle3<T> getTrianlgeByIndex(size_t t) const
 		{
-			// todo
 			Triangle3<T> tri;
+
+			auto a = points[pointIndices[t][0]];
+			auto b = points[pointIndices[t][1]];
+			auto c = points[pointIndices[t][2]];
+
+			tri.points[0] = a;
+			tri.points[1] = b;
+			tri.points[2] = c;
+
+			if (hasNormal())
+			{
+				tri.normals[0] = normals[normalIndices[t][0]];
+				tri.normals[1] = normals[normalIndices[t][1]];
+				tri.normals[2] = normals[normalIndices[t][2]];
+			}
+			else
+			{
+				tri.setNormalsToFaceNormal();
+			}
+
+			if (hasUV())
+			{
+				tri.uvs[0] = uvs[uvIndices[t][0]];
+				tri.uvs[1] = uvs[uvIndices[t][1]];
+				tri.uvs[2] = uvs[uvIndices[t][2]];
+			}
 
 			return tri;
 		}
@@ -174,6 +199,11 @@ namespace HSim
 		size_t numUVs() const
 		{
 			return uvs.size();
+		}
+
+		size_t numTrianlges() const
+		{
+			return pointIndices.size();
 		}
 
 		// IO .obj file
@@ -316,14 +346,14 @@ namespace HSim
 	public:
 		// Transform3<T> transform Inherited from Surface3;
 
-		// points
+		// points (positions)
 		std::vector<Vec3<T>> points;
 		// normals
 		std::vector<Vec3<T>> normals;
 		// uvs
 		std::vector<Vec2<T>> uvs;
 
-		// pointIndices
+		// pointIndices (positionIndices)
 		std::vector<Vec3ui> pointIndices;
 		// normalIndices
 		std::vector<Vec3ui> normalIndices;
@@ -335,9 +365,6 @@ namespace HSim
 		unsigned int vaoID = 0;
 		unsigned int vboID = 0;
 		unsigned int eboID = 0;
-
-		std::vector<T> vertices;
-		std::vector<size_t> indices;
 
 		// flatten
 		template <typename U>
@@ -353,10 +380,35 @@ namespace HSim
 			return v;
 		}
 
-// https://github.com/tinyobjloader/tinyobjloader/blob/release/examples/viewer/viewer.cc
-		void buildVertices()
+		std::vector<float> buildVertices()
 		{
-			vertices.clear();
+			std::vector<float> vertices;
+
+			std::vector<Vec3<float>> tempNormals;
+			if (!hasNormal())
+			{
+				// compute normals
+				// todo Flat-shading https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Load_OBJ
+
+				tempNormals.resize(numPoints());
+
+				for (size_t triIdx = 0; triIdx < numTrianlges(); triIdx++)
+				{
+					auto aIndex = pointIndices[triIdx][0];
+					auto bIndex = pointIndices[triIdx][1];
+					auto cIndex = pointIndices[triIdx][2];
+
+					auto a = points[aIndex];
+					auto b = points[bIndex];
+					auto c = points[cIndex];
+
+					auto normal = (b - a).cross(c - a).getNormalized();
+
+					tempNormals[aIndex] = normal;
+					tempNormals[bIndex] = normal;
+					tempNormals[cIndex] = normal;
+				}
+			}
 
 			for (size_t i = 0; i < numPoints(); i++)
 			{
@@ -366,22 +418,26 @@ namespace HSim
 				vertices.push_back(point.y);
 				vertices.push_back(point.z);
 
+				Vec3<T> normal;
 				if (hasNormal())
 				{
-					auto normal = normals[i];
-					vertices.push_back(normal.x);
-					vertices.push_back(normal.y);
-					vertices.push_back(normal.z);
+					normal = normals[i];
 				}
 				else
 				{
-
+					normal = tempNormals[i];
 				}
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
 			}
+
+			return vertices;
 		}
 
-		void buildIndices()
+		std::vector<size_t> buildIndices()
 		{
+			return flatten(pointIndices);
 		}
 
 		void serialize() override
@@ -396,12 +452,10 @@ namespace HSim
 					glDeleteBuffers(1, &eboID);
 				}
 
-				vertices.clear();
-				indices.clear();
-
-				vboID = toVBO();
-				vaoID = toVAO();
-				eboID = toEBO();
+				// vboID = toVBO();
+				// vaoID = toVAO();
+				// eboID = toEBO();
+				buildRenderingData();
 
 				updated = false;
 			}
@@ -417,15 +471,57 @@ namespace HSim
 			unsigned int vboID;
 			glGenBuffers(1, &vboID);
 
-			vertices
+			auto vertices = buildVertices();
 
-				return vboID;
+			// debug
+			std::cout << "vertices:\n";
+			size_t i = 0;
+			for (auto ele : vertices)
+			{
+				std::cout << ele << " ";
+				i++;
+				if (!(i % 6))
+					std::cout << std::endl;
+			}
+			std::cout << std::endl;
+
+			// transform
+			for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)
+			{
+				// vertices[i], vertices[i+1], vertices[i+2]
+				auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+				vertices[i] = v[0];
+				vertices[i + 1] = v[1];
+				vertices[i + 2] = v[2];
+			}
+
+			glBindBuffer(GL_ARRAY_BUFFER, vboID);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+			return vboID;
 		}
 
 		size_t toEBO() override
 		{
 			unsigned int eboID;
 			glGenBuffers(1, &eboID);
+
+			auto indices = buildIndices();
+
+			// debug
+			std::cout << "\nindices:\n";
+			size_t i = 0;
+			for (auto ele : indices)
+			{
+				std::cout << ele << " ";
+				i++;
+				if (!(i % 3))
+					std::cout << std::endl;
+			}
+			std::cout << std::endl;
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
 			return eboID;
 		}
@@ -436,22 +532,81 @@ namespace HSim
 			glGenVertexArrays(1, &vaoID);
 			glBindVertexArray(vaoID);
 
+			// layout 0: positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 1: normals
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+			// unbind
+			glBindVertexArray(0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 			return vaoID;
+		}
+
+		void buildRenderingData()
+		{
+			unsigned int vao;
+			glGenVertexArrays(1, &vao);
+			glBindVertexArray(vao);
+
+			auto vertices = buildVertices();
+
+			unsigned int vbo;
+			glGenBuffers(1, &vbo);
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+			// layout 0: positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 1: normals
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+			auto indices = buildIndices();
+
+			unsigned int ebo;
+			glGenBuffers(1, &ebo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+			glBindVertexArray(0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			vaoID = vao;
+			vboID = vbo;
+			eboID = ebo;
 		}
 
 		void draw() override
 		{
-			// if (!vboID || !eboID || !vaoID)
-			// {
-			// 	vertices.clear();
-			// 	indices.clear();
+			if (!vboID || !eboID || !vaoID)
+			{
 
-			// 	vboID = toVBO();
-			// 	eboID = toEBO();
-			// 	vaoID = toVAO();
+				// vboID = toVBO();
+				// eboID = toEBO();
+				// vaoID = toVAO();
 
-			// 	std::cout << "triangle_mesh init draw" << std::endl;
-			// }
+				buildRenderingData();
+
+				std::cout << "triangle_mesh init draw" << std::endl;
+			}
+
+			std::cout << vaoID << std::endl;
+
+			glBindVertexArray(vaoID);
+
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_TRIANGLES, numTrianlges()*3, GL_UNSIGNED_INT, 0);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			// unbind
+			glBindVertexArray(0);
 		}
 	};
 
