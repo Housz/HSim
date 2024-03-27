@@ -34,7 +34,6 @@ HSim::SceneGraph_ptr createScene()
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
 	mesh->readOBJ("spot_triangulated.obj");
 	// mesh->readOBJ("cube.obj");
-	// mesh->readOBJ("beam3.obj");
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	auto go2 = std::make_shared<HSim::GameObject>();

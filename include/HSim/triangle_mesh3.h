@@ -435,9 +435,17 @@ namespace HSim
 			return vertices;
 		}
 
-		std::vector<size_t> buildIndices()
+		std::vector<unsigned int> buildIndices()
 		{
-			return flatten(pointIndices);
+			std::vector<unsigned int> v;
+			// return flatten(pointIndices);
+			for(auto element: pointIndices)
+			{
+				v.push_back((unsigned int)element[0]);
+				v.push_back((unsigned int)element[1]);
+				v.push_back((unsigned int)element[2]);
+			}
+			return v;
 		}
 
 		void serialize() override
@@ -473,18 +481,6 @@ namespace HSim
 
 			auto vertices = buildVertices();
 
-			// debug
-			std::cout << "vertices:\n";
-			size_t i = 0;
-			for (auto ele : vertices)
-			{
-				std::cout << ele << " ";
-				i++;
-				if (!(i % 6))
-					std::cout << std::endl;
-			}
-			std::cout << std::endl;
-
 			// transform
 			for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)
 			{
@@ -507,18 +503,6 @@ namespace HSim
 			glGenBuffers(1, &eboID);
 
 			auto indices = buildIndices();
-
-			// debug
-			std::cout << "\nindices:\n";
-			size_t i = 0;
-			for (auto ele : indices)
-			{
-				std::cout << ele << " ";
-				i++;
-				if (!(i % 3))
-					std::cout << std::endl;
-			}
-			std::cout << std::endl;
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
@@ -550,15 +534,53 @@ namespace HSim
 		void buildRenderingData()
 		{
 			unsigned int vao;
+			unsigned int vbo;
+			unsigned int ebo;
 			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+			glGenBuffers(1, &ebo);
+
 			glBindVertexArray(vao);
 
 			auto vertices = buildVertices();
 
-			unsigned int vbo;
-			glGenBuffers(1, &vbo);
+			// debug
+			// std::cout << "vertices:\n";
+			// size_t i = 0;
+			// for (auto ele : vertices)
+			// {
+			// 	std::cout << ele << " ";
+			// 	i++;
+			// 	if (!(i % 6))
+			// 		std::cout << std::endl;
+			// }
+			// std::cout << std::endl;
+
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+			// std::cout << "vertices.size() " << vertices.size() << std::endl;
+			// std::cout << "(unsigned int)vertices.size() * sizeof(float) " << (unsigned int)vertices.size() * sizeof(float) << std::endl;
+
+			auto indices = buildIndices();
+
+			// debug
+			// std::cout << "\nindices:\n";
+			// i = 0;
+			// for (auto ele : indices)
+			// {
+			// 	std::cout << ele << " ";
+			// 	i++;
+			// 	if (!(i % 3))
+			// 		std::cout << std::endl;
+			// }
+			// std::cout << std::endl;
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+			// std::cout << "indices.size() " << indices.size() << std::endl;
+			// std::cout << "(unsigned int)indices.size() * sizeof(unsigned int) " << (unsigned int)indices.size() * sizeof(unsigned int) << std::endl;
 
 			// layout 0: positions
 			glEnableVertexAttribArray(0);
@@ -567,16 +589,9 @@ namespace HSim
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
-			auto indices = buildIndices();
-
-			unsigned int ebo;
-			glGenBuffers(1, &ebo);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-			glBindVertexArray(0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
 
 			vaoID = vao;
 			vboID = vbo;
@@ -601,9 +616,9 @@ namespace HSim
 
 			glBindVertexArray(vaoID);
 
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glDrawElements(GL_TRIANGLES, numTrianlges()*3, GL_UNSIGNED_INT, 0);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			// unbind
 			glBindVertexArray(0);
