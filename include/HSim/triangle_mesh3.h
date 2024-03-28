@@ -435,11 +435,40 @@ namespace HSim
 			return vertices;
 		}
 
+		std::vector<float> buildVerticesFlat()
+		{
+			std::vector<float> vertices;
+
+			for (size_t triIdx = 0; triIdx < numTrianlges(); triIdx++)
+			{
+				auto aIndex = pointIndices[triIdx][0];
+				auto bIndex = pointIndices[triIdx][1];
+				auto cIndex = pointIndices[triIdx][2];
+
+				auto a = points[aIndex];
+				auto b = points[bIndex];
+				auto c = points[cIndex];
+
+				auto normal = (b - a).cross(c - a).getNormalized();
+				
+				vertices.push_back(a.x); vertices.push_back(a.y); vertices.push_back(a.z);
+				vertices.push_back(normal.x); vertices.push_back(normal.y); vertices.push_back(normal.z);
+				vertices.push_back(b.x); vertices.push_back(b.y); vertices.push_back(b.z);
+				vertices.push_back(normal.x); vertices.push_back(normal.y); vertices.push_back(normal.z);
+				vertices.push_back(c.x); vertices.push_back(c.y); vertices.push_back(c.z);
+				vertices.push_back(normal.x); vertices.push_back(normal.y); vertices.push_back(normal.z);
+
+			}
+
+			return vertices;
+		}
+
 		std::vector<unsigned int> buildIndices()
 		{
+			// return flatten(pointIndices); // error! size_t 2 unsigned int
+
 			std::vector<unsigned int> v;
-			// return flatten(pointIndices);
-			for(auto element: pointIndices)
+			for (auto element : pointIndices)
 			{
 				v.push_back((unsigned int)element[0]);
 				v.push_back((unsigned int)element[1]);
@@ -463,7 +492,8 @@ namespace HSim
 				// vboID = toVBO();
 				// vaoID = toVAO();
 				// eboID = toEBO();
-				buildRenderingData();
+				// buildRenderingData();
+				buildRenderingDataFlat();
 
 				updated = false;
 			}
@@ -474,62 +504,7 @@ namespace HSim
 			}
 		}
 
-		size_t toVBO() override
-		{
-			unsigned int vboID;
-			glGenBuffers(1, &vboID);
 
-			auto vertices = buildVertices();
-
-			// transform
-			for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)
-			{
-				// vertices[i], vertices[i+1], vertices[i+2]
-				auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
-				vertices[i] = v[0];
-				vertices[i + 1] = v[1];
-				vertices[i + 2] = v[2];
-			}
-
-			glBindBuffer(GL_ARRAY_BUFFER, vboID);
-			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-			return vboID;
-		}
-
-		size_t toEBO() override
-		{
-			unsigned int eboID;
-			glGenBuffers(1, &eboID);
-
-			auto indices = buildIndices();
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-			return eboID;
-		}
-
-		size_t toVAO() override
-		{
-			unsigned int vaoID;
-			glGenVertexArrays(1, &vaoID);
-			glBindVertexArray(vaoID);
-
-			// layout 0: positions
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
-			// layout 1: normals
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-
-			// unbind
-			glBindVertexArray(0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			return vaoID;
-		}
 
 		void buildRenderingData()
 		{
@@ -559,9 +534,6 @@ namespace HSim
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-			// std::cout << "vertices.size() " << vertices.size() << std::endl;
-			// std::cout << "(unsigned int)vertices.size() * sizeof(float) " << (unsigned int)vertices.size() * sizeof(float) << std::endl;
-
 			auto indices = buildIndices();
 
 			// debug
@@ -579,9 +551,6 @@ namespace HSim
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-			// std::cout << "indices.size() " << indices.size() << std::endl;
-			// std::cout << "(unsigned int)indices.size() * sizeof(unsigned int) " << (unsigned int)indices.size() * sizeof(unsigned int) << std::endl;
-
 			// layout 0: positions
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
@@ -598,27 +567,56 @@ namespace HSim
 			eboID = ebo;
 		}
 
+		void buildRenderingDataFlat()
+		{
+			unsigned int vao;
+			unsigned int vbo;
+
+			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+
+			glBindVertexArray(vao);
+			auto vertices = buildVerticesFlat();
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+			// layout 0: positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 1: normals
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+			// unbind
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+
+			vaoID = vao;
+			vboID = vbo;
+		}
+
 		void draw() override
 		{
-			if (!vboID || !eboID || !vaoID)
+
+			if (!vboID || !vaoID)
 			{
+				buildRenderingDataFlat();
 
-				// vboID = toVBO();
-				// eboID = toEBO();
-				// vaoID = toVAO();
-
-				buildRenderingData();
-
-				std::cout << "triangle_mesh init draw" << std::endl;
+				std::cout << "triangle_mesh init draw flat" << std::endl;
 			}
 
 			std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
 
+			// render
 			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
+			// glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
 			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			
+			// flat render
+			glDrawArrays(GL_TRIANGLES, 0, numTrianlges() * 3);
 
 			// unbind
 			glBindVertexArray(0);

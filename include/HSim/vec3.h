@@ -103,7 +103,7 @@ namespace HSim
         Vec3<T> getNormalized() const
         {
             T len = length();
-            assert(len > EPSILON);
+            // assert(len > EPSILON);
             return Vec3<T>(x / len, y / len, z / len);
         }
 

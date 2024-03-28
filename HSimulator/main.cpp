@@ -32,7 +32,8 @@ HSim::SceneGraph_ptr createScene()
 	auto grid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
-	mesh->readOBJ("spot_triangulated.obj");
+	// mesh->readOBJ("spot_triangulated.obj");
+	mesh->readOBJ("bunny.obj");
 	// mesh->readOBJ("cube.obj");
 
 	auto go1 = std::make_shared<HSim::GameObject>();
