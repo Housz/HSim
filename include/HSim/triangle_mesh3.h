@@ -463,6 +463,56 @@ namespace HSim
 			return vertices;
 		}
 
+		std::vector<float> buildVerticesSmooth()
+		{
+			std::vector<float> vertices;
+
+			std::vector<Vec3<float>> smoothNormals(numPoints());
+			std::vector<size_t> normalCount(numPoints());
+
+			for (size_t triIdx = 0; triIdx < numTrianlges(); triIdx++)
+			{
+				auto aIndex = pointIndices[triIdx][0];
+				auto bIndex = pointIndices[triIdx][1];
+				auto cIndex = pointIndices[triIdx][2];
+
+				auto a = points[aIndex];
+				auto b = points[bIndex];
+				auto c = points[cIndex];
+
+				auto normal = (b - a).cross(c - a).getNormalized();
+
+				normalCount[aIndex] ++;
+				normalCount[bIndex] ++;
+				normalCount[cIndex] ++;
+
+				smoothNormals[aIndex] = normal / normalCount[aIndex] + 
+										smoothNormals[aIndex] * (normalCount[aIndex] - 1) / normalCount[aIndex];
+				smoothNormals[bIndex] = normal / normalCount[bIndex] + 
+										smoothNormals[bIndex] * (normalCount[bIndex] - 1) / normalCount[bIndex];
+				smoothNormals[cIndex] = normal / normalCount[cIndex] + 
+										smoothNormals[cIndex] * (normalCount[cIndex] - 1) / normalCount[cIndex];
+
+			}
+
+			for (size_t i = 0; i < numPoints(); i++)
+			{
+				auto point = points[i];
+
+				vertices.push_back(point.x);
+				vertices.push_back(point.y);
+				vertices.push_back(point.z);
+
+				auto normal = smoothNormals[i];
+
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
+			}
+
+			return vertices;
+		}
+
 		std::vector<unsigned int> buildIndices()
 		{
 			// return flatten(pointIndices); // error! size_t 2 unsigned int
@@ -488,12 +538,17 @@ namespace HSim
 					glDeleteVertexArrays(1, &vaoID);
 					glDeleteBuffers(1, &eboID);
 				}
+#ifdef NAIVE_RENDERING
+				buildRenderingData();
+#endif // NAIVE_RENDERING
 
-				// vboID = toVBO();
-				// vaoID = toVAO();
-				// eboID = toEBO();
-				// buildRenderingData();
+#ifdef FLAT_RENDERING
 				buildRenderingDataFlat();
+#endif // FLAT_RENDERING
+
+#ifdef SMOOTH_RENDERING
+				buildRenderingDataSmooth();
+#endif // SMOOTH_RENDERING
 
 				updated = false;
 			}
@@ -596,9 +651,62 @@ namespace HSim
 			vboID = vbo;
 		}
 
+		void buildRenderingDataSmooth()
+		{
+			unsigned int vao;
+			unsigned int vbo;
+			unsigned int ebo;
+			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+			glGenBuffers(1, &ebo);
+			glBindVertexArray(vao);
+			
+			auto vertices = buildVerticesSmooth();
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+			auto indices = buildIndices();
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
+			// layout 0: positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 1: normals
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+			// unbind
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+
+			vaoID = vao;
+			vboID = vbo;
+			eboID = ebo;
+		}
+
 		void draw() override
 		{
+#ifdef NAIVE_RENDERING
+			if (!vboID || !vaoID || !eboID)
+			{
+				buildRenderingData();
+				std::cout << "triangle_mesh init draw naive" << std::endl;
+			}
+			std::cout << vaoID << std::endl;
+			glBindVertexArray(vaoID);
 
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			glBindVertexArray(0);
+
+#endif // NAIVE_RENDERING
+
+
+#ifdef FLAT_RENDERING
 			if (!vboID || !vaoID)
 			{
 				buildRenderingDataFlat();
@@ -610,16 +718,48 @@ namespace HSim
 
 			glBindVertexArray(vaoID);
 
-			// render
+			glDrawArrays(GL_TRIANGLES, 0, numTrianlges() * 3);
+
+			glBindVertexArray(0);
+
+#endif // FLAT_RENDERING
+
+
+#ifdef SMOOTH_RENDERING
+			if (!vboID || !vaoID || !eboID)
+			{
+				buildRenderingDataSmooth();
+				std::cout << "triangle_mesh init draw smooth" << std::endl;
+			}
+			std::cout << vaoID << std::endl;
+			glBindVertexArray(vaoID);
+
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			glBindVertexArray(0);
+
+#endif // SMOOTH_RENDERING
+
+
+
+
+
+
+			// 1. rendering
 			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			// glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
 			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			
-			// flat render
-			glDrawArrays(GL_TRIANGLES, 0, numTrianlges() * 3);
+			// 2. flat rendering
+			// glDrawArrays(GL_TRIANGLES, 0, numTrianlges() * 3);
+
+			// 3. smooth rendering
+			// glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
 
 			// unbind
-			glBindVertexArray(0);
+			// glBindVertexArray(0);
 		}
 	};
 

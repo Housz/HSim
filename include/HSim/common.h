@@ -25,3 +25,12 @@ const double PI_QUARTER = 	0.785398163397448309615660845819875721;
 const double EPSILON = std::numeric_limits<double>::epsilon();
 const float MAX_FLOAT = std::numeric_limits<float>::max();
 const double MAX_DOUBLE = std::numeric_limits<double>::max();
+
+
+/**
+ * rendering mods
+ */
+// #define NAIVE_RENDERING
+#define FLAT_RENDERING
+// #define SMOOTH_RENDERING
+// #define WIREFRAME_RENDERING
