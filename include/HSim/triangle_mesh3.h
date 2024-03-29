@@ -450,14 +450,25 @@ namespace HSim
 				auto c = points[cIndex];
 
 				auto normal = (b - a).cross(c - a).getNormalized();
-				
-				vertices.push_back(a.x); vertices.push_back(a.y); vertices.push_back(a.z);
-				vertices.push_back(normal.x); vertices.push_back(normal.y); vertices.push_back(normal.z);
-				vertices.push_back(b.x); vertices.push_back(b.y); vertices.push_back(b.z);
-				vertices.push_back(normal.x); vertices.push_back(normal.y); vertices.push_back(normal.z);
-				vertices.push_back(c.x); vertices.push_back(c.y); vertices.push_back(c.z);
-				vertices.push_back(normal.x); vertices.push_back(normal.y); vertices.push_back(normal.z);
 
+				vertices.push_back(a.x);
+				vertices.push_back(a.y);
+				vertices.push_back(a.z);
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
+				vertices.push_back(b.x);
+				vertices.push_back(b.y);
+				vertices.push_back(b.z);
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
+				vertices.push_back(c.x);
+				vertices.push_back(c.y);
+				vertices.push_back(c.z);
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
 			}
 
 			return vertices;
@@ -482,17 +493,16 @@ namespace HSim
 
 				auto normal = (b - a).cross(c - a).getNormalized();
 
-				normalCount[aIndex] ++;
-				normalCount[bIndex] ++;
-				normalCount[cIndex] ++;
+				normalCount[aIndex]++;
+				normalCount[bIndex]++;
+				normalCount[cIndex]++;
 
-				smoothNormals[aIndex] = normal / normalCount[aIndex] + 
+				smoothNormals[aIndex] = normal / normalCount[aIndex] +
 										smoothNormals[aIndex] * (normalCount[aIndex] - 1) / normalCount[aIndex];
-				smoothNormals[bIndex] = normal / normalCount[bIndex] + 
+				smoothNormals[bIndex] = normal / normalCount[bIndex] +
 										smoothNormals[bIndex] * (normalCount[bIndex] - 1) / normalCount[bIndex];
-				smoothNormals[cIndex] = normal / normalCount[cIndex] + 
+				smoothNormals[cIndex] = normal / normalCount[cIndex] +
 										smoothNormals[cIndex] * (normalCount[cIndex] - 1) / normalCount[cIndex];
-
 			}
 
 			for (size_t i = 0; i < numPoints(); i++)
@@ -527,10 +537,15 @@ namespace HSim
 			return v;
 		}
 
+		/**
+		 * Determine whether it is updated before each rendering.
+		 * If updated, the render data is regenerated (VAO, VBO, EBO).
+		 */
 		void serialize() override
 		{
 			if (this->updated)
 			{
+				// Delete previous buffers
 				if (vaoID && vboID && eboID)
 				{
 					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
@@ -538,6 +553,8 @@ namespace HSim
 					glDeleteVertexArrays(1, &vaoID);
 					glDeleteBuffers(1, &eboID);
 				}
+
+				// Build new buffers
 #ifdef NAIVE_RENDERING
 				buildRenderingData();
 #endif // NAIVE_RENDERING
@@ -558,8 +575,6 @@ namespace HSim
 				return;
 			}
 		}
-
-
 
 		void buildRenderingData()
 		{
@@ -660,7 +675,7 @@ namespace HSim
 			glGenBuffers(1, &vbo);
 			glGenBuffers(1, &ebo);
 			glBindVertexArray(vao);
-			
+
 			auto vertices = buildVerticesSmooth();
 
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -705,7 +720,6 @@ namespace HSim
 
 #endif // NAIVE_RENDERING
 
-
 #ifdef FLAT_RENDERING
 			if (!vboID || !vaoID)
 			{
@@ -721,9 +735,7 @@ namespace HSim
 			glDrawArrays(GL_TRIANGLES, 0, numTrianlges() * 3);
 
 			glBindVertexArray(0);
-
 #endif // FLAT_RENDERING
-
 
 #ifdef SMOOTH_RENDERING
 			if (!vboID || !vaoID || !eboID)
@@ -739,27 +751,7 @@ namespace HSim
 			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			glBindVertexArray(0);
-
 #endif // SMOOTH_RENDERING
-
-
-
-
-
-
-			// 1. rendering
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			// glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			
-			// 2. flat rendering
-			// glDrawArrays(GL_TRIANGLES, 0, numTrianlges() * 3);
-
-			// 3. smooth rendering
-			// glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
-
-			// unbind
-			// glBindVertexArray(0);
 		}
 	};
 

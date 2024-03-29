@@ -7,15 +7,8 @@ namespace HSim
 	class BVH
 	{
 	public:
-		bvh()
-		{
-			
-		}
-
-		~bvh()
-		{
-
-		}
+		bvh() {}
+		
 	};
 	
 

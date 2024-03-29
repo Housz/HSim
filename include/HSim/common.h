@@ -31,6 +31,6 @@ const double MAX_DOUBLE = std::numeric_limits<double>::max();
  * rendering mods
  */
 // #define NAIVE_RENDERING
-#define FLAT_RENDERING
-// #define SMOOTH_RENDERING
+// #define FLAT_RENDERING
+#define SMOOTH_RENDERING
 // #define WIREFRAME_RENDERING
