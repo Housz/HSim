@@ -727,7 +727,7 @@ void renderScene(GLFWwindow *window)
     sg.root = root;
 
     HSim::GroundHelper ground;
-    ground.init(10, 10);
+    
 
     while (!glfwWindowShouldClose(window))
     {

@@ -140,7 +140,16 @@ namespace HSim
 
 		// for rendering
 	public:
-		bool updated = false;
+
+		// status flags
+		bool renderingDataNeedUpdate = true;
+		bool aabbNeedUpdate = true;
+
+		void resetStatusFlags()
+		{
+			renderingDataNeedUpdate = true;
+			aabbNeedUpdate = true;
+		}
 
 		virtual void serialize() {}
 

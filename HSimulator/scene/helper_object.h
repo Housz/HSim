@@ -13,19 +13,8 @@ namespace HSim
 	class GroundHelper
 	{
 	public:
-		void draw()
+		void buildRenderingData()
 		{
-			// std::cout << "GroundHelper" << std::endl;
-			if (vaoID && vboID)
-			{
-				glBindVertexArray(vaoID);
-				glLineWidth(1.0f);
-				glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, 0);
-				glBindVertexArray(0);
-
-				return;
-			}
-
 			std::vector<glm::vec3> vertices;
 			std::vector<glm::uvec4> indices;
 
@@ -77,27 +66,30 @@ namespace HSim
 
 			length = (GLuint)indices.size() * 4;
 
-			glBindVertexArray(vao);
-
-			glLineWidth(1.0f);
-
-			glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, 0);
-
-			glBindVertexArray(0);
-
 			vaoID = vao;
 			vboID = vbo;
 		}
 
-		void init(float length, size_t divisions)
+		void draw()
 		{
+			// std::cout << "GroundHelper" << std::endl;
+			if (!vaoID || !vboID)
+			{
+				buildRenderingData();
+				std::cout << "GroundHelper init draw" << std::endl;
+			}
+
+			glBindVertexArray(vaoID);
+			glLineWidth(1.0f);
+			glDrawElements(GL_LINES, length, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
 		}
 
 		// GLuint vao;
 		size_t length;
 
-		GLuint vaoID = 0;
-		GLuint vboID = 0;
+		unsigned int vaoID = 0;
+		unsigned int vboID = 0;
 	};
 
 	class AABBHelper
@@ -115,11 +107,8 @@ namespace HSim
 	class SphereHelper
 	{
 	public:
-		void draw()
+		void buildRenderingData()
 		{
-			std::vector<float> vertices;
-			std::vector<unsigned int> indices;
-
 			size_t numSectors = 30;
 			size_t numStacks = 30;
 
@@ -180,11 +169,15 @@ namespace HSim
 			}
 
 			unsigned int vao;
+			unsigned int vbo;
+			unsigned int ebo;
+
 			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+			glGenBuffers(1, &ebo);		
+			
 			glBindVertexArray(vao);
 
-			unsigned int vbo;
-			glGenBuffers(1, &vbo);
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
@@ -195,8 +188,6 @@ namespace HSim
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
-			unsigned int ebo;
-			glGenBuffers(1, &ebo);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
@@ -204,16 +195,34 @@ namespace HSim
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-			glBindVertexArray(vao);
+			vaoID = vao;
+			vboID = vbo;
+			eboID = ebo;
+		}
 
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		void draw()
+		{
+			if (!vaoID || !vboID || !eboID)
+			{
+				buildRenderingData();
+				std::cout << "SphereHelper init draw" << std::endl;
+			}
+
+			glBindVertexArray(vaoID);
+
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-
-			// glPointSize(10.0f);
-			// glDrawArrays(GL_POINTS, 0, vertices.size()/6);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			glBindVertexArray(0);
 		}
+
+		unsigned int vaoID = 0;
+		unsigned int vboID = 0;
+		unsigned int eboID = 0;
+
+		std::vector<float> vertices;
+		std::vector<unsigned int> indices;
 	};
 
 } // namespace HSim

@@ -61,17 +61,17 @@ namespace HSim
 			return aabb;
 		}
 
-		bool intersectedLocal(const Ray3<T>& ray) const override
-        {
-            return false;
-        }    
+		bool intersectedLocal(const Ray3<T> &ray) const override
+		{
+			return false;
+		}
 
-        IntersectionInfo interactLocal(const Ray3<T>& ray) const override
-        {
-            IntersectionInfo intersectionInfo;
+		IntersectionInfo interactLocal(const Ray3<T> &ray) const override
+		{
+			IntersectionInfo intersectionInfo;
 
-            return intersectionInfo;
-        }
+			return intersectionInfo;
+		}
 
 		// data
 	public:
@@ -86,50 +86,15 @@ namespace HSim
 		unsigned int vboID = 0;
 		unsigned int eboID = 0;
 
-		std::vector<float> vertices;
-		std::vector<unsigned int> indices;
+		size_t numSectors = 30;
+		size_t numStacks = 30;
 
-		int numSectors = 30;
-		int numStacks = 30;
-
-		void serialize() override
+		std::vector<float> buildVertices()
 		{
-			if (this->updated)
-			{
-				if (vaoID && vboID && eboID)
-				{
-					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
-					glDeleteBuffers(1, &vboID);
-					glDeleteVertexArrays(1, &vaoID);
-					glDeleteBuffers(1, &eboID);
-				}
+			std::vector<float> vertices;
 
-				// std::unique_lock<std::mutex> lk(mtx);
+			float radius = 1;
 
-				// std::cout << "serialize" << std::endl;
-				// std::cout << transform.translation;
-
-				vertices.clear();
-				indices.clear();
-
-				vboID = toVBO();
-				vaoID = toVAO();
-				eboID = toEBO();
-
-				updated = false;
-
-				// lk.unlock();
-			}
-			else
-			{
-				std::cout << "------- pass sphere serialize -------" << std::endl;
-				return;
-			}
-		}
-
-		size_t toVBO() override
-		{
-			vertices.clear();
 			for (size_t stack = 0; stack <= numStacks; stack++)
 			{
 				float phi = PI_HALF - PI * ((float)stack / numStacks);
@@ -154,41 +119,27 @@ namespace HSim
 				}
 			}
 
-			// std::cout << "index: " << index << std::endl;
-
 			// transform
 			for (size_t i = 0; i < vertices.size(); i += 3)
 			{
-				// vertices[i], vertices[i+1], vertices[i+2]
 				auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+
 				vertices[i] = v[0];
 				vertices[i + 1] = v[1];
 				vertices[i + 2] = v[2];
 			}
 
-			unsigned int vboID;
-			glGenBuffers(1, &vboID);
-			glBindBuffer(GL_ARRAY_BUFFER, vboID);
-			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-			// std::cout << "vbo" << std::endl;
-
-			return vboID;
+			return vertices;
 		}
 
-		size_t toEBO() override
+		std::vector<unsigned int> buildIndices()
 		{
-			indices.clear();
-			
-			// float indices[];
-
-			// k1--k1+1
-			// |  / |
-			// | /  |
-			// k2--k2+1
-
-			// unsigned int indices[5220];
-
+			std::vector<unsigned int> indices;
+			// indices
+			//  k1--k1+1
+			//  |  / |
+			//  | /  |
+			//  k2--k2+1
 			unsigned int k1, k2;
 
 			for (size_t i = 0; i < numStacks; ++i)
@@ -214,19 +165,25 @@ namespace HSim
 				}
 			}
 
-			unsigned int eboID;
-			glGenBuffers(1, &eboID);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
-
-			return eboID;
+			return indices;
 		}
 
-		size_t toVAO() override
+		void buildRenderingData()
 		{
-			unsigned int vaoID;
-			glGenVertexArrays(1, &vaoID);
-			glBindVertexArray(vaoID);
+			unsigned int vao;
+			unsigned int vbo;
+			unsigned int ebo;
+
+			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+			glGenBuffers(1, &ebo);
+
+			glBindVertexArray(vao);
+
+			auto vertices = buildVertices();
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
 			// layout 0: positions
 			glEnableVertexAttribArray(0);
@@ -235,35 +192,59 @@ namespace HSim
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
-			// unbind
+			auto indices = buildIndices();
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
 			glBindVertexArray(0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-			return vaoID;
+			vaoID = vao;
+			vboID = vbo;
+			eboID = ebo;
+		}
+
+		void serialize() override
+		{
+			// if (this->updated)
+			if (this->renderingDataNeedUpdate)
+			{
+				if (vaoID && vboID && eboID)
+				{
+					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
+					glDeleteBuffers(1, &vboID);
+					glDeleteVertexArrays(1, &vaoID);
+					glDeleteBuffers(1, &eboID);
+				}
+
+				buildRenderingData();
+
+				renderingDataNeedUpdate = false;
+
+			}
+			else
+			{
+				std::cout << "------- pass sphere serialize -------" << std::endl;
+				return;
+			}
 		}
 
 		void draw() override
 		{
 			if (!vboID || !eboID || !vaoID)
 			{
-				vertices.clear();
-				indices.clear();
-
-				vboID = toVBO();
-				eboID = toEBO();
-				vaoID = toVAO();
-
-				std::cout << "init draw" << std::endl;
+				buildRenderingData();
+				std::cout << "sphere init draw" << std::endl;
 			}
 
 			std::cout << vboID << std::endl;
-			std::cout << eboID << std::endl;
-			std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
 
-			glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+			// glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+			glDrawElements(GL_TRIANGLES, numSectors * numStacks * 2 * 3, GL_UNSIGNED_INT, 0);
 
 			glBindVertexArray(0);
 		}

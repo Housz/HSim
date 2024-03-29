@@ -164,7 +164,8 @@ namespace HSim
 
 		void serialize() override
 		{
-			if (this->updated)
+			// if (this->updated)
+			if (this->renderingDataNeedUpdate)
 			{
 				if (vaoID && vboID)
 				{
@@ -181,7 +182,7 @@ namespace HSim
 				vboID = toVBO();
 				vaoID = toVAO();
 
-				updated = false;
+				renderingDataNeedUpdate = false;
 
 				// lk.unlock();
 			}

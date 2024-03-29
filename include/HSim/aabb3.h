@@ -280,7 +280,7 @@ namespace HSim
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 
 			// unbind
 			glBindVertexArray(0);

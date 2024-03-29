@@ -13,8 +13,7 @@ void HSim::Renderer::init()
 	// init shader
 	shader = HSim::Shader("./resources/shaders/basic.vs", "./resources/shaders/basic.fs");
 
-	// init ground helper
-	ground.init(10, 10);
+
 
 
 }

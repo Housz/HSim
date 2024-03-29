@@ -1,5 +1,7 @@
 #pragma once
 
+// todo vertices transform
+
 #include <HSim/common.h>
 #include <HSim/vec2.h>
 #include <HSim/vec3.h>
@@ -35,19 +37,16 @@ namespace HSim
 		void addPoint(const Vec3<T> &point_)
 		{
 			points.push_back(point_);
-			updated = true;
 		}
 
 		void addNormal(const Vec3<T> &normal_)
 		{
 			normals.push_back(normal_);
-			updated = true;
 		}
 
 		void addUV(const Vec2<T> &uv_)
 		{
 			uvs.push_back(uv_);
-			updated = true;
 		}
 
 		void addTriangle(const Triangle3<T> &triangle_)
@@ -79,26 +78,21 @@ namespace HSim
 				addUV(triangle_.uvs[2]);
 				uvIndices.push_back({uvIndex, uvIndex + 1, uvIndex + 2});
 			}
-
-			updated = true;
 		}
 
 		void addTrianglePointIndices(const Vec3ui &trianglePointIndices)
 		{
 			pointIndices.push_back(trianglePointIndices);
-			updated = true;
 		}
 
 		void addTriangleNormalIndices(const Vec3ui &triangleNormalIndices)
 		{
 			normalIndices.push_back(triangleNormalIndices);
-			updated = true;
 		}
 
 		void addTriangleUVIndices(const Vec3ui &triangleUVIndices)
 		{
 			uvIndices.push_back(triangleUVIndices);
-			updated = true;
 		}
 
 		// getters setters
@@ -322,8 +316,6 @@ namespace HSim
 				}
 			}
 
-			updated = true;
-
 			return true;
 
 		} // readOBJ
@@ -345,7 +337,8 @@ namespace HSim
 		AABB3<T> AABBLocal() const override
 		{
 			// todo
-			buildAABB();
+			AABB3<T> aabb;
+			// buildAABB();
 
 			return aabb;
 		}
@@ -380,7 +373,7 @@ namespace HSim
 		// uvIndices
 		std::vector<Vec3ui> uvIndices;
 
-		AABB<T> aabb;
+		AABB3<T> aabb;
 
 		// for rendering
 	public:
@@ -559,45 +552,6 @@ namespace HSim
 			return v;
 		}
 
-		/**
-		 * Determine whether it is updated before each rendering.
-		 * If updated, the render data is regenerated (VAO, VBO, EBO).
-		 */
-		void serialize() override
-		{
-			if (this->updated)
-			{
-				// Delete previous buffers
-				if (vaoID && vboID && eboID)
-				{
-					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
-					glDeleteBuffers(1, &vboID);
-					glDeleteVertexArrays(1, &vaoID);
-					glDeleteBuffers(1, &eboID);
-				}
-
-				// Build new buffers
-#ifdef NAIVE_RENDERING
-				buildRenderingData();
-#endif // NAIVE_RENDERING
-
-#ifdef FLAT_RENDERING
-				buildRenderingDataFlat();
-#endif // FLAT_RENDERING
-
-#ifdef SMOOTH_RENDERING
-				buildRenderingDataSmooth();
-#endif // SMOOTH_RENDERING
-
-				updated = false;
-			}
-			else
-			{
-				std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
-				return;
-			}
-		}
-
 		void buildRenderingData()
 		{
 			unsigned int vao;
@@ -722,6 +676,46 @@ namespace HSim
 			vboID = vbo;
 			eboID = ebo;
 		}
+
+		/**
+		 * Determine whether it is updated before each rendering.
+		 * If updated, the render data is regenerated (VAO, VBO, EBO).
+		 */
+		void serialize() override
+		{
+			if (this->renderingDataNeedUpdate)
+			{
+				// Delete previous buffers
+				if (vaoID && vboID && eboID)
+				{
+					std::cout << "------------------glDeleteBuffers-------------------" << std::endl;
+					glDeleteBuffers(1, &vboID);
+					glDeleteVertexArrays(1, &vaoID);
+					glDeleteBuffers(1, &eboID);
+				}
+
+				// Build new buffers
+#ifdef NAIVE_RENDERING
+				buildRenderingData();
+#endif // NAIVE_RENDERING
+
+#ifdef FLAT_RENDERING
+				buildRenderingDataFlat();
+#endif // FLAT_RENDERING
+
+#ifdef SMOOTH_RENDERING
+				buildRenderingDataSmooth();
+#endif // SMOOTH_RENDERING
+
+				renderingDataNeedUpdate = false;
+			}
+			else
+			{
+				std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
+				return;
+			}
+		}
+
 
 		void draw() override
 		{

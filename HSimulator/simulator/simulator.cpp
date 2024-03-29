@@ -31,7 +31,7 @@ void HSim::Simulator::mainLoop()
 
 			surface->transform.translation.x += .01;
 
-			surface->updated = true;
+			surface->resetStatusFlags();
 
 			lk.unlock();
 

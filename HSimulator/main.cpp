@@ -15,9 +15,11 @@ HSim::SceneGraph_ptr createScene()
 	auto root = std::make_shared<HSim::GameObject>();
 	sg->root = root;
 
-	auto box1 = std::make_shared<HSim::Box3<float>>();
+	// auto box1 = std::make_shared<HSim::Box3<float>>();
 	HSim::Vec3<float> lower(1, 1, 1);
 	HSim::Vec3<float> upper(5, 5, 5);
+
+	auto sphere = std::make_shared<HSim::Sphere3<float>>();
 
 	auto box2 = std::make_shared<HSim::Box3<float>>(lower, upper);
 	// box1->transform.translation = {2, 0, 0};
@@ -42,18 +44,19 @@ HSim::SceneGraph_ptr createScene()
 	auto go4 = std::make_shared<HSim::GameObject>();
 	auto go5 = std::make_shared<HSim::GameObject>();
 
-	go1->surface_ptr = box1;
+	go1->surface_ptr = sphere;
 	go2->surface_ptr = sphere1;
 	go3->surface_ptr = box2;
 	go4->grid_ptr = grid;
 	go5->surface_ptr = mesh;
 
 	root->drawable = false;
-	go1->drawable = false;
+
+	go1->drawable = true;
 	go2->drawable = false;
-	go3->drawable = false;
+	go3->drawable = true;
 	go4->drawable = false;
-	go5->drawable = true;
+	go5->drawable = false;
 
 
 	root->children.push_back(go1);
