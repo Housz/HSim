@@ -67,6 +67,7 @@ void HSim::SceneGraph::draw()
 			auto surface = go->surface_ptr;
 
 			surface->draw();
+			surface->drawBoundary();
 		}
 
 		if (go->grid_ptr != nullptr && go->drawable)

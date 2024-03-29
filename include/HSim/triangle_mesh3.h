@@ -37,16 +37,19 @@ namespace HSim
 		void addPoint(const Vec3<T> &point_)
 		{
 			points.push_back(point_);
+			resetStatusFlags();
 		}
 
 		void addNormal(const Vec3<T> &normal_)
 		{
 			normals.push_back(normal_);
+			resetStatusFlags();
 		}
 
 		void addUV(const Vec2<T> &uv_)
 		{
 			uvs.push_back(uv_);
+			resetStatusFlags();
 		}
 
 		void addTriangle(const Triangle3<T> &triangle_)
@@ -78,21 +81,25 @@ namespace HSim
 				addUV(triangle_.uvs[2]);
 				uvIndices.push_back({uvIndex, uvIndex + 1, uvIndex + 2});
 			}
+			resetStatusFlags();
 		}
 
 		void addTrianglePointIndices(const Vec3ui &trianglePointIndices)
 		{
 			pointIndices.push_back(trianglePointIndices);
+			resetStatusFlags();
 		}
 
 		void addTriangleNormalIndices(const Vec3ui &triangleNormalIndices)
 		{
 			normalIndices.push_back(triangleNormalIndices);
+			resetStatusFlags();
 		}
 
 		void addTriangleUVIndices(const Vec3ui &triangleUVIndices)
 		{
 			uvIndices.push_back(triangleUVIndices);
+			resetStatusFlags();
 		}
 
 		// getters setters
@@ -315,6 +322,8 @@ namespace HSim
 					idx += fv;
 				}
 			}
+
+			resetStatusFlags();
 
 			return true;
 
@@ -771,12 +780,21 @@ namespace HSim
 		}
 
 
-		void drawBoundary()
+		void drawBoundary() override
 		{
 			// todo
 			// if aabbNeedUpdate
 			// buildaabb 
+			if (aabbNeedUpdate)
+			{
+				buildAABB();
+
+				aabbNeedUpdate = false;
+			}
+
 			aabb.draw();
+			
+			
 
 			// simulator change surface
 			// surface.updateStatus() { renderingDataNeedUpdate = true;  aabbNeedUpdate = ture; }

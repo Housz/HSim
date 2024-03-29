@@ -56,7 +56,7 @@ HSim::SceneGraph_ptr createScene()
 	go2->drawable = false;
 	go3->drawable = true;
 	go4->drawable = false;
-	go5->drawable = false;
+	go5->drawable = true;
 
 
 	root->children.push_back(go1);
