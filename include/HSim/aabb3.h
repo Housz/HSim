@@ -6,7 +6,6 @@
 #include <HSim/common.h>
 #include <HSim/vec3.h>
 
-
 namespace HSim
 {
 	/**
@@ -16,8 +15,11 @@ namespace HSim
 	class AABB3
 	{
 	public:
-		AABB3(){};
-		~AABB3(){};
+		AABB3()
+		{
+			reset();
+		}
+		~AABB3() {}
 
 		AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
 			: lowerCorner(lowerCorner_), upperCorner(upperCorner_)
@@ -36,6 +38,16 @@ namespace HSim
 		{
 			lowerCorner = {std::min(p1.x, p2.x), std::min(p1.y, p2.y), std::min(p1.z, p2.z)};
 			upperCorner = {std::max(p1.x, p2.x), std::max(p1.y, p2.y), std::max(p1.z, p2.z)};
+		}
+
+		void reset()
+		{
+			lowerCorner.x = std::numeric_limits<T>::max();
+			lowerCorner.y = std::numeric_limits<T>::max();
+			lowerCorner.z = std::numeric_limits<T>::max();
+			upperCorner.x = -std::numeric_limits<T>::max();
+			upperCorner.y = -std::numeric_limits<T>::max();
+			upperCorner.z = -std::numeric_limits<T>::max();
 		}
 
 		void setLowerCorner(const Vec3<T> &lowerCorner_)
@@ -69,18 +81,45 @@ namespace HSim
 		{
 			assert(i <= 7);
 
-			if (i == 0) { return lowerCorner; }
-			else if (i == 1) { return lowerCorner + Vec3<T>(0, 0, depth()); }
-			else if (i == 2) { return lowerCorner + Vec3<T>(width(), 0, depth()); }
-			else if (i == 3) { return lowerCorner + Vec3<T>(width(), 0, 0); }
-			else if (i == 4) { return lowerCorner + Vec3<T>(0, height(), 0); }
-			else if (i == 5) { return lowerCorner + Vec3<T>(0, height(), depth()); }
-			else if (i == 6) { return lowerCorner + Vec3<T>(width(), height(), depth()); }
-			else if (i == 7) { return lowerCorner + Vec3<T>(width(), height(), 0); }
-			else { return  Vec3<T>(); }
+			if (i == 0)
+			{
+				return lowerCorner;
+			}
+			else if (i == 1)
+			{
+				return lowerCorner + Vec3<T>(0, 0, depth());
+			}
+			else if (i == 2)
+			{
+				return lowerCorner + Vec3<T>(width(), 0, depth());
+			}
+			else if (i == 3)
+			{
+				return lowerCorner + Vec3<T>(width(), 0, 0);
+			}
+			else if (i == 4)
+			{
+				return lowerCorner + Vec3<T>(0, height(), 0);
+			}
+			else if (i == 5)
+			{
+				return lowerCorner + Vec3<T>(0, height(), depth());
+			}
+			else if (i == 6)
+			{
+				return lowerCorner + Vec3<T>(width(), height(), depth());
+			}
+			else if (i == 7)
+			{
+				return lowerCorner + Vec3<T>(width(), height(), 0);
+			}
+			else
+			{
+				return Vec3<T>();
+			}
 		}
 
-		void merge(const Vec3<T>& p_)
+		void merge(const Vec3<T> &p_)
 		{
 			lowerCorner.x = std::min(lowerCorner.x, p_.x);
 			lowerCorner.y = std::min(lowerCorner.y, p_.y);
@@ -89,9 +128,9 @@ namespace HSim
 			upperCorner.x = std::max(upperCorner.x, p_.x);
 			upperCorner.y = std::max(upperCorner.y, p_.y);
 			upperCorner.z = std::max(upperCorner.z, p_.z);
-		}	
+		}
 
-		void merge(const AABB3<T>& aabb_)
+		void merge(const AABB3<T> &aabb_)
 		{
 			lowerCorner.x = std::min(lowerCorner.x, aabb_.lowerCorner.x);
 			lowerCorner.y = std::min(lowerCorner.y, aabb_.lowerCorner.y);
@@ -130,8 +169,8 @@ namespace HSim
 		}
 
 	public:
-		Vec3<T> lowerCorner = {0, 0, 0};
-		Vec3<T> upperCorner = {0, 0, 0};
+		Vec3<T> lowerCorner;
+		Vec3<T> upperCorner;
 
 		// for rendering
 	public:

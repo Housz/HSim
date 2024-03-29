@@ -76,7 +76,11 @@ target_link_libraries(testtrimesh3 PUBLIC glad::glad)
 target_link_libraries(testtrimesh3 PUBLIC tinyobjloader::tinyobjloader)
 target_link_libraries(testtrimesh3 PUBLIC HSim)
 
-
+add_executable(testbvh test_bvh3.cpp)
+target_link_libraries(testbvh PUBLIC glfw)
+target_link_libraries(testbvh PUBLIC glad::glad)
+target_link_libraries(testbvh PUBLIC tinyobjloader::tinyobjloader)
+target_link_libraries(testbvh PUBLIC HSim)
 
 
 add_subdirectory(benchmarks)

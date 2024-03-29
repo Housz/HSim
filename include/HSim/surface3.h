@@ -151,6 +151,8 @@ namespace HSim
 		virtual size_t toVAO() { return 0; }
 
 		virtual void draw() {}
+
+		virtual void drawBoundary() {}
 	};
 
 	template <typename T>

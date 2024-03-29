@@ -35,21 +35,23 @@ namespace HSim
 		void addPoint(const Vec3<T> &point_)
 		{
 			points.push_back(point_);
+			updated = true;
 		}
 
 		void addNormal(const Vec3<T> &normal_)
 		{
 			normals.push_back(normal_);
+			updated = true;
 		}
 
 		void addUV(const Vec2<T> &uv_)
 		{
 			uvs.push_back(uv_);
+			updated = true;
 		}
 
 		void addTriangle(const Triangle3<T> &triangle_)
 		{
-
 			auto pointIndex = points.size();
 			addPoint(triangle_.points[0]);
 			addPoint(triangle_.points[1]);
@@ -77,21 +79,26 @@ namespace HSim
 				addUV(triangle_.uvs[2]);
 				uvIndices.push_back({uvIndex, uvIndex + 1, uvIndex + 2});
 			}
+
+			updated = true;
 		}
 
 		void addTrianglePointIndices(const Vec3ui &trianglePointIndices)
 		{
 			pointIndices.push_back(trianglePointIndices);
+			updated = true;
 		}
 
 		void addTriangleNormalIndices(const Vec3ui &triangleNormalIndices)
 		{
 			normalIndices.push_back(triangleNormalIndices);
+			updated = true;
 		}
 
 		void addTriangleUVIndices(const Vec3ui &triangleUVIndices)
 		{
 			uvIndices.push_back(triangleUVIndices);
+			updated = true;
 		}
 
 		// getters setters
@@ -206,6 +213,17 @@ namespace HSim
 			return pointIndices.size();
 		}
 
+		void buildAABB()
+		{
+			aabb.reset();
+
+			for (size_t i = 0; i < numTrianlges(); i++)
+			{
+				auto trianlge = getTrianlgeByIndex(i);
+				aabb.merge(trianlge.AABBLocal());
+			}
+		}
+
 		// IO .obj file
 	public:
 		bool readOBJ(const std::string &filename)
@@ -304,6 +322,8 @@ namespace HSim
 				}
 			}
 
+			updated = true;
+
 			return true;
 
 		} // readOBJ
@@ -325,7 +345,7 @@ namespace HSim
 		AABB3<T> AABBLocal() const override
 		{
 			// todo
-			AABB3<T> aabb;
+			buildAABB();
 
 			return aabb;
 		}
@@ -359,6 +379,8 @@ namespace HSim
 		std::vector<Vec3ui> normalIndices;
 		// uvIndices
 		std::vector<Vec3ui> uvIndices;
+
+		AABB<T> aabb;
 
 		// for rendering
 	public:
@@ -752,6 +774,21 @@ namespace HSim
 
 			glBindVertexArray(0);
 #endif // SMOOTH_RENDERING
+		}
+
+
+		void drawBoundary()
+		{
+			// todo
+			// if aabbNeedUpdate
+			// buildaabb 
+			aabb.draw();
+
+			// simulator change surface
+			// surface.updateStatus() { renderingDataNeedUpdate = true;  aabbNeedUpdate = ture; }
+			
+			// buildAABB() {if(aabbNeedUpdate) build...; aabbNeedUpdate = false}
+			// buildrenderdata() (if(renderingDataNeedUpdate) build...; renderingDataNeedUpdate = false;)
 		}
 	};
 
