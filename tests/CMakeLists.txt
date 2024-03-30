@@ -74,12 +74,14 @@ add_executable(testtrimesh3 test_trianglemesh3.cpp)
 target_link_libraries(testtrimesh3 PUBLIC glfw)
 target_link_libraries(testtrimesh3 PUBLIC glad::glad)
 target_link_libraries(testtrimesh3 PUBLIC tinyobjloader::tinyobjloader)
+target_link_libraries(testtrimesh3 PUBLIC TBB::tbb)
 target_link_libraries(testtrimesh3 PUBLIC HSim)
 
 add_executable(testbvh test_bvh3.cpp)
 target_link_libraries(testbvh PUBLIC glfw)
 target_link_libraries(testbvh PUBLIC glad::glad)
 target_link_libraries(testbvh PUBLIC tinyobjloader::tinyobjloader)
+target_link_libraries(testbvh PUBLIC TBB::tbb)
 target_link_libraries(testbvh PUBLIC HSim)
 
 

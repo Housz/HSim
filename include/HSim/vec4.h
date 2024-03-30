@@ -51,15 +51,16 @@ namespace HSim
             z = z_;
             w = w_;
         }
-        void set(const Vec4 &v_)
+        template <typename U>
+        void set(const Vec4<U> &v_)
         {
             x = v_.x;
             y = v_.y;
             z = v_.z;
             w = v_.w;
         }
-
-        void set(const Vec3<T> &v_, T w_)
+        template <typename U>
+        void set(const Vec3<U> &v_, T w_)
         {
             x = v_.x;
             y = v_.y;
@@ -67,7 +68,8 @@ namespace HSim
             w = w_;
         }
 
-        void set(const Vec3<T> &v_)
+        template <typename U>
+        void set(const Vec3<U> &v_)
         {
             x = v_.x;
             y = v_.y;
@@ -253,8 +255,9 @@ namespace HSim
             assert(i < 4);
             return (&x)[i];
         }
-
-        Vec4 &operator=(const Vec4<T> &v_)
+        
+        template <typename U>
+        Vec4 &operator=(const Vec4<U> &v_)
         {
             set(v_);
             return (*this);

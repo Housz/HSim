@@ -43,7 +43,8 @@ namespace HSim
             x = x_;
             y = y_;
         }
-        void set(const Vec2 &v_)
+        template <typename U>
+        void set(const Vec2<U> &v_)
         {
             x = v_.x;
             y = v_.y;
@@ -183,7 +184,8 @@ namespace HSim
             return (&x)[i];
         }
 
-        Vec2 &operator=(Vec2<T> &v_)
+        template <typename U>
+        Vec2 &operator=(Vec2<U> &v_)
         {
             set(v_);
             return (*this);

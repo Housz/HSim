@@ -8,6 +8,8 @@
 #include <HSim/transform3.h>
 #include <HSim/surface3.h>
 #include <HSim/triangle3.h>
+#include <HSim/bvh3.h>
+#include <HSim/parallel.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -225,6 +227,31 @@ namespace HSim
 			}
 		}
 
+		void buildBVH()
+		{
+			bvh.reset();
+
+			// create primitiveIndices (triangles indices) and primitivesAABBs (triangles AABBs)
+			std::vector<size_t> primitiveIndices(numTrianlges());
+			std::iota(primitiveIndices.begin(), primitiveIndices.end(), 0);
+
+			std::vector<AABB3<T>> primitivesAABBs(numTrianlges());
+			parallelFor(size_t(0), numTrianlges(), [&] (size_t i){
+				auto trianlge = getTrianlgeByIndex(i);
+				auto triangleAABB = trianlge.AABBLocal();
+				primitivesAABBs[i] = triangleAABB;
+			});
+
+			// debug
+			// for(auto aabb : primitivesAABBs)
+			// {
+			// 	std::cout << aabb.lowerCorner;
+			// 	std::cout << aabb.upperCorner;
+			// }			
+
+			bvh.build(primitiveIndices, primitivesAABBs);
+		}
+
 		// IO .obj file
 	public:
 		bool readOBJ(const std::string &filename)
@@ -383,6 +410,8 @@ namespace HSim
 		std::vector<Vec3ui> uvIndices;
 
 		AABB3<T> aabb;
+
+		BVH3<T> bvh;
 
 		// for rendering
 	public:

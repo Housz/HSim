@@ -46,34 +46,43 @@ int main()
 	// mesh.readOBJ("spot_triangulated.obj");
 	mesh.readOBJ("cube.obj");
 
-	// std::cout << mesh.points[0];
+	
+	/**
+	 * test show
+	 */
+	std::cout << mesh.points[0];
 
-	std::cout << mesh.pointIndices[0];
-	std::cout << mesh.uvIndices[0];
-	std::cout << mesh.points[mesh.pointIndices[0][0]];
-	std::cout << mesh.points[mesh.pointIndices[0][1]];
-	std::cout << mesh.points[mesh.pointIndices[0][2]];
-	std::cout << mesh.uvs[mesh.uvIndices[0][0]];
-	std::cout << mesh.uvs[mesh.uvIndices[0][1]];
-	std::cout << mesh.uvs[mesh.uvIndices[0][2]];
+	// std::cout << mesh.pointIndices[0];
+	// std::cout << mesh.uvIndices[0];
+	// std::cout << mesh.points[mesh.pointIndices[0][0]];
+	// std::cout << mesh.points[mesh.pointIndices[0][1]];
+	// std::cout << mesh.points[mesh.pointIndices[0][2]];
+	// std::cout << mesh.uvs[mesh.uvIndices[0][0]];
+	// std::cout << mesh.uvs[mesh.uvIndices[0][1]];
+	// std::cout << mesh.uvs[mesh.uvIndices[0][2]];
 
-	HSim::Triangle3<float> tri;
+	/**
+	 * test addTriangle
+	 */
+	// HSim::Triangle3<float> tri;
 
-	tri.points[0] = {0, 0, 0};
-	tri.points[1] = {1, 0, 0};
-	tri.points[2] = {0, 1, 0};
+	// tri.points[0] = {0, 0, 0};
+	// tri.points[1] = {1, 0, 0};
+	// tri.points[2] = {0, 1, 0};
 
-	tri.uvs[0] = {0, 0};
-	tri.uvs[1] = {1, 0};
-	tri.uvs[2] = {0, 1};
+	// tri.uvs[0] = {0, 0};
+	// tri.uvs[1] = {1, 0};
+	// tri.uvs[2] = {0, 1};
 
-	tri.normals[0] = {0, 0, 1};
-	tri.normals[1] = {0, 0, 1};
-	tri.normals[2] = {0, 0, 1};
+	// tri.normals[0] = {0, 0, 1};
+	// tri.normals[1] = {0, 0, 1};
+	// tri.normals[2] = {0, 0, 1};
 
 	// mesh.addTriangle(tri);
 
-	// show the last triangle abc
+	/**
+	 * show the last triangle abc
+	 */
 	// std::cout << std::endl;
 	// std::cout << mesh.pointIndices[mesh.pointIndices.size()-1];
 	// std::cout << mesh.uvIndices[mesh.pointIndices.size()-1];
@@ -90,7 +99,13 @@ int main()
 	// auto flattenedPointIndices = mesh.flatten(mesh.pointIndices);
 	// std::cout << flattenedPointIndices[0] << std::endl;
 	
-
+	
+	/**
+	 * test bvh
+	 */
+	mesh.buildBVH();
+	// std::cout << mesh.bvh.rootAABB.lowerCorner;
+	// std::cout << mesh.bvh.rootAABB.upperCorner;
 
 #endif
 
