@@ -61,7 +61,7 @@ namespace HSim
 			{
 				rootAABB.merge(aabb);
 			}
-			
+
 			// debug
 			// std::cout << "rootAABB";
 			// std::cout << rootAABB.lowerCorner;
@@ -85,8 +85,10 @@ namespace HSim
 			// if (primitiveIndices.size() == 1)
 
 			size_t currIndicesSize = indexEnd - indexBegin;
+			
+			std::cout << "\ncurrIndicesSize: " << currIndicesSize << std::endl;
 
-			if (currIndicesSize == 0)
+			if (currIndicesSize == 1)
 			{
 				currNode->primitiveIndex = primitiveIndices[0];
 				currNode->aabb = primitivesAABBs[primitiveIndices[0]];
@@ -110,6 +112,11 @@ namespace HSim
 				nodeAABB.merge(currPrimitivesAABB);
 			}
 
+			// debug
+			// std::cout << "depth: " << currDepth;
+			// std::cout << "\nnodeAABB\n" << nodeAABB.lowerCorner;
+			// std::cout << nodeAABB.upperCorner;
+
 			// Choose the axis with the longest span as the spliting axis
 			auto nodeAABBSize = nodeAABB.upperCorner - nodeAABB.lowerCorner;
 			size_t axis; // 0: x, 1: y, 2: z
@@ -124,8 +131,24 @@ namespace HSim
 
 			float pivotPosition = 0.5 * (nodeAABB.upperCorner[axis] + nodeAABB.lowerCorner[axis]);
 
+			// debug
+			std::cout << "depth: " << currDepth << std::endl;
+			for (auto primitiveIndex : primitiveIndices)
+			{
+				std::cout << primitiveIndex << " ";
+			}
+
 			// split
 			auto splitIter = qsplit(indexBegin, indexEnd, pivotPosition, axis);
+
+			std::cout << "\nqsplited:\n";
+			for (auto primitiveIndex : primitiveIndices)
+			{
+				std::cout << primitiveIndex << " ";
+			}
+			std::cout << "\nsplitIter: " << splitIter - indexBegin << std::endl;
+
+			std::cout << indexBegin - indexBegin << " " << splitIter - indexBegin << " " << indexEnd - indexBegin << std::endl << std::endl;
 
 			BVH3Node_Ptr LChildNode = std::make_shared<BVH3Node>();
 			BVH3Node_Ptr RChildNode = std::make_shared<BVH3Node>();
