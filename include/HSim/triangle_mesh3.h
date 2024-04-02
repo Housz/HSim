@@ -565,6 +565,9 @@ namespace HSim
 			{
 				auto point = points[i];
 
+				// transform
+				point = transform.mul(point);
+
 				vertices.push_back(point.x);
 				vertices.push_back(point.y);
 				vertices.push_back(point.z);
@@ -606,34 +609,36 @@ namespace HSim
 
 			auto vertices = buildVertices();
 
-			// debug
-			// std::cout << "vertices:\n";
-			// size_t i = 0;
-			// for (auto ele : vertices)
-			// {
-			// 	std::cout << ele << " ";
-			// 	i++;
-			// 	if (!(i % 6))
-			// 		std::cout << std::endl;
-			// }
-			// std::cout << std::endl;
+			/** debug
+			std::cout << "vertices:\n";
+			size_t i = 0;
+			for (auto ele : vertices)
+			{
+				std::cout << ele << " ";
+				i++;
+				if (!(i % 6))
+					std::cout << std::endl;
+			}
+			std::cout << std::endl;
+			*/
 
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);
 			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
 			auto indices = buildIndices();
 
-			// debug
-			// std::cout << "\nindices:\n";
-			// i = 0;
-			// for (auto ele : indices)
-			// {
-			// 	std::cout << ele << " ";
-			// 	i++;
-			// 	if (!(i % 3))
-			// 		std::cout << std::endl;
-			// }
-			// std::cout << std::endl;
+			/** debug
+			std::cout << "\nindices:\n";
+			i = 0;
+			for (auto ele : indices)
+			{
+				std::cout << ele << " ";
+				i++;
+				if (!(i % 3))
+					std::cout << std::endl;
+			}
+			std::cout << std::endl;
+			*/
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, (unsigned int)indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
@@ -760,6 +765,8 @@ namespace HSim
 
 		void draw() override
 		{
+			serialize();
+
 #ifdef NAIVE_RENDERING
 			if (!vboID || !vaoID || !eboID)
 			{
@@ -814,25 +821,18 @@ namespace HSim
 
 		void drawBoundary() override
 		{
-			// todo
-			// if aabbNeedUpdate
-			// buildaabb 
 			if (aabbNeedUpdate)
 			{
 				buildAABB();
 
 				aabbNeedUpdate = false;
+
+				
 			}
 
-			aabb.draw();
+			// aabb.draw();
+			AABB().draw();
 			
-			
-
-			// simulator change surface
-			// surface.updateStatus() { renderingDataNeedUpdate = true;  aabbNeedUpdate = ture; }
-			
-			// buildAABB() {if(aabbNeedUpdate) build...; aabbNeedUpdate = false}
-			// buildrenderdata() (if(renderingDataNeedUpdate) build...; renderingDataNeedUpdate = false;)
 		}
 	};
 

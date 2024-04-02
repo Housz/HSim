@@ -124,7 +124,7 @@ namespace HSim
 				auto cornerInWorld = toWorld(cornerInLocal);
 
 				aabb3InWorld.lowerCorner = min(aabb3InWorld.lowerCorner, cornerInWorld);
-				aabb3InWorld.upperCorner = min(aabb3InWorld.upperCorner, cornerInWorld);
+				aabb3InWorld.upperCorner = max(aabb3InWorld.upperCorner, cornerInWorld);
 			}
 			return aabb3InWorld;
 		}

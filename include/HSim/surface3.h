@@ -15,28 +15,32 @@ namespace HSim
 	{
 		bool isIntersected = false;
 		float distance = MAX_FLOAT;
-		
+
 		Vec3f position;
-		Vec3f normal; 
+		Vec3f normal;
 
 		// https://cloud.tencent.com/developer/ask/sof/109333199
-        inline friend std::ostream &operator<<(std::ostream &, IntersectionInfo &);
+		inline friend std::ostream &operator<<(std::ostream &, IntersectionInfo &);
 	};
 
 	inline std::ostream &operator<<(std::ostream &os, IntersectionInfo &info)
 	{
 		if (info.isIntersected)
 		{
-			os << "isIntersected: " << "true" << "\n"
-				<< "distance: " << info.distance << "\n"
-				<< "position: " << info.position << "\n"
-				<< "normal: " << info.normal << "\n";
+			os << "isIntersected: "
+			   << "true"
+			   << "\n"
+			   << "distance: " << info.distance << "\n"
+			   << "position: " << info.position << "\n"
+			   << "normal: " << info.normal << "\n";
 		}
 		else
 		{
-			os << "isIntersected: " << "false" << "\n";
+			os << "isIntersected: "
+			   << "false"
+			   << "\n";
 		}
-		
+
 		return os;
 	}
 
@@ -44,16 +48,20 @@ namespace HSim
 	{
 		if (info.isIntersected)
 		{
-			os << "isIntersected: " << "true" << "\n"
-				<< "distance: " << info.distance << "\n"
-				<< "position: " << info.position << "\n"
-				<< "normal: " << info.normal << "\n";
+			os << "isIntersected: "
+			   << "true"
+			   << "\n"
+			   << "distance: " << info.distance << "\n"
+			   << "position: " << info.position << "\n"
+			   << "normal: " << info.normal << "\n";
 		}
 		else
 		{
-			os << "isIntersected: " << "false" << "\n";
+			os << "isIntersected: "
+			   << "false"
+			   << "\n";
 		}
-		
+
 		return os;
 	}
 
@@ -95,12 +103,12 @@ namespace HSim
 			return transform.toWorld(AABBLocal());
 		}
 
-		bool intersected(const Ray3<T>& ray) 
+		bool intersected(const Ray3<T> &ray)
 		{
 			return intersectedLocal(transform.toLocal(ray));
 		}
 
-		IntersectionInfo interact(const Ray3<T>& ray)
+		IntersectionInfo interact(const Ray3<T> &ray)
 		{
 			auto interactionInfoLocal = interactLocal(transform.toLocal(ray));
 			IntersectionInfo interactionInfo;
@@ -129,21 +137,27 @@ namespace HSim
 			return r.dot(closestNormal) < 0.0;
 		}
 
-		virtual AABB3<T> AABBLocal()  = 0;
+		virtual AABB3<T> AABBLocal() = 0;
 
-		virtual bool intersectedLocal(const Ray3<T>& ray) const = 0;
+		virtual bool intersectedLocal(const Ray3<T> &ray) const = 0;
 
-		virtual IntersectionInfo interactLocal(const Ray3<T>& ray) const = 0;
+		virtual IntersectionInfo interactLocal(const Ray3<T> &ray) const = 0;
 
 	public:
 		Transform3<T> transform;
 
 		// for rendering
 	public:
-
 		// status flags
 		bool renderingDataNeedUpdate = true;
 		bool aabbNeedUpdate = true;
+		
+
+		// simulator change surface
+		// surface.updateStatus() { renderingDataNeedUpdate = true;  aabbNeedUpdate = ture; }
+
+		// buildAABB() {if(aabbNeedUpdate) build...; aabbNeedUpdate = false}
+		// buildrenderdata() (if(renderingDataNeedUpdate) build...; renderingDataNeedUpdate = false;)
 
 		void resetStatusFlags()
 		{

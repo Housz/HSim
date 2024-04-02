@@ -267,6 +267,7 @@ namespace HSim
 
 		void draw()
 		{
+			// debug
 			// std::cout << "AABB draw" << std::endl;
 			// std::cout << lowerCorner;
 			// std::cout << upperCorner;
