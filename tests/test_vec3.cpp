@@ -5,21 +5,28 @@ int main()
 {
 
 	HSim::Vec3d v(1, 2, 3); 
-	v = {2, 3, 4};
-	std::cout << v;
-	std::cout << 2 * v;
-	// std::cout << HSim::vec3d({1, 2, 3});
+	// v = {2, 3, 4};
+	// std::cout << v;
+	// std::cout << 2 * v;
+	// // std::cout << HSim::vec3d({1, 2, 3});
 
-	HSim::Vec3d v1(1, 1, 1);
-	HSim::Vec3d v2(-1, -1, -1);
+	// HSim::Vec3d v1(1, 1, 1);
+	// HSim::Vec3d v2(-1, -1, -1);
 
-	std::cout << v1.distanceTo(v2) << std::endl; 
+	// std::cout << v1.distanceTo(v2) << std::endl; 
 
-	auto list = {1, 2, 3};
-	std::cout << v1 + list;
-	std::cout << v1 - list;
-	std::cout << list + v1;
-	std::cout << list - v1;
+	// auto list = {1, 2, 3};
+	// std::cout << v1 + list;
+	// std::cout << v1 - list;
+	// std::cout << list + v1;
+	// std::cout << list - v1;
+
+	// std::cout << v[0] << std::endl;
+	// v[0] = 5;
+	// std::cout << v[0] << std::endl;
+
+	const HSim::Vec3d cv(1, 2, 3);
+	std::cout << cv[0] << std::endl;
 
 	
 	return 0;

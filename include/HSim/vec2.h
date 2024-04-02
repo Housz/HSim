@@ -160,13 +160,13 @@ namespace HSim
 
         //// Operators
 
-        T &operator[](size_t i)
+        T& operator[](size_t i)
         {
             assert(i < 2);
             return (&x)[i];
         }
 
-        T operator[](size_t i) const
+        const T& operator[](size_t i) const
         {
             assert(i < 2);
             return (&x)[i];

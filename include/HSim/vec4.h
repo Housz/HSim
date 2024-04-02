@@ -238,7 +238,7 @@ namespace HSim
             return (&x)[i];
         }
 
-        T operator[](size_t i) const
+        const T& operator[](size_t i) const
         {
             assert(i < 4);
             return (&x)[i];

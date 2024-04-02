@@ -300,7 +300,7 @@ namespace HSim
             return container[i];
         }
 
-        T operator[](size_t i) const
+        const T& operator[](size_t i) const
         {
             return container[i];
         }

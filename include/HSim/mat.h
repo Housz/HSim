@@ -338,7 +338,7 @@ namespace HSim
 			return container[i];
 		}
 
-		std::vector<T> operator[] (size_t i) const
+		const std::vector<T>& operator[] (size_t i) const
 		{
 			return container[i];
 		}
