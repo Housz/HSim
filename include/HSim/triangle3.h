@@ -201,7 +201,7 @@ namespace HSim
             return (ta * ANormal + tb * BNormal + tc * CNormal).getNormalized();
         }
 
-        AABB3<T> AABBLocal() const override
+        AABB3<T> AABBLocal()  override
         {
             AABB3<T> aabb(points[0], points[1]);
             aabb.merge(points[2]);
@@ -344,6 +344,9 @@ namespace HSim
 
         
     };
+
+    using Triangle3f = Triangle3<float>;
+    using Triangle3d = Triangle3<double>;
 
     template <typename T>
 	using Triangle3_Ptr = std::shared_ptr<Triangle3<T>>;

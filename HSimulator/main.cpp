@@ -34,9 +34,36 @@ HSim::SceneGraph_ptr createScene()
 	auto grid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
-	mesh->readOBJ("spot_triangulated.obj");
+	// mesh->readOBJ("spot_triangulated.obj");
 	// mesh->readOBJ("bunny.obj");
 	// mesh->readOBJ("cube.obj");
+
+	HSim::Triangle3f tri1;
+	tri1.points[0] = {1, 0, 0};
+	tri1.points[1] = {0, 1, 0};
+	tri1.points[2] = {0, 0, 1};
+
+	HSim::Vec3 triNormal = {1, 1, 1};
+	triNormal.normalize();
+	tri1.normals[0] = triNormal;
+	tri1.normals[1] = triNormal;
+	tri1.normals[2] = triNormal;
+
+	mesh->addTriangle(tri1);
+
+	HSim::Triangle3f tri2;
+	tri2.points[0] = {-1, 0, 0};
+	tri2.points[1] = {0, -1, 0};
+	tri2.points[2] = {0, 0, -1};
+
+	triNormal = {-1, -1, -1};
+	triNormal.normalize();
+	tri2.normals[0] = triNormal;
+	tri2.normals[1] = triNormal;
+	tri2.normals[2] = triNormal;
+
+	mesh->addTriangle(tri2);
+
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	auto go2 = std::make_shared<HSim::GameObject>();
@@ -52,9 +79,9 @@ HSim::SceneGraph_ptr createScene()
 
 	root->drawable = false;
 
-	go1->drawable = true;
+	go1->drawable = false;
 	go2->drawable = false;
-	go3->drawable = true;
+	go3->drawable = false;
 	go4->drawable = false;
 	go5->drawable = true;
 

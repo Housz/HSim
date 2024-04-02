@@ -83,6 +83,7 @@ namespace HSim
 				addUV(triangle_.uvs[2]);
 				uvIndices.push_back({uvIndex, uvIndex + 1, uvIndex + 2});
 			}
+			
 			resetStatusFlags();
 		}
 
@@ -370,12 +371,14 @@ namespace HSim
 			return {0, 0, 0};
 		}
 
-		AABB3<T> AABBLocal() const override
+		AABB3<T> AABBLocal()  override
 		{
-			// todo
-			AABB3<T> aabb;
-			// buildAABB();
-
+			if (aabbNeedUpdate)
+			{
+				buildAABB();
+				aabbNeedUpdate = false;
+			}
+			
 			return aabb;
 		}
 

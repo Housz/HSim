@@ -21,9 +21,14 @@ namespace HSim
 		}
 		~AABB3() {}
 
-		AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
-			: lowerCorner(lowerCorner_), upperCorner(upperCorner_)
+		// AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
+		// 	: lowerCorner(lowerCorner_), upperCorner(upperCorner_)
+		// {
+		// }
+
+		AABB3(const Vec3<T> &p1, const Vec3<T> &p2)
 		{
+			set(p1, p2);
 		}
 
 		AABB3(const AABB3<T> &boundingBox_)

@@ -53,7 +53,7 @@ namespace HSim
 			return normal;
 		}
 
-		AABB3<T> AABBLocal() const override
+		AABB3<T> AABBLocal()  override
 		{
 			// todo
 			AABB3<T> aabb;

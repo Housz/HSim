@@ -129,7 +129,7 @@ namespace HSim
 			return r.dot(closestNormal) < 0.0;
 		}
 
-		virtual AABB3<T> AABBLocal() const = 0;
+		virtual AABB3<T> AABBLocal()  = 0;
 
 		virtual bool intersectedLocal(const Ray3<T>& ray) const = 0;
 

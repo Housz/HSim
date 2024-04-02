@@ -132,7 +132,7 @@ namespace HSim
 			return closestNormal;
 		}
 
-		AABB3<T> AABBLocal() const override
+		AABB3<T> AABBLocal()  override
 		{
 			AABB3<T> aabb(lowerCorner, upperCorner);
 			return aabb;

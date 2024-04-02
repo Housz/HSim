@@ -52,7 +52,7 @@ namespace HSim
 			}
 		}
 
-		AABB3<T> AABBLocal() const override
+		AABB3<T> AABBLocal()  override
 		{
 			AABB3<T> aabb;
 			auto offset = {radius, radius, radius};
