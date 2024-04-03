@@ -265,6 +265,70 @@ namespace HSim
 			return vaoID;
 		}
 
+		void buildRenderingData()
+		{
+			unsigned int vao;
+			unsigned int vbo;
+
+			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+
+			glBindVertexArray(vao);
+
+			float vertices[] = {
+				lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				
+				
+				
+
+				// upperCorner[0], lowerCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				// upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				// upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				// upperCorner[0], lowerCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+
+				// lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				// lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				// upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				// upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,				
+				
+				// lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				// lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				// upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				// upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,	
+
+				// upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				// lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				// lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				// upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,	
+
+				// upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				// lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				// lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				// upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,	
+			};
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+			// VAO layout 0
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			glEnableVertexAttribArray(0);
+
+			// VAO layout 1
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+			glEnableVertexAttribArray(1);
+
+			// unbind
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+
+			vaoID = vao;
+			vboID = vbo;
+		}
+
 		void draw()
 		{
 			// debug
@@ -276,6 +340,7 @@ namespace HSim
 			{
 				vboID = toVBO();
 				vaoID = toVAO();
+				// buildRenderingData();
 
 				std::cout << "init draw" << std::endl;
 			}
@@ -286,6 +351,7 @@ namespace HSim
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
+			// glDrawArrays(GL_QUADS, 0, 4);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			// unbind

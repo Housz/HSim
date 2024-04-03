@@ -41,7 +41,7 @@ HSim::SceneGraph_ptr createScene()
 
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> distribution(0, 10);
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < 10; i++)
 	{
 		// HSim::Vec3f offset = {distribution(generator), distribution(generator), distribution(generator)};
 		// HSim::Vec3f offset = {10, 1, 1};
