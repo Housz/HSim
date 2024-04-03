@@ -819,21 +819,43 @@ namespace HSim
 		}
 
 
+		// void drawBoundary() override
+		// {
+		// 	if (aabbNeedUpdate)
+		// 	{
+		// 		buildAABB();
+
+		// 		aabbNeedUpdate = false;
+
+
+		// 	}
+
+		// 	aabb.draw();
+		// 	// AABB().draw();
+			
+		// }
+
+		// draw bvh
 		void drawBoundary() override
 		{
 			if (aabbNeedUpdate)
 			{
-				buildAABB();
+				buildBVH();
 
 				aabbNeedUpdate = false;
-
-				
 			}
 
-			// aabb.draw();
-			AABB().draw();
+
+			std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
+			{
+				node->aabb.draw();
+			};
+
+			bvh.traverse(callback);
+
 			
 		}
+
 	};
 
 	using TriangleMesh3f = TriangleMesh3<float>;

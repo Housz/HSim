@@ -38,32 +38,33 @@ HSim::SceneGraph_ptr createScene()
 	// mesh->readOBJ("bunny.obj");
 	// mesh->readOBJ("cube.obj");
 
-	HSim::Triangle3f tri1;
-	tri1.points[0] = {1, 0, 0};
-	tri1.points[1] = {0, 1, 0};
-	tri1.points[2] = {0, 0, 1};
 
-	HSim::Vec3 triNormal = {1, 1, 1};
-	triNormal.normalize();
-	tri1.normals[0] = triNormal;
-	tri1.normals[1] = triNormal;
-	tri1.normals[2] = triNormal;
+	std::default_random_engine generator;
+	std::uniform_int_distribution<int> distribution(0, 10);
+	for (size_t i = 0; i < 4; i++)
+	{
+		// HSim::Vec3f offset = {distribution(generator), distribution(generator), distribution(generator)};
+		// HSim::Vec3f offset = {10, 1, 1};
 
-	mesh->addTriangle(tri1);
+		auto offset = distribution(generator);
 
-	HSim::Triangle3f tri2;
-	tri2.points[0] = {-1, 0, 0};
-	tri2.points[1] = {0, -1, 0};
-	tri2.points[2] = {0, 0, -1};
+		std::cout << offset;
 
-	triNormal = {-1, -1, -1};
-	triNormal.normalize();
-	tri2.normals[0] = triNormal;
-	tri2.normals[1] = triNormal;
-	tri2.normals[2] = triNormal;
+		HSim::Triangle3f tri;
+		tri.points[0] = {1+offset, 0+offset, 0+offset};
+		tri.points[1] = {0+offset, 1+offset, 0+offset};
+		tri.points[2] = {0+offset, 0+offset, 1+offset};
 
-	mesh->addTriangle(tri2);
+		HSim::Vec3 triNormal = {1, 1, 1};
+		triNormal.normalize();
+		tri.normals[0] = triNormal;
+		tri.normals[1] = triNormal;
+		tri.normals[2] = triNormal;
 
+		mesh->addTriangle(tri);
+	}
+
+	mesh->buildBVH();
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	auto go2 = std::make_shared<HSim::GameObject>();
@@ -84,7 +85,6 @@ HSim::SceneGraph_ptr createScene()
 	go3->drawable = false;
 	go4->drawable = false;
 	go5->drawable = true;
-
 
 	root->children.push_back(go1);
 	root->children.push_back(go2);

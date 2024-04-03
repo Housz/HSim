@@ -90,8 +90,11 @@ namespace HSim
 
 			if (currIndicesSize == 1)
 			{
-				currNode->primitiveIndex = primitiveIndices[0];
-				currNode->aabb = primitivesAABBs[primitiveIndices[0]];
+				currNode->primitiveIndex = primitiveIndices[*indexBegin];
+				currNode->aabb = primitivesAABBs[primitiveIndices[*indexBegin]];
+
+				currNode->LChild = nullptr;
+				currNode->RChild = nullptr;
 
 				return currDepth + 1;
 			}
@@ -141,14 +144,14 @@ namespace HSim
 			// split
 			auto splitIter = qsplit(indexBegin, indexEnd, pivotPosition, axis);
 
-			std::cout << "\nqsplited:\n";
-			for (auto primitiveIndex : primitiveIndices)
-			{
-				std::cout << primitiveIndex << " ";
-			}
-			std::cout << "\nsplitIter: " << splitIter - indexBegin << std::endl;
+			// std::cout << "\nqsplited:\n";
+			// for (auto primitiveIndex : primitiveIndices)
+			// {
+			// 	std::cout << primitiveIndex << " ";
+			// }
+			// std::cout << "\nsplitIter: " << splitIter - indexBegin << std::endl;
 
-			std::cout << indexBegin - indexBegin << " " << splitIter - indexBegin << " " << indexEnd - indexBegin << std::endl << std::endl;
+			// std::cout << indexBegin - indexBegin << " " << splitIter - indexBegin << " " << indexEnd - indexBegin << std::endl << std::endl;
 
 			BVH3Node_Ptr LChildNode = std::make_shared<BVH3Node>();
 			BVH3Node_Ptr RChildNode = std::make_shared<BVH3Node>();
@@ -189,6 +192,32 @@ namespace HSim
 			return splitIter;
 		}
 
+		public:
+		// traverse( functional )
+		// function: show child aabb
+		void traverse(std::function<void(BVH3Node_Ptr)> &callback)
+		{
+			traverse(callback, rootNode);
+		}
+
+		void traverse(std::function<void(BVH3Node_Ptr)> &callback, BVH3Node_Ptr node)
+		{
+			callback(node);
+
+			if (node->isLeaf())
+			{
+				return;
+			}
+			else
+			{
+				auto LChild = node->LChild;
+				auto RChild = node->RChild;
+				traverse(callback, LChild);
+				traverse(callback, RChild);
+			}
+			
+		}
+		
 		std::vector<size_t> primitiveIndices;
 		std::vector<AABB3<T>> primitivesAABBs;
 
