@@ -35,34 +35,34 @@ HSim::SceneGraph_ptr createScene()
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
 	// mesh->readOBJ("spot_triangulated.obj");
-	// mesh->readOBJ("bunny.obj");
+	mesh->readOBJ("bunny.obj");
 	// mesh->readOBJ("cube.obj");
 
 
-	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution(0, 10);
-	for (size_t i = 0; i < 10; i++)
-	{
-		// HSim::Vec3f offset = {distribution(generator), distribution(generator), distribution(generator)};
-		// HSim::Vec3f offset = {10, 1, 1};
+	// std::default_random_engine generator;
+	// std::uniform_int_distribution<int> distribution(-10, 10);
+	// for (size_t i = 0; i < 9; i++)
+	// {
+	// 	// HSim::Vec3f offset = {distribution(generator), distribution(generator), distribution(generator)};
+	// 	// HSim::Vec3f offset = {10, 1, 1};
 
-		auto offset = distribution(generator);
+	// 	auto offset = distribution(generator);
 
-		std::cout << offset;
+	// 	std::cout << offset;
 
-		HSim::Triangle3f tri;
-		tri.points[0] = {1+offset, 0+offset, 0+offset};
-		tri.points[1] = {0+offset, 1+offset, 0+offset};
-		tri.points[2] = {0+offset, 0+offset, 1+offset};
+	// 	HSim::Triangle3f tri;
+	// 	tri.points[0] = {1+i, 0+i%2, 0+i%4};
+	// 	tri.points[1] = {0+i, 1+i%3, 0+i%3};
+	// 	tri.points[2] = {0+i, 0+i%4, 1+i%2};
 
-		HSim::Vec3 triNormal = {1, 1, 1};
-		triNormal.normalize();
-		tri.normals[0] = triNormal;
-		tri.normals[1] = triNormal;
-		tri.normals[2] = triNormal;
+	// 	HSim::Vec3 triNormal = {1, 1, 1};
+	// 	triNormal.normalize();
+	// 	tri.normals[0] = triNormal;
+	// 	tri.normals[1] = triNormal;
+	// 	tri.normals[2] = triNormal;
 
-		mesh->addTriangle(tri);
-	}
+	// 	mesh->addTriangle(tri);
+	// }
 
 	mesh->buildBVH();
 

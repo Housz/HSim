@@ -239,7 +239,7 @@ namespace HSim
 
 			glBindBuffer(GL_ARRAY_BUFFER, vboID);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-			std::cout << "AABB vbo " << std::endl;
+			// std::cout << "AABB vbo " << std::endl;
 
 			return vboID;
 		}
@@ -342,16 +342,16 @@ namespace HSim
 				vaoID = toVAO();
 				// buildRenderingData();
 
-				std::cout << "init draw" << std::endl;
+				// std::cout << "init draw" << std::endl;
 			}
 
-			std::cout << vaoID << std::endl;
+			// std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
-			// glDrawArrays(GL_QUADS, 0, 4);
+			// glDrawArrays(GL_QUADS, 0, 24);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			// unbind

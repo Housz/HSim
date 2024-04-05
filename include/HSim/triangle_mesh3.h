@@ -757,7 +757,7 @@ namespace HSim
 			}
 			else
 			{
-				std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
+				// std::cout << "------- pass triangle_mesh3 serialize -------" << std::endl;
 				return;
 			}
 		}

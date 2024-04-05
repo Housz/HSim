@@ -86,7 +86,7 @@ namespace HSim
 
 			size_t currIndicesSize = indexEnd - indexBegin;
 			
-			std::cout << "\ncurrIndicesSize: " << currIndicesSize << std::endl;
+			// std::cout << "\ncurrIndicesSize: " << currIndicesSize << std::endl;
 
 			if (currIndicesSize == 1)
 			{
@@ -135,11 +135,11 @@ namespace HSim
 			float pivotPosition = 0.5 * (nodeAABB.upperCorner[axis] + nodeAABB.lowerCorner[axis]);
 
 			// debug
-			std::cout << "depth: " << currDepth << std::endl;
-			for (auto primitiveIndex : primitiveIndices)
-			{
-				std::cout << primitiveIndex << " ";
-			}
+			// std::cout << "depth: " << currDepth << std::endl;
+			// for (auto primitiveIndex : primitiveIndices)
+			// {
+			// 	std::cout << primitiveIndex << " ";
+			// }
 
 			// split
 			auto splitIter = qsplit(indexBegin, indexEnd, pivotPosition, axis);
@@ -218,6 +218,10 @@ namespace HSim
 			
 		}
 		
+		
+
+		// data
+		public:
 		std::vector<size_t> primitiveIndices;
 		std::vector<AABB3<T>> primitivesAABBs;
 
