@@ -108,10 +108,22 @@ void HSim::RenderWindow::mainLoop()
 
 	scene->serialize();
 
+	// timing
+	float currentFrame = 0.0f;
+	float deltaTime = 0.0f; // time between current frame and last frame
+	float lastFrame = 0.0f;
+
 	// opengl main loop
 	while (!glfwWindowShouldClose(glfwWindow))
 	{
 		// std::cout << "main loop" << std::endl;
+
+		float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+		// std::cout << "deltaTime: " << deltaTime << std::endl;
+		std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
 
 		// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClearColor(.667f, 0.8f, 1.f, 1.0f);

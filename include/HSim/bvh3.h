@@ -85,7 +85,7 @@ namespace HSim
 			// if (primitiveIndices.size() == 1)
 
 			size_t currIndicesSize = indexEnd - indexBegin;
-			
+
 			// std::cout << "\ncurrIndicesSize: " << currIndicesSize << std::endl;
 
 			if (currIndicesSize == 1)
@@ -192,7 +192,7 @@ namespace HSim
 			return splitIter;
 		}
 
-		public:
+	public:
 		// traverse( functional )
 		// function: show child aabb
 		void traverse(std::function<void(BVH3Node_Ptr)> &callback)
@@ -215,13 +215,10 @@ namespace HSim
 				traverse(callback, LChild);
 				traverse(callback, RChild);
 			}
-			
 		}
-		
-		
 
 		// data
-		public:
+	public:
 		std::vector<size_t> primitiveIndices;
 		std::vector<AABB3<T>> primitivesAABBs;
 
@@ -229,6 +226,11 @@ namespace HSim
 		BVH3Node_Ptr rootNode;
 		// AABB of root
 		AABB3<T> rootAABB;
+
+		// for rendering
+	public:
+		// void buildRenderingData()
+		// void draw
 
 	}; // class BVH3
 

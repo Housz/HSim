@@ -842,18 +842,25 @@ namespace HSim
 			{
 				buildBVH();
 
+				// bvh draw()
+
 				aabbNeedUpdate = false;
 			}
 
 
-			std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
-			{
-				node->aabb.draw();
-			};
+			// std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
+			// {
+			// 	node->aabb.draw();
+			// };
 
-			bvh.traverse(callback);
+			// bvh.traverse(callback);
 
 			
+		}
+
+		void buildBVHRenderingData()
+		{
+
 		}
 
 	};
