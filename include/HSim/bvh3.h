@@ -73,6 +73,8 @@ namespace HSim
 			indexIterType indexEnd = primitiveIndices.end();
 
 			auto depth = recursiveBuid(rootNode, indexBegin, indexEnd, 0);
+
+			buildRenderingData();
 		}
 
 		//  primitiveIndices begin iter, end iter,
@@ -227,10 +229,113 @@ namespace HSim
 		// AABB of root
 		AABB3<T> rootAABB;
 
+		
+
 		// for rendering
 	public:
+		unsigned int vaoID = 0;
+		unsigned int vboID = 0;
+
+		std::vector<float> vertices;
+
 		// void buildRenderingData()
+		void buildRenderingData()
+		{
+			std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
+			{
+				auto lowerCorner = node->aabb.lowerCorner;
+				auto upperCorner = node->aabb.upperCorner;
+				vertices.insert(vertices.end(), {
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+
+				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+
+				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+
+				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f
+				});
+			};
+
+			traverse(callback);
+
+			unsigned int vao;
+			unsigned int vbo;
+
+			glGenVertexArrays(1, &vao);
+			glGenBuffers(1, &vbo);
+			glBindVertexArray(vao);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo);
+			glBufferData(GL_ARRAY_BUFFER, (unsigned int)vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+			// layout 0: positions
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+			// layout 1: normals
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+			glBindVertexArray(0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			
+			vaoID = vao;
+			vboID = vbo;
+		}
+
 		// void draw
+		void draw()
+		{
+			glBindVertexArray(vaoID);
+
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			// unbind
+			glBindVertexArray(0);
+
+		}
 
 	}; // class BVH3
 

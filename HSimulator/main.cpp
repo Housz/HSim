@@ -35,7 +35,9 @@ HSim::SceneGraph_ptr createScene()
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
 	mesh->readOBJ("spot_triangulated.obj");
+	// mesh->readOBJ("teapot.obj");
 	// mesh->readOBJ("bunny.obj");
+	// mesh->readOBJ("buddha.obj");
 	// mesh->readOBJ("cube.obj");
 
 

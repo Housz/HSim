@@ -835,33 +835,34 @@ namespace HSim
 			
 		// }
 
+		// draw bvh by traversing nodes of bvh
+		// void drawBoundary() override
+		// {
+		// 	if (aabbNeedUpdate)
+		// 	{
+		// 		buildBVH();
+
+		// 		// bvh draw()
+
+		// 		aabbNeedUpdate = false;
+		// 	}
+
+
+		// 	std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
+		// 	{
+		// 		node->aabb.draw();
+		// 	};
+
+		// 	bvh.traverse(callback);
+		// }
+
 		// draw bvh
 		void drawBoundary() override
 		{
-			if (aabbNeedUpdate)
-			{
-				buildBVH();
-
-				// bvh draw()
-
-				aabbNeedUpdate = false;
-			}
-
-
-			// std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
-			// {
-			// 	node->aabb.draw();
-			// };
-
-			// bvh.traverse(callback);
-
-			
+			bvh.draw();
 		}
 
-		void buildBVHRenderingData()
-		{
 
-		}
 
 	};
 
