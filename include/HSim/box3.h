@@ -140,11 +140,13 @@ namespace HSim
 
 		bool intersectedLocal(const Ray3<T>& ray) const override
         {
+			// todo
             return false;
         }    
 
         IntersectionInfo interactLocal(const Ray3<T>& ray) const override
         {
+			// todo
             IntersectionInfo intersectionInfo;
 
             return intersectionInfo;

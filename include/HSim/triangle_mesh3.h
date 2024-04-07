@@ -2,6 +2,10 @@
 
 // todo vertices transform
 
+/**
+ * 
+*/
+
 #include <HSim/common.h>
 #include <HSim/vec2.h>
 #include <HSim/vec3.h>
@@ -362,12 +366,14 @@ namespace HSim
 		Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const override
 		{
 			// todo
+			// invoke bvh closestPosition(positionInLocal_)
 			return {0, 0, 0};
 		}
 
 		Vec3<T> closestNormalLocal(const Vec3<T> &positionInLocal_) const override
 		{
 			// todo
+			// invoke bvh closestNormal(positionInLocal_)
 			return {0, 0, 0};
 		}
 
@@ -384,14 +390,24 @@ namespace HSim
 
 		bool intersectedLocal(const Ray3<T> &ray) const override
 		{
+			// todo
+			// bvh intersects(ray, testfunc)
 			return false;
 		}
 
 		IntersectionInfo interactLocal(const Ray3<T> &ray) const override
 		{
+			// todo
 			IntersectionInfo intersectionInfo;
 
 			return intersectionInfo;
+		}
+
+		bool isInsideLocal(const Vec3<T> &positionInLocal_) const override
+		{
+			// todo
+
+			return false;
 		}
 
 		// data
@@ -826,7 +842,6 @@ namespace HSim
 		// 		buildAABB();
 
 		// 		aabbNeedUpdate = false;
-
 
 		// 	}
 

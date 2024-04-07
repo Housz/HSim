@@ -241,6 +241,7 @@ namespace HSim
 		// void buildRenderingData()
 		void buildRenderingData()
 		{
+			vertices.clear();
 			std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
 			{
 				auto lowerCorner = node->aabb.lowerCorner;
