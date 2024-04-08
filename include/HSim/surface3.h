@@ -128,7 +128,7 @@ namespace HSim
 			return positionInLocal_.distanceTo(closestPositionLocal(positionInLocal_));
 		}
 
-		bool isInsideLocal(const Vec3<T> &positionInLocal_) const
+		virtual bool isInsideLocal(const Vec3<T> &positionInLocal_) const
 		{
 			auto closestPosition = closestPositionLocal(positionInLocal_);
 			auto closestNormal = closestNormalLocal(positionInLocal_);
