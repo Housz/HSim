@@ -430,7 +430,7 @@ namespace HSim
 
 		AABB3<T> aabb;
 
-		BVH3<T> bvh;
+		BVH3<T> bvh; // in local frame
 
 		// for rendering
 	public:

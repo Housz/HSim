@@ -19,7 +19,6 @@ namespace HSim
 		Vec3f position;
 		Vec3f normal;
 
-		// https://cloud.tencent.com/developer/ask/sof/109333199
 		inline friend std::ostream &operator<<(std::ostream &, IntersectionInfo &);
 	};
 
@@ -151,7 +150,7 @@ namespace HSim
 		// status flags
 		bool renderingDataNeedUpdate = true;
 		bool aabbNeedUpdate = true;
-		
+
 
 		// simulator change surface
 		// surface.updateStatus() { renderingDataNeedUpdate = true;  aabbNeedUpdate = ture; }

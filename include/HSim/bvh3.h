@@ -27,6 +27,28 @@ namespace HSim
 
 	}; // struct BVH3Node
 
+	// closest 
+	struct ClosestPrimitiveInfo 
+	{
+		size_t primitiveIndex;
+
+		float distance = MAX_FLOAT;
+
+		// Vec3f position;
+		// Vec3f normal;
+
+		inline friend std::ostream &operator<<(std::ostream &, ClosestPrimitiveInfo &);
+
+	}; // struct ClosestInfo
+
+	inline std::ostream &operator<<(std::ostream & os, ClosestPrimitiveInfo & info)
+	{
+		os << "primitiveIndex: " << info.primitiveIndex << "\n"
+		   << "distance" << info.distance << "\n";
+
+		return os;
+	}
+
 	template <typename T = float>
 	class BVH3
 	{
@@ -194,9 +216,8 @@ namespace HSim
 			return splitIter;
 		}
 
+		// traverse
 	public:
-		// traverse( functional )
-		// function: show child aabb
 		void traverse(std::function<void(BVH3Node_Ptr)> &callback)
 		{
 			traverse(callback, rootNode);
@@ -218,6 +239,13 @@ namespace HSim
 				traverse(callback, RChild);
 			}
 		}
+
+		// queries and operations
+	public:
+
+		// ClosestPrimitiveInfo closestPrimitive(Vec3<T> position, std::function distance function)
+
+
 
 		// data
 	public:
