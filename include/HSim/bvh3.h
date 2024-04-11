@@ -44,7 +44,7 @@ namespace HSim
 	inline std::ostream &operator<<(std::ostream & os, ClosestPrimitiveInfo & info)
 	{
 		os << "primitiveIndex: " << info.primitiveIndex << "\n"
-		   << "distance" << info.distance << "\n";
+		   << "distance: " << info.distance << "\n";
 
 		return os;
 	}
@@ -218,12 +218,12 @@ namespace HSim
 
 		// traverse
 	public:
-		void traverse(std::function<void(BVH3Node_Ptr)> &callback)
+		void traverse(const std::function<void(BVH3Node_Ptr)> &callback)
 		{
 			traverse(callback, rootNode);
 		}
 
-		void traverse(std::function<void(BVH3Node_Ptr)> &callback, BVH3Node_Ptr node)
+		void traverse(const std::function<void(BVH3Node_Ptr)> &callback, BVH3Node_Ptr node)
 		{
 			callback(node);
 
@@ -243,8 +243,38 @@ namespace HSim
 		// queries and operations
 	public:
 
-		// ClosestPrimitiveInfo closestPrimitive(Vec3<T> position, std::function distance function)
+		ClosestPrimitiveInfo closestPrimitive(const Vec3<T>& position, 
+			const std::function<T(const Vec3<T>& position, const size_t primitiveIndex)>& distanceFunction) const
+		{
+			ClosestPrimitiveInfo info;
 
+			// info.distance = distanceFunction(position, 1);
+			// info.primitiveIndex = 1;
+
+
+			// auto callback = [&](BVH3Node_Ptr node){
+
+			// };
+			
+			// auto _traverse = [&](BVH3Node_Ptr node){
+
+			// 	if (node->isLeaf())
+			// 	{
+			// 		auto primitiveIndex = node->primitiveIndex;
+			// 		auto currDistance = distanceFunction(position, primitiveIndex);
+
+			// 	}
+			// 	else
+			// 	{
+
+			// 	}
+			// };
+
+			// _traverse(root);
+
+
+			return info;
+		}
 
 
 		// data
@@ -256,7 +286,6 @@ namespace HSim
 		BVH3Node_Ptr rootNode;
 		// AABB of root
 		AABB3<T> rootAABB;
-
 		
 
 		// for rendering
@@ -270,7 +299,8 @@ namespace HSim
 		void buildRenderingData()
 		{
 			vertices.clear();
-			std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
+			// std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
+			auto callback = [&](BVH3Node_Ptr node)
 			{
 				auto lowerCorner = node->aabb.lowerCorner;
 				auto upperCorner = node->aabb.upperCorner;

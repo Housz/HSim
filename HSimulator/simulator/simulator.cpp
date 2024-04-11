@@ -27,13 +27,13 @@ void HSim::Simulator::mainLoop()
 
 			auto surface = go->surface_ptr;
 
-			std::unique_lock<std::mutex> lk(mtx);
+			// std::unique_lock<std::mutex> lk(mtx);
 
 			surface->transform.translation.x += .01;
 
 			surface->resetStatusFlags();
 
-			lk.unlock();
+			// lk.unlock();
 
 			std::cout << surface->transform.translation;
 
@@ -66,6 +66,6 @@ void HSim::Simulator::mainLoop()
 	{
 		// std::cout << "simulator update" << std::endl;
 		// scene->traverse(callback_anim);
-		// std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		// std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }

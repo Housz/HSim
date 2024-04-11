@@ -32,6 +32,23 @@ namespace HSim
 		// std::unordered_set<std::shared_ptr<GameObject>> children;
 		// void removeChild()
 
+		void setSurface(std::shared_ptr<Surface3<PRECISION>> surface_ptr_)
+		{
+			assert(grid_ptr == nullptr);
+
+			surface_ptr = surface_ptr_;
+		}
+
+		void setGrid(std::shared_ptr<Grid3<PRECISION>> grid_ptr_)
+		{
+			assert(surface_ptr == nullptr);
+
+			grid_ptr = grid_ptr_;
+		}
+
+		void enableDraw() { drawable = true; }
+		void disableDraw() { drawable = false; }
+
 	
 	// iteration
 	public:

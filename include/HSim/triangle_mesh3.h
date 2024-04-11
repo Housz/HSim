@@ -3,8 +3,8 @@
 // todo vertices transform
 
 /**
- * 
-*/
+ *
+ */
 
 #include <HSim/common.h>
 #include <HSim/vec2.h>
@@ -87,7 +87,7 @@ namespace HSim
 				addUV(triangle_.uvs[2]);
 				uvIndices.push_back({uvIndex, uvIndex + 1, uvIndex + 2});
 			}
-			
+
 			resetStatusFlags();
 		}
 
@@ -241,18 +241,18 @@ namespace HSim
 			std::iota(primitiveIndices.begin(), primitiveIndices.end(), 0);
 
 			std::vector<AABB3<T>> primitivesAABBs(numTrianlges());
-			parallelFor(size_t(0), numTrianlges(), [&] (size_t i){
+			parallelFor(size_t(0), numTrianlges(), [&](size_t i)
+						{
 				auto trianlge = getTrianlgeByIndex(i);
 				auto triangleAABB = trianlge.AABBLocal();
-				primitivesAABBs[i] = triangleAABB;
-			});
+				primitivesAABBs[i] = triangleAABB; });
 
 			// debug
 			// for(auto aabb : primitivesAABBs)
 			// {
 			// 	std::cout << aabb.lowerCorner;
 			// 	std::cout << aabb.upperCorner;
-			// }			
+			// }
 
 			bvh.build(primitiveIndices, primitivesAABBs);
 		}
@@ -367,6 +367,20 @@ namespace HSim
 		{
 			// todo
 			// invoke bvh closestPosition(positionInLocal_)
+
+			// std::function<float(const HSim::Vec3f& position, const size_t primitiveIndex)> distanceFunction =
+			auto distanceFunction =
+				[](const HSim::Vec3<float> &position, const size_t primitiveIndex) -> float
+			{
+				// auto primitive = mesh->
+
+				return 1;
+			};
+
+			auto closestPrimitiveInfo = bvh.closestPrimitive(positionInLocal_, distanceFunction);
+
+			std::cout << closestPrimitiveInfo;
+
 			return {0, 0, 0};
 		}
 
@@ -377,14 +391,14 @@ namespace HSim
 			return {0, 0, 0};
 		}
 
-		AABB3<T> AABBLocal()  override
+		AABB3<T> AABBLocal() override
 		{
 			if (aabbNeedUpdate)
 			{
 				buildAABB();
 				aabbNeedUpdate = false;
 			}
-			
+
 			return aabb;
 		}
 
@@ -778,7 +792,6 @@ namespace HSim
 			}
 		}
 
-
 		void draw() override
 		{
 			serialize();
@@ -834,7 +847,6 @@ namespace HSim
 #endif // SMOOTH_RENDERING
 		}
 
-
 		// void drawBoundary() override
 		// {
 		// 	if (aabbNeedUpdate)
@@ -847,7 +859,7 @@ namespace HSim
 
 		// 	aabb.draw();
 		// 	// AABB().draw();
-			
+
 		// }
 
 		// draw bvh by traversing nodes of bvh
@@ -862,7 +874,6 @@ namespace HSim
 		// 		aabbNeedUpdate = false;
 		// 	}
 
-
 		// 	std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
 		// 	{
 		// 		node->aabb.draw();
@@ -876,9 +887,6 @@ namespace HSim
 		{
 			bvh.draw();
 		}
-
-
-
 	};
 
 	using TriangleMesh3f = TriangleMesh3<float>;
