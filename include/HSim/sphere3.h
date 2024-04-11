@@ -71,7 +71,7 @@ namespace HSim
 		IntersectionInfo interactLocal(const Ray3<T> &ray) const override
 		{
 			// todo
-			
+
 			IntersectionInfo intersectionInfo;
 
 			return intersectionInfo;
@@ -97,7 +97,7 @@ namespace HSim
 		{
 			std::vector<float> vertices;
 
-			float radius = 1;
+			// float radius = 1;
 
 			for (size_t stack = 0; stack <= numStacks; stack++)
 			{
@@ -126,11 +126,11 @@ namespace HSim
 			// transform
 			for (size_t i = 0; i < vertices.size(); i += 3)
 			{
-				auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+				// auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
 
-				vertices[i] = v[0];
-				vertices[i + 1] = v[1];
-				vertices[i + 2] = v[2];
+				vertices[i] 	+= center[0];
+				vertices[i + 1] += center[1];
+				vertices[i + 2] += center[2];
 			}
 
 			return vertices;

@@ -370,18 +370,21 @@ namespace HSim
 
 			// std::function<float(const HSim::Vec3f& position, const size_t primitiveIndex)> distanceFunction =
 			auto distanceFunction =
-				[](const HSim::Vec3<float> &position, const size_t primitiveIndex) -> float
+				[&](const HSim::Vec3<float> &position, const size_t primitiveIndex) -> float
 			{
-				// auto primitive = mesh->
-
-				return 1;
+				auto triangle = getTrianlgeByIndex(primitiveIndex);
+				auto closestPositionInTriangle = triangle.closestPositionLocal(position);
+				return position.distanceTo(closestPositionInTriangle);
 			};
 
 			auto closestPrimitiveInfo = bvh.closestPrimitive(positionInLocal_, distanceFunction);
 
 			std::cout << closestPrimitiveInfo;
 
-			return {0, 0, 0};
+			auto closestTriangle = getTrianlgeByIndex(closestPrimitiveInfo.primitiveIndex);
+			auto closestPosition = closestTriangle.closestPositionLocal(positionInLocal_);
+
+			return closestPosition;
 		}
 
 		Vec3<T> closestNormalLocal(const Vec3<T> &positionInLocal_) const override
@@ -885,7 +888,7 @@ namespace HSim
 		// draw bvh
 		void drawBoundary() override
 		{
-			bvh.draw();
+			// bvh.draw();
 		}
 	};
 

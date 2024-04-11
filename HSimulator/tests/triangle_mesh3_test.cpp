@@ -16,16 +16,39 @@ HSim::SceneGraph_ptr createScene()
 	scene->root = root;
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
-	mesh->readOBJ("spot_triangulated.obj");
+	// mesh->readOBJ("spot_triangulated.obj");
+	mesh->readOBJ("cube.obj");
 	mesh->buildBVH();
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	go1->setSurface(mesh);
-	// go1->enableDraw();
+	go1->enableDraw();
 
 	root->addChild(go1);
 
-	auto p = mesh->closestPositionLocal({2, 2, 2});
+	HSim::Vec3f target(0, 0.1, -1);
+
+	auto p = mesh->closestPositionLocal(target);
+	std::cout << p;
+
+	auto sphere1 = std::make_shared<HSim::Sphere3<float>>();
+	sphere1->center = target;
+	sphere1->radius = 0.05;
+	auto sphere2 = std::make_shared<HSim::Sphere3<float>>();
+	sphere2->center = p;
+	sphere2->radius = 0.05;
+
+
+	auto goTarget = std::make_shared<HSim::GameObject>();
+	goTarget->setSurface(sphere1);
+	auto goClosest = std::make_shared<HSim::GameObject>();
+	goClosest->setSurface(sphere2);
+
+	root->addChild(goTarget);
+	root->addChild(goClosest);
+	goTarget->enableDraw();
+	goClosest->enableDraw();
+
 
 	return scene;
 }

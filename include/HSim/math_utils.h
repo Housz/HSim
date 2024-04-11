@@ -7,7 +7,14 @@ namespace HSim
 	template <typename T>
     inline T clamp(T value, T min, T max)
 	{
-		assert(min < max);
+		assert(min <= max);
+
+		// if (min > max)
+		// {
+		// 	std::swap(min, max);
+		// }
+		
+
 		if (value < min)
 		{
 			return min;
@@ -25,7 +32,7 @@ namespace HSim
 	template <typename T>
     inline Vec3<T> clamp(const Vec3<T>& value, const Vec3<T>& min, const Vec3<T>& max)
 	{
-		assert(min.x < max.x && min.y < max.y && min.z < max.z);
+		assert(min.x <= max.x && min.y <= max.y && min.z <= max.z);
 
 		return 
 		{

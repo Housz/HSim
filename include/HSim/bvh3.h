@@ -27,8 +27,8 @@ namespace HSim
 
 	}; // struct BVH3Node
 
-	// closest 
-	struct ClosestPrimitiveInfo 
+	// closest
+	struct ClosestPrimitiveInfo
 	{
 		size_t primitiveIndex;
 
@@ -41,7 +41,7 @@ namespace HSim
 
 	}; // struct ClosestInfo
 
-	inline std::ostream &operator<<(std::ostream & os, ClosestPrimitiveInfo & info)
+	inline std::ostream &operator<<(std::ostream &os, ClosestPrimitiveInfo &info)
 	{
 		os << "primitiveIndex: " << info.primitiveIndex << "\n"
 		   << "distance: " << info.distance << "\n";
@@ -242,40 +242,64 @@ namespace HSim
 
 		// queries and operations
 	public:
-
-		ClosestPrimitiveInfo closestPrimitive(const Vec3<T>& position, 
-			const std::function<T(const Vec3<T>& position, const size_t primitiveIndex)>& distanceFunction) const
+		ClosestPrimitiveInfo closestPrimitive(const Vec3<T> &position,
+											  const std::function<T(const Vec3<T> &position, const size_t primitiveIndex)> &distanceFunction) const
 		{
 			ClosestPrimitiveInfo info;
 
 			// info.distance = distanceFunction(position, 1);
 			// info.primitiveIndex = 1;
 
+			std::function<void(BVH3Node_Ptr node)> _traverse = [&](BVH3Node_Ptr node)
+			{
+				if (node->isLeaf())
+				{
+					auto primitiveIndex = node->primitiveIndex;
+					auto currDistance = distanceFunction(position, primitiveIndex);
 
-			// auto callback = [&](BVH3Node_Ptr node){
+					if (currDistance < info.distance)
+					{
+						info.distance = currDistance;
+						info.primitiveIndex = primitiveIndex;
+					}
+				}
+				else
+				{
+					auto LNode = node->LChild;
+					auto RNode = node->RChild;
 
-			// };
-			
-			// auto _traverse = [&](BVH3Node_Ptr node){
+					auto distanceToLNodeAABB = position.distanceTo(clamp(position, LNode->aabb.lowerCorner, LNode->aabb.upperCorner));
+					auto distanceToRNodeAABB = position.distanceTo(clamp(position, RNode->aabb.lowerCorner, RNode->aabb.upperCorner));
 
-			// 	if (node->isLeaf())
-			// 	{
-			// 		auto primitiveIndex = node->primitiveIndex;
-			// 		auto currDistance = distanceFunction(position, primitiveIndex);
+					if (distanceToLNodeAABB < info.distance && distanceToRNodeAABB < info.distance)
+					{
+						if (distanceToLNodeAABB < distanceToRNodeAABB)
+						{
+							_traverse(LNode);
+						}
+						else
+						{
+							_traverse(RNode);
+						}
+					}
+					else if (distanceToLNodeAABB > info.distance)
+					{
+						_traverse(RNode);
+					}
+					else if (distanceToRNodeAABB > info.distance)
+					{
+						_traverse(LNode);
+					}
+					else
+					{
+					}
+				}
+			};
 
-			// 	}
-			// 	else
-			// 	{
-
-			// 	}
-			// };
-
-			// _traverse(root);
-
+			_traverse(rootNode);
 
 			return info;
 		}
-
 
 		// data
 	public:
@@ -286,7 +310,6 @@ namespace HSim
 		BVH3Node_Ptr rootNode;
 		// AABB of root
 		AABB3<T> rootAABB;
-		
 
 		// for rendering
 	public:
@@ -304,55 +327,53 @@ namespace HSim
 			{
 				auto lowerCorner = node->aabb.lowerCorner;
 				auto upperCorner = node->aabb.upperCorner;
-				vertices.insert(vertices.end(), {
-				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+				vertices.insert(vertices.end(), {lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+												 upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+												 upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 
-				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+												 upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+												 lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+												 lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 
-				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+												 lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+												 upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+												 upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 
-				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+												 upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+												 lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+												 lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 
-				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
-				upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
-				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+												 lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+												 upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+												 upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
 
-				upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
-				lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
-				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+												 upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+												 lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+												 lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
 
-				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
-				upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
-				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+												 lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+												 upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+												 upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
 
-				upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
-				lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
-				lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+												 upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+												 lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+												 lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
 
-				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
-				lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
-				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+												 lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+												 lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+												 lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
 
-				lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
-				lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
-				lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+												 lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+												 lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+												 lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
 
-				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
-				upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
-				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+												 upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+												 upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
+												 upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
 
-				upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
-				upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
-				upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f
-				});
+												 upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+												 upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+												 upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f});
 			};
 
 			traverse(callback);
@@ -377,7 +398,7 @@ namespace HSim
 			glBindVertexArray(0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			
+
 			vaoID = vao;
 			vboID = vbo;
 		}
@@ -393,7 +414,6 @@ namespace HSim
 
 			// unbind
 			glBindVertexArray(0);
-
 		}
 
 	}; // class BVH3
