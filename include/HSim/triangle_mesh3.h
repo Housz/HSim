@@ -842,9 +842,9 @@ namespace HSim
 			std::cout << vaoID << std::endl;
 			glBindVertexArray(vaoID);
 
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glDrawElements(GL_TRIANGLES, numTrianlges() * 3, GL_UNSIGNED_INT, 0);
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			glBindVertexArray(0);
 #endif // SMOOTH_RENDERING

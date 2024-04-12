@@ -20,6 +20,8 @@ namespace HSim
 		AABB3f aabb;
 		size_t primitiveIndex; // if isLeaf
 
+		size_t depth;
+
 		bool isLeaf()
 		{
 			return (LChild == nullptr) && (RChild == nullptr);
@@ -95,6 +97,7 @@ namespace HSim
 			indexIterType indexEnd = primitiveIndices.end();
 
 			auto depth = recursiveBuid(rootNode, indexBegin, indexEnd, 0);
+			rootNode->depth = depth;
 
 			buildRenderingData();
 		}
@@ -182,6 +185,9 @@ namespace HSim
 
 			size_t depthL = recursiveBuid(LChildNode, indexBegin, splitIter, currDepth + 1);
 			size_t depthR = recursiveBuid(RChildNode, splitIter, indexEnd, currDepth + 1);
+
+			LChildNode->depth = currDepth + 1;
+			RChildNode->depth = currDepth + 1;
 
 			currNode->aabb = nodeAABB;
 			currNode->LChild = LChildNode;
@@ -271,27 +277,44 @@ namespace HSim
 					auto distanceToLNodeAABB = position.distanceTo(clamp(position, LNode->aabb.lowerCorner, LNode->aabb.upperCorner));
 					auto distanceToRNodeAABB = position.distanceTo(clamp(position, RNode->aabb.lowerCorner, RNode->aabb.upperCorner));
 
+
 					if (distanceToLNodeAABB < info.distance && distanceToRNodeAABB < info.distance)
 					{
 						if (distanceToLNodeAABB < distanceToRNodeAABB)
 						{
 							_traverse(LNode);
+							if (distanceToRNodeAABB < info.distance)
+							{
+								_traverse(RNode);
+							}
 						}
 						else
 						{
 							_traverse(RNode);
+							if (distanceToLNodeAABB < info.distance)
+							{
+								_traverse(LNode);
+							}
 						}
 					}
-					else if (distanceToLNodeAABB > info.distance)
+
+					else if (distanceToLNodeAABB < info.distance && distanceToRNodeAABB > info.distance)
 					{
-						_traverse(RNode);
-					}
-					else if (distanceToRNodeAABB > info.distance)
-					{
+						// std::cout << "L\n";
 						_traverse(LNode);
 					}
+
+					else if (distanceToLNodeAABB > info.distance && distanceToRNodeAABB < info.distance)
+					{
+						// std::cout << "R\n";
+						_traverse(RNode);
+					}
+					
 					else
 					{
+						std::cout << "distanceToLNodeAABB " << distanceToLNodeAABB 
+									<< "\ndistanceToRNodeAABB " << distanceToRNodeAABB
+									<< "\ninfo.distance " << info.distance << "\n\n";
 					}
 				}
 			};
@@ -325,6 +348,11 @@ namespace HSim
 			// std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
 			auto callback = [&](BVH3Node_Ptr node)
 			{
+				// if (node->depth != 1)
+				// {
+				// 	return;
+				// }
+
 				auto lowerCorner = node->aabb.lowerCorner;
 				auto upperCorner = node->aabb.upperCorner;
 				vertices.insert(vertices.end(), {lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
