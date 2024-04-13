@@ -104,7 +104,7 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 
 void HSim::RenderWindow::mainLoop()
 {
-	std::cout << "window.mainLoop() in" << std::endl;
+	// std::cout << "window.mainLoop() in" << std::endl;
 
 	scene->serialize();
 
@@ -123,7 +123,7 @@ void HSim::RenderWindow::mainLoop()
         lastFrame = currentFrame;
 
 		// std::cout << "deltaTime: " << deltaTime << std::endl;
-		std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
+		// std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
 
 		// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClearColor(.667f, 0.8f, 1.f, 1.0f);
@@ -231,7 +231,7 @@ void HSim::RenderWindow::mouseButtonCallback(GLFWwindow *window, int button, int
 
 	if (action == GLFW_PRESS)
 	{
-		std::cout << "GLFW_PRESS" << std::endl;
+		// std::cout << "GLFW_PRESS" << std::endl;
 		// if(mOpenCameraRotate)
 		camera->registerPoint((float)xpos, (float)ypos);
 		// activeWindow->setButtonState(GLFW_DOWN);
@@ -245,7 +245,7 @@ void HSim::RenderWindow::mouseButtonCallback(GLFWwindow *window, int button, int
 
 	if (action == GLFW_RELEASE)
 	{
-		std::cout << "GLFW_RELEASE" << std::endl;
+		// std::cout << "GLFW_RELEASE" << std::endl;
 		// activeWindow->setButtonState(GLFW_UP);
 		activeWindow->buttonState = GLFW_UP;
 
@@ -375,7 +375,7 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 		// && !activeWindow->mImWindow.cameraLocked()
 	)
 	{
-		std::cout << "camera->translateToPoint(x, y);" << std::endl;
+		// std::cout << "camera->translateToPoint(x, y);" << std::endl;
 		camera->translateToPoint(x, y);
 	}
 	else if (
@@ -387,7 +387,7 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 	{
 		if (activeWindow->mCursorTempX != -1)
 		{
-			std::cout << "camera->zoom(-0.005 * (x - activeWindow->mCursorTempX));" << std::endl;
+			// std::cout << "camera->zoom(-0.005 * (x - activeWindow->mCursorTempX));" << std::endl;
 
 			camera->zoom(-0.005 * (x - activeWindow->mCursorTempX));
 			activeWindow->mCursorTempX = x;
@@ -398,7 +398,7 @@ void HSim::RenderWindow::cursorPosCallback(GLFWwindow *window, double x, double 
 
 void HSim::RenderWindow::scrollCallback(GLFWwindow *window, double offsetX, double OffsetY)
 {
-	std::cout << "scroll: offsetX = " << offsetX << " offsetY = " << OffsetY << std::endl;
+	// std::cout << "scroll: offsetX = " << offsetX << " offsetY = " << OffsetY << std::endl;
 	RenderWindow *activeWindow = (RenderWindow *)glfwGetWindowUserPointer(window);
 	auto camera = activeWindow->camera;
 

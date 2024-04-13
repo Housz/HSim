@@ -39,7 +39,7 @@ void HSim::SceneGraph::serialize()
 	{
 		if (go->surface_ptr != nullptr && go->drawable)
 		{
-			std::cout << "callback_serialize" << std::endl;
+			// std::cout << "callback_serialize" << std::endl;
 
 			auto surface = go->surface_ptr;
 
@@ -62,7 +62,7 @@ void HSim::SceneGraph::draw()
 	{
 		if (go->surface_ptr != nullptr && go->drawable)
 		{
-			std::cout << "callback_draw" << std::endl;
+			// std::cout << "callback_draw" << std::endl;
 
 			auto surface = go->surface_ptr;
 
@@ -72,7 +72,7 @@ void HSim::SceneGraph::draw()
 
 		if (go->grid_ptr != nullptr && go->drawable)
 		{
-			std::cout << "callback_draw" << std::endl;
+			// std::cout << "callback_draw" << std::endl;
 			auto grid = go->grid_ptr;
 			grid->drawBoundary();
 			

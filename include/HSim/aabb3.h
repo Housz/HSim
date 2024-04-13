@@ -149,16 +149,33 @@ namespace HSim
 	public:
 		bool isOverlap(const AABB3<T> &b_) const
 		{
-			if (upperCorner.x < b_.lowerCorner.x || lowerCorner.x > b_.upperCorner.x ||
-				upperCorner.y < b_.lowerCorner.y || lowerCorner.y > b_.upperCorner.y ||
-				upperCorner.z < b_.lowerCorner.z || lowerCorner.z > b_.upperCorner.z)
+			// if (upperCorner.x < b_.lowerCorner.x || lowerCorner.x > b_.upperCorner.x ||
+			// 	upperCorner.y < b_.lowerCorner.y || lowerCorner.y > b_.upperCorner.y ||
+			// 	upperCorner.z < b_.lowerCorner.z || lowerCorner.z > b_.upperCorner.z)
+			// {
+			// 	return false;
+			// }
+			// else
+			// {
+			// 	return true;
+			// }
+
+			if (upperCorner.x < b_.lowerCorner.x || lowerCorner.x > b_.upperCorner.x)
 			{
 				return false;
 			}
-			else
+
+			if (upperCorner.y < b_.lowerCorner.y || lowerCorner.y > b_.upperCorner.y)
 			{
-				return true;
+				return false;
 			}
+
+			if (upperCorner.z < b_.lowerCorner.z || lowerCorner.z > b_.upperCorner.z)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		bool isInside(const Vec3<T> &position_) const
@@ -280,9 +297,6 @@ namespace HSim
 				lowerCorner[0], upperCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
 				lowerCorner[0], upperCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
 				lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
-				
-				
-				
 
 				// upperCorner[0], lowerCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
 				// upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
@@ -292,22 +306,22 @@ namespace HSim
 				// lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
 				// lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
 				// upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
-				// upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,				
-				
+				// upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+
 				// lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
 				// lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
 				// upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
-				// upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,	
+				// upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
 
 				// upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 				// lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 				// lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-				// upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,	
+				// upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
 
 				// upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 				// lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 				// lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-				// upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,	
+				// upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
 			};
 
 			glBindBuffer(GL_ARRAY_BUFFER, vbo);

@@ -9,12 +9,6 @@ namespace HSim
 	{
 		assert(min <= max);
 
-		// if (min > max)
-		// {
-		// 	std::swap(min, max);
-		// }
-		
-
 		if (value < min)
 		{
 			return min;

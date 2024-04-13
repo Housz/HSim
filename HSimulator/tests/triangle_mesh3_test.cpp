@@ -16,9 +16,10 @@ HSim::SceneGraph_ptr createScene()
 	scene->root = root;
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
-	mesh->readOBJ("spot_triangulated.obj");
+	// mesh->readOBJ("spot_triangulated.obj");
 	// mesh->readOBJ("cube.obj");
-	// mesh->readOBJ("bunny.obj");
+	mesh->readOBJ("bunny.obj");
+	// mesh->readOBJ("grid.obj");
 
 	// std::default_random_engine generator;
 	// std::uniform_int_distribution<int> distribution(-2, 2);
@@ -53,7 +54,8 @@ HSim::SceneGraph_ptr createScene()
 
 	root->addChild(go1);
 
-	HSim::Vec3f target(0, 0.2, 0.8);
+	// HSim::Vec3f target(0.2, 0.5, 0);
+	HSim::Vec3f target(0, 1, 0);
 
 	auto p = mesh->closestPositionLocal(target);
 	std::cout << p;

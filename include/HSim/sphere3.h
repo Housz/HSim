@@ -230,7 +230,7 @@ namespace HSim
 			}
 			else
 			{
-				std::cout << "------- pass sphere serialize -------" << std::endl;
+				// std::cout << "------- pass sphere serialize -------" << std::endl;
 				return;
 			}
 		}
@@ -243,7 +243,7 @@ namespace HSim
 				std::cout << "sphere init draw" << std::endl;
 			}
 
-			std::cout << vboID << std::endl;
+			// std::cout << vboID << std::endl;
 
 			glBindVertexArray(vaoID);
 

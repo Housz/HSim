@@ -805,7 +805,7 @@ namespace HSim
 				buildRenderingData();
 				std::cout << "triangle_mesh init draw naive" << std::endl;
 			}
-			std::cout << vaoID << std::endl;
+			// std::cout << vaoID << std::endl;
 			glBindVertexArray(vaoID);
 
 			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -824,7 +824,7 @@ namespace HSim
 				std::cout << "triangle_mesh init draw flat" << std::endl;
 			}
 
-			std::cout << vaoID << std::endl;
+			// std::cout << vaoID << std::endl;
 
 			glBindVertexArray(vaoID);
 
@@ -839,7 +839,7 @@ namespace HSim
 				buildRenderingDataSmooth();
 				std::cout << "triangle_mesh init draw smooth" << std::endl;
 			}
-			std::cout << vaoID << std::endl;
+			// std::cout << vaoID << std::endl;
 			glBindVertexArray(vaoID);
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -888,7 +888,7 @@ namespace HSim
 		// draw bvh
 		void drawBoundary() override
 		{
-			// bvh.draw();
+			bvh.draw();
 		}
 	};
 

@@ -186,8 +186,8 @@ namespace HSim
 			size_t depthL = recursiveBuid(LChildNode, indexBegin, splitIter, currDepth + 1);
 			size_t depthR = recursiveBuid(RChildNode, splitIter, indexEnd, currDepth + 1);
 
-			LChildNode->depth = currDepth + 1;
-			RChildNode->depth = currDepth + 1;
+			LChildNode->depth = currDepth;
+			RChildNode->depth = currDepth;
 
 			currNode->aabb = nodeAABB;
 			currNode->LChild = LChildNode;
@@ -256,10 +256,14 @@ namespace HSim
 			// info.distance = distanceFunction(position, 1);
 			// info.primitiveIndex = 1;
 
+			size_t overlap(0), both(0), onlyL(0), onlyR(0), other(0);
+			size_t leaf(0);
+
 			std::function<void(BVH3Node_Ptr node)> _traverse = [&](BVH3Node_Ptr node)
 			{
 				if (node->isLeaf())
 				{
+					leaf++;
 					auto primitiveIndex = node->primitiveIndex;
 					auto currDistance = distanceFunction(position, primitiveIndex);
 
@@ -274,52 +278,108 @@ namespace HSim
 					auto LNode = node->LChild;
 					auto RNode = node->RChild;
 
+					auto currD = info.distance;
+
 					auto distanceToLNodeAABB = position.distanceTo(clamp(position, LNode->aabb.lowerCorner, LNode->aabb.upperCorner));
 					auto distanceToRNodeAABB = position.distanceTo(clamp(position, RNode->aabb.lowerCorner, RNode->aabb.upperCorner));
 
-
-					if (distanceToLNodeAABB < info.distance && distanceToRNodeAABB < info.distance)
+					if (LNode->aabb.isOverlap(RNode->aabb))
 					{
-						if (distanceToLNodeAABB < distanceToRNodeAABB)
+						overlap++;
+
+						// std::cout << "LAABB\n" << LNode->aabb.lowerCorner << LNode->aabb.upperCorner;
+						// std::cout << "RAABB\n" << RNode->aabb.lowerCorner << RNode->aabb.upperCorner;
+
+						// std::cout << "currD " << currD << "\n"
+						// 		<< "distanceToLNodeAABB " << distanceToLNodeAABB
+						// 		<<  "\ndistanceToRNodeAABB " << distanceToRNodeAABB << "\n\n";
+
+						_traverse(LNode);
+						_traverse(RNode);
+
+						return;
+					}
+
+					if (distanceToLNodeAABB < info.distance)
+					{
+						if (distanceToRNodeAABB < info.distance)
 						{
-							_traverse(LNode);
-							if (distanceToRNodeAABB < info.distance)
+							both++;
+							if (distanceToLNodeAABB < distanceToRNodeAABB)
+							{
+								_traverse(LNode);
+								if (distanceToRNodeAABB < info.distance)
+								_traverse(RNode);
+							}
+							else
 							{
 								_traverse(RNode);
+								if (distanceToLNodeAABB < info.distance)
+								_traverse(LNode);
 							}
 						}
 						else
 						{
-							_traverse(RNode);
-							if (distanceToLNodeAABB < info.distance)
-							{
-								_traverse(LNode);
-							}
+							onlyL++;
+							_traverse(LNode);
 						}
 					}
-
-					else if (distanceToLNodeAABB < info.distance && distanceToRNodeAABB > info.distance)
+					else if (distanceToRNodeAABB < info.distance)
 					{
-						// std::cout << "L\n";
-						_traverse(LNode);
-					}
-
-					else if (distanceToLNodeAABB > info.distance && distanceToRNodeAABB < info.distance)
-					{
-						// std::cout << "R\n";
+						onlyR++;
 						_traverse(RNode);
 					}
-					
 					else
 					{
-						std::cout << "distanceToLNodeAABB " << distanceToLNodeAABB 
-									<< "\ndistanceToRNodeAABB " << distanceToRNodeAABB
-									<< "\ninfo.distance " << info.distance << "\n\n";
+						other++;
 					}
+
+					// if (distanceToLNodeAABB < info.distance && distanceToRNodeAABB < info.distance)
+					// {
+					// 	_traverse(LNode);
+					// 	_traverse(RNode);
+					// 	// if (distanceToLNodeAABB < distanceToRNodeAABB)
+					// 	// {
+					// 	// 	_traverse(LNode);
+					// 	// 	if (distanceToRNodeAABB < info.distance)
+					// 	// 	{
+					// 	// 		_traverse(RNode);
+					// 	// 	}
+					// 	// }
+					// 	// else
+					// 	// {
+					// 	// 	_traverse(RNode);
+					// 	// 	if (distanceToLNodeAABB < info.distance)
+					// 	// 	{
+					// 	// 		_traverse(LNode);
+					// 	// 	}
+					// 	// }
+					// }
+					// else if (distanceToLNodeAABB < info.distance)
+					// {
+					// 	// std::cout << "L\n";
+					// 	_traverse(LNode);
+					// }
+					// else if (distanceToLNodeAABB > info.distance)
+					// {
+					// 	// std::cout << "R\n";
+					// 	_traverse(RNode);
+					// }
+					// else
+					// {
+					// 	std::cout << "distanceToLNodeAABB " << distanceToLNodeAABB
+					// 			  << "\ndistanceToRNodeAABB " << distanceToRNodeAABB
+					// 			  << "\ninfo.distance " << info.distance << "\n\n";
+					// 	return;
+					// }
 				}
 			};
 
 			_traverse(rootNode);
+
+			printf("leaf: %zd\n", leaf);
+			printf("overlap, both, onlyL, onlyR, other\n");
+			printf("%zd %zd %zd %zd %zd\n", overlap, both, onlyL, onlyR, other);
 
 			return info;
 		}
@@ -348,10 +408,10 @@ namespace HSim
 			// std::function<void(BVH3Node_Ptr)> callback = [&](BVH3Node_Ptr node)
 			auto callback = [&](BVH3Node_Ptr node)
 			{
-				// if (node->depth != 1)
-				// {
-				// 	return;
-				// }
+				if (node->depth != 0)
+				{
+					return;
+				}
 
 				auto lowerCorner = node->aabb.lowerCorner;
 				auto upperCorner = node->aabb.upperCorner;
@@ -437,7 +497,9 @@ namespace HSim
 			glBindVertexArray(vaoID);
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glLineWidth(3.0f);
 			glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+			glLineWidth(1.0f);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			// unbind

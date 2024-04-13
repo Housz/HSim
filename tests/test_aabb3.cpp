@@ -4,7 +4,7 @@
 int main()
 {
 	auto lower = HSim::Vec3f(0, 0, 0);
-	auto upper = HSim::Vec3f(0, 1, 1);
+	auto upper = HSim::Vec3f(0, 0, 1);
 
     auto aabb = std::make_shared<HSim::AABB3<float>>(lower, upper);
 
@@ -16,9 +16,10 @@ int main()
 	// 	std::cout << aabb->corners(i);
 	// }
 
-	HSim::Vec3f p(-0.5, 0.5, 2);
+	HSim::Vec3f p(1, 0, 0.5);
 
 	std::cout << clamp(p, aabb->lowerCorner, aabb->upperCorner);
+	std::cout << p.distanceTo(clamp(p, aabb->lowerCorner, aabb->upperCorner));
 	
 
 	return 0;

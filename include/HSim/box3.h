@@ -197,7 +197,7 @@ namespace HSim
 			// vaoBuffer.push(vaoID);
 			// vboBuffer.push(vboID);
 
-			std::cout << vaoID << std::endl;
+			// std::cout << vaoID << std::endl;
 		}
 
 		size_t toVBO() override
@@ -340,7 +340,7 @@ namespace HSim
 			}
 			
 
-			std::cout << vaoID << std::endl;
+			// std::cout << vaoID << std::endl;
 
 			// if (!vaoBuffer.empty())
 			// {
