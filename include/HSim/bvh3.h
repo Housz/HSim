@@ -29,6 +29,11 @@ namespace HSim
 
 	}; // struct BVH3Node
 
+	struct BVH3NodeFlatten
+	{
+
+	};
+
 	// closest
 	struct ClosestPrimitiveInfo
 	{
@@ -222,6 +227,8 @@ namespace HSim
 			return splitIter;
 		}
 
+		
+
 		// traverse
 	public:
 		void traverse(const std::function<void(BVH3Node_Ptr)> &callback)
@@ -279,10 +286,12 @@ namespace HSim
 					auto RNode = node->RChild;
 
 					auto currD = info.distance;
-
+					// _traverse(LNode);
+					// _traverse(RNode);return;
 					auto distanceToLNodeAABB = position.distanceTo(clamp(position, LNode->aabb.lowerCorner, LNode->aabb.upperCorner));
 					auto distanceToRNodeAABB = position.distanceTo(clamp(position, RNode->aabb.lowerCorner, RNode->aabb.upperCorner));
 
+					// if (LNode->aabb.isOverlap(RNode->aabb)  && LNode->depth >= rootNode->depth - (size_t)rootNode->depth*.99)
 					if (LNode->aabb.isOverlap(RNode->aabb))
 					{
 						overlap++;
@@ -309,13 +318,13 @@ namespace HSim
 							{
 								_traverse(LNode);
 								if (distanceToRNodeAABB < info.distance)
-								_traverse(RNode);
+									_traverse(RNode);
 							}
 							else
 							{
 								_traverse(RNode);
 								if (distanceToLNodeAABB < info.distance)
-								_traverse(LNode);
+									_traverse(LNode);
 							}
 						}
 						else
@@ -382,6 +391,12 @@ namespace HSim
 			printf("%zd %zd %zd %zd %zd\n", overlap, both, onlyL, onlyR, other);
 
 			return info;
+		}
+
+		ClosestPrimitiveInfo closestPrimitiveF(const Vec3<T> &position,
+											  const std::function<T(const Vec3<T> &position, const size_t primitiveIndex)> &distanceFunction) const
+		{
+
 		}
 
 		// data
