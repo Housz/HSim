@@ -31,9 +31,9 @@ namespace HSim
 
 			auto iter = list.begin();
 
-			r = static_cast<T>(*iter);
-			g = static_cast<T>(*(++iter));
-			b = static_cast<T>(*(++iter));
+			r = static_cast<float>(*iter);
+			g = static_cast<float>(*(++iter));
+			b = static_cast<float>(*(++iter));
 		}
 
 		std::string serialize()

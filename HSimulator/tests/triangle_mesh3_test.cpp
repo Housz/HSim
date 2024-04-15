@@ -52,6 +52,8 @@ HSim::SceneGraph_ptr createScene()
 
 	auto material1 = std::make_shared<HSim::BasicMaterial>();
 	material1->color = {0.8, 0.4, 0.4};
+	
+
 
 	go1->setSurface(tirMesh);
 	go1->enableDraw();

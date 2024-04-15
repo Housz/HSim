@@ -10,6 +10,12 @@
 
 namespace HSim
 {
+	class Helper
+	{
+	public:
+		virtual draw() = 0;
+		// todo
+	};
 
 	class GroundHelper
 	{
@@ -226,14 +232,12 @@ namespace HSim
 		std::vector<unsigned int> indices;
 	};
 
-	class Helper : public Surface3f
+
+
+	class LineHelper : public Helper
 	{
-		
+		// todo
 	};
 
-	// class LineHelper : public Surface3f
-	// {
-
-	// };
 
 } // namespace HSim

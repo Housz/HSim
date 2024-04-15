@@ -28,4 +28,22 @@ namespace HSim
 		// id  vaoID
 	};
 
+	class SurfaceMesh : public Mesh
+	{
+	public:
+		std::shared_ptr<Surface3<PRECISION>> surface_ptr = nullptr;
+	};
+
+	class GridMesh : public Mesh
+	{
+	public:
+		std::shared_ptr<Grid3<PRECISION>> grid_ptr = nullptr;
+	};
+
+	class HelperMesh : public Mesh
+	{
+	public:
+		// helper ptr
+	};
+
 } // namespace HSim
