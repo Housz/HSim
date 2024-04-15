@@ -8,6 +8,7 @@
 #include <HSim/cell_center_scalar_grid3.h>
 
 #include <config/numerical_config.h>
+#include <scene/mesh.h>
 
 namespace HSim
 {
@@ -65,6 +66,10 @@ namespace HSim
 
 		// grid ptr
 		std::shared_ptr<Grid3<PRECISION>> grid_ptr = nullptr;
+
+
+		// mesh
+		std::shared_ptr<Mesh> mesh_ptr = nullptr;
 		
 
 	// local transform

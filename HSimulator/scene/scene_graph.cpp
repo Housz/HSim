@@ -81,5 +81,14 @@ void HSim::SceneGraph::draw()
 		
 	};
 
+	// std::function<void(HSim::GameObject_ptr)> callback_draw = [&](HSim::GameObject_ptr go)
+	// {
+	// 	if (go->mesh_ptr != nullptr)
+	// 	{
+	// 		go->mesh_ptr->draw();
+	// 	}
+		
+	// };
+
 	this->traverse(callback_draw);
 }

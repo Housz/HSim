@@ -15,8 +15,8 @@ HSim::SceneGraph_ptr createScene()
 	auto root = std::make_shared<HSim::GameObject>();
 	scene->root = root;
 
-	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
-	mesh->readOBJ("spot_triangulated.obj");
+	auto tirMesh = std::make_shared<HSim::TriangleMesh3f>();
+	tirMesh->readOBJ("spot_triangulated.obj");
 	// mesh->readOBJ("cube.obj");
 	// mesh->readOBJ("bunny.obj");
 	// mesh->readOBJ("grid.obj");
@@ -46,10 +46,14 @@ HSim::SceneGraph_ptr createScene()
 	// 	mesh->addTriangle(tri);
 	// }
 
-	mesh->buildBVH();
+	tirMesh->buildBVH();
 
 	auto go1 = std::make_shared<HSim::GameObject>();
-	go1->setSurface(mesh);
+
+	auto material1 = std::make_shared<HSim::BasicMaterial>();
+	material1->color = {0.8, 0.4, 0.4};
+
+	go1->setSurface(tirMesh);
 	go1->enableDraw();
 
 	root->addChild(go1);
@@ -57,8 +61,8 @@ HSim::SceneGraph_ptr createScene()
 	HSim::Vec3f target(0.2, 0.5, 0);
 	// HSim::Vec3f target(0, 1, 0);
 
-	auto p = mesh->closestPositionLocal(target);
-	std::cout << "numTrianlges: " << mesh->numTrianlges() << "\n";
+	auto p = tirMesh->closestPositionLocal(target);
+	std::cout << "numTrianlges: " << tirMesh->numTrianlges() << "\n";
 	std::cout << p;
 
 	auto sphere1 = std::make_shared<HSim::Sphere3<float>>();

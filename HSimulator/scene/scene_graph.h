@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game_object.h"
+#include <scene/game_object.h>
 
 namespace HSim
 {
