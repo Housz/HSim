@@ -12,6 +12,9 @@ namespace HSim
 
 		Color(float r_, float g_, float b_) : r(r_), g(g_), b(b_) {}
 		
+		Color(const Color& color_) : r(color_.r), g(color_.g), b(color_.b) {}
+
+		
 		std::string serialize()
 		{
 			// todo
@@ -28,7 +31,5 @@ namespace HSim
 		float b = 0.0f;
 	};
 
-
-	
 
 } // namespace HSim

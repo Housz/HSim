@@ -2,6 +2,7 @@
 
 #include <HSim/common.h>
 #include <HSim/transform3.h>
+#include <HSim/surface3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -104,7 +105,7 @@ namespace HSim
 		}
 	};
 
-	class SphereHelper
+	class SphereHelper 
 	{
 	public:
 		void buildRenderingData()
@@ -224,5 +225,15 @@ namespace HSim
 		std::vector<float> vertices;
 		std::vector<unsigned int> indices;
 	};
+
+	class Helper : public Surface3f
+	{
+		
+	};
+
+	// class LineHelper : public Surface3f
+	// {
+
+	// };
 
 } // namespace HSim

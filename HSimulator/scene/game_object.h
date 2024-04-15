@@ -61,6 +61,7 @@ namespace HSim
 
 		// surface ptr
 		std::shared_ptr<Surface3<PRECISION>> surface_ptr = nullptr;
+		// std::shared_ptr<Object<PRECISION>> surface_ptr = nullptr;
 
 		// grid ptr
 		std::shared_ptr<Grid3<PRECISION>> grid_ptr = nullptr;

@@ -393,11 +393,15 @@ namespace HSim
 			return info;
 		}
 
-		ClosestPrimitiveInfo closestPrimitiveF(const Vec3<T> &position,
+		ClosestPrimitiveInfo closestPrimitiveFlatten(const Vec3<T> &position,
 											  const std::function<T(const Vec3<T> &position, const size_t primitiveIndex)> &distanceFunction) const
 		{
+			// todo
+			ClosestPrimitiveInfo info;
+			retrun info;
+		}	
 
-		}
+		
 
 		// data
 	public:

@@ -33,7 +33,6 @@ void HSim::Renderer::draw(RenderParams renderParams)
 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
 	shader.setVec3("viewPos", cameraPosition);
 
-
 	shader.setMat4("projection", renderParams.transforms.proj);
 	shader.setMat4("view", renderParams.transforms.view);
 	shader.setMat4("model", renderParams.transforms.model);

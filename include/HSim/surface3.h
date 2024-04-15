@@ -1,6 +1,7 @@
 #pragma once
 
 #include <HSim/common.h>
+#include <HSim/object.h>
 #include <HSim/transform3.h>
 #include <HSim/ray3.h>
 
@@ -65,7 +66,7 @@ namespace HSim
 	}
 
 	template <typename T>
-	class Surface3
+	class Surface3 : Object<T>
 	{
 	public:
 		Surface3(){};
@@ -179,5 +180,8 @@ namespace HSim
 
 	template <typename T>
 	using Surface3_Ptr = std::shared_ptr<Surface3<T>>;
+
+	using Surface3f = Surface3<float>;
+	using Surface3d = Surface3<double>;
 
 } // namespace HSim
