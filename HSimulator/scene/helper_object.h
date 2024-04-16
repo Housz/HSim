@@ -13,7 +13,7 @@ namespace HSim
 	class Helper
 	{
 	public:
-		virtual draw() = 0;
+		virtual void draw() = 0;
 		// todo
 	};
 

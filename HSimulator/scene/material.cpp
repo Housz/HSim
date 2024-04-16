@@ -1,4 +1,4 @@
-#include "material.h"
+#include <scene/material.h>
 
 HSim::Material::Material()
 {

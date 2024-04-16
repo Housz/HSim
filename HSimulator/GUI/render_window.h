@@ -34,7 +34,7 @@ namespace HSim
 
 		void setScene(SceneGraph_ptr scene_);
 
-		// interactions
+		// interactions 
 	public:
 		void initCallbacks();
 
