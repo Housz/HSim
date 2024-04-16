@@ -7,6 +7,14 @@
 
 namespace HSim
 {
+
+	struct MeshState
+	{
+		bool renderingDataNeedUpdate = true;
+		bool aabbNeedUpdate = true;
+		// ...
+	};
+
 	class Mesh
 	{
 	public:
@@ -25,13 +33,18 @@ namespace HSim
 
 		Material_ptr material = nullptr;
 
-		// id  vaoID
+		MeshState meshState;
+
 	};
 
 	class SurfaceMesh : public Mesh
 	{
 	public:
 		std::shared_ptr<Surface3<PRECISION>> surface_ptr = nullptr;
+		Material_ptr material = nullptr;
+
+		MeshState meshState;
+		
 	};
 
 	class GridMesh : public Mesh
