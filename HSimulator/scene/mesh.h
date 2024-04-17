@@ -3,6 +3,7 @@
 #include <HSim/surface3.h>
 #include <HSim/grid3.h>
 #include <scene/material.h>
+#include <scene/renderable.h>
 #include <config/numerical_config.h>
 
 namespace HSim
@@ -33,19 +34,28 @@ namespace HSim
 
 		Material_ptr material = nullptr;
 
-		MeshState meshState;
+		Renderable_Ptr renderable = nullptr;
 
+		MeshState meshState;
 	};
 
 	class SurfaceMesh : public Mesh
 	{
 	public:
+		SurfaceMesh()
+		{
+		}
+		~SurfaceMesh()
+		{
+		}
+
 		std::shared_ptr<Surface3<PRECISION>> surface_ptr = nullptr;
 		Material_ptr material = nullptr;
 
 		MeshState meshState;
-		
 	};
+
+	//
 
 	class GridMesh : public Mesh
 	{
