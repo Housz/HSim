@@ -51,7 +51,7 @@ namespace HSim
 		void loadData(GLvoid* data_, GLuint size_, GLuint offset_);
 
 		GLuint size;
-		GLenum usage;
+		GLenum usage; // GL_STATIC_DRAW, GL_DYNAMIC_DRAW
 	};
 
 	// EBO

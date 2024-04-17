@@ -1,23 +1,20 @@
 #pragma once
 
-#include <scene/graphics_object.h>
-
 namespace HSim
 {
-	struct Renderable
+	struct RenderableState
 	{
-		virtual void buildRenderingData() = 0;
-
-		VertexArrayObject vao;
+		bool renderingDataNeedUpdate = true;
+		bool aabbNeedUpdate = true;
+		// ...
 	};
 
-	using Renderable_Ptr = std::shared_ptr<Renderable>;
-
-	struct SphereHelperRenderable : public Renderable
+	class Renderable
 	{
-		void buildRenderingData() override;
-	};
+	public:
+		RenderableState state;
 
-	// struct 
+		
+	};
 
 } // namespace HSim
