@@ -23,7 +23,7 @@ namespace HSim
 	{
 	public:
 		BasicMaterial();
-		BasicMaterial(const Color& color_, const bool wireframe);
+		BasicMaterial(const Color& color_, const bool wireframe_);
 		~BasicMaterial();
 	
 	public:

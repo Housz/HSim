@@ -4,9 +4,9 @@ HSim::Renderable::Renderable()
 {
 }
 
-HSim::Renderable::Renderable(SpaceObject3_Ptr<PRECISION> object_, GraphicsObject_Ptr graphicsObject_)
+HSim::Renderable::Renderable(SpaceObject3_Ptr<PRECISION> spaceObject_, GraphicsObject_Ptr graphicsObject_)
 {
-	object = object_;
+	spaceObject = spaceObject_;
 	graphicsObject = graphicsObject_;
 }
 

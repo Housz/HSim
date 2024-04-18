@@ -17,7 +17,7 @@ namespace HSim
 	{
 	public:
 		Renderable();
-		Renderable(SpaceObject3_Ptr<PRECISION> object_, GraphicsObject_Ptr graphicsObject_);
+		Renderable(SpaceObject3_Ptr<PRECISION> spaceObject_, GraphicsObject_Ptr graphicsObject_);
 		~Renderable();
 
 		void draw();

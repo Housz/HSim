@@ -71,9 +71,9 @@ void HSim::Sphere3GObject::draw(RenderParams renderParams)
 		buildRenderingData();
 	}
 
-	auto mat = static_pointer_cast<HSim::BasicMaterial>(material);
-	auto color = material->color;
-	auto shader = material->shader;
+	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+	auto color = mat->color;
+	auto shader = mat->shader;
 
 	// use shader with renderParams
 	shader->use();
@@ -82,16 +82,16 @@ void HSim::Sphere3GObject::draw(RenderParams renderParams)
 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
 	shader->setVec3("viewPos", cameraPosition);
 
-	shader_>setMat4("projection", renderParams.transforms.proj);
-	shader_>setMat4("view", renderParams.transforms.view);
-	shader_>setMat4("model", renderParams.transforms.model);
+	shader->setMat4("projection", renderParams.transforms.proj);
+	shader->setMat4("view", renderParams.transforms.view);
+	shader->setMat4("model", renderParams.transforms.model);
 	
 	glViewport(0, 0, renderParams.width, renderParams.height);
 	
 	// bind vao and draw
 	vao.bind();
 
-	if (material.wireframe)
+	if (mat->wireframe)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
