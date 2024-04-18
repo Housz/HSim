@@ -29,7 +29,7 @@ void HSim::VertexArrayObject::unbind()
 	glBindVertexArray(0);
 }
 
-void HSim::VertexArrayObject::bindEBO(VertexBufferObject &EBO)
+void HSim::VertexArrayObject::bindEBO(ElementBufferObject &EBO)
 {
 	bind();
 	if (EBO.isValid())

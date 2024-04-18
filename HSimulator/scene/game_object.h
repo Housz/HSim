@@ -8,7 +8,7 @@
 #include <HSim/cell_center_scalar_grid3.h>
 
 #include <config/numerical_config.h>
-#include <scene/mesh.h>
+#include <scene/renderable.h>
 
 namespace HSim
 {
@@ -50,6 +50,8 @@ namespace HSim
 		void enableDraw() { drawable = true; }
 		void disableDraw() { drawable = false; }
 
+		void draw();
+
 	
 	// iteration
 	public:
@@ -69,8 +71,8 @@ namespace HSim
 
 
 		// mesh
-		std::shared_ptr<Mesh> mesh_ptr = nullptr;
-		
+		// std::shared_ptr<Mesh> mesh_ptr = nullptr;
+		Renderable_Ptr renderable;
 
 	// local transform
 	public:

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <HSim/common.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -30,7 +31,7 @@ namespace HSim
 		void bind() override;
 		void unbind() override;
 
-		void bindEBO(VertexBufferObject &EBO);
+		void bindEBO(ElementBufferObject &EBO);
 		void bindVBO(
 			VertexBufferObject &VBO,
 			GLuint index, GLuint size, GLsizei stride, const void *pointer);

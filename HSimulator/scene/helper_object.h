@@ -3,6 +3,7 @@
 #include <HSim/common.h>
 #include <HSim/transform3.h>
 #include <HSim/surface3.h>
+#include <HSim/space_object3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,10 +11,13 @@
 
 namespace HSim
 {
-	class Helper
+	class Helper : public SpaceObject3<float>
 	{
 	public:
-		virtual void draw() = 0;
+		Helper();
+		~Helper();
+
+		// virtual void draw() = 0;
 		// todo
 	};
 

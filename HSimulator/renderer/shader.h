@@ -188,4 +188,7 @@ namespace HSim
 		unsigned int ID;
 	};
 
+	using Shader_Ptr = std::shared_ptr<Shader>;
+
+
 } // namespace HSim

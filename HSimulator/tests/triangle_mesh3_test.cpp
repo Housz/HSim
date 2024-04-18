@@ -2,6 +2,8 @@
 
 #include <app/app.h>
 #include <scene/scene_graph.h>
+#include <scene/game_object.h>
+
 #include <HSim/box3.h>
 #include <HSim/sphere3.h>
 #include <HSim/cell_center_scalar_grid3.h>

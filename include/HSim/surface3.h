@@ -1,7 +1,7 @@
 #pragma once
 
 #include <HSim/common.h>
-#include <HSim/object.h>
+#include <HSim/space_object3.h>
 #include <HSim/transform3.h>
 #include <HSim/ray3.h>
 
@@ -66,7 +66,7 @@ namespace HSim
 	}
 
 	template <typename T>
-	class Surface3 : Object<T>
+	class Surface3 : public SpaceObject3<T>
 	{
 	public:
 		Surface3(){};

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <HSim/common.h>
+#include <HSim/space_object3.h>
 #include <HSim/vec3.h>
 #include <HSim/aabb3.h>
 #include <HSim/parallel.h>
@@ -13,7 +14,7 @@ namespace HSim
      * @tparam T: float or double
      */
     template <typename T>
-    class Grid3
+    class Grid3 : public SpaceObject3<T>
     {
     public:
         Grid3() {}
