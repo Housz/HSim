@@ -17,13 +17,14 @@ HSim::SceneGraph_ptr createScene()
 	auto material = std::make_shared<HSim::BasicMaterial>();
 	material->color = {0.8, 0.4, 0.4};
 	material->wireframe = true;
-	
+
 	auto sphereGraphicsObject = std::make_shared<HSim::Sphere3GObject>(sphere, material);
 
 	auto sphereRenderable = std::make_shared<HSim::Renderable>(sphere, sphereGraphicsObject);
 
 	auto go1 = std::make_shared<HSim::GameObject>();
 	go1->renderable = sphereRenderable;
+	// go1->addRenderable( SphereRenderableCreator() )
 
 
 	root->addChild(go1);

@@ -44,6 +44,8 @@ namespace HSim
 		T timeInterval = 1.0 / 60;
 	};
 
+
+	// class Solver?
 	template <typename T>
 	class Animation
 	{
