@@ -27,14 +27,14 @@ namespace HSim
 		void setScene(SceneGraph_ptr scene_);
 
 	public: 
-		void draw(RenderParams renderParams);
+		void draw(const RenderParams& renderParams);
 
 	// drawable objects
 	public:
 		SceneGraph_ptr scene;
 
-		HSim::GroundHelper ground;
-		HSim::SphereHelper sphere;
+		// HSim::GroundHelper ground;
+		// HSim::SphereHelper sphere;
 
 	// shader
 	public:

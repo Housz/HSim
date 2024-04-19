@@ -20,7 +20,7 @@ namespace HSim
 
 		virtual void buildRenderingData() = 0;
 
-		virtual void draw(RenderParams renderParams) = 0;
+		virtual void draw(const RenderParams& renderParams) = 0;
 
 	public:
 		virtual bool rendingDataValid() = 0;
@@ -47,7 +47,7 @@ namespace HSim
 
 		void buildRenderingData() override;
 
-		void draw(RenderParams renderParams) override;
+		void draw(const RenderParams& renderParams) override;
 
 		bool rendingDataValid() override;
 
@@ -64,6 +64,12 @@ namespace HSim
 		std::vector<float> buildVertices();
 
 		std::vector<unsigned int> buildIndices();
+	};
+
+	class GroundHelperGObject : public GObject
+	{
+	public:
+		
 	};
 
 } // namespace HSim

@@ -15,7 +15,7 @@ namespace HSim
 	public:
 		Shader_Ptr shader = nullptr;
 
-		static Shader_Ptr basicShader;
+		// static Shader_Ptr basicShader;
 		// todo: more types of shader
 	};
 

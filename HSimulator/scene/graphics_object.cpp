@@ -9,6 +9,8 @@ HSim::GraphicsObject::GraphicsObject()
 
 HSim::GraphicsObject::GraphicsObject(Material_Ptr material_)
 {
+	vao.create();
+
 	material = material_;
 }
 
@@ -41,6 +43,8 @@ void HSim::Sphere3GObject::buildRenderingData()
 {
 	assert(sphere != nullptr);
 
+	std::cout << "buildRenderingData\n";
+
 	vao.bind();
 
 	auto vertices = buildVertices();
@@ -64,10 +68,11 @@ void HSim::Sphere3GObject::buildRenderingData()
 	std::cout << "Sphere3GObject buildRenderingData" << std::endl;
 }
 
-void HSim::Sphere3GObject::draw(RenderParams renderParams)
+void HSim::Sphere3GObject::draw(const RenderParams& renderParams)
 {
 	if (rendingDataValid())
 	{
+		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
 		buildRenderingData();
 	}
 

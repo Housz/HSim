@@ -20,6 +20,10 @@ namespace HSim
 		void serialize();
 		void draw();
 
+		void draw(const RenderParams& renderParams);
+
+		void addGround(size_t slices = 100);
+
 	public:
 		GameObject_ptr root = nullptr;
 

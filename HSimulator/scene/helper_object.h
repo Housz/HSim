@@ -16,12 +16,9 @@ namespace HSim
 	public:
 		Helper();
 		~Helper();
-
-		// virtual void draw() = 0;
-		// todo
 	};
 
-	class GroundHelper
+	class GroundHelper_
 	{
 	public:
 		void buildRenderingData()
@@ -115,7 +112,7 @@ namespace HSim
 		}
 	};
 
-	class SphereHelper 
+	class SphereHelper_ 
 	{
 	public:
 		void buildRenderingData()
@@ -237,11 +234,41 @@ namespace HSim
 	};
 
 
+	class GroundHelper : public Helper
+	{
+	public:
+		GroundHelper();
+		GroundHelper(size_t slices_);
+		~GroundHelper();
+
+	public:
+		size_t slices = 100;
+	};
 
 	class LineHelper : public Helper
 	{
-		// todo
+	public:
+		LineHelper();
+		LineHelper(const Vec3f& start_, const Vec3f& end_);
+		~LineHelper();
+
+	public:
+		Vec3f start;
+		Vec3f end;
 	};
+
+	class SphereHelper : public Helper
+	{
+	public:
+		SphereHelper();
+		SphereHelper(const Vec3f& center_, const float radius_);
+		~SphereHelper();
+
+	public:
+		Vec3f center;
+		float radius = 0.5;
+	};
+
 
 
 } // namespace HSim

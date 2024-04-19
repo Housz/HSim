@@ -30,10 +30,9 @@ void HSim::GameObject::addChild(const std::shared_ptr<GameObject> child)
 
 void HSim::GameObject::draw()
 {
-
-	
 	// renderable->draw();
 }
+
 
 void HSim::GameObject::traverseChildren(std::function<void(GameObject_ptr)> &callback)
 {
@@ -41,5 +40,4 @@ void HSim::GameObject::traverseChildren(std::function<void(GameObject_ptr)> &cal
 	{
 		callback(child);
 	}
-	
 }

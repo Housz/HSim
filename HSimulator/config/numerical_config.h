@@ -1,4 +1,4 @@
-// 
+#pragma once
 
 using PRECISION = float; 
 

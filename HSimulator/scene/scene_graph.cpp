@@ -1,5 +1,4 @@
 #include <scene/scene_graph.h>
-#include "scene_graph.h"
 
 HSim::SceneGraph::SceneGraph()
 {
@@ -33,7 +32,7 @@ void HSim::SceneGraph::traverse(std::function<void(GameObject_ptr)> &callback, G
 
 void HSim::SceneGraph::serialize()
 {
-    // float r = 0;
+	// float r = 0;
 
 	std::function<void(HSim::GameObject_ptr)> callback_serialize = [&](HSim::GameObject_ptr go)
 	{
@@ -52,7 +51,6 @@ void HSim::SceneGraph::serialize()
 	};
 
 	this->traverse(callback_serialize);
-
 }
 
 void HSim::SceneGraph::draw()
@@ -75,20 +73,32 @@ void HSim::SceneGraph::draw()
 			// std::cout << "callback_draw" << std::endl;
 			auto grid = go->grid_ptr;
 			grid->drawBoundary();
-			
+
 			grid->drawData();
 		}
-		
+
+		if (go->renderable != nullptr && go->renderable->visible)
+		{
+		}
 	};
 
-	// std::function<void(HSim::GameObject_ptr)> callback_draw = [&](HSim::GameObject_ptr go)
-	// {
-	// 	if (go->mesh_ptr != nullptr)
-	// 	{
-	// 		go->mesh_ptr->draw();
-	// 	}
-		
-	// };
+	this->traverse(callback_draw);
+}
+
+void HSim::SceneGraph::draw(const RenderParams &renderParams)
+{
+	std::function<void(HSim::GameObject_ptr)> callback_draw = [&](HSim::GameObject_ptr go)
+	{
+		if (go->renderable != nullptr && go->renderable->visible)
+		{
+			go->renderable->draw(renderParams);
+		}
+	};
 
 	this->traverse(callback_draw);
+}
+
+void HSim::SceneGraph::addGround(size_t slices)
+{
+	
 }

@@ -9,6 +9,7 @@
 
 #include <config/numerical_config.h>
 #include <scene/renderable.h>
+#include <renderer/render_params.h>
 
 namespace HSim
 {
@@ -60,6 +61,7 @@ namespace HSim
 
 	// geometrical elements
 	public:
+		// x
 		bool drawable = false;
 
 		// surface ptr
