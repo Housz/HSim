@@ -4,6 +4,7 @@
 #include <config/numerical_config.h>
 #include <scene/material.h>
 #include <renderer/render_params.h>
+#include <scene/helper_object.h>
 
 #include <HSim/common.h>
 #include <HSim/surface3.h>
@@ -23,7 +24,7 @@ namespace HSim
 		virtual void draw(const RenderParams& renderParams) = 0;
 
 	public:
-		virtual bool rendingDataValid() = 0;
+		virtual bool isRendingDataValid() = 0;
 
 	public:
 		VertexArrayObject vao;
@@ -40,7 +41,7 @@ namespace HSim
 	{
 	public:
 		Sphere3GObject();
-		Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, BasicMaterial_Ptr material_);
+		Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_);
 		~Sphere3GObject();
 
 	public:
@@ -49,13 +50,13 @@ namespace HSim
 
 		void draw(const RenderParams& renderParams) override;
 
-		bool rendingDataValid() override;
+		bool isRendingDataValid() override;
 
 	public:
 		VertexBufferObject vbo;
 		ElementBufferObject ebo;
 
-		Sphere3_Ptr<PRECISION> sphere;
+		Sphere3_Ptr<PRECISION> sphere = nullptr;
 
 	private:
 		const size_t numSectors = 30;
@@ -69,7 +70,21 @@ namespace HSim
 	class GroundHelperGObject : public GObject
 	{
 	public:
-		
+		GroundHelperGObject();
+		GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
+		~GroundHelperGObject();
+
+		void buildRenderingData() override;
+
+		void draw(const RenderParams& renderParams) override;
+
+		bool isRendingDataValid() override;
+	
+	public:
+		VertexBufferObject vbo;
+		ElementBufferObject ebo;
+
+		GroundHelper_Ptr groundHelper = nullptr;
 	};
 
 } // namespace HSim

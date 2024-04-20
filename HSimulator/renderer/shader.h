@@ -10,6 +10,7 @@
 
 #include <glm/glm.hpp>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace HSim
 {
@@ -54,6 +55,14 @@ namespace HSim
 
 			const char *vShaderCode = vertexCode.c_str();
 			const char *fShaderCode = fragmentCode.c_str();
+
+			// if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+			// {
+			// 	std::cout << "Failed to initialize GLAD" << std::endl;
+
+			// 	exit(-1);
+			// 	// return -1;
+			// }
 
 			// 2. compile shaders
 			unsigned int vertex, fragment;
@@ -110,7 +119,6 @@ namespace HSim
 		{
 			glUniform4f(glGetUniformLocation(ID, name.c_str()), value0, value1, value2, value3);
 		}
-		
 
 		// ------------------------------------------------------------------------
 		void setVec2(const std::string &name, const glm::vec2 &value) const
@@ -190,5 +198,6 @@ namespace HSim
 
 	using Shader_Ptr = std::shared_ptr<Shader>;
 
+	// inline auto _basicShader = std::make_shared<Shader>("./resources/shaders/basic.vs", "./resources/shaders/basic.fs");
 
 } // namespace HSim

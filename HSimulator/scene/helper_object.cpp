@@ -32,14 +32,14 @@ HSim::LineHelper::~LineHelper()
 {
 }
 
-HSim::SphereHelper::SphereHelper()
-{
-}
+// HSim::SphereHelper::SphereHelper()
+// {
+// }
 
-HSim::SphereHelper::SphereHelper(const Vec3f &center_, const float radius_)
-{
-}
+// HSim::SphereHelper::SphereHelper(const Vec3f &center_, const float radius_)
+// {
+// }
 
-HSim::SphereHelper::~SphereHelper()
-{
-}
+// HSim::SphereHelper::~SphereHelper()
+// {
+// }

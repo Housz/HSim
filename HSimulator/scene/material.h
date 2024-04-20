@@ -30,6 +30,7 @@ namespace HSim
 		Color color = {0.5, 0.5, 0.5}; // default color
 		bool wireframe = false;
 	};
+
 	
 	using Material_Ptr = std::shared_ptr<Material>;
 	using BasicMaterial_Ptr = std::shared_ptr<BasicMaterial>;

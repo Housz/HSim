@@ -112,7 +112,7 @@ namespace HSim
 		}
 	};
 
-	class SphereHelper_ 
+	class SphereHelper 
 	{
 	public:
 		void buildRenderingData()
@@ -245,6 +245,8 @@ namespace HSim
 		size_t slices = 100;
 	};
 
+	using GroundHelper_Ptr = std::shared_ptr<GroundHelper>;
+
 	class LineHelper : public Helper
 	{
 	public:
@@ -257,17 +259,17 @@ namespace HSim
 		Vec3f end;
 	};
 
-	class SphereHelper : public Helper
-	{
-	public:
-		SphereHelper();
-		SphereHelper(const Vec3f& center_, const float radius_);
-		~SphereHelper();
+	// class SphereHelper : public Helper
+	// {
+	// public:
+	// 	SphereHelper();
+	// 	SphereHelper(const Vec3f& center_, const float radius_);
+	// 	~SphereHelper();
 
-	public:
-		Vec3f center;
-		float radius = 0.5;
-	};
+	// public:
+	// 	Vec3f center;
+	// 	float radius = 0.5;
+	// };
 
 
 

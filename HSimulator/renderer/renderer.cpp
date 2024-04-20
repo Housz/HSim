@@ -11,7 +11,7 @@ HSim::Renderer::~Renderer()
 void HSim::Renderer::init()
 {
 	// init shader
-	shader = HSim::Shader("./resources/shaders/basic.vs", "./resources/shaders/basic.fs");
+	// shader = HSim::Shader("./resources/shaders/basic.vs", "./resources/shaders/basic.fs");
 }
 
 void HSim::Renderer::setScene(SceneGraph_ptr scene_)
@@ -47,7 +47,7 @@ void HSim::Renderer::setScene(SceneGraph_ptr scene_)
 void HSim::Renderer::draw(const RenderParams& renderParams)
 {
 	// sphere.draw();
-	// ground.draw();
+	ground.draw();
 
 	scene->draw(renderParams);
 }

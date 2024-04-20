@@ -33,7 +33,7 @@ namespace HSim
 	public:
 		SceneGraph_ptr scene;
 
-		// HSim::GroundHelper ground;
+		HSim::GroundHelper ground;
 		// HSim::SphereHelper sphere;
 
 	// shader
