@@ -1,4 +1,4 @@
-#include "helper_object.h"
+#include <scene/helper_object.h>
 
 HSim::Helper::Helper()
 {

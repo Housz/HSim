@@ -85,6 +85,9 @@ namespace HSim
 		ElementBufferObject ebo;
 
 		GroundHelper_Ptr groundHelper = nullptr;
+	
+	public:
+		size_t numElements;
 	};
 
 } // namespace HSim

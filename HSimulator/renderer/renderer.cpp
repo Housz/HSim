@@ -47,7 +47,7 @@ void HSim::Renderer::setScene(SceneGraph_ptr scene_)
 void HSim::Renderer::draw(const RenderParams& renderParams)
 {
 	// sphere.draw();
-	ground.draw();
+	// ground.draw();
 
 	scene->draw(renderParams);
 }

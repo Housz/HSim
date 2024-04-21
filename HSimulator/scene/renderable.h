@@ -33,7 +33,7 @@ namespace HSim
 		// states
 	public:
 		// RenderableState state;
-		
+
 		bool visible = true;
 
 		bool renderingDataNeedUpdate = true;

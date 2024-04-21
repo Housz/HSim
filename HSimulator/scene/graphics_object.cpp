@@ -244,14 +244,8 @@ void HSim::GroundHelperGObject::draw(const RenderParams &renderParams)
 
 	// bind vao and draw
 	vao.bind();
-
-	if (mat->wireframe)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	glDrawElements(GL_TRIANGLES, numSectors * numStacks * 2 * 3, GL_UNSIGNED_INT, 0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
+	glLineWidth(1.0f);
+	glDrawElements(GL_LINES, numElements, GL_UNSIGNED_INT, 0);
 	vao.unbind();
 }
 
@@ -298,4 +292,6 @@ void HSim::GroundHelperGObject::buildRenderingData()
 	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(glm::uvec4), 0);
 
 	vao.bindEBO(ebo);
+
+	numElements = indices.size() * 4;
 }

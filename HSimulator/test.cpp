@@ -726,7 +726,7 @@ void renderScene(GLFWwindow *window)
 
     sg.root = root;
 
-    HSim::GroundHelper ground;
+    // HSim::GroundHelper ground;
     
 
     while (!glfwWindowShouldClose(window))
@@ -766,7 +766,7 @@ void renderScene(GLFWwindow *window)
 
         sg.traverse(callback_draw);
 
-        ground.draw();
+        // ground.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
