@@ -25,6 +25,7 @@ HSim::LineHelper::LineHelper()
 }
 
 HSim::LineHelper::LineHelper(const Vec3f &start_, const Vec3f &end_)
+:start(start_), end(end_)
 {
 }
 

@@ -17,16 +17,15 @@ HSim::SceneGraph_ptr createScene()
 	auto groudHelper = std::make_shared<HSim::GroundHelper>();
 
 	auto material0 = std::make_shared<HSim::BasicMaterial>();
-	material0->color = {0.2, 0.2, 0.8};
+	material0->color = {0.2, 0.2, 0.2};
 	auto groundHelperGObject = std::make_shared<HSim::GroundHelperGObject>(groudHelper, material0);
-	
+
 	auto groundHelperRenderable = std::make_shared<HSim::Renderable>(groudHelper, groundHelperGObject);
 
 	auto go0 = std::make_shared<HSim::GameObject>();
 	go0->renderable = groundHelperRenderable;
 
 	root->addChild(go0);
-
 
 	/**************************************************/
 
@@ -45,6 +44,23 @@ HSim::SceneGraph_ptr createScene()
 	// go1->addRenderable( SphereRenderableCreator() )
 
 	root->addChild(go1);
+
+	/**************************************************/
+
+	HSim::Vec3f start = {0, 0, 0};
+	HSim::Vec3f end = {5, 5, 5};
+	auto lineHelper = std::make_shared<HSim::LineHelper>(start, end);
+
+	auto material2 = std::make_shared<HSim::BasicMaterial>();
+	material2->color = {0.2, 0.8, 0.2};
+	auto lineHelperGObject = std::make_shared<HSim::LineHelperGObject>(lineHelper, material2);
+
+	auto lineHelperRenderable = std::make_shared<HSim::Renderable>(lineHelper, lineHelperGObject);
+
+	auto go2 = std::make_shared<HSim::GameObject>();
+	go2->renderable = lineHelperRenderable;
+
+	root->addChild(go2);
 
 	/**************************************************/
 

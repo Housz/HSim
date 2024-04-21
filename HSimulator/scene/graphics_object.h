@@ -21,7 +21,7 @@ namespace HSim
 
 		virtual void buildRenderingData() = 0;
 
-		virtual void draw(const RenderParams& renderParams) = 0;
+		virtual void draw(const RenderParams &renderParams) = 0;
 
 	public:
 		virtual bool isRendingDataValid() = 0;
@@ -45,10 +45,9 @@ namespace HSim
 		~Sphere3GObject();
 
 	public:
-
 		void buildRenderingData() override;
 
-		void draw(const RenderParams& renderParams) override;
+		void draw(const RenderParams &renderParams) override;
 
 		bool isRendingDataValid() override;
 
@@ -76,18 +75,36 @@ namespace HSim
 
 		void buildRenderingData() override;
 
-		void draw(const RenderParams& renderParams) override;
+		void draw(const RenderParams &renderParams) override;
 
 		bool isRendingDataValid() override;
-	
+
 	public:
 		VertexBufferObject vbo;
 		ElementBufferObject ebo;
 
 		GroundHelper_Ptr groundHelper = nullptr;
-	
+
 	public:
 		size_t numElements;
 	};
 
+	class LineHelperGObject : public GObject
+	{
+	public:
+		LineHelperGObject();
+		LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_);
+		~LineHelperGObject();
+
+		void buildRenderingData() override;
+
+		void draw(const RenderParams &renderParams) override;
+
+		bool isRendingDataValid() override;
+
+	public:
+		VertexBufferObject vbo;
+
+		LineHelper_Ptr lineHelper = nullptr;
+	};
 } // namespace HSim

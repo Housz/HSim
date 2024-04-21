@@ -259,6 +259,8 @@ namespace HSim
 		Vec3f end;
 	};
 
+	using LineHelper_Ptr = std::shared_ptr<LineHelper>;
+
 	// class SphereHelper : public Helper
 	// {
 	// public:
