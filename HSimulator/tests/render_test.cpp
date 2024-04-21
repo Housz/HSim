@@ -46,9 +46,8 @@ HSim::SceneGraph_ptr createScene()
 	root->addChild(go1);
 
 	/**************************************************/
-
-	HSim::Vec3f start = {0, 0, 0};
-	HSim::Vec3f end = {5, 5, 5};
+	HSim::Vec3f start = {-5, -5, -5};
+	HSim::Vec3f end = {0, 0, 0};
 	auto lineHelper = std::make_shared<HSim::LineHelper>(start, end);
 
 	auto material2 = std::make_shared<HSim::BasicMaterial>();
@@ -61,6 +60,25 @@ HSim::SceneGraph_ptr createScene()
 	go2->renderable = lineHelperRenderable;
 
 	root->addChild(go2);
+
+	/**************************************************/
+
+	HSim::Vec3f lower = {0, 0, 0};
+	HSim::Vec3f upper = {5, 5, 5};
+	auto box = std::make_shared<HSim::Box3<float>>(lower, upper);
+
+	auto boxMat = std::make_shared<HSim::BasicMaterial>();
+	boxMat->color = {0.8, 0.1, 0.8};
+	boxMat->wireframe = false;
+
+	auto boxGraphicsObject = std::make_shared<HSim::Box3GObject>(box, boxMat);
+
+	auto boxRenderable = std::make_shared<HSim::Renderable>(box, boxGraphicsObject);
+
+	auto go3 = std::make_shared<HSim::GameObject>();
+	go3->renderable = boxRenderable;
+
+	root->addChild(go3);
 
 	/**************************************************/
 

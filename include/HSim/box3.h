@@ -359,7 +359,7 @@ namespace HSim
 		}
 	};
 
-	// template <typename T>
-	// using Box3_Ptr = std::make_shared<Box3<T>>;
+	template <typename T>
+	using Box3_Ptr = std::shared_ptr<Box3<T>>;
 
 } // namespace HSim

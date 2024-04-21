@@ -188,183 +188,183 @@ HSim::GraphicsObject::~GraphicsObject()
 
 /*********************************************************************/
 
-HSim::GroundHelperGObject::GroundHelperGObject()
-{
-}
+// HSim::GroundHelperGObject::GroundHelperGObject()
+// {
+// }
 
-HSim::GroundHelperGObject::~GroundHelperGObject()
-{
-}
+// HSim::GroundHelperGObject::~GroundHelperGObject()
+// {
+// }
 
-HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_)
-	: GraphicsObject(material_)
-{
-	groundHelper = groundHelper_;
+// HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_)
+// 	: GraphicsObject(material_)
+// {
+// 	groundHelper = groundHelper_;
 
-	vbo.create();
-	ebo.create();
+// 	vbo.create();
+// 	ebo.create();
 
-	buildRenderingData();
-}
+// 	buildRenderingData();
+// }
 
-bool HSim::GroundHelperGObject::isRendingDataValid()
-{
-	return (vao.isValid() && vbo.isValid() && ebo.isValid());
-}
+// bool HSim::GroundHelperGObject::isRendingDataValid()
+// {
+// 	return (vao.isValid() && vbo.isValid() && ebo.isValid());
+// }
 
-void HSim::GroundHelperGObject::draw(const RenderParams &renderParams)
-{
-	if (!isRendingDataValid())
-	{
-		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
-		buildRenderingData();
-	}
+// void HSim::GroundHelperGObject::draw(const RenderParams &renderParams)
+// {
+// 	if (!isRendingDataValid())
+// 	{
+// 		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
+// 		buildRenderingData();
+// 	}
 
-	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
-	auto color = mat->color;
-	auto shader = mat->shader;
+// 	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+// 	auto color = mat->color;
+// 	auto shader = mat->shader;
 
-	// use shader with renderParams
-	shader->use();
-	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
-	shader->setVec3("lightPos", 20, 15, 15);
-	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
-	shader->setVec3("viewPos", cameraPosition);
+// 	// use shader with renderParams
+// 	shader->use();
+// 	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+// 	shader->setVec3("lightPos", 20, 15, 15);
+// 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+// 	shader->setVec3("viewPos", cameraPosition);
 
-	shader->setMat4("projection", renderParams.transforms.proj);
-	shader->setMat4("view", renderParams.transforms.view);
-	shader->setMat4("model", renderParams.transforms.model);
+// 	shader->setMat4("projection", renderParams.transforms.proj);
+// 	shader->setMat4("view", renderParams.transforms.view);
+// 	shader->setMat4("model", renderParams.transforms.model);
 
-	glViewport(0, 0, renderParams.width, renderParams.height);
+// 	glViewport(0, 0, renderParams.width, renderParams.height);
 
-	// bind vao and draw
-	vao.bind();
-	glLineWidth(1.0f);
-	glDrawElements(GL_LINES, numElements, GL_UNSIGNED_INT, 0);
-	vao.unbind();
-}
+// 	// bind vao and draw
+// 	vao.bind();
+// 	glLineWidth(1.0f);
+// 	glDrawElements(GL_LINES, numElements, GL_UNSIGNED_INT, 0);
+// 	vao.unbind();
+// }
 
-void HSim::GroundHelperGObject::buildRenderingData()
-{
-	std::vector<glm::vec3> vertices;
-	std::vector<glm::uvec4> indices;
+// void HSim::GroundHelperGObject::buildRenderingData()
+// {
+// 	std::vector<glm::vec3> vertices;
+// 	std::vector<glm::uvec4> indices;
 
-	auto slices = groundHelper->slices;
+// 	auto slices = groundHelper->slices;
 
-	for (int j = 0; j <= slices; ++j)
-	{
-		for (int i = 0; i <= slices; ++i)
-		{
-			float x = (float)i;
-			float y = 0;
-			float z = (float)j;
-			vertices.push_back(glm::vec3(x - slices / 2, y, z - slices / 2));
-		}
-	}
+// 	for (int j = 0; j <= slices; ++j)
+// 	{
+// 		for (int i = 0; i <= slices; ++i)
+// 		{
+// 			float x = (float)i;
+// 			float y = 0;
+// 			float z = (float)j;
+// 			vertices.push_back(glm::vec3(x - slices / 2, y, z - slices / 2));
+// 		}
+// 	}
 
-	for (int j = 0; j < slices; ++j)
-	{
-		for (int i = 0; i < slices; ++i)
-		{
+// 	for (int j = 0; j < slices; ++j)
+// 	{
+// 		for (int i = 0; i < slices; ++i)
+// 		{
 
-			int row1 = j * (slices + 1);
-			int row2 = (j + 1) * (slices + 1);
+// 			int row1 = j * (slices + 1);
+// 			int row2 = (j + 1) * (slices + 1);
 
-			indices.push_back(glm::uvec4(row1 + i, row1 + i + 1, row1 + i + 1, row2 + i + 1));
-			indices.push_back(glm::uvec4(row2 + i + 1, row2 + i, row2 + i, row1 + i));
-		}
-	}
+// 			indices.push_back(glm::uvec4(row1 + i, row1 + i + 1, row1 + i + 1, row2 + i + 1));
+// 			indices.push_back(glm::uvec4(row2 + i + 1, row2 + i, row2 + i, row1 + i));
+// 		}
+// 	}
 
-	// vbo
-	vbo.bind();
-	vbo.allocate((unsigned int)vertices.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
-	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(glm::vec3), 0);
+// 	// vbo
+// 	vbo.bind();
+// 	vbo.allocate((unsigned int)vertices.size() * sizeof(glm::vec3), GL_STATIC_DRAW);
+// 	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(glm::vec3), 0);
 
-	vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
+// 	vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
 
-	// ebo
-	ebo.allocate((unsigned int)indices.size() * sizeof(glm::uvec4), GL_STATIC_DRAW);
-	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(glm::uvec4), 0);
+// 	// ebo
+// 	ebo.allocate((unsigned int)indices.size() * sizeof(glm::uvec4), GL_STATIC_DRAW);
+// 	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(glm::uvec4), 0);
 
-	vao.bindEBO(ebo);
+// 	vao.bindEBO(ebo);
 
-	numElements = indices.size() * 4;
-}
+// 	numElements = indices.size() * 4;
+// }
 
 /*********************************************************************/
 
-HSim::LineHelperGObject::LineHelperGObject()
-{
-}
+// HSim::LineHelperGObject::LineHelperGObject()
+// {
+// }
 
-HSim::LineHelperGObject::~LineHelperGObject()
-{
-}
+// HSim::LineHelperGObject::~LineHelperGObject()
+// {
+// }
 
-HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_)
-	: GraphicsObject(material_)
-{
-	lineHelper = lineHelper_;
+// HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_)
+// 	: GraphicsObject(material_)
+// {
+// 	lineHelper = lineHelper_;
 
-	vbo.create();
+// 	vbo.create();
 
-	buildRenderingData();
-}
+// 	buildRenderingData();
+// }
 
-bool HSim::LineHelperGObject::isRendingDataValid()
-{
-	return (vao.isValid() && vbo.isValid());
-}
+// bool HSim::LineHelperGObject::isRendingDataValid()
+// {
+// 	return (vao.isValid() && vbo.isValid());
+// }
 
-void HSim::LineHelperGObject::buildRenderingData()
-{
-	float vertices[6] =
-	{
-		lineHelper->start[0],
-		lineHelper->start[1],
-		lineHelper->start[2],
-		lineHelper->end[0],
-		lineHelper->end[1],
-		lineHelper->end[2],
-	};
+// void HSim::LineHelperGObject::buildRenderingData()
+// {
+// 	float vertices[6] =
+// 	{
+// 		lineHelper->start[0],
+// 		lineHelper->start[1],
+// 		lineHelper->start[2],
+// 		lineHelper->end[0],
+// 		lineHelper->end[1],
+// 		lineHelper->end[2],
+// 	};
 
-	vbo.bind();
-	vbo.allocate(6*sizeof(float), GL_STATIC_DRAW);
-	vbo.loadData(vertices, 6*sizeof(float), 0);
+// 	vbo.bind();
+// 	vbo.allocate(6*sizeof(float), GL_STATIC_DRAW);
+// 	vbo.loadData(vertices, 6*sizeof(float), 0);
 
-	vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
-}
+// 	vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
+// }
 
 
 
-void HSim::LineHelperGObject::draw(const RenderParams &renderParams)
-{
-	if (!isRendingDataValid())
-	{
-		std::cout << vao.id << " " << vbo.id << "\n";
-		buildRenderingData();
-	}
+// void HSim::LineHelperGObject::draw(const RenderParams &renderParams)
+// {
+// 	if (!isRendingDataValid())
+// 	{
+// 		std::cout << vao.id << " " << vbo.id << "\n";
+// 		buildRenderingData();
+// 	}
 
-	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
-	auto color = mat->color;
-	auto shader = mat->shader;
+// 	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+// 	auto color = mat->color;
+// 	auto shader = mat->shader;
 
-	// use shader with renderParams
-	shader->use();
-	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
-	shader->setVec3("lightPos", 20, 15, 15);
-	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
-	shader->setVec3("viewPos", cameraPosition);
+// 	// use shader with renderParams
+// 	shader->use();
+// 	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+// 	shader->setVec3("lightPos", 20, 15, 15);
+// 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+// 	shader->setVec3("viewPos", cameraPosition);
 
-	shader->setMat4("projection", renderParams.transforms.proj);
-	shader->setMat4("view", renderParams.transforms.view);
-	shader->setMat4("model", renderParams.transforms.model);
+// 	shader->setMat4("projection", renderParams.transforms.proj);
+// 	shader->setMat4("view", renderParams.transforms.view);
+// 	shader->setMat4("model", renderParams.transforms.model);
 
-	glViewport(0, 0, renderParams.width, renderParams.height);
+// 	glViewport(0, 0, renderParams.width, renderParams.height);
 
-	// bind vao and draw
-	vao.bind();
-	glLineWidth(3.0f);
-	glDrawArrays(GL_LINES, 0, 6);
-	vao.unbind();
-}
+// 	// bind vao and draw
+// 	vao.bind();
+// 	glLineWidth(3.0f);
+// 	glDrawArrays(GL_LINES, 0, 6);
+// 	vao.unbind();
+// }

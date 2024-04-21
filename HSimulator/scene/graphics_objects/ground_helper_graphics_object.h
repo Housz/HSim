@@ -1,0 +1,28 @@
+#pragma once
+#include <scene/graphics_object.h>
+
+namespace HSim
+{
+    class GroundHelperGObject : public GObject
+    {
+    public:
+        GroundHelperGObject();
+        GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
+        ~GroundHelperGObject();
+
+        void buildRenderingData() override;
+
+        void draw(const RenderParams &renderParams) override;
+
+        bool isRendingDataValid() override;
+
+    public:
+        VertexBufferObject vbo;
+        ElementBufferObject ebo;
+
+        GroundHelper_Ptr groundHelper = nullptr;
+
+    public:
+        size_t numElements;
+    };
+} // namespace HSim

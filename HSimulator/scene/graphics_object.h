@@ -66,47 +66,50 @@ namespace HSim
 	// 	std::vector<unsigned int> buildIndices();
 	// };
 
-	class GroundHelperGObject : public GObject
-	{
-	public:
-		GroundHelperGObject();
-		GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
-		~GroundHelperGObject();
+	// class GroundHelperGObject : public GObject
+	// {
+	// public:
+	// 	GroundHelperGObject();
+	// 	GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
+	// 	~GroundHelperGObject();
 
-		void buildRenderingData() override;
+	// 	void buildRenderingData() override;
 
-		void draw(const RenderParams &renderParams) override;
+	// 	void draw(const RenderParams &renderParams) override;
 
-		bool isRendingDataValid() override;
+	// 	bool isRendingDataValid() override;
 
-	public:
-		VertexBufferObject vbo;
-		ElementBufferObject ebo;
+	// public:
+	// 	VertexBufferObject vbo;
+	// 	ElementBufferObject ebo;
 
-		GroundHelper_Ptr groundHelper = nullptr;
+	// 	GroundHelper_Ptr groundHelper = nullptr;
 
-	public:
-		size_t numElements;
-	};
+	// public:
+	// 	size_t numElements;
+	// };
 
-	class LineHelperGObject : public GObject
-	{
-	public:
-		LineHelperGObject();
-		LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_);
-		~LineHelperGObject();
+	// class LineHelperGObject : public GObject
+	// {
+	// public:
+	// 	LineHelperGObject();
+	// 	LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_);
+	// 	~LineHelperGObject();
 
-		void buildRenderingData() override;
+	// 	void buildRenderingData() override;
 
-		void draw(const RenderParams &renderParams) override;
+	// 	void draw(const RenderParams &renderParams) override;
 
-		bool isRendingDataValid() override;
+	// 	bool isRendingDataValid() override;
 
-	public:
-		VertexBufferObject vbo;
+	// public:
+	// 	VertexBufferObject vbo;
 
-		LineHelper_Ptr lineHelper = nullptr;
-	};
+	// 	LineHelper_Ptr lineHelper = nullptr;
+	// };
 } // namespace HSim
 
 #include <scene/graphics_objects/sphere3_graphics_object.h>
+#include <scene/graphics_objects/box3_graphics_object.h>
+#include <scene/graphics_objects/ground_helper_graphics_object.h>
+#include <scene/graphics_objects/line_helper_graphics_object.h>
