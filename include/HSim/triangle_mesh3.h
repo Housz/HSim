@@ -15,7 +15,7 @@
 #include <HSim/bvh3.h>
 #include <HSim/parallel.h>
 
-#define TINYOBJLOADER_IMPLEMENTATION
+// #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
 namespace HSim

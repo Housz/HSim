@@ -37,34 +37,34 @@ namespace HSim
 	using GraphicsObject_Ptr = std::shared_ptr<GraphicsObject>;
 	using GObject_Ptr = std::shared_ptr<GraphicsObject>;
 
-	class Sphere3GObject : public GObject
-	{
-	public:
-		Sphere3GObject();
-		Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_);
-		~Sphere3GObject();
+	// class Sphere3GObject : public GObject
+	// {
+	// public:
+	// 	Sphere3GObject();
+	// 	Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_);
+	// 	~Sphere3GObject();
 
-	public:
-		void buildRenderingData() override;
+	// public:
+	// 	void buildRenderingData() override;
 
-		void draw(const RenderParams &renderParams) override;
+	// 	void draw(const RenderParams &renderParams) override;
 
-		bool isRendingDataValid() override;
+	// 	bool isRendingDataValid() override;
 
-	public:
-		VertexBufferObject vbo;
-		ElementBufferObject ebo;
+	// public:
+	// 	VertexBufferObject vbo;
+	// 	ElementBufferObject ebo;
 
-		Sphere3_Ptr<PRECISION> sphere = nullptr;
+	// 	Sphere3_Ptr<PRECISION> sphere = nullptr;
 
-	private:
-		const size_t numSectors = 30;
-		const size_t numStacks = 30;
+	// private:
+	// 	const size_t numSectors = 30;
+	// 	const size_t numStacks = 30;
 
-		std::vector<float> buildVertices();
+	// 	std::vector<float> buildVertices();
 
-		std::vector<unsigned int> buildIndices();
-	};
+	// 	std::vector<unsigned int> buildIndices();
+	// };
 
 	class GroundHelperGObject : public GObject
 	{
@@ -108,3 +108,5 @@ namespace HSim
 		LineHelper_Ptr lineHelper = nullptr;
 	};
 } // namespace HSim
+
+#include <scene/graphics_objects/sphere3_graphics_object.h>

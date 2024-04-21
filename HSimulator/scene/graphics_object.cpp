@@ -1,5 +1,4 @@
 #include <scene/graphics_object.h>
-#include "graphics_object.h"
 
 HSim::GraphicsObject::GraphicsObject()
 {
@@ -20,172 +19,172 @@ HSim::GraphicsObject::~GraphicsObject()
 
 /*********************************************************************/
 
-HSim::Sphere3GObject::Sphere3GObject()
-{
-}
+// HSim::Sphere3GObject::Sphere3GObject()
+// {
+// }
 
-HSim::Sphere3GObject::Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_)
-	: GraphicsObject(material_)
-{
-	sphere = sphere_;
+// HSim::Sphere3GObject::Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_)
+// 	: GraphicsObject(material_)
+// {
+// 	sphere = sphere_;
 
-	vbo.create();
-	ebo.create();
+// 	vbo.create();
+// 	ebo.create();
 
-	buildRenderingData();
-}
+// 	buildRenderingData();
+// }
 
-HSim::Sphere3GObject::~Sphere3GObject()
-{
-}
+// HSim::Sphere3GObject::~Sphere3GObject()
+// {
+// }
 
-void HSim::Sphere3GObject::buildRenderingData()
-{
-	assert(sphere != nullptr);
+// void HSim::Sphere3GObject::buildRenderingData()
+// {
+// 	assert(sphere != nullptr);
 
-	vao.bind();
+// 	vao.bind();
 
-	auto vertices = buildVertices();
-	auto indices = buildIndices();
+// 	auto vertices = buildVertices();
+// 	auto indices = buildIndices();
 
-	// vbo
-	vbo.bind();
-	vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_STATIC_DRAW);
-	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(float), 0);
+// 	// vbo
+// 	vbo.bind();
+// 	vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_STATIC_DRAW);
+// 	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(float), 0);
 
-	vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);
-	vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+// 	vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);
+// 	vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
-	// ebo
-	ebo.bind();
-	ebo.allocate((unsigned int)indices.size() * sizeof(unsigned int), GL_STATIC_DRAW);
-	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(unsigned int), 0);
+// 	// ebo
+// 	ebo.bind();
+// 	ebo.allocate((unsigned int)indices.size() * sizeof(unsigned int), GL_STATIC_DRAW);
+// 	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(unsigned int), 0);
 
-	vao.bindEBO(ebo);
-}
+// 	vao.bindEBO(ebo);
+// }
 
-void HSim::Sphere3GObject::draw(const RenderParams &renderParams)
-{
-	if (!isRendingDataValid())
-	{
-		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
-		buildRenderingData();
-	}
+// void HSim::Sphere3GObject::draw(const RenderParams &renderParams)
+// {
+// 	if (!isRendingDataValid())
+// 	{
+// 		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
+// 		buildRenderingData();
+// 	}
 
-	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
-	auto color = mat->color;
-	auto shader = mat->shader;
+// 	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+// 	auto color = mat->color;
+// 	auto shader = mat->shader;
 
-	// use shader with renderParams
-	shader->use();
-	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
-	shader->setVec3("lightPos", 20, 15, 15);
-	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
-	shader->setVec3("viewPos", cameraPosition);
+// 	// use shader with renderParams
+// 	shader->use();
+// 	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+// 	shader->setVec3("lightPos", 20, 15, 15);
+// 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+// 	shader->setVec3("viewPos", cameraPosition);
 
-	shader->setMat4("projection", renderParams.transforms.proj);
-	shader->setMat4("view", renderParams.transforms.view);
-	shader->setMat4("model", renderParams.transforms.model);
+// 	shader->setMat4("projection", renderParams.transforms.proj);
+// 	shader->setMat4("view", renderParams.transforms.view);
+// 	shader->setMat4("model", renderParams.transforms.model);
 
-	glViewport(0, 0, renderParams.width, renderParams.height);
+// 	glViewport(0, 0, renderParams.width, renderParams.height);
 
-	// bind vao and draw
-	vao.bind();
+// 	// bind vao and draw
+// 	vao.bind();
 
-	if (mat->wireframe)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	glDrawElements(GL_TRIANGLES, numSectors * numStacks * 2 * 3, GL_UNSIGNED_INT, 0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+// 	if (mat->wireframe)
+// 	{
+// 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+// 	}
+// 	glDrawElements(GL_TRIANGLES, numSectors * numStacks * 2 * 3, GL_UNSIGNED_INT, 0);
+// 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	vao.unbind();
-}
+// 	vao.unbind();
+// }
 
-bool HSim::Sphere3GObject::isRendingDataValid()
-{
-	return (vao.isValid() && vbo.isValid() && ebo.isValid());
-}
+// bool HSim::Sphere3GObject::isRendingDataValid()
+// {
+// 	return (vao.isValid() && vbo.isValid() && ebo.isValid());
+// }
 
-std::vector<float> HSim::Sphere3GObject::buildVertices()
-{
-	std::vector<float> vertices;
+// std::vector<float> HSim::Sphere3GObject::buildVertices()
+// {
+// 	std::vector<float> vertices;
 
-	const auto radius = sphere->radius;
-	const auto center = sphere->center;
+// 	const auto radius = sphere->radius;
+// 	const auto center = sphere->center;
 
-	for (size_t stack = 0; stack <= numStacks; stack++)
-	{
-		float phi = PI_HALF - PI * ((float)stack / numStacks);
-		float y = radius * std::sin(phi);
+// 	for (size_t stack = 0; stack <= numStacks; stack++)
+// 	{
+// 		float phi = PI_HALF - PI * ((float)stack / numStacks);
+// 		float y = radius * std::sin(phi);
 
-		for (size_t sector = 0; sector <= numSectors; sector++)
-		{
-			float theta = PI_DOUBLE * ((float)sector / numSectors);
+// 		for (size_t sector = 0; sector <= numSectors; sector++)
+// 		{
+// 			float theta = PI_DOUBLE * ((float)sector / numSectors);
 
-			float x = radius * std::cos(phi) * std::sin(theta);
-			float z = radius * std::cos(phi) * std::cos(theta);
+// 			float x = radius * std::cos(phi) * std::sin(theta);
+// 			float z = radius * std::cos(phi) * std::cos(theta);
 
-			// position for layout 0
-			vertices.push_back(x);
-			vertices.push_back(y);
-			vertices.push_back(z);
+// 			// position for layout 0
+// 			vertices.push_back(x);
+// 			vertices.push_back(y);
+// 			vertices.push_back(z);
 
-			// position for layout 1
-			vertices.push_back(x / radius);
-			vertices.push_back(y / radius);
-			vertices.push_back(z / radius);
-		}
-	}
+// 			// position for layout 1
+// 			vertices.push_back(x / radius);
+// 			vertices.push_back(y / radius);
+// 			vertices.push_back(z / radius);
+// 		}
+// 	}
 
-	// transform
-	for (size_t i = 0; i < vertices.size(); i += 3)
-	{
-		// auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+// 	// transform
+// 	for (size_t i = 0; i < vertices.size(); i += 3)
+// 	{
+// 		// auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
 
-		vertices[i] += center[0];
-		vertices[i + 1] += center[1];
-		vertices[i + 2] += center[2];
-	}
+// 		vertices[i] += center[0];
+// 		vertices[i + 1] += center[1];
+// 		vertices[i + 2] += center[2];
+// 	}
 
-	return vertices;
-}
+// 	return vertices;
+// }
 
-std::vector<unsigned int> HSim::Sphere3GObject::buildIndices()
-{
-	std::vector<unsigned int> indices;
-	// indices
-	//  k1--k1+1
-	//  |  / |
-	//  | /  |
-	//  k2--k2+1
-	unsigned int k1, k2;
+// std::vector<unsigned int> HSim::Sphere3GObject::buildIndices()
+// {
+// 	std::vector<unsigned int> indices;
+// 	// indices
+// 	//  k1--k1+1
+// 	//  |  / |
+// 	//  | /  |
+// 	//  k2--k2+1
+// 	unsigned int k1, k2;
 
-	for (size_t i = 0; i < numStacks; ++i)
-	{
-		k1 = i * (numSectors + 1);
-		k2 = k1 + numSectors + 1;
+// 	for (size_t i = 0; i < numStacks; ++i)
+// 	{
+// 		k1 = i * (numSectors + 1);
+// 		k2 = k1 + numSectors + 1;
 
-		for (size_t j = 0; j < numSectors; j++, k1++, k2++)
-		{
-			if (i != 0)
-			{
-				indices.push_back(k1);
-				indices.push_back(k2);
-				indices.push_back(k1 + 1);
-			}
+// 		for (size_t j = 0; j < numSectors; j++, k1++, k2++)
+// 		{
+// 			if (i != 0)
+// 			{
+// 				indices.push_back(k1);
+// 				indices.push_back(k2);
+// 				indices.push_back(k1 + 1);
+// 			}
 
-			if (i != (numStacks - 1))
-			{
-				indices.push_back(k1 + 1);
-				indices.push_back(k2);
-				indices.push_back(k2 + 1);
-			}
-		}
-	}
+// 			if (i != (numStacks - 1))
+// 			{
+// 				indices.push_back(k1 + 1);
+// 				indices.push_back(k2);
+// 				indices.push_back(k2 + 1);
+// 			}
+// 		}
+// 	}
 
-	return indices;
-}
+// 	return indices;
+// }
 
 /*********************************************************************/
 

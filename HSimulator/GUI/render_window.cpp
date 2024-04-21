@@ -1,4 +1,6 @@
-#include "render_window.h"
+#include <GUI/render_window.h>
+#define STB_IMAGE_IMPLEMENTATION    
+#include "stb_image.h"
 
 HSim::RenderWindow::RenderWindow()
 {
