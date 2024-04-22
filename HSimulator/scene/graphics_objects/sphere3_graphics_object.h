@@ -1,5 +1,6 @@
 #pragma once
-#include <scene/graphics_object.h>
+#include <HSim/sphere3.h>
+#include <scene/graphics_objects/graphics_object.h>
 
 namespace HSim
 {

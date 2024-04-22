@@ -1,14 +1,14 @@
 #pragma once
 
-#include <scene/graphics_buffer.h>
-#include <config/numerical_config.h>
-#include <scene/material.h>
-#include <renderer/render_params.h>
-#include <scene/helper_object.h>
-
 #include <HSim/common.h>
 #include <HSim/surface3.h>
-#include <HSim/sphere3.h>
+
+#include <scene/graphics_buffer.h>
+#include <scene/material.h>
+#include <scene/helper_object.h>
+#include <config/numerical_config.h>
+#include <renderer/render_params.h>
+
 
 namespace HSim
 {
@@ -109,7 +109,7 @@ namespace HSim
 	// };
 } // namespace HSim
 
-#include <scene/graphics_objects/sphere3_graphics_object.h>
-#include <scene/graphics_objects/box3_graphics_object.h>
-#include <scene/graphics_objects/ground_helper_graphics_object.h>
-#include <scene/graphics_objects/line_helper_graphics_object.h>
+// #include <scene/graphics_objects/sphere3_graphics_object.h>
+// #include <scene/graphics_objects/box3_graphics_object.h>
+// #include <scene/graphics_objects/ground_helper_graphics_object.h>
+// #include <scene/graphics_objects/line_helper_graphics_object.h>

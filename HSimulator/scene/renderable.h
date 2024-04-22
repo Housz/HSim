@@ -2,7 +2,7 @@
 
 #include <HSim/space_object3.h>
 #include <config/numerical_config.h>
-#include <scene/graphics_object.h>
+#include <scene/graphics_objects.h>
 #include <renderer/render_params.h>
 
 namespace HSim

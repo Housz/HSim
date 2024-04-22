@@ -62,23 +62,35 @@ HSim::SceneGraph_ptr createScene()
 	root->addChild(go2);
 
 	/**************************************************/
+	std::default_random_engine generator;
+	std::uniform_int_distribution<int> distribution_i(-50, 50); 
+	std::uniform_real_distribution<float> distribution_f(0, 1); 
 
-	HSim::Vec3f lower = {0, 0, 0};
-	HSim::Vec3f upper = {5, 5, 5};
-	auto box = std::make_shared<HSim::Box3<float>>(lower, upper);
+	for (size_t i = 0; i < 1000; i++)
+	{
+		auto x  = distribution_i(generator);
+		auto y  = distribution_i(generator);
+		auto z  = distribution_i(generator);
+		HSim::Vec3f lower = {x, y, z};
+		HSim::Vec3f upper = {x+1, y+1, z+1};
+		auto box = std::make_shared<HSim::Box3<float>>(lower, upper);
 
-	auto boxMat = std::make_shared<HSim::BasicMaterial>();
-	boxMat->color = {0.8, 0.1, 0.8};
-	boxMat->wireframe = false;
+		auto r = distribution_f(generator);
+		auto g = distribution_f(generator);
+		auto b = distribution_f(generator);
+		auto boxMat = std::make_shared<HSim::BasicMaterial>();
+		boxMat->color = {r, g, b};
+		boxMat->wireframe = false;
 
-	auto boxGraphicsObject = std::make_shared<HSim::Box3GObject>(box, boxMat);
+		auto boxGraphicsObject = std::make_shared<HSim::Box3GObject>(box, boxMat);
 
-	auto boxRenderable = std::make_shared<HSim::Renderable>(box, boxGraphicsObject);
+		auto boxRenderable = std::make_shared<HSim::Renderable>(box, boxGraphicsObject);
 
-	auto go3 = std::make_shared<HSim::GameObject>();
-	go3->renderable = boxRenderable;
+		auto go3 = std::make_shared<HSim::GameObject>();
+		go3->renderable = boxRenderable;
 
-	root->addChild(go3);
+		root->addChild(go3);
+	}
 
 	/**************************************************/
 
