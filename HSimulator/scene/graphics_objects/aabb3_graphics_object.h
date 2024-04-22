@@ -13,9 +13,10 @@ namespace HSim
 	{
 	public:
 		AABB3GObject();
-		AABB3GObject(const AABB3_Ptr<PRECISION> aabb_, const BasicMaterial_Ptr material_);
+		// AABB3GObject(const AABB3_Ptr<PRECISION> aabb_, const BasicMaterial_Ptr material_);
+		AABB3GObject(const AABB3<PRECISION> aabb_, const BasicMaterial_Ptr material_);
 		// AABB3GObject(const SpaceObject3_Ptr<PRECISION> spaceObject_, const BasicMaterial_Ptr material_);
-		AABB3GObject(const Surface3_Ptr<PRECISION> spaceObject_, const BasicMaterial_Ptr material_);
+		// AABB3GObject(const Surface3_Ptr<PRECISION> surface_, const BasicMaterial_Ptr material_);
 		~AABB3GObject();
 
 	public:
@@ -28,7 +29,8 @@ namespace HSim
 	public:
 		VertexBufferObject vbo;
 
-		AABB3_Ptr<PRECISION> aabb = nullptr;
+		// AABB3_Ptr<PRECISION> aabb = nullptr;
+		AABB3<PRECISION> aabb;
 		
 	};
 } // namespace HSim

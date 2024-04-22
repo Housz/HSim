@@ -66,7 +66,7 @@ HSim::SceneGraph_ptr createScene()
 	std::uniform_int_distribution<int> distribution_i(-50, 50); 
 	std::uniform_real_distribution<float> distribution_f(0, 1); 
 
-	for (size_t i = 0; i < 1000; i++)
+	for (size_t i = 0; i < 10; i++)
 	{
 		auto x  = distribution_i(generator);
 		auto y  = distribution_i(generator);
@@ -91,6 +91,18 @@ HSim::SceneGraph_ptr createScene()
 
 		root->addChild(go3);
 	}
+
+	/**************************************************/
+
+
+	auto aabbGObject = std::make_shared<HSim::AABB3GObject>(sphere->AABB(), material2);
+	auto aabbRenderable = std::make_shared<HSim::Renderable>(nullptr, aabbGObject);
+	
+	auto go4 = std::make_shared<HSim::GameObject>();
+	go4->renderable = aabbRenderable;
+	// go1->addRenderable( SphereRenderableCreator() )
+
+	root->addChild(go4);
 
 	/**************************************************/
 
