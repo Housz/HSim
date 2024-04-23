@@ -97,8 +97,3 @@ void HSim::readOBJtoTriangleMesh(TriangleMesh3_Ptr<PRECISION> triMesh, const std
         }
     } // Read faces (triangles)
 }
-
-void HSim::fun(const std::string &filename)
-{
-    std::cout << filename;
-}

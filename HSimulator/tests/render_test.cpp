@@ -108,7 +108,6 @@ HSim::SceneGraph_ptr createScene()
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3<PRECISION>>();
 	HSim::readOBJtoTriangleMesh(mesh, "spot_triangulated.obj");
-	// HSim::fun("spot_triangulated.obj");
 
 	auto matMesh = std::make_shared<HSim::BasicMaterial>();
 	matMesh->color = {0.2, 0.8, 0.2};
@@ -121,6 +120,14 @@ HSim::SceneGraph_ptr createScene()
 	go5->renderable = meshRenderable;
 
 	root->addChild(go5);
+
+	auto meshAABBGObject = std::make_shared<HSim::AABB3GraphicsObject>(mesh->AABB(), material2);
+	auto meshAABBRenderable = std::make_shared<HSim::Renderable>(nullptr, meshAABBGObject);
+
+	auto go6 = std::make_shared<HSim::GameObject>();
+	go6->renderable = meshAABBRenderable;
+
+	root->addChild(go6);
 
 	/**************************************************/
 

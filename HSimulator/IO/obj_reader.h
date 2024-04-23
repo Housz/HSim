@@ -8,5 +8,4 @@ namespace HSim
 {   
     void readOBJtoTriangleMesh(TriangleMesh3_Ptr<PRECISION> triMesh, const std::string &filename);
 
-    void fun(const std::string &filename);
 } // namespace HSim
