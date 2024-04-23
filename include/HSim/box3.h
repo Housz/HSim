@@ -12,8 +12,8 @@ namespace HSim
 	class Box3 : public Surface3<T>
 	{
 	public:
-		Box3(){};
-		~Box3(){};
+		Box3();
+		~Box3();
 
 		Box3(const Transform3<T> transform_) : transform(transform_) {}
 

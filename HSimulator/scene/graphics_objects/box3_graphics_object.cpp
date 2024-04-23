@@ -1,10 +1,10 @@
 #include <scene/graphics_objects/box3_graphics_object.h>
 
-HSim::Box3GObject::Box3GObject()
+HSim::Box3GraphicsObject::Box3GraphicsObject()
 {
 }
 
-HSim::Box3GObject::Box3GObject(const Box3_Ptr<PRECISION> box_, const BasicMaterial_Ptr material_)
+HSim::Box3GraphicsObject::Box3GraphicsObject(const Box3_Ptr<PRECISION> box_, const BasicMaterial_Ptr material_)
     : GraphicsObject(material_)
 {
     box = box_;
@@ -14,11 +14,11 @@ HSim::Box3GObject::Box3GObject(const Box3_Ptr<PRECISION> box_, const BasicMateri
     buildRenderingData();
 }
 
-HSim::Box3GObject::~Box3GObject()
+HSim::Box3GraphicsObject::~Box3GraphicsObject()
 {
 }
 
-void HSim::Box3GObject::buildRenderingData()
+void HSim::Box3GraphicsObject::buildRenderingData()
 {
     assert(box != nullptr);
 
@@ -94,7 +94,7 @@ void HSim::Box3GObject::buildRenderingData()
     vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 }
 
-void HSim::Box3GObject::draw(const RenderParams &renderParams)
+void HSim::Box3GraphicsObject::draw(const RenderParams &renderParams)
 {
     if (!isRendingDataValid())
     {
@@ -130,7 +130,7 @@ void HSim::Box3GObject::draw(const RenderParams &renderParams)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-bool HSim::Box3GObject::isRendingDataValid()
+bool HSim::Box3GraphicsObject::isRendingDataValid()
 {
     return (vao.isValid() && vbo.isValid());
 }

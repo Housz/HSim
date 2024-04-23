@@ -6,4 +6,4 @@
 #include <scene/graphics_objects/ground_helper_graphics_object.h>
 #include <scene/graphics_objects/line_helper_graphics_object.h>
 #include <scene/graphics_objects/sphere3_graphics_object.h>
-#include <scene/graphics_objects/trianglej_mesh3_graphics_object.h>
+#include <scene/graphics_objects/triangle_mesh3_graphics_object.h>

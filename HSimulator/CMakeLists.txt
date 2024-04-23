@@ -29,7 +29,7 @@ aux_source_directory(app sources)
 # target_include_directories(HSimulator PUBLIC .)
 
 
-add_library(HSimulatorLib STATIC ${sources})
+add_library(HSimulatorLib OBJECT ${sources})
 target_link_libraries(HSimulatorLib PUBLIC HSim)
 target_link_libraries(HSimulatorLib PUBLIC glfw)
 target_link_libraries(HSimulatorLib PUBLIC glad::glad)

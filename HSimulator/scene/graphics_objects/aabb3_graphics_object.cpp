@@ -1,6 +1,6 @@
 #include "aabb3_graphics_object.h"
 
-HSim::AABB3GObject::AABB3GObject()
+HSim::AABB3GraphicsObject::AABB3GraphicsObject()
 {
 }
 
@@ -15,7 +15,7 @@ HSim::AABB3GObject::AABB3GObject()
 // 	buildRenderingData();
 // }
 
-HSim::AABB3GObject::AABB3GObject(const AABB3<PRECISION> aabb_, const BasicMaterial_Ptr material_)
+HSim::AABB3GraphicsObject::AABB3GraphicsObject(const AABB3<PRECISION> aabb_, const BasicMaterial_Ptr material_)
 	: GraphicsObject(material_)
 {
 	aabb = aabb_;
@@ -26,11 +26,11 @@ HSim::AABB3GObject::AABB3GObject(const AABB3<PRECISION> aabb_, const BasicMateri
 }
 
 
-HSim::AABB3GObject::~AABB3GObject()
+HSim::AABB3GraphicsObject::~AABB3GraphicsObject()
 {
 }
 
-void HSim::AABB3GObject::buildRenderingData()
+void HSim::AABB3GraphicsObject::buildRenderingData()
 {
 	// assert(aabb != nullptr);
 
@@ -62,12 +62,12 @@ void HSim::AABB3GObject::buildRenderingData()
     vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
 }
 
-bool HSim::AABB3GObject::isRendingDataValid()
+bool HSim::AABB3GraphicsObject::isRendingDataValid()
 {
 	return (vao.isValid() && vbo.isValid());
 }
 
-void HSim::AABB3GObject::draw(const RenderParams &renderParams)
+void HSim::AABB3GraphicsObject::draw(const RenderParams &renderParams)
 {
 	if (!isRendingDataValid())
     {

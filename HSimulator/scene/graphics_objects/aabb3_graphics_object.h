@@ -9,15 +9,15 @@
 
 namespace HSim
 {
-	class AABB3GObject : public GObject
+	class AABB3GraphicsObject : public GObject
 	{
 	public:
-		AABB3GObject();
+		AABB3GraphicsObject();
 		// AABB3GObject(const AABB3_Ptr<PRECISION> aabb_, const BasicMaterial_Ptr material_);
-		AABB3GObject(const AABB3<PRECISION> aabb_, const BasicMaterial_Ptr material_);
+		AABB3GraphicsObject(const AABB3<PRECISION> aabb_, const BasicMaterial_Ptr material_);
 		// AABB3GObject(const SpaceObject3_Ptr<PRECISION> spaceObject_, const BasicMaterial_Ptr material_);
 		// AABB3GObject(const Surface3_Ptr<PRECISION> surface_, const BasicMaterial_Ptr material_);
-		~AABB3GObject();
+		~AABB3GraphicsObject();
 
 	public:
 		void buildRenderingData() override;
@@ -33,4 +33,6 @@ namespace HSim
 		AABB3<PRECISION> aabb;
 		
 	};
+
+	using AABB3GObject = AABB3GraphicsObject;
 } // namespace HSim
