@@ -15,8 +15,8 @@
 #include <HSim/bvh3.h>
 #include <HSim/parallel.h>
 
-#define TINYOBJLOADER_IMPLEMENTATION
-#include "tiny_obj_loader.h"
+// #define TINYOBJLOADER_IMPLEMENTATION
+// #include "tiny_obj_loader.h"
 
 namespace HSim
 {
@@ -24,14 +24,18 @@ namespace HSim
 	class TriangleMesh3 : public Surface3<T>
 	{
 	public:
-		TriangleMesh3();
-		TriangleMesh3(const Transform3<T> &transform_);
+		TriangleMesh3() {};
+		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_) {};
 		TriangleMesh3(
 			const std::vector<Vec3<T>> &points_, const std::vector<Vec3<T>> &normals_, const std::vector<Vec2<T>> &uvs_,
 			const std::vector<Vec3ui> pointIndices_, const std::vector<Vec3ui> normalIndices_, const std::vector<Vec3ui> uvIndices_,
-			const Transform3<T> &transform_);
+			const Transform3<T> &transform_)
+			: points(points), normals(normals_), uvs(uvs_),
+	  		pointIndices(pointIndices_), normalIndices(normalIndices_), uvIndices(uvIndices_),
+	  		transform(transform_) 
+		{};
 
-		~TriangleMesh3();
+		~TriangleMesh3() {};
 
 		// manipulators
 	public:
@@ -254,107 +258,107 @@ namespace HSim
 
 		// IO .obj file
 	public:
-		bool readOBJ(const std::string &filename)
-		{
-			// https://github.com/tinyobjloader/tinyobjloader
+		// bool readOBJ(const std::string &filename)
+		// {
+		// 	// https://github.com/tinyobjloader/tinyobjloader
 
-			tinyobj::ObjReaderConfig reader_config;
-			reader_config.mtl_search_path = "./";
+		// 	tinyobj::ObjReaderConfig reader_config;
+		// 	reader_config.mtl_search_path = "./";
 
-			tinyobj::ObjReader reader;
+		// 	tinyobj::ObjReader reader;
 
-			if (!reader.ParseFromFile(filename, reader_config))
-			{
-				if (!reader.Error().empty())
-				{
-					std::cerr << "TinyObjReader: " << reader.Error();
-				}
-				return false;
-			}
+		// 	if (!reader.ParseFromFile(filename, reader_config))
+		// 	{
+		// 		if (!reader.Error().empty())
+		// 		{
+		// 			std::cerr << "TinyObjReader: " << reader.Error();
+		// 		}
+		// 		return false;
+		// 	}
 
-			if (!reader.Warning().empty())
-			{
-				std::cout << "TinyObjReader: " << reader.Warning();
-				return false;
-			}
+		// 	if (!reader.Warning().empty())
+		// 	{
+		// 		std::cout << "TinyObjReader: " << reader.Warning();
+		// 		return false;
+		// 	}
 
-			auto &attrib = reader.GetAttrib();
-			auto &shapes = reader.GetShapes();
-			auto &materials = reader.GetMaterials();
+		// 	auto &attrib = reader.GetAttrib();
+		// 	auto &shapes = reader.GetShapes();
+		// 	auto &materials = reader.GetMaterials();
 
-			// Read vertices
-			for (size_t i = 0; i < attrib.vertices.size(); i += 3)
-			{
-				auto vx = attrib.vertices[i + 0];
-				auto vy = attrib.vertices[i + 1];
-				auto vz = attrib.vertices[i + 2];
+		// 	// Read vertices
+		// 	for (size_t i = 0; i < attrib.vertices.size(); i += 3)
+		// 	{
+		// 		auto vx = attrib.vertices[i + 0];
+		// 		auto vy = attrib.vertices[i + 1];
+		// 		auto vz = attrib.vertices[i + 2];
 
-				addPoint({vx, vy, vz});
-			}
+		// 		addPoint({vx, vy, vz});
+		// 	}
 
-			// Read normals
-			for (size_t i = 0; i < attrib.normals.size(); i += 3)
-			{
-				auto nx = attrib.normals[i + 0];
-				auto ny = attrib.normals[i + 1];
-				auto nz = attrib.normals[i + 2];
+		// 	// Read normals
+		// 	for (size_t i = 0; i < attrib.normals.size(); i += 3)
+		// 	{
+		// 		auto nx = attrib.normals[i + 0];
+		// 		auto ny = attrib.normals[i + 1];
+		// 		auto nz = attrib.normals[i + 2];
 
-				addNormal({nx, ny, nz});
-			}
+		// 		addNormal({nx, ny, nz});
+		// 	}
 
-			// Read UVs
-			for (size_t i = 0; i < attrib.texcoords.size(); i += 2)
-			{
-				auto u = attrib.texcoords[i + 0];
-				auto v = attrib.texcoords[i + 1];
+		// 	// Read UVs
+		// 	for (size_t i = 0; i < attrib.texcoords.size(); i += 2)
+		// 	{
+		// 		auto u = attrib.texcoords[i + 0];
+		// 		auto v = attrib.texcoords[i + 1];
 
-				addUV({u, v});
-			}
+		// 		addUV({u, v});
+		// 	}
 
-			// Read faces (triangles)
-			for (auto &shape : shapes)
-			{
-				size_t idx = 0;
+		// 	// Read faces (triangles)
+		// 	for (auto &shape : shapes)
+		// 	{
+		// 		size_t idx = 0;
 
-				for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); ++f)
-				{
-					const size_t fv = shape.mesh.num_face_vertices[f];
+		// 		for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); ++f)
+		// 		{
+		// 			const size_t fv = shape.mesh.num_face_vertices[f];
 
-					if (fv == 3)
-					{
-						if (!attrib.vertices.empty())
-						{
-							addTrianglePointIndices(
-								{shape.mesh.indices[idx].vertex_index,
-								 shape.mesh.indices[idx + 1].vertex_index,
-								 shape.mesh.indices[idx + 2].vertex_index});
-						}
+		// 			if (fv == 3)
+		// 			{
+		// 				if (!attrib.vertices.empty())
+		// 				{
+		// 					addTrianglePointIndices(
+		// 						{shape.mesh.indices[idx].vertex_index,
+		// 						 shape.mesh.indices[idx + 1].vertex_index,
+		// 						 shape.mesh.indices[idx + 2].vertex_index});
+		// 				}
 
-						if (!attrib.normals.empty())
-						{
-							addTriangleNormalIndices(
-								{shape.mesh.indices[idx].normal_index,
-								 shape.mesh.indices[idx + 1].normal_index,
-								 shape.mesh.indices[idx + 2].normal_index});
-						}
+		// 				if (!attrib.normals.empty())
+		// 				{
+		// 					addTriangleNormalIndices(
+		// 						{shape.mesh.indices[idx].normal_index,
+		// 						 shape.mesh.indices[idx + 1].normal_index,
+		// 						 shape.mesh.indices[idx + 2].normal_index});
+		// 				}
 
-						if (!attrib.texcoords.empty())
-						{
-							addTriangleUVIndices({shape.mesh.indices[idx].texcoord_index,
-												  shape.mesh.indices[idx + 1].texcoord_index,
-												  shape.mesh.indices[idx + 2].texcoord_index});
-						}
-					} // if (fv == 3)
+		// 				if (!attrib.texcoords.empty())
+		// 				{
+		// 					addTriangleUVIndices({shape.mesh.indices[idx].texcoord_index,
+		// 										  shape.mesh.indices[idx + 1].texcoord_index,
+		// 										  shape.mesh.indices[idx + 2].texcoord_index});
+		// 				}
+		// 			} // if (fv == 3)
 
-					idx += fv;
-				}
-			}
+		// 			idx += fv;
+		// 		}
+		// 	}
 
-			resetStatusFlags();
+		// 	resetStatusFlags();
 
-			return true;
+		// 	return true;
 
-		} // readOBJ
+		// } // readOBJ
 
 		// in local frame
 	public:
@@ -889,6 +893,9 @@ namespace HSim
 
 	using TriangleMesh3f = TriangleMesh3<float>;
 	using TriangleMesh3d = TriangleMesh3<double>;
+
+	template <typename T>
+	using TriangleMesh3_Ptr = std::shared_ptr<TriangleMesh3<T>>;
 
 
 

@@ -24,8 +24,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/build/out/bin)
 
-# file(GLOB_RECURSE source CONFIGURE_DEPENDS include/*.h src/*.cpp)
-file(GLOB_RECURSE source CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE source CONFIGURE_DEPENDS include/*.h src/*.cpp)
+# file(GLOB_RECURSE source CONFIGURE_DEPENDS src/*.cpp)
 
 
 add_library(HSim OBJECT ${source})

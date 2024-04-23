@@ -4,6 +4,7 @@
 #include <scene/game_object.h>
 #include <config/numerical_config.h>
 #include <app/app.h>
+#include <IO/obj_reader.h>
 
 HSim::SceneGraph_ptr createScene()
 {
@@ -63,16 +64,16 @@ HSim::SceneGraph_ptr createScene()
 
 	/**************************************************/
 	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution_i(-50, 50); 
-	std::uniform_real_distribution<float> distribution_f(0, 1); 
+	std::uniform_int_distribution<int> distribution_i(-50, 50);
+	std::uniform_real_distribution<float> distribution_f(0, 1);
 
 	for (size_t i = 0; i < 100; i++)
 	{
-		auto x  = distribution_i(generator);
-		auto y  = distribution_i(generator);
-		auto z  = distribution_i(generator);
+		auto x = distribution_i(generator);
+		auto y = distribution_i(generator);
+		auto z = distribution_i(generator);
 		HSim::Vec3f lower = {x, y, z};
-		HSim::Vec3f upper = {x+1, y+1, z+1};
+		HSim::Vec3f upper = {x + 1, y + 1, z + 1};
 		auto box = std::make_shared<HSim::Box3<float>>(lower, upper);
 
 		auto r = distribution_f(generator);
@@ -94,15 +95,32 @@ HSim::SceneGraph_ptr createScene()
 
 	/**************************************************/
 
-
 	auto aabbGObject = std::make_shared<HSim::AABB3GraphicsObject>(sphere->AABB(), material2);
 	auto aabbRenderable = std::make_shared<HSim::Renderable>(nullptr, aabbGObject);
-	
+
 	auto go4 = std::make_shared<HSim::GameObject>();
 	go4->renderable = aabbRenderable;
 	// go1->addRenderable( SphereRenderableCreator() )
 
 	root->addChild(go4);
+
+	/**************************************************/
+
+	auto mesh = std::make_shared<HSim::TriangleMesh3<PRECISION>>();
+	HSim::readOBJtoTriangleMesh(mesh, "spot_triangulated.obj");
+	// HSim::fun("spot_triangulated.obj");
+
+	auto matMesh = std::make_shared<HSim::BasicMaterial>();
+	matMesh->color = {0.2, 0.8, 0.2};
+	matMesh->renderingType = HSim::RenderingType::FLAT;
+
+	auto meshGObject = std::make_shared<HSim::TriangleMesh3GObject>(mesh, matMesh);
+	auto meshRenderable = std::make_shared<HSim::Renderable>(mesh, meshGObject);
+
+	auto go5 = std::make_shared<HSim::GameObject>();
+	go5->renderable = meshRenderable;
+
+	root->addChild(go5);
 
 	/**************************************************/
 

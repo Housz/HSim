@@ -58,6 +58,10 @@ void HSim::GroundHelperGObject::draw(const RenderParams &renderParams)
 
 void HSim::GroundHelperGObject::buildRenderingData()
 {
+	assert(groundHelper != nullptr);
+
+	vao.bind();
+
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::uvec4> indices;
 
@@ -101,4 +105,6 @@ void HSim::GroundHelperGObject::buildRenderingData()
 	vao.bindEBO(ebo);
 
 	numElements = indices.size() * 4;
+
+	vao.unbind();
 }

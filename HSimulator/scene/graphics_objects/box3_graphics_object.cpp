@@ -22,6 +22,8 @@ void HSim::Box3GraphicsObject::buildRenderingData()
 {
     assert(box != nullptr);
 
+    vao.bind();
+
     auto lowerCorner = box->lowerCorner;
     auto upperCorner = box->upperCorner;
     auto transform = box->transform;
@@ -92,6 +94,8 @@ void HSim::Box3GraphicsObject::buildRenderingData()
 
     vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);
     vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+
+    vao.unbind();
 }
 
 void HSim::Box3GraphicsObject::draw(const RenderParams &renderParams)
@@ -128,6 +132,8 @@ void HSim::Box3GraphicsObject::draw(const RenderParams &renderParams)
 	}
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    vao.unbind();
 }
 
 bool HSim::Box3GraphicsObject::isRendingDataValid()

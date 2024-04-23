@@ -42,6 +42,8 @@ void HSim::Sphere3GObject::buildRenderingData()
 	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(unsigned int), 0);
 
 	vao.bindEBO(ebo);
+
+	vao.unbind();
 }
 
 void HSim::Sphere3GObject::draw(const RenderParams &renderParams)

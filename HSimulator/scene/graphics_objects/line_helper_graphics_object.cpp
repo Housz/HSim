@@ -25,6 +25,8 @@ bool HSim::LineHelperGObject::isRendingDataValid()
 
 void HSim::LineHelperGObject::buildRenderingData()
 {
+	vao.bind();
+
     float vertices[6] =
         {
             lineHelper->start[0],
@@ -40,6 +42,8 @@ void HSim::LineHelperGObject::buildRenderingData()
     vbo.loadData(vertices, 6 * sizeof(float), 0);
 
     vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
+
+	vao.unbind();
 }
 
 void HSim::LineHelperGObject::draw(const RenderParams &renderParams)
