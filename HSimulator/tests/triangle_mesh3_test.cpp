@@ -1,90 +1,67 @@
-#include <iostream>
+#include <HSim/common.h>
 
 #include <app/app.h>
-#include <scene/scene_graph.h>
 #include <scene/game_object.h>
-
-#include <HSim/box3.h>
-#include <HSim/sphere3.h>
-#include <HSim/cell_center_scalar_grid3.h>
-#include <HSim/triangle_mesh3.h>
+#include <config/numerical_config.h>
+#include <IO/obj_reader.h>
 
 HSim::SceneGraph_ptr createScene()
 {
-
 	auto scene = std::make_shared<HSim::SceneGraph>();
 
-	auto root = std::make_shared<HSim::GameObject>();
-	scene->root = root;
+	scene->addGround(10);
 
-	auto tirMesh = std::make_shared<HSim::TriangleMesh3f>();
-	tirMesh->readOBJ("spot_triangulated.obj");
-	// mesh->readOBJ("cube.obj");
-	// mesh->readOBJ("bunny.obj");
-	// mesh->readOBJ("grid.obj");
+	auto root = scene->root;
 
-	// std::default_random_engine generator;
-	// std::uniform_int_distribution<int> distribution(-2, 2);
-	// for (size_t i = 0; i < 9; i++)
-	// {
-	// 	// HSim::Vec3f offset = {distribution(generator), distribution(generator), distribution(generator)};
-	// 	// HSim::Vec3f offset = {10, 1, 1};
+	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
+	HSim::readOBJtoTriangleMesh(mesh, "spot_triangulated.obj");
 
-	// 	auto offset = distribution(generator);
+	mesh->buildBVH();
 
-	// 	std::cout << offset;
+	auto matMesh = std::make_shared<HSim::BasicMaterial>();
+	matMesh->color = {0.2, 0.8, 0.2};
+	// matMesh->renderingType = HSim::RenderingType::FLAT;
+	matMesh->wireframe = true;
 
-	// 	HSim::Triangle3f tri;
-	// 	tri.points[0] = {1+i, 0+i%2, 0+i%4};
-	// 	tri.points[1] = {0+i, 1+i%3, 0+i%3};
-	// 	tri.points[2] = {0+i, 0+i%4, 1+i%2};
+	auto meshGObject = std::make_shared<HSim::TriangleMesh3GObject>(mesh, matMesh);
+	auto meshRenderable = std::make_shared<HSim::Renderable>(mesh, meshGObject);
 
-	// 	HSim::Vec3 triNormal = {1, 1, 1};
-	// 	triNormal.normalize();
-	// 	tri.normals[0] = triNormal;
-	// 	tri.normals[1] = triNormal;
-	// 	tri.normals[2] = triNormal;
-
-	// 	mesh->addTriangle(tri);
-	// }
-
-	tirMesh->buildBVH();
-
-	auto go1 = std::make_shared<HSim::GameObject>();
-
-	auto material1 = std::make_shared<HSim::BasicMaterial>();
-	material1->color = {0.8, 0.4, 0.4};
-	
-
-
-	go1->setSurface(tirMesh);
-	go1->enableDraw();
-
-	root->addChild(go1);
+	auto goMesh = std::make_shared<HSim::GameObject>();
+	goMesh->renderable = meshRenderable;
+	root->addChild(goMesh);
 
 	HSim::Vec3f target(0.2, 0.5, 0);
-	// HSim::Vec3f target(0, 1, 0);
 
-	auto p = tirMesh->closestPositionLocal(target);
-	std::cout << "numTrianlges: " << tirMesh->numTrianlges() << "\n";
-	std::cout << p;
+	auto p = mesh->closestPositionLocal(target);
 
-	auto sphere1 = std::make_shared<HSim::Sphere3<float>>();
+	auto sphere1 = std::make_shared<HSim::Sphere3<PRECISION>>();
 	sphere1->center = target;
 	sphere1->radius = 0.01;
+
 	auto sphere2 = std::make_shared<HSim::Sphere3<float>>();
 	sphere2->center = p;
 	sphere2->radius = 0.01;
 
-	auto goTarget = std::make_shared<HSim::GameObject>();
-	goTarget->setSurface(sphere1);
-	auto goClosest = std::make_shared<HSim::GameObject>();
-	goClosest->setSurface(sphere2);
+	auto material1 = std::make_shared<HSim::BasicMaterial>();
+	material1->color = {0.8, 0.4, 0.4};
+	material1->wireframe = true;
 
-	root->addChild(goTarget);
-	root->addChild(goClosest);
-	goTarget->enableDraw();
-	goClosest->enableDraw();
+	auto material2 = std::make_shared<HSim::BasicMaterial>();
+	material2->color = {0.8, 0.4, 0.4};
+	material2->wireframe = true;
+
+	auto sphereGraphicsObject1 = std::make_shared<HSim::Sphere3GObject>(sphere1, material1);
+	auto sphereGraphicsObject2 = std::make_shared<HSim::Sphere3GObject>(sphere2, material2);
+	auto sphereRenderable1 = std::make_shared<HSim::Renderable>(sphere1, sphereGraphicsObject1);
+	auto sphereRenderable2 = std::make_shared<HSim::Renderable>(sphere2, sphereGraphicsObject2);
+
+	auto go1 = std::make_shared<HSim::GameObject>();
+	go1->renderable = sphereRenderable1;
+	auto go2 = std::make_shared<HSim::GameObject>();
+	go2->renderable = sphereRenderable2;
+
+	root->addChild(go1);
+	root->addChild(go2);
 
 	return scene;
 }

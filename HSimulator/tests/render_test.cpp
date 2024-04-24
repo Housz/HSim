@@ -10,8 +10,10 @@ HSim::SceneGraph_ptr createScene()
 {
 	auto scene = std::make_shared<HSim::SceneGraph>();
 
-	auto root = std::make_shared<HSim::GameObject>();
-	scene->root = root;
+	// auto root = std::make_shared<HSim::GameObject>();
+	// scene->root = root;
+
+	auto root = scene->root;
 
 	/**************************************************/
 

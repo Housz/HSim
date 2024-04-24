@@ -1,5 +1,5 @@
 #include <GUI/render_window.h>
-#define STB_IMAGE_IMPLEMENTATION    
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 HSim::RenderWindow::RenderWindow()
@@ -91,7 +91,23 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 
 	glfwSetWindowUserPointer(glfwWindow, this);
 
-	// imgui
+	/********************** imgui *************************/
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO &io = ImGui::GetIO();
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	// ImGui::StyleColorsLight();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
+	ImGui_ImplOpenGL3_Init();
+	/********************** imgui *************************/
 
 	// Get Context scale
 	float xscale, yscale;
@@ -121,15 +137,18 @@ void HSim::RenderWindow::mainLoop()
 		// std::cout << "main loop" << std::endl;
 
 		float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
 		// std::cout << "deltaTime: " << deltaTime << std::endl;
 		// std::cout << "FPS: " << 1.0 / deltaTime << std::endl;
 
+
+
 		// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClearColor(.667f, 0.8f, 1.f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 		if (animationToggle)
 		{
@@ -149,6 +168,17 @@ void HSim::RenderWindow::mainLoop()
 
 		renderer->draw(renderParams);
 
+		
+		/********************** imgui *************************/
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow(); // Show demo window! :)
+
+		ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		/********************** imgui *************************/
+
 		// imgui
 
 		// ground.draw();
@@ -156,6 +186,15 @@ void HSim::RenderWindow::mainLoop()
 		glfwSwapBuffers(glfwWindow);
 		glfwPollEvents();
 	}
+
+	// Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
+    glfwTerminate();
 }
 
 void HSim::RenderWindow::setScene(SceneGraph_ptr scene_)

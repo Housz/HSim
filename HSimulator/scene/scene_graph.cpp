@@ -2,6 +2,7 @@
 
 HSim::SceneGraph::SceneGraph()
 {
+	root = std::make_shared<HSim::GameObject>();
 }
 
 HSim::SceneGraph::~SceneGraph()
@@ -100,5 +101,13 @@ void HSim::SceneGraph::draw(const RenderParams &renderParams)
 
 void HSim::SceneGraph::addGround(size_t slices)
 {
-	
+	auto groudHelper = std::make_shared<HSim::GroundHelper>(slices);
+	auto mat = std::make_shared<HSim::BasicMaterial>();
+	mat->color = {0.2, 0.2, 0.2};
+	auto groundHelperGObject = std::make_shared<HSim::GroundHelperGObject>(groudHelper, mat);
+	auto groundHelperRenderable = std::make_shared<HSim::Renderable>(groudHelper, groundHelperGObject);
+	auto go = std::make_shared<HSim::GameObject>();
+	go->renderable = groundHelperRenderable;
+
+	root->addChild(go);
 }

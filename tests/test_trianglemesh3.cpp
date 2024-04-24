@@ -41,16 +41,16 @@ int main()
 
 #ifdef TRIMESH
 
-	HSim::TriangleMesh3f mesh;
+	// HSim::TriangleMesh3f mesh;
 
 	// mesh.readOBJ("spot_triangulated.obj");
-	mesh.readOBJ("cube.obj");
+	// mesh.readOBJ("cube.obj");
 
 	
 	/**
 	 * test show
 	 */
-	std::cout << mesh.points[0];
+	// std::cout << mesh.points[0];
 
 	// std::cout << mesh.pointIndices[0];
 	// std::cout << mesh.uvIndices[0];
@@ -103,7 +103,7 @@ int main()
 	/**
 	 * test bvh
 	 */
-	mesh.buildBVH();
+	// mesh.buildBVH();
 	// std::cout << mesh.bvh.rootAABB.lowerCorner;
 	// std::cout << mesh.bvh.rootAABB.upperCorner;
 

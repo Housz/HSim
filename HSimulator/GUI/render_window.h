@@ -10,6 +10,10 @@
 #include <scene/scene_graph.h>
 #include <scene/helper_object.h>
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 namespace HSim
 {
 	enum GLFWButtonState
