@@ -1,4 +1,4 @@
-#include "aabb3_graphics_object.h"
+#include <scene/graphics_objects/aabb3_graphics_object.h>
 
 HSim::AABB3GraphicsObject::AABB3GraphicsObject()
 {
@@ -55,11 +55,15 @@ void HSim::AABB3GraphicsObject::buildRenderingData()
 		l[0], l[1], u[2],	u[0], l[1], u[2],
 	};
 
+	vao.bind();
+
 	vbo.bind();
 	vbo.allocate(sizeof(vertices), GL_STATIC_DRAW);
     vbo.loadData(vertices, sizeof(vertices), 0);
 
     vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
+
+	vao.unbind();
 }
 
 bool HSim::AABB3GraphicsObject::isRendingDataValid()

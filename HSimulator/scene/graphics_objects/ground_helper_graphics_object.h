@@ -23,7 +23,7 @@ namespace HSim
 
         GroundHelper_Ptr groundHelper = nullptr;
 
-    public:
+    private:
         size_t numElements;
     };
 } // namespace HSim

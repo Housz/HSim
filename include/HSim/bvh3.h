@@ -67,6 +67,8 @@ namespace HSim
 			rootNode = std::make_shared<BVH3Node>();
 		}
 
+		~BVH3() {}
+
 		void reset()
 		{
 			rootNode = std::make_shared<BVH3Node>();
@@ -526,5 +528,8 @@ namespace HSim
 		}
 
 	}; // class BVH3
+
+	template <typename T>
+	using BVH3_Ptr = std::shared_ptr<BVH3<T>>;
 
 } // namespace HSim

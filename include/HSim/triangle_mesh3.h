@@ -24,8 +24,16 @@ namespace HSim
 	class TriangleMesh3 : public Surface3<T>
 	{
 	public:
-		TriangleMesh3() {};
-		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_) {};
+		TriangleMesh3() 
+		{
+			bvh = std::make_shared<BVH3<T>>();
+		}
+
+		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_) 
+		{
+			bvh = std::make_shared<BVH3<T>>();
+		}
+
 		TriangleMesh3(
 			const std::vector<Vec3<T>> &points_, const std::vector<Vec3<T>> &normals_, const std::vector<Vec2<T>> &uvs_,
 			const std::vector<Vec3ui> pointIndices_, const std::vector<Vec3ui> normalIndices_, const std::vector<Vec3ui> uvIndices_,
@@ -33,7 +41,9 @@ namespace HSim
 			: points(points), normals(normals_), uvs(uvs_),
 	  		pointIndices(pointIndices_), normalIndices(normalIndices_), uvIndices(uvIndices_),
 	  		transform(transform_) 
-		{};
+		{
+			bvh = std::make_shared<BVH3<T>>();
+		}
 
 		~TriangleMesh3() {};
 
@@ -233,7 +243,7 @@ namespace HSim
 
 		void buildBVH()
 		{
-			bvh.reset();
+			bvh->reset();
 
 			// create primitiveIndices (triangles indices) and primitivesAABBs (triangles AABBs)
 			std::vector<size_t> primitiveIndices(numTrianlges());
@@ -253,7 +263,7 @@ namespace HSim
 			// 	std::cout << aabb.upperCorner;
 			// }
 
-			bvh.build(primitiveIndices, primitivesAABBs);
+			bvh->build(primitiveIndices, primitivesAABBs);
 		}
 
 		// IO .obj file
@@ -376,7 +386,7 @@ namespace HSim
 				return position.distanceTo(closestPositionInTriangle);
 			};
 
-			auto closestPrimitiveInfo = bvh.closestPrimitive(positionInLocal_, distanceFunction);
+			auto closestPrimitiveInfo = bvh->closestPrimitive(positionInLocal_, distanceFunction);
 
 			std::cout << closestPrimitiveInfo;
 
@@ -446,7 +456,8 @@ namespace HSim
 
 		AABB3<T> aabb;
 
-		BVH3<T> bvh; // in local frame
+		// BVH3<T> bvh; // in local frame
+		BVH3_Ptr<T> bvh;
 
 		// for rendering
 	public:
@@ -881,13 +892,13 @@ namespace HSim
 		// 		node->aabb.draw();
 		// 	};
 
-		// 	bvh.traverse(callback);
+		// 	bvh->traverse(callback);
 		// }
 
 		// draw bvh
 		void drawBoundary() override
 		{
-			bvh.draw();
+			bvh->draw();
 		}
 	};
 
