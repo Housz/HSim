@@ -74,6 +74,10 @@ int main()
 
 	app.setScene(createScene());
 
+	int a = 1;
+
+	app.window->ImGuiCallback = [&](){ std::cout << a << " ImGuiCallback\n"; ImGui::ShowDemoWindow();};
+
 	app.mainLoop();
 
 	return 0;

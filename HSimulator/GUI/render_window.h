@@ -96,6 +96,9 @@ namespace HSim
 	public:
 		SceneGraph_ptr scene;
 
+		// std::shared_ptr<std::function<void()>> ImGuiCallback = nullptr;
+		std::function<void()> ImGuiCallback;
+
 	};
 
 	using RenderWindow_ptr = std::shared_ptr<RenderWindow>;

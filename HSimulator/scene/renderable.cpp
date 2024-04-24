@@ -18,5 +18,9 @@ void HSim::Renderable::draw(const RenderParams &renderParams)
 {
 	assert(graphicsObject != nullptr);
 
-	graphicsObject->draw(renderParams);
+	if (visible)
+	{
+		graphicsObject->draw(renderParams);
+	}
+	
 }
