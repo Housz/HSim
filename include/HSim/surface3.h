@@ -12,6 +12,15 @@
 
 namespace HSim
 {
+	enum class SurfaceType 
+	{
+		BOX,
+		SPHERE,
+		PLANE,
+		TRIANGLE,
+		TRIANGLE_MESH,
+	};
+
 	struct IntersectionInfo
 	{
 		bool isIntersected = false;
@@ -69,10 +78,16 @@ namespace HSim
 	class Surface3 : public SpaceObject3<T>
 	{
 	public:
-		Surface3(){};
+		Surface3()
+		{
+			spaceObjectType = SpaceObjectType::SURFACE;
+		};
 		~Surface3(){};
 
-		Surface3(const Transform3<T> &transform_) : transform(transform_) {}
+		Surface3(const Transform3<T> &transform_) : transform(transform_) 
+		{
+			spaceObjectType = SpaceObjectType::SURFACE;
+		}
 
 		Vec3<T> closestPosition(const Vec3<T> &positionInWorld_) const
 		{
@@ -146,6 +161,7 @@ namespace HSim
 	public:
 		Transform3<T> transform;
 
+		SurfaceType SurfaceType;
 		// for rendering
 	public:
 		// status flags

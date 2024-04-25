@@ -13,9 +13,9 @@ namespace HSim
     class Triangle3 : public Surface3<T>
     {
     public:
-        Triangle3() {};
+        Triangle3() { SurfaceType = SurfaceType::TRIANGLE; }
 
-        Triangle3(const Transform3<T>& transform_) : Surface3(transform_) {}
+        Triangle3(const Transform3<T>& transform_) : Surface3(transform_) { SurfaceType = SurfaceType::TRIANGLE; }
 
         Triangle3(
             const std::array<Vec3<T>, 3>& points_, 
@@ -23,7 +23,7 @@ namespace HSim
             const std::array<Vec2<T>, 3>& uvs_,
             const Transform3<T>& transform_
             ) : points(points_), normals(normals_), uvs(uvs_), Surface3(transform_) 
-        {};
+        { SurfaceType = SurfaceType::TRIANGLE; }
         
         template<typename U>
         Triangle3(const Triangle3<U> triangle_) 
@@ -31,7 +31,7 @@ namespace HSim
           normals(triangle_.normals), 
           uvs(triangle_.uvs),
           Surface3(triangle_.transform) 
-        {}
+        { SurfaceType = SurfaceType::TRIANGLE; }
 
         ~Triangle3() {};
     

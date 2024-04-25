@@ -12,18 +12,20 @@ namespace HSim
 	class Box3 : public Surface3<T>
 	{
 	public:
-		Box3() {};
+		Box3() { SurfaceType = SurfaceType::BOX; }
 		~Box3() {};
 
-		Box3(const Transform3<T> transform_) : transform(transform_) {}
+		Box3(const Transform3<T> transform_) : transform(transform_) { SurfaceType = SurfaceType::BOX; }
 
 		Box3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
-			: lowerCorner(lowerCorner_), upperCorner(upperCorner_) {}
+			: lowerCorner(lowerCorner_), upperCorner(upperCorner_) { SurfaceType = SurfaceType::BOX; }
 
 		Box3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_, const Transform3<T> transform_)
-			: lowerCorner(lowerCorner_), upperCorner(upperCorner_), transform(transform_) {}
+			: lowerCorner(lowerCorner_), upperCorner(upperCorner_), transform(transform_) 
+			{ SurfaceType = SurfaceType::BOX; }
 
-		Box3(const Box3<T> &box_) : lowerCorner(box_.lowerCorner), upperCorner(box_.upperCorner) {}
+		Box3(const Box3<T> &box_) : lowerCorner(box_.lowerCorner), upperCorner(box_.upperCorner) 
+		{ SurfaceType = SurfaceType::BOX; }
 
 		/**
 		 * @brief set Box3 with any two points

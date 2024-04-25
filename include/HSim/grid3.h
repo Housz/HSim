@@ -17,7 +17,10 @@ namespace HSim
     class Grid3 : public SpaceObject3<T>
     {
     public:
-        Grid3() {}
+        Grid3() 
+        {
+            spaceObjectType = SpaceObjectType::GRID;
+        }
         ~Grid3() {}
 
         /**
@@ -29,6 +32,8 @@ namespace HSim
          */
         Grid3(size_t x, size_t y, size_t z)
         {
+            spaceObjectType = SpaceObjectType::GRID;
+
             _gridResolution = {x, y, z};
             computeAABB();
         }
@@ -41,6 +46,8 @@ namespace HSim
          */
         Grid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1}) : _gridResolution(resolution), _girdOrigin(origin), _gridSpacing(gridSpacing)
         {
+            spaceObjectType = SpaceObjectType::GRID;
+            
             computeAABB();
         }
 

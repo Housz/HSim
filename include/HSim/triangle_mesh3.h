@@ -26,11 +26,15 @@ namespace HSim
 	public:
 		TriangleMesh3() 
 		{
+			SurfaceType = SurfaceType::TRIANGLE_MESH;
+
 			bvh = std::make_shared<BVH3<T>>();
 		}
 
 		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_) 
 		{
+			SurfaceType = SurfaceType::TRIANGLE_MESH;
+
 			bvh = std::make_shared<BVH3<T>>();
 		}
 
@@ -42,6 +46,8 @@ namespace HSim
 	  		pointIndices(pointIndices_), normalIndices(normalIndices_), uvIndices(uvIndices_),
 	  		transform(transform_) 
 		{
+			SurfaceType = SurfaceType::TRIANGLE_MESH;
+
 			bvh = std::make_shared<BVH3<T>>();
 		}
 

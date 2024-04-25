@@ -177,7 +177,6 @@ void HSim::RenderWindow::mainLoop()
 		ImGui::NewFrame();
 		// ImGui::ShowDemoWindow(); // Show demo window! :)
 
-
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -195,10 +194,9 @@ void HSim::RenderWindow::mainLoop()
 			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);			 // Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
 
-			ImGui::SliderFloat("lightPos.x", &renderParams.lightPos.x, -100.0f, 100.0f);	
-			ImGui::SliderFloat("lightPos.y", &renderParams.lightPos.y, -100.0f, 100.0f);	
-			ImGui::SliderFloat("lightPos.z", &renderParams.lightPos.z, -100.0f, 100.0f);	
-
+			ImGui::SliderFloat("lightPos.x", &renderParams.lightPos.x, -100.0f, 100.0f);
+			ImGui::SliderFloat("lightPos.y", &renderParams.lightPos.y, -100.0f, 100.0f);
+			ImGui::SliderFloat("lightPos.z", &renderParams.lightPos.z, -100.0f, 100.0f);
 
 			if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
 				counter++;
@@ -223,7 +221,22 @@ void HSim::RenderWindow::mainLoop()
 		{
 			ImGui::Begin("Scene");
 
-			
+			auto callback = [&](GameObject_ptr go)
+			{
+				if (!go->isLeaf())
+					return;
+
+				if (go->renderable->spaceObject->spaceObjectType == SpaceObjectType::SURFACE)
+				{
+					auto obj = std::static_pointer_cast<Surface3_Ptr<PRECISION>>(go->renderable->spaceObject);
+
+					// ImGui::SliderFloat("x", &obj->transform.translation.x, -100.0f, 100.0f);
+					// ImGui::SliderFloat("y", &obj->transform.translation.y, -100.0f, 100.0f);
+					// ImGui::SliderFloat("z", &obj->transform.translation.z, -100.0f, 100.0f);
+				}
+			};
+
+			scene->traverse(callback);
 
 			ImGui::End();
 		}
@@ -512,7 +525,6 @@ void HSim::RenderWindow::scrollCallback(GLFWwindow *window, double offsetX, doub
 	// }
 }
 
-
 void HSim::RenderWindow::cursorEnterCallback(GLFWwindow *window, int entered)
 {
 	// todo
@@ -522,7 +534,6 @@ void HSim::RenderWindow::cursorEnterCallback(GLFWwindow *window, int entered)
 
 void HSim::RenderWindow::ImGuiInit()
 {
-	
 }
 
 void HSim::RenderWindow::ImGuiCreate()
@@ -532,4 +543,3 @@ void HSim::RenderWindow::ImGuiCreate()
 void HSim::RenderWindow::ImGuiCleanup()
 {
 }
-

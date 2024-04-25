@@ -4,6 +4,13 @@
 namespace HSim
 {
 	// base class for 3d objects
+	enum class SpaceObjectType 
+	{
+		SURFACE,
+		GRID,
+		HELPER
+	};
+
 	template <typename T>
 	class SpaceObject3
 	{
@@ -12,6 +19,9 @@ namespace HSim
 		~SpaceObject3() {}
 
 		// todo: class info: class name, object id
+
+	public:
+		SpaceObjectType spaceObjectType;
 	};
 
 	template <typename T> 

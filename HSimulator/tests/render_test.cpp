@@ -70,7 +70,7 @@ void createScene(HSim::App &app)
 	std::uniform_int_distribution<int> distribution_i(-50, 50);
 	std::uniform_real_distribution<float> distribution_f(0, 1);
 
-	for (size_t i = 0; i < 100; i++)
+	for (size_t i = 0; i < 10; i++)
 	{
 		auto x = distribution_i(generator);
 		auto y = distribution_i(generator);

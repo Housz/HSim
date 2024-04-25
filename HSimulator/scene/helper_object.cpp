@@ -2,6 +2,7 @@
 
 HSim::Helper::Helper()
 {
+    spaceObjectType = SpaceObjectType::HELPER;
 }
 
 HSim::Helper::~Helper()

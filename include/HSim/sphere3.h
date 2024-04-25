@@ -10,18 +10,20 @@ namespace HSim
 	class Sphere3 : public Surface3<T>
 	{
 	public:
-		Sphere3(){};
+		Sphere3() { SurfaceType = SurfaceType::SPHERE; }
 		~Sphere3(){};
 
 		// Sphere3(const Vec3<T> &center_, const T radius_) : center(center_), radius(radius_) {}
 
-		Sphere3(const Transform3<T> &transform_) : Surface3<T>(transform_){};
+		Sphere3(const Transform3<T> &transform_) : Surface3<T>(transform_) { SurfaceType = SurfaceType::SPHERE; };
 
 		Sphere3(const Vec3<T> &center_, const T radius_, const Transform3<T> &transform_)
-			: Surface3<T>(transform_), center(center_), radius(radius_) {}
+			: Surface3<T>(transform_), center(center_), radius(radius_) 
+			{ SurfaceType = SurfaceType::SPHERE; }
 
 		Sphere3(const Sphere3<T> &sphere_)
-			: Surface3<T>(sphere_.transform), center(sphere_.center), radius(sphere_.radius) {}
+			: Surface3<T>(sphere_.transform), center(sphere_.center), radius(sphere_.radius) 
+			{ SurfaceType = SurfaceType::SPHERE; }
 
 		void setCenter(const Vec3<T> center_) { center = center_; }
 		void setRadius(const T radius_) { radius = radius_; }

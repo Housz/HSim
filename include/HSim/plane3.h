@@ -9,19 +9,21 @@ namespace HSim
 	class Plane3 : public Surface3<T>
 	{
 	public:
-		Plane3() {};
+		Plane3() { SurfaceType = SurfaceType::PLANE; };
 		~Plane3() {};
 
-		Plane3(const Transform3<T>& transform_) : transform(transform_) {}
+		Plane3(const Transform3<T>& transform_) : transform(transform_) { SurfaceType = SurfaceType::PLANE; }
 
 		Plane3(const Vec3<T> normal_, const Vec3<T> point_)
-		: normal(normal_), point(point_) {}
+		: normal(normal_), point(point_) { SurfaceType = SurfaceType::PLANE; }
 
 		Plane3(const Vec3<T> normal_, const Vec3<T> point_, const Transform3<T>& transform_)
-		: normal(normal_), point(point_), transform(transform_) {}
+		: normal(normal_), point(point_), transform(transform_) { SurfaceType = SurfaceType::PLANE; }
 
 		Plane3(const Vec3<T> p1, const Vec3<T> p2, const Vec3<T> p3)
 		{
+			SurfaceType = SurfaceType::PLANE;
+
 			auto v12 = p2 - p1;
 			auto v13 = p3 - p1;
 
@@ -32,6 +34,8 @@ namespace HSim
 		Plane3(const Vec3<T> p1, const Vec3<T> p2, const Vec3<T> p3, const Transform3<T>& transform_)
 		: transform(transform_)
 		{
+			SurfaceType = SurfaceType::PLANE;
+			
 			auto v12 = p2 - p1;
 			auto v13 = p3 - p1;
 
