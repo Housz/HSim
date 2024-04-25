@@ -111,7 +111,7 @@ void createScene(HSim::App &app)
 
 	// mesh
 	auto mesh = std::make_shared<HSim::TriangleMesh3<PRECISION>>();
-	HSim::readOBJtoTriangleMesh(mesh, "spot_triangulated.obj");
+	HSim::readOBJtoTriangleMesh(mesh, "./resources/models/spot_triangulated.obj");
 
 	auto matMesh = std::make_shared<HSim::BasicMaterial>();
 	matMesh->color = {0.2, 0.8, 0.2};
@@ -142,7 +142,7 @@ void createScene(HSim::App &app)
 	auto go7 = std::make_shared<HSim::GameObject>();
 	go7->renderable = meshBVHRenderable;
 
-	root->addChild(go7);
+	// root->addChild(go7);
 
 
 }

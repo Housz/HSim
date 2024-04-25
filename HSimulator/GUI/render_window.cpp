@@ -115,17 +115,19 @@ void HSim::RenderWindow::mainLoop()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
 
+	io.Fonts->AddFontFromFileTTF("./resources/fonts/Cousine-Regular.ttf", 24);
+
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 	// ImGui::StyleColorsLight();
 
-	ImGui::GetIO().FontGlobalScale = 1.5f;
+	// ImGui::GetIO().FontGlobalScale = 1.5f;
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplGlfw_InitForOpenGL(glfwWindow, true);
 	ImGui_ImplOpenGL3_Init();
 
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	/********************** imgui *************************/
@@ -214,6 +216,15 @@ void HSim::RenderWindow::mainLoop()
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
 				show_another_window = false;
+			ImGui::End();
+		}
+
+		// scene
+		{
+			ImGui::Begin("Scene");
+
+			
+
 			ImGui::End();
 		}
 

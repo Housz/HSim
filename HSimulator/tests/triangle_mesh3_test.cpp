@@ -15,7 +15,7 @@ void createScene(HSim::App &app)
 	auto root = scene->root;
 
 	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
-	HSim::readOBJtoTriangleMesh(mesh, "spot_triangulated.obj");
+	HSim::readOBJtoTriangleMesh(mesh, "./resources/models/spot_triangulated.obj");
 
 	mesh->buildBVH();
 
