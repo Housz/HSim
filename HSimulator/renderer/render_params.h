@@ -43,6 +43,8 @@ namespace HSim
 		// 1 - Shadow map generation
 		// 2 = Transparency
 		int mode = 0;
+
+		glm::vec3 lightPos = glm::vec3(20.f, 15.f, 15.f);
 	};
 
 } // namespace HSim

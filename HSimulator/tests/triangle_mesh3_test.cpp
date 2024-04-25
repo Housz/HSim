@@ -5,9 +5,10 @@
 #include <config/numerical_config.h>
 #include <IO/obj_reader.h>
 
-HSim::SceneGraph_ptr createScene()
+void createScene(HSim::App &app)
 {
 	auto scene = std::make_shared<HSim::SceneGraph>();
+	app.setScene(scene);
 
 	scene->addGround(10);
 
@@ -62,23 +63,19 @@ HSim::SceneGraph_ptr createScene()
 
 	root->addChild(go1);
 	root->addChild(go2);
-
-	return scene;
 }
 
-int main()
-{
-	HSim::App app;
+	// return scene;
 
-	app.init(1920, 1080);
+	int main()
+	{
+		HSim::App app;
 
-	app.setScene(createScene());
+		app.init(1920, 1080);
 
-	int a = 1;
+		createScene(app);
 
-	app.window->ImGuiCallback = [&](){ std::cout << a << " ImGuiCallback\n"; ImGui::ShowDemoWindow();};
+		app.mainLoop();
 
-	app.mainLoop();
-
-	return 0;
-}
+		return 0;
+	}

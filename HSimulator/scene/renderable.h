@@ -32,12 +32,11 @@ namespace HSim
 
 		// states
 	public:
-		// RenderableState state;
 
 		bool visible = true;
 
 		bool renderingDataNeedUpdate = true;
-		bool aabbNeedUpdate = true;
+		// bool aabbNeedUpdate = true;
 	};
 
 	using Renderable_Ptr = std::shared_ptr<Renderable>;

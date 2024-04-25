@@ -113,7 +113,7 @@ void HSim::Box3GraphicsObject::draw(const RenderParams &renderParams)
     // use shader with renderParams
     shader->use();
     shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
-    shader->setVec3("lightPos", 20, 15, 15);
+    shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
     glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
     shader->setVec3("viewPos", cameraPosition);
 

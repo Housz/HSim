@@ -20,6 +20,12 @@ void HSim::Renderable::draw(const RenderParams &renderParams)
 
 	if (visible)
 	{
+		if (renderingDataNeedUpdate)
+		{
+			graphicsObject->buildRenderingData();
+			renderingDataNeedUpdate = false;
+		}
+		
 		graphicsObject->draw(renderParams);
 	}
 	

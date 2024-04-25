@@ -97,7 +97,13 @@ namespace HSim
 		SceneGraph_ptr scene;
 
 		// std::shared_ptr<std::function<void()>> ImGuiCallback = nullptr;
-		std::function<void()> ImGuiCallback;
+		// std::function<void()> ImGuiCallback;
+		// std::function<void()>& ImGuiCallback ;
+
+	private:
+		void ImGuiInit();
+		void ImGuiCreate();
+		void ImGuiCleanup();
 
 	};
 

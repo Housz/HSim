@@ -6,9 +6,10 @@
 #include <app/app.h>
 #include <IO/obj_reader.h>
 
-HSim::SceneGraph_ptr createScene()
+void createScene(HSim::App &app)
 {
 	auto scene = std::make_shared<HSim::SceneGraph>();
+	app.setScene(scene);
 
 	// auto root = std::make_shared<HSim::GameObject>();
 	// scene->root = root;
@@ -143,11 +144,8 @@ HSim::SceneGraph_ptr createScene()
 
 	root->addChild(go7);
 
-	/**************************************************/
 
-	return scene;
 }
-
 
 int main()
 {
@@ -155,7 +153,7 @@ int main()
 
 	app.init(1920, 1080);
 
-	app.setScene(createScene());
+	createScene(app);
 
 	app.mainLoop();
 
