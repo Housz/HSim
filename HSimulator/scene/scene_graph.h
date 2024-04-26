@@ -22,7 +22,13 @@ namespace HSim
 
 		void draw(const RenderParams& renderParams);
 
+	public:
 		void addGround(size_t slices = 100);
+
+		void addSphere(const Vec3f& center, const float radius, const Vec3f& color = {0.8, 0.4, 0.4});
+
+		void addBox(const Vec3f& lowerCorner, const Vec3f& upperCorner, const Vec3f& color = {0.8, 0.4, 0.4});
+
 
 	public:
 		GameObject_ptr root = nullptr;

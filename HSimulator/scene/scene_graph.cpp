@@ -1,4 +1,5 @@
 #include <scene/scene_graph.h>
+#include "scene_graph.h"
 
 HSim::SceneGraph::SceneGraph()
 {
@@ -108,6 +109,40 @@ void HSim::SceneGraph::addGround(size_t slices)
 	auto groundHelperRenderable = std::make_shared<HSim::Renderable>(groudHelper, groundHelperGObject);
 	auto go = std::make_shared<HSim::GameObject>();
 	go->renderable = groundHelperRenderable;
+
+	root->addChild(go);
+}
+
+void HSim::SceneGraph::addSphere(const Vec3f &center, const float radius, const Vec3f &color)
+{
+	auto sphere = std::make_shared<HSim::Sphere3<PRECISION>>();
+	sphere->setCenter(center);
+	sphere->setRadius(radius);
+
+	auto material = std::make_shared<HSim::BasicMaterial>();
+	material->color = {color[0], color[1], color[2]};
+
+	auto sphereGraphicsObject = std::make_shared<HSim::Sphere3GObject>(sphere, material);
+	auto sphereRenderable = std::make_shared<HSim::Renderable>(sphere, sphereGraphicsObject);
+
+	auto go = std::make_shared<HSim::GameObject>();
+	go->renderable = sphereRenderable;
+
+	root->addChild(go);
+}
+
+void HSim::SceneGraph::addBox(const Vec3f &lowerCorner, const Vec3f &upperCorner, const Vec3f &color)
+{
+	auto box = std::make_shared<HSim::Box3<float>>(lowerCorner, upperCorner);
+	auto material = std::make_shared<HSim::BasicMaterial>();
+	material->color = {color[0], color[1], color[2]};
+	
+	auto boxGraphicsObject = std::make_shared<HSim::Box3GraphicsObject>(box, material);
+
+	auto boxRenderable = std::make_shared<HSim::Renderable>(box, boxGraphicsObject);
+	
+	auto go = std::make_shared<HSim::GameObject>();
+	go->renderable = boxRenderable;
 
 	root->addChild(go);
 }

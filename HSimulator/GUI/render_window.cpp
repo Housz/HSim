@@ -39,6 +39,9 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	// glfwWindowHint(GLFW_SAMPLES, 4);
 
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	
+
 	glfwWindow = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
 
 	// if (glfwWindow == NULL)
@@ -83,6 +86,8 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 		exit(-1);
 		// return -1;
 	}
+
+	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 
 	glfwSwapInterval(1); // Enable vsync
@@ -221,18 +226,74 @@ void HSim::RenderWindow::mainLoop()
 		{
 			ImGui::Begin("Scene");
 
-			auto callback = [&](GameObject_ptr go)
+			/********************** addBox ****************************/
+			static float boxLower[3] = {0, 0, 0};
+			static float boxUpper[3] = {1, 1, 1};
+			static float boxColor[3] = {0.2, 0.2, 0.2};
+			ImGui::InputFloat3("##boxLower", boxLower);
+			ImGui::InputFloat3("##boxUpper", boxUpper);
+			ImGui::ColorEdit3("##boxColor", boxColor);
+			if (ImGui::Button("add Box"))
 			{
-				if (!go->isLeaf())
+				scene->addBox(
+					{boxLower[0], boxLower[1], boxLower[2]},
+					{boxUpper[0], boxUpper[1], boxUpper[2]},
+					{boxColor[0], boxColor[1], boxColor[2]});
+			}
+			/********************** addBox ****************************/
+
+			/********************** addSphere ****************************/
+			static float sphereCenter[3] = {0, 0, 0};
+			static float sphereRadius = 1;
+			static float sphereColor[3] = {0.2, 0.2, 0.2};
+			ImGui::InputFloat3("##sphereCenter", sphereCenter);
+			ImGui::InputFloat("##sphereRadius", &sphereRadius);
+			ImGui::ColorEdit3("##sphereColor", sphereColor);
+			if (ImGui::Button("add Sphere"))
+			{
+				scene->addSphere(
+					{sphereCenter[0], sphereCenter[1], sphereCenter[2]},
+					sphereRadius,
+					{sphereColor[0], sphereColor[1], sphereColor[2]});
+			}
+
+			/********************** addBox ****************************/
+
+			size_t i = 0;
+
+			std::function<void(GameObject_ptr)> callback = [&](GameObject_ptr go)
+			{
+				if (go->renderable == nullptr)
+					return;
+
+				if (go->renderable->spaceObject == nullptr)
 					return;
 
 				if (go->renderable->spaceObject->spaceObjectType == SpaceObjectType::SURFACE)
 				{
-					auto obj = std::static_pointer_cast<Surface3_Ptr<PRECISION>>(go->renderable->spaceObject);
+					auto obj = std::static_pointer_cast<Surface3<PRECISION>>(go->renderable->spaceObject);
 
-					// ImGui::SliderFloat("x", &obj->transform.translation.x, -100.0f, 100.0f);
-					// ImGui::SliderFloat("y", &obj->transform.translation.y, -100.0f, 100.0f);
-					// ImGui::SliderFloat("z", &obj->transform.translation.z, -100.0f, 100.0f);
+					ImGui::PushID(i);
+					i++;
+
+					if (ImGui::SliderFloat("x", &obj->transform.translation.x, -100.0f, 100.0f))
+					{
+						go->renderable->renderingDataNeedUpdate = true;
+					}
+
+					if (ImGui::SliderFloat("y", &obj->transform.translation.y, -100.0f, 100.0f))
+					{
+						go->renderable->renderingDataNeedUpdate = true;
+					}
+
+					if (ImGui::SliderFloat("z", &obj->transform.translation.z, -100.0f, 100.0f))
+					{
+						go->renderable->renderingDataNeedUpdate = true;
+					}
+
+					ImGui::Separator();
+
+					ImGui::PopID();
 				}
 			};
 

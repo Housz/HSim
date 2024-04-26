@@ -226,6 +226,9 @@ std::vector<float> HSim::TriangleMesh3GObject::buildVerticesNaive()
     for (size_t i = 0; i < mesh->numPoints(); i++)
     {
         auto point = mesh->points[i];
+        
+        // transform
+        point = mesh->transform.mul(point);
 
         vertices.push_back(point.x);
         vertices.push_back(point.y);
@@ -261,6 +264,11 @@ std::vector<float> HSim::TriangleMesh3GObject::buildVerticesFlat()
         auto a = mesh->points[aIndex];
         auto b = mesh->points[bIndex];
         auto c = mesh->points[cIndex];
+
+        // transform
+        a = mesh->transform.mul(a);
+        b = mesh->transform.mul(b);
+        c = mesh->transform.mul(c);
 
         auto normal = (b - a).cross(c - a).getNormalized();
 

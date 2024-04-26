@@ -113,6 +113,8 @@ void createScene(HSim::App &app)
 	auto mesh = std::make_shared<HSim::TriangleMesh3<PRECISION>>();
 	HSim::readOBJtoTriangleMesh(mesh, "./resources/models/spot_triangulated.obj");
 
+	mesh->transform.setTranslation({1, 1, 1});
+
 	auto matMesh = std::make_shared<HSim::BasicMaterial>();
 	matMesh->color = {0.2, 0.8, 0.2};
 	matMesh->renderingType = HSim::RenderingType::FLAT;
