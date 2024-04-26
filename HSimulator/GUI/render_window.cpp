@@ -228,7 +228,7 @@ void HSim::RenderWindow::mainLoop()
 			/********************** addBox ****************************/
 			static float boxLower[3] = {0, 0, 0};
 			static float boxUpper[3] = {1, 1, 1};
-			static float boxColor[3] = {0.2, 0.2, 0.2};
+			static float boxColor[3] = {0.7, 0.7, 0.7};
 			ImGui::InputFloat3("##boxLower", boxLower);
 			ImGui::InputFloat3("##boxUpper", boxUpper);
 			ImGui::ColorEdit3("##boxColor", boxColor);
@@ -244,7 +244,7 @@ void HSim::RenderWindow::mainLoop()
 			/********************** addSphere ****************************/
 			static float sphereCenter[3] = {0, 0, 0};
 			static float sphereRadius = 1;
-			static float sphereColor[3] = {0.2, 0.2, 0.2};
+			static float sphereColor[3] = {0.7, 0.7, 0.7};
 			ImGui::InputFloat3("##sphereCenter", sphereCenter);
 			ImGui::InputFloat("##sphereRadius", &sphereRadius);
 			ImGui::ColorEdit3("##sphereColor", sphereColor);
