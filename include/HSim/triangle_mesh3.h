@@ -380,9 +380,6 @@ namespace HSim
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const override
 		{
-			// todo
-			// invoke bvh closestPosition(positionInLocal_)
-
 			// std::function<float(const HSim::Vec3f& position, const size_t primitiveIndex)> distanceFunction =
 			auto distanceFunction =
 				[&](const HSim::Vec3<float> &position, const size_t primitiveIndex) -> float
@@ -406,6 +403,8 @@ namespace HSim
 		{
 			// todo
 			// invoke bvh closestNormal(positionInLocal_)
+			
+
 			return {0, 0, 0};
 		}
 

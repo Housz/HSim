@@ -40,7 +40,6 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 	// glfwWindowHint(GLFW_SAMPLES, 4);
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
-	
 
 	glfwWindow = glfwCreateWindow(width, height, windowTitle.c_str(), NULL, NULL);
 
@@ -261,7 +260,8 @@ void HSim::RenderWindow::mainLoop()
 
 			size_t i = 0;
 
-			std::function<void(GameObject_ptr)> callback = [&](GameObject_ptr go)
+			// std::function<void(GameObject_ptr)> callback = [&](GameObject_ptr go)
+			auto callback = [&](const GameObject_ptr go)
 			{
 				if (go->renderable == nullptr)
 					return;

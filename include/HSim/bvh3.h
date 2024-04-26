@@ -405,6 +405,8 @@ namespace HSim
 
 		
 
+		
+
 		// data
 	public:
 		std::vector<size_t> primitiveIndices;

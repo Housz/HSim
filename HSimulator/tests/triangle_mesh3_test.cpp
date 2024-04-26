@@ -65,17 +65,17 @@ void createScene(HSim::App &app)
 	root->addChild(go2);
 }
 
-	// return scene;
+// return scene;
 
-	int main()
-	{
-		HSim::App app;
+int main()
+{
+	HSim::App app;
 
-		app.init(1920, 1080);
+	app.init(1920, 1080);
 
-		createScene(app);
+	createScene(app);
 
-		app.mainLoop();
+	app.mainLoop();
 
-		return 0;
-	}
+	return 0;
+}

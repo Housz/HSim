@@ -12,9 +12,11 @@ namespace HSim
 
 	public:
 		void traverse(std::function<void(GameObject_ptr)>& callback);
+		void traverse(const std::function<void(GameObject_ptr)>& callback);
 
 	public:
 		void traverse(std::function<void(GameObject_ptr)>& callback, GameObject_ptr go);
+		void traverse(const std::function<void(GameObject_ptr)>& callback, GameObject_ptr go);
 		
 
 		void serialize();
