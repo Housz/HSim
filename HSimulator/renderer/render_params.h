@@ -14,10 +14,12 @@ namespace HSim
 											  // glm::mat4 normal = glm::mat4{ 1.f }; // normal transform
 		} transforms;
 
+		// to use
 		struct Light
 		{
 			// ambient light
-			glm::vec3 ambientColor = glm::vec3(0.05f);
+			// glm::vec3 ambientColor = glm::vec3(0.05f);
+			glm::vec3 ambientColor = glm::vec3(0.5f);
 			float ambientScale = 1.f;
 
 			// directional light
@@ -30,6 +32,8 @@ namespace HSim
 			glm::vec3 cameraLightColor = glm::vec3(0.1f);
 			float cameraLightScale = 1.f;
 		} light;
+
+		glm::vec3 lightColor = glm::vec3(0.7f);
 
 		// image size
 		int width = 0;

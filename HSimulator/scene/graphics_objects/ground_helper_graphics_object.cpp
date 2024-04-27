@@ -40,6 +40,8 @@ void HSim::GroundHelperGObject::draw(const RenderParams &renderParams)
 	shader->use();
 	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
 	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
+    shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
+
 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
 	shader->setVec3("viewPos", cameraPosition);
 

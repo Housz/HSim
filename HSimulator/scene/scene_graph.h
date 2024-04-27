@@ -31,7 +31,7 @@ namespace HSim
 
 		void addBox(const Vec3f& lowerCorner, const Vec3f& upperCorner, const Vec3f& color = {0.8, 0.4, 0.4});
 
-		void addLine(const Vec3f& start, const Vec3f& end, const Vec3f& color = {1, 1, 0.0});
+		void addLine(const Vec3f& start, const Vec3f& end, const Vec3f& color = {0.9, 0.9, 0.0});
 
 
 	public:

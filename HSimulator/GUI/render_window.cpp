@@ -198,6 +198,8 @@ void HSim::RenderWindow::mainLoop()
 			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);			 // Edit 1 float using a slider from 0.0f to 1.0f
 			ImGui::ColorEdit3("clear color", (float *)&clear_color); // Edit 3 floats representing a color
 
+			ImGui::ColorEdit3("lightColor", (float *)&renderParams.lightColor); // Edit 3 floats representing a color
+			
 			ImGui::SliderFloat("lightPos.x", &renderParams.lightPos.x, -100.0f, 100.0f);
 			ImGui::SliderFloat("lightPos.y", &renderParams.lightPos.y, -100.0f, 100.0f);
 			ImGui::SliderFloat("lightPos.z", &renderParams.lightPos.z, -100.0f, 100.0f);

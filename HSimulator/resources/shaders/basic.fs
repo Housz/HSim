@@ -7,15 +7,18 @@ out vec4 FragColor;
 uniform vec4 ourColor;
 
 uniform vec3 lightPos;
+uniform vec3 lightColor;
 
 uniform vec3 viewPos;
 
 void main() {
-    vec4 lightColor = vec4(1.0);
-    // vec3 lightPos = vec3(5, 5, 5);
+
+    // vec4 lightColor = vec4(0.7);
+    vec4 lightColor = vec4(lightColor, 1.0);
 
     // ambient
-    float ambientStrength = 0.5;
+    // float ambientStrength = 0.5;
+    float ambientStrength = 1;
 
     vec4 ambient = ambientStrength * lightColor;
 
