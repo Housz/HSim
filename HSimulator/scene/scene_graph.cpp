@@ -141,10 +141,10 @@ void HSim::SceneGraph::addSphere(const Vec3f &center, const float radius, const 
 	sphere->setCenter(center);
 	sphere->setRadius(radius);
 
-	auto material = std::make_shared<HSim::BasicMaterial>();
-	material->color = {color[0], color[1], color[2]};
+	auto sphereMat = std::make_shared<HSim::BasicMaterial>();
+	sphereMat->color = {color[0], color[1], color[2]};
 
-	auto sphereGraphicsObject = std::make_shared<HSim::Sphere3GObject>(sphere, material);
+	auto sphereGraphicsObject = std::make_shared<HSim::Sphere3GObject>(sphere, sphereMat);
 	auto sphereRenderable = std::make_shared<HSim::Renderable>(sphere, sphereGraphicsObject);
 
 	auto go = std::make_shared<HSim::GameObject>();
@@ -156,15 +156,31 @@ void HSim::SceneGraph::addSphere(const Vec3f &center, const float radius, const 
 void HSim::SceneGraph::addBox(const Vec3f &lowerCorner, const Vec3f &upperCorner, const Vec3f &color)
 {
 	auto box = std::make_shared<HSim::Box3<float>>(lowerCorner, upperCorner);
-	auto material = std::make_shared<HSim::BasicMaterial>();
-	material->color = {color[0], color[1], color[2]};
+	auto boxMat = std::make_shared<HSim::BasicMaterial>();
+	boxMat->color = {color[0], color[1], color[2]};
 	
-	auto boxGraphicsObject = std::make_shared<HSim::Box3GraphicsObject>(box, material);
+	auto boxGraphicsObject = std::make_shared<HSim::Box3GraphicsObject>(box, boxMat);
 
 	auto boxRenderable = std::make_shared<HSim::Renderable>(box, boxGraphicsObject);
 	
 	auto go = std::make_shared<HSim::GameObject>();
 	go->renderable = boxRenderable;
+
+	root->addChild(go);
+}
+
+void HSim::SceneGraph::addLine(const Vec3f &start, const Vec3f &end, const Vec3f &color)
+{
+	auto lineHelper = std::make_shared<HSim::LineHelper>(start, end);
+	auto lineMat = std::make_shared<HSim::BasicMaterial>();
+	lineMat->color = {color[0], color[1], color[2]};
+
+	auto lineHelperGObject = std::make_shared<HSim::LineHelperGObject>(lineHelper, lineMat);
+
+	auto lineHelperRenderable = std::make_shared<HSim::Renderable>(lineHelper, lineHelperGObject);
+
+	auto go = std::make_shared<HSim::GameObject>();
+	go->renderable = lineHelperRenderable;
 
 	root->addChild(go);
 }

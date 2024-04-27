@@ -401,11 +401,22 @@ namespace HSim
 
 		Vec3<T> closestNormalLocal(const Vec3<T> &positionInLocal_) const override
 		{
-			// todo
-			// invoke bvh closestNormal(positionInLocal_)
-			
+			auto distanceFunction =
+				[&](const HSim::Vec3<float> &position, const size_t primitiveIndex) -> float
+			{
+				auto triangle = getTrianlgeByIndex(primitiveIndex);
+				auto closestPositionInTriangle = triangle.closestPositionLocal(position);
+				return position.distanceTo(closestPositionInTriangle);
+			};
 
-			return {0, 0, 0};
+			auto closestPrimitiveInfo = bvh->closestPrimitive(positionInLocal_, distanceFunction);
+
+			std::cout << closestPrimitiveInfo;
+
+			auto closestTriangle = getTrianlgeByIndex(closestPrimitiveInfo.primitiveIndex);
+			auto closestNormal = closestTriangle.faceNormal();
+
+			return closestNormal;
 		}
 
 		AABB3<T> AABBLocal() override

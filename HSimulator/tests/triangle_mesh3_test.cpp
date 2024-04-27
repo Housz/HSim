@@ -31,9 +31,11 @@ void createScene(HSim::App &app)
 	goMesh->renderable = meshRenderable;
 	root->addChild(goMesh);
 
-	HSim::Vec3f target(0.2, 0.5, 0);
+	HSim::Vec3f target(0.2, 0.4, 0.3);
 
 	auto p = mesh->closestPositionLocal(target);
+
+	auto n = mesh->closestNormalLocal(target);
 
 	auto sphere1 = std::make_shared<HSim::Sphere3<PRECISION>>();
 	sphere1->center = target;
@@ -41,7 +43,7 @@ void createScene(HSim::App &app)
 
 	auto sphere2 = std::make_shared<HSim::Sphere3<float>>();
 	sphere2->center = p;
-	sphere2->radius = 0.01;
+	sphere2->radius = 0.005;
 
 	auto material1 = std::make_shared<HSim::BasicMaterial>();
 	material1->color = {0.8, 0.4, 0.4};
@@ -63,6 +65,11 @@ void createScene(HSim::App &app)
 
 	root->addChild(go1);
 	root->addChild(go2);
+
+
+	scene->addLine(p, target);
+
+	scene->addLine(p, p + n);
 }
 
 // return scene;
