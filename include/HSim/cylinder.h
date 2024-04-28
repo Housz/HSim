@@ -70,7 +70,7 @@ namespace HSim
 		AABB3<T> AABBLocal()  override
 		{
 			// todo
-			AABB3<T> aabb();
+			AABB3<T> aabb;
 			return aabb;
 		}
 
@@ -95,5 +95,7 @@ namespace HSim
 		T height;
 	};
 
+	template <typename T>
+	using Cylinder3_Ptr = std::shared_ptr<Cylinder3<T>>;
 	
 } // namespace HSim

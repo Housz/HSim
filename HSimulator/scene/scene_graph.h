@@ -33,6 +33,7 @@ namespace HSim
 
 		void addLine(const Vec3f& start, const Vec3f& end, const Vec3f& color = {0.9, 0.9, 0.0});
 
+		void addCylinder(const float radiusTop, const float radiusBottom, const float height, const Vec3f& color = {0.7, 0.7, 0.7});
 
 	public:
 		GameObject_ptr root = nullptr;

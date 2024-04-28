@@ -155,7 +155,7 @@ void HSim::SceneGraph::addSphere(const Vec3f &center, const float radius, const 
 
 void HSim::SceneGraph::addBox(const Vec3f &lowerCorner, const Vec3f &upperCorner, const Vec3f &color)
 {
-	auto box = std::make_shared<HSim::Box3<float>>(lowerCorner, upperCorner);
+	auto box = std::make_shared<HSim::Box3<PRECISION>>(lowerCorner, upperCorner);
 	auto boxMat = std::make_shared<HSim::BasicMaterial>();
 	boxMat->color = {color[0], color[1], color[2]};
 	
@@ -181,6 +181,22 @@ void HSim::SceneGraph::addLine(const Vec3f &start, const Vec3f &end, const Vec3f
 
 	auto go = std::make_shared<HSim::GameObject>();
 	go->renderable = lineHelperRenderable;
+
+	root->addChild(go);
+}
+
+void HSim::SceneGraph::addCylinder(const float radiusTop, const float radiusBottom, const float height, const Vec3f &color)
+{
+	auto cylinder = std::make_shared<HSim::Cylinder3<PRECISION>>(radiusTop, radiusBottom, height);
+	auto cylinderMat = std::make_shared<HSim::BasicMaterial>();
+	cylinderMat->color = {color[0], color[1], color[2]};
+	
+	auto cylinderGraphicsObject = std::make_shared<HSim::CylinderGObject>(cylinder, cylinderMat);
+
+	auto cylinderRenderable = std::make_shared<HSim::Renderable>(cylinder, cylinderGraphicsObject);
+
+	auto go = std::make_shared<HSim::GameObject>();
+	go->renderable = cylinderRenderable;
 
 	root->addChild(go);
 }

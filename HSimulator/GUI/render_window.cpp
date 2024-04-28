@@ -260,6 +260,27 @@ void HSim::RenderWindow::mainLoop()
 
 			/********************** addBox ****************************/
 
+			/********************** addCylinder ****************************/
+			static float cylinderRadiusTop = 0.5;
+			static float cylinderRadiusBottom = 0.5;
+			static float cylinderHeight = 1;
+			static float cylinderColor[3] = {0.7, 0.7, 0.7};
+
+			ImGui::InputFloat("##cylinderRadiusTop", &cylinderRadiusTop);
+			ImGui::InputFloat("##cylinderRadiusBottom", &cylinderRadiusBottom);
+			ImGui::InputFloat("##cylinderHeight", &cylinderHeight);
+			ImGui::ColorEdit3("##cylinderColor", cylinderColor);
+
+			if (ImGui::Button("add Cylinder"))
+			{
+				scene->addCylinder(cylinderRadiusTop, cylinderRadiusBottom, cylinderHeight,
+				{cylinderColor[0], cylinderColor[1], cylinderColor[2]});
+			}
+
+
+			/********************** addCylinder ****************************/
+
+
 			size_t i = 0;
 
 			// std::function<void(GameObject_ptr)> callback = [&](GameObject_ptr go)
