@@ -16,6 +16,7 @@ namespace HSim
 	{
 		BOX,
 		SPHERE,
+		Cylinder,
 		PLANE,
 		TRIANGLE,
 		TRIANGLE_MESH,

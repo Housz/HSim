@@ -8,7 +8,7 @@ HSim::LineHelperGObject::~LineHelperGObject()
 {
 }
 
-HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_)
+HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, const LineMaterial_Ptr material_)
     : GraphicsObject(material_)
 {
     lineHelper = lineHelper_;

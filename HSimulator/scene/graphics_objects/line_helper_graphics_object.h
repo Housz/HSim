@@ -8,7 +8,7 @@ namespace HSim
     {
     public:
         LineHelperGObject();
-        LineHelperGObject(const LineHelper_Ptr lineHelper_, const BasicMaterial_Ptr material_);
+        LineHelperGObject(const LineHelper_Ptr lineHelper_, const LineMaterial_Ptr material_);
         ~LineHelperGObject();
 
         void buildRenderingData() override;
@@ -22,4 +22,6 @@ namespace HSim
 
         LineHelper_Ptr lineHelper = nullptr;
     };
+
+    // class 
 } // namespace HSim

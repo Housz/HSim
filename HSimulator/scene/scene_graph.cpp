@@ -172,7 +172,7 @@ void HSim::SceneGraph::addBox(const Vec3f &lowerCorner, const Vec3f &upperCorner
 void HSim::SceneGraph::addLine(const Vec3f &start, const Vec3f &end, const Vec3f &color)
 {
 	auto lineHelper = std::make_shared<HSim::LineHelper>(start, end);
-	auto lineMat = std::make_shared<HSim::BasicMaterial>();
+	auto lineMat = std::make_shared<HSim::LineMaterial>();
 	lineMat->color = {color[0], color[1], color[2]};
 
 	auto lineHelperGObject = std::make_shared<HSim::LineHelperGObject>(lineHelper, lineMat);

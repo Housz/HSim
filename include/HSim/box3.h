@@ -13,7 +13,7 @@ namespace HSim
 	{
 	public:
 		Box3() { SurfaceType = SurfaceType::BOX; }
-		~Box3() {};
+		~Box3() {}
 
 		Box3(const Transform3<T> transform_) : transform(transform_) { SurfaceType = SurfaceType::BOX; }
 
@@ -154,6 +154,7 @@ namespace HSim
             return intersectionInfo;
         }
 
+	// data
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};

@@ -261,6 +261,18 @@ namespace HSim
 
 	using LineHelper_Ptr = std::shared_ptr<LineHelper>;
 
+	class ArrowHelper : public Helper
+	{
+	public:
+		ArrowHelper();
+		ArrowHelper(const Vec3f& start_, const Vec3f& end_);
+		~ArrowHelper();
+
+	public:
+		Vec3f start;
+		Vec3f end;
+	};
+
 	// class SphereHelper : public Helper
 	// {
 	// public:

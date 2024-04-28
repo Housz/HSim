@@ -40,7 +40,20 @@ namespace HSim
 		RenderingType renderingType = RenderingType::NAIVE;
 	};
 
+	class LineMaterial : public Material
+	{
+	public:
+		LineMaterial();
+		LineMaterial(const Color &color_);
+		~LineMaterial();
+
+	public:
+		Color color = {0.5, 0.5, 0.5}; // default color
+		
+	};
+
 	using Material_Ptr = std::shared_ptr<Material>;
 	using BasicMaterial_Ptr = std::shared_ptr<BasicMaterial>;
+	using LineMaterial_Ptr = std::shared_ptr<LineMaterial>;
 
 } // namespace HSim

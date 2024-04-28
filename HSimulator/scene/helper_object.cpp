@@ -1,4 +1,5 @@
 #include <scene/helper_object.h>
+#include "helper_object.h"
 
 HSim::Helper::Helper()
 {
@@ -45,3 +46,16 @@ HSim::LineHelper::~LineHelper()
 // HSim::SphereHelper::~SphereHelper()
 // {
 // }
+
+HSim::ArrowHelper::ArrowHelper()
+{
+}
+
+HSim::ArrowHelper::ArrowHelper(const Vec3f &start_, const Vec3f &end_)
+:start(start_), end(end_)
+{
+}
+
+HSim::ArrowHelper::~ArrowHelper()
+{
+}

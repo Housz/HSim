@@ -56,7 +56,10 @@ void createScene(HSim::App &app)
 
 	auto material2 = std::make_shared<HSim::BasicMaterial>();
 	material2->color = {0.2, 0.8, 0.2};
-	auto lineHelperGObject = std::make_shared<HSim::LineHelperGObject>(lineHelper, material2);
+
+	auto lineMat = std::make_shared<HSim::LineMaterial>();
+	lineMat->color = {0.2, 0.8, 0.2};
+	auto lineHelperGObject = std::make_shared<HSim::LineHelperGObject>(lineHelper, lineMat);
 
 	auto lineHelperRenderable = std::make_shared<HSim::Renderable>(lineHelper, lineHelperGObject);
 
@@ -145,8 +148,6 @@ void createScene(HSim::App &app)
 	go7->renderable = meshBVHRenderable;
 
 	// root->addChild(go7);
-
-
 }
 
 int main()
