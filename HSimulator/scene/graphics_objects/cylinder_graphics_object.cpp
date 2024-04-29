@@ -9,10 +9,10 @@ HSim::CylinderGraphicsObject::CylinderGraphicsObject(const Cylinder3_Ptr<PRECISI
 {
     cylinder = cylinder_;
 
-	vbo.create();
-	ebo.create();
+    vbo.create();
+    ebo.create();
 
-	buildRenderingData();
+    buildRenderingData();
 }
 
 HSim::CylinderGraphicsObject::~CylinderGraphicsObject()
@@ -25,65 +25,65 @@ void HSim::CylinderGraphicsObject::buildRenderingData()
 
     vao.bind();
 
-	auto vertices = buildVertices();
-	auto indices = buildIndices();
-	
+    auto vertices = buildVertices();
+    auto indices = buildIndices();
+
     // vbo
-	vbo.bind();
-	vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_STATIC_DRAW);
-	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(float), 0);
+    vbo.bind();
+    vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_STATIC_DRAW);
+    vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(float), 0);
 
-	vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);
-	vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);
+    vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
-	// ebo
-	ebo.bind();
-	ebo.allocate((unsigned int)indices.size() * sizeof(unsigned int), GL_STATIC_DRAW);
-	ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(unsigned int), 0);
+    // ebo
+    ebo.bind();
+    ebo.allocate((unsigned int)indices.size() * sizeof(unsigned int), GL_STATIC_DRAW);
+    ebo.loadData(indices.data(), (unsigned int)indices.size() * sizeof(unsigned int), 0);
 
-	vao.bindEBO(ebo);
+    vao.bindEBO(ebo);
 
-	vao.unbind();
+    vao.unbind();
 }
 
 void HSim::CylinderGraphicsObject::draw(const RenderParams &renderParams)
 {
-	if (!isRendingDataValid())
-	{
-		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
-		buildRenderingData();
-	}
+    if (!isRendingDataValid())
+    {
+        std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
+        buildRenderingData();
+    }
 
-	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
-	auto color = mat->color;
-	auto shader = mat->shader;
+    auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+    auto color = mat->color;
+    auto shader = mat->shader;
 
-	// use shader with renderParams
-	shader->use();
-	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
-	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
+    // use shader with renderParams
+    shader->use();
+    shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+    shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
     shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
 
-	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
-	shader->setVec3("viewPos", cameraPosition);
+    glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+    shader->setVec3("viewPos", cameraPosition);
 
-	shader->setMat4("projection", renderParams.transforms.proj);
-	shader->setMat4("view", renderParams.transforms.view);
-	shader->setMat4("model", renderParams.transforms.model);
+    shader->setMat4("projection", renderParams.transforms.proj);
+    shader->setMat4("view", renderParams.transforms.view);
+    shader->setMat4("model", renderParams.transforms.model);
 
-	glViewport(0, 0, renderParams.width, renderParams.height);
+    glViewport(0, 0, renderParams.width, renderParams.height);
 
-	// bind vao and draw
-	vao.bind();
+    // bind vao and draw
+    vao.bind();
 
-	if (mat->wireframe)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	glDrawElements(GL_TRIANGLES, segments * 2 * 3 + segments * 3 *2, GL_UNSIGNED_INT, 0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (mat->wireframe)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    glDrawElements(GL_TRIANGLES, segments * 4 * 3 , GL_UNSIGNED_INT, 0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	vao.unbind();
+    vao.unbind();
 }
 
 bool HSim::CylinderGraphicsObject::isRendingDataValid()
@@ -104,6 +104,9 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
 
     auto angleStep = PI_DOUBLE / segments;
 
+    /**
+     * 1. side
+     */
     // top circle
     for (size_t i = 0; i <= segments; i++)
     {
@@ -115,11 +118,49 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
         vertices.push_back(-radiusTop * std::sin(i * angleStep));
 
         // normal
-        Vec3f n(radiusTop * std::cos(i * angleStep), 0, -radiusTop * std::sin(i * angleStep));
+
+        Vec3f n(height * std::cos(i * angleStep), radiusBottom - radiusTop, -height * std::sin(i * angleStep));
         n.normalize();
         vertices.push_back(n.x);
         vertices.push_back(n.y);
         vertices.push_back(n.z);
+    }
+
+    // 2. bottom circle
+    for (size_t i = 0; i <= segments; i++)
+    {
+        // x
+        vertices.push_back(radiusBottom * std::cos(i * angleStep));
+        // y
+        vertices.push_back(-height / 2.0);
+        // z
+        vertices.push_back(-radiusBottom * std::sin(i * angleStep));
+
+        // normal
+        Vec3f n(height * std::cos(i * angleStep), radiusBottom - radiusTop, -height * std::sin(i * angleStep));
+        n.normalize();
+        vertices.push_back(n.x);
+        vertices.push_back(n.y);
+        vertices.push_back(n.z);
+    }
+
+    /**
+     * top and bottom circles
+     */
+    // top circle
+    for (size_t i = 0; i <= segments; i++)
+    {
+        // x
+        vertices.push_back(radiusTop * std::cos(i * angleStep));
+        // y
+        vertices.push_back(height / 2.0);
+        // z
+        vertices.push_back(-radiusTop * std::sin(i * angleStep));
+
+        // normal
+        vertices.push_back(0);
+        vertices.push_back(1);
+        vertices.push_back(0);
     }
 
     // bottom circle
@@ -131,12 +172,11 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
         vertices.push_back(-height / 2.0);
         // z
         vertices.push_back(-radiusBottom * std::sin(i * angleStep));
+
         // normal
-        Vec3f n(radiusBottom * std::cos(i * angleStep), 0, -radiusBottom * std::sin(i * angleStep));
-        n.normalize();
-        vertices.push_back(n.x);
-        vertices.push_back(n.y);
-        vertices.push_back(n.z);
+        vertices.push_back(0);
+        vertices.push_back(-1);
+        vertices.push_back(0);
     }
 
     // top center
@@ -162,7 +202,7 @@ std::vector<unsigned int> HSim::CylinderGraphicsObject::buildIndices()
 {
     std::vector<unsigned int> indices;
 
-    // side 
+    // side
     for (size_t i = 0; i < segments; i++)
     {
         indices.push_back(i);
@@ -175,19 +215,19 @@ std::vector<unsigned int> HSim::CylinderGraphicsObject::buildIndices()
     }
 
     // top circle
-    for (size_t i = 0; i < segments; i++)
+    for (size_t i = (segments + 1) * 2; i < (segments + 1) * 2 + segments; i++)
     {
         indices.push_back(i);
         indices.push_back(i + 1);
-        indices.push_back((segments + 1) * 2);
+        indices.push_back((segments + 1) * 4);
     }
 
     // bottom circle
-    for (size_t i = 0; i < segments; i++)
+    for (size_t i = (segments + 1) * 3; i < (segments + 1) * 3 + segments; i++)
     {
-        indices.push_back(i + segments + 1);
-        indices.push_back(i + segments + 2);
-        indices.push_back((segments + 1) * 2 + 1);
+        indices.push_back(i);
+        indices.push_back(i + 1);
+        indices.push_back((segments + 1) * 4 + 1);
     }
 
     return indices;

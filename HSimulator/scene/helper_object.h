@@ -273,6 +273,8 @@ namespace HSim
 		Vec3f end;
 	};
 
+	using ArrowHelper_Ptr = std::shared_ptr<ArrowHelper>;
+
 	// class SphereHelper : public Helper
 	// {
 	// public:

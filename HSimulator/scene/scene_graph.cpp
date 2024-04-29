@@ -190,6 +190,7 @@ void HSim::SceneGraph::addCylinder(const float radiusTop, const float radiusBott
 	auto cylinder = std::make_shared<HSim::Cylinder3<PRECISION>>(radiusTop, radiusBottom, height);
 	auto cylinderMat = std::make_shared<HSim::BasicMaterial>();
 	cylinderMat->color = {color[0], color[1], color[2]};
+	// cylinderMat->wireframe = true;
 	
 	auto cylinderGraphicsObject = std::make_shared<HSim::CylinderGObject>(cylinder, cylinderMat);
 

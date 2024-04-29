@@ -23,5 +23,4 @@ namespace HSim
         LineHelper_Ptr lineHelper = nullptr;
     };
 
-    // class 
 } // namespace HSim
