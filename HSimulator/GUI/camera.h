@@ -66,7 +66,7 @@ namespace HSim
 
 	protected:
 		float mNear = 0.01f;
-		float mFar = 10.0f;
+		float mFar = 10000.0f;
 		float mFov = 0.0f;
 
 		int mViewportWidth;

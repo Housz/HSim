@@ -21,8 +21,8 @@ void createScene(HSim::App &app)
 
 	auto matMesh = std::make_shared<HSim::BasicMaterial>();
 	matMesh->color = {0.2, 0.8, 0.2};
-	// matMesh->renderingType = HSim::RenderingType::FLAT;
-	matMesh->wireframe = true;
+	matMesh->renderingType = HSim::RenderingType::FLAT;
+	// matMesh->wireframe = true;
 
 	auto meshGObject = std::make_shared<HSim::TriangleMesh3GObject>(mesh, matMesh);
 	auto meshRenderable = std::make_shared<HSim::Renderable>(mesh, meshGObject);

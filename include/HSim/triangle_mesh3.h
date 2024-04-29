@@ -1,11 +1,5 @@
 #pragma once
 
-// todo vertices transform
-
-/**
- *
- */
-
 #include <HSim/common.h>
 #include <HSim/vec2.h>
 #include <HSim/vec3.h>
