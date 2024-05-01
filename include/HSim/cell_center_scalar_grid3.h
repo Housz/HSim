@@ -98,4 +98,7 @@ namespace HSim
 		}
 	};
 
+	template <typename T>
+	using CellCenterScalarGrid3_Ptr = std::shared_ptr<CellCenterScalarGrid3<T>>; 
+
 } // namespace HSim

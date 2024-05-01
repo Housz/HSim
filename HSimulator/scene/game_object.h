@@ -74,7 +74,10 @@ namespace HSim
 
 		// mesh
 		// std::shared_ptr<Mesh> mesh_ptr = nullptr;
+
+
 		Renderable_Ptr renderable;
+		
 
 	// local transform
 	public:
