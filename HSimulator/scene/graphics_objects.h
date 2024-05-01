@@ -9,3 +9,4 @@
 #include <scene/graphics_objects/triangle_mesh3_graphics_object.h>
 #include <scene/graphics_objects/cylinder_graphics_object.h>
 #include <scene/graphics_objects/ray_graphics_object.h>
+#include <scene/graphics_objects/grid_graphics_object.h>
