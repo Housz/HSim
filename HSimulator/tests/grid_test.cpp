@@ -32,8 +32,8 @@ void createScene(HSim::App &app)
 
 	grid->parallelForEachCell(fillGrid);
 
-	auto gridMat = std::make_shared<HSim::BasicMaterial>();
-	gridMat->color = {0.2, 0.2, 0.2};
+	auto gridMat = std::make_shared<HSim::PointMaterial>();
+	// gridMat->color = {0.2, 0.2, 0.2};
 
 	auto gridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(grid, gridMat);
 	auto gridRenderable = std::make_shared<HSim::Renderable>(grid, gridGObject);

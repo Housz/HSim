@@ -4,7 +4,7 @@ HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject()
 {
 }
 
-HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3_Ptr<PRECISION> grid_, const BasicMaterial_Ptr material_)
+HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_)
 	: GraphicsObject(material_)
 {
 	grid = grid_;
@@ -31,13 +31,13 @@ void HSim::CellCenterScalarGrid3GraphicsObject::draw(const RenderParams &renderP
 		buildRenderingData();
 	}
 
-	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
-	auto color = mat->color;
+	auto mat = std::static_pointer_cast<HSim::PointMaterial>(material);
+	// auto color = mat->color;
 	auto shader = mat->shader;
 
 	// use shader with renderParams
 	shader->use();
-	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+	// shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
 	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
 	shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
 
@@ -69,6 +69,9 @@ void HSim::CellCenterScalarGrid3GraphicsObject::buildRenderingData()
 			vertices.push_back(i);
 			vertices.push_back(j);
 			vertices.push_back(k);
+			vertices.push_back(i / 5.0);
+			vertices.push_back(1.0 - i / 5.0);
+			vertices.push_back(0.0);
 		}
 	};
 
@@ -80,7 +83,8 @@ void HSim::CellCenterScalarGrid3GraphicsObject::buildRenderingData()
 	vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_DYNAMIC_DRAW);
 	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(float), 0);
 
-	vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
+	vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);
+	vao.bindVBO(vbo, 1, 3, 6 * sizeof(float), (void *)(3 * sizeof(float)));
 
 	vao.unbind();
 

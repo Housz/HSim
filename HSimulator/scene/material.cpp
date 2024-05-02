@@ -51,3 +51,15 @@ HSim::LineMaterial::LineMaterial(const Color &color_)
 HSim::LineMaterial::~LineMaterial()
 {
 }
+
+/********************************************************************/
+
+HSim::PointMaterial::PointMaterial()
+{
+	shader = std::make_shared<Shader>("./resources/shaders/point.vs", "./resources/shaders/point.fs");
+}
+
+HSim::PointMaterial::~PointMaterial()
+{
+
+}

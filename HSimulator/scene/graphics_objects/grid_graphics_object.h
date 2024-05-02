@@ -11,7 +11,7 @@ namespace HSim
 	{
 	public:
 		CellCenterScalarGrid3GraphicsObject();
-		CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3_Ptr<PRECISION> grid_, const BasicMaterial_Ptr material_);
+		CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_);
 		~CellCenterScalarGrid3GraphicsObject();
 
 	public:

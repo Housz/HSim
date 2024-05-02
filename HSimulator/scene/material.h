@@ -52,8 +52,16 @@ namespace HSim
 		
 	};
 
+	class PointMaterial : public Material
+	{
+	public:
+		PointMaterial();
+		~PointMaterial();
+	};
+
 	using Material_Ptr = std::shared_ptr<Material>;
 	using BasicMaterial_Ptr = std::shared_ptr<BasicMaterial>;
 	using LineMaterial_Ptr = std::shared_ptr<LineMaterial>;
+	using PointMaterial_Ptr = std::shared_ptr<PointMaterial>;
 
 } // namespace HSim
