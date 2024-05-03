@@ -3,9 +3,11 @@
 #include <HSim/common.h>
 // #include <app/mtx.h>
 #include <HSim/lock.h>
-
+#include <config/numerical_config.h>
 
 #include <scene/scene_graph.h>
+
+#include <HSim/solver.h>
 
 namespace HSim
 {
@@ -25,6 +27,8 @@ namespace HSim
 
 	public:
 		SceneGraph_ptr scene;
+
+		// Solver<PRECISION> solver;
 	};
 	using Simulator_ptr = std::shared_ptr<Simulator>;
 	

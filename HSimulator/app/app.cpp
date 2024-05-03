@@ -30,7 +30,7 @@ void HSim::App::mainLoop()
 
 	window->mainLoop();
 
-	// simulator->mainLoop();
+	simulator->mainLoop();
 
 	simulator_thread.join();
 }

@@ -4,13 +4,9 @@
 
 namespace HSim
 {
-
-	template <typename T>
-	class Frame
+	struct Frame
 	{
-	public:
 		Frame() {}
-		~Frame() {}
 
 		Frame(size_t index_, T timeInterval_) : index(index_), timeInterval(timeInterval_) {}
 
@@ -39,41 +35,23 @@ namespace HSim
 
 		// }
 
-	public:
 		// index of this frame.
 		size_t index = 0;
 		// Time interval between two frames.
 		T timeInterval = 1.0 / 60;
 	};
 
-
-	// class Solver?
 	template <typename T>
-	class Animation
+	class Solver
 	{
 	public:
-		Animation(){};
-		~Animation(){};
+		Solver(){};
+		~Solver(){};
 
 	public:
-		virtual void update(Frame<T> frame) = 0;
+		virtual void update(Frame frame) = 0;
 	};
 
-	template <typename T>
-	class PhysicsAnimation : Animation<T>
-	{
-	public:
-		PhysicsAnimation(){};
-		~PhysicsAnimation(){};
-
-	public:
-		Frame<T> currentFrame;
-		// fixed sub time steps
-		size_t nmbSubTimeSteps = 1;
-		T currentTime = 0.0;
-	};
-
-	template <typename T>
-	using PhysicsAnimationPtr = std::shared_ptr<PhysicsAnimation<T>>;
+	// using Solver_Ptr
 
 } // namespace HSim
