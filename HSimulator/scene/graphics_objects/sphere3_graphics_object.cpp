@@ -97,6 +97,7 @@ std::vector<float> HSim::Sphere3GObject::buildVertices()
 
 	const auto radius = sphere->radius;
 	const auto center = sphere->center;
+	const auto transform = sphere->transform;
 
 	for (size_t stack = 0; stack <= numStacks; stack++)
 	{
@@ -125,11 +126,14 @@ std::vector<float> HSim::Sphere3GObject::buildVertices()
 	// transform
 	for (size_t i = 0; i < vertices.size(); i += 3)
 	{
-		// auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+		// vertices[i] += center[0];
+		// vertices[i + 1] += center[1];
+		// vertices[i + 2] += center[2];
 
-		vertices[i] += center[0];
-		vertices[i + 1] += center[1];
-		vertices[i + 2] += center[2];
+		auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+		vertices[i] = v[0];
+        vertices[i + 1] = v[1];
+        vertices[i + 2] = v[2];
 	}
 
 	return vertices;

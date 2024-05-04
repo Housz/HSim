@@ -95,14 +95,16 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
 {
     std::vector<float> vertices;
 
-    auto height = cylinder->height;
-    auto radiusTop = cylinder->radiusTop;
-    auto radiusBottom = cylinder->radiusBottom;
+    const auto height = cylinder->height;
+    const auto radiusTop = cylinder->radiusTop;
+    const auto radiusBottom = cylinder->radiusBottom;
 
-    auto centerTop = Vec3f(0.0, height / 2.0, 0.0);
-    auto centerBottom = Vec3f(0.0, -height / 2.0, 0.0);
+    const auto transform = cylinder->transform;
 
-    auto angleStep = PI_DOUBLE / segments;
+    const auto centerTop = Vec3f(0.0, height / 2.0, 0.0);
+    const auto centerBottom = Vec3f(0.0, -height / 2.0, 0.0);
+
+    const auto angleStep = PI_DOUBLE / segments;
 
     /**
      * 1. side
@@ -194,6 +196,15 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
     vertices.push_back(0);
     vertices.push_back(-1);
     vertices.push_back(0);
+
+    // transform
+    for (size_t i = 0; i < vertices.size(); i += 3)
+	{
+		auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+		vertices[i] = v[0];
+        vertices[i + 1] = v[1];
+        vertices[i + 2] = v[2];
+	}
 
     return vertices;
 }

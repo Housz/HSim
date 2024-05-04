@@ -4,6 +4,7 @@
 
 namespace HSim
 {
+	template <typename T>
 	struct Frame
 	{
 		Frame() {}
@@ -49,9 +50,10 @@ namespace HSim
 		~Solver(){};
 
 	public:
-		virtual void update(Frame frame) = 0;
+		virtual void update(Frame<T> frame) = 0;
 	};
 
-	// using Solver_Ptr
+	template <typename T>
+	using Solver_Ptr = std::shared_ptr<Solver<T>>;
 
 } // namespace HSim
