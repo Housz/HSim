@@ -31,10 +31,12 @@ namespace HSim
 			return *this;
 		}
 
-		// Frame operator++(int)
-		// {
-
-		// }
+		Frame operator++(int)
+		{
+			Frame result = *this;
+			advance();
+			return result;
+		}
 
 		// index of this frame.
 		size_t index = 0;
