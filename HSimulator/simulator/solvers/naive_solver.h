@@ -11,7 +11,7 @@ namespace HSim
 	class NaiveSolver : public Solver<T>
 	{
 	public:
-		void update(Frame<T> frame) override;
+		void update(Frame frame) override;
 
 	public:
 		void advanceTimeStep(double timeInterval);
@@ -24,11 +24,10 @@ namespace HSim
 		GameObject_ptr go = nullptr;
 		// std::vector<GameObject_ptr> goCollection;
 
-		Frame<T> currentFrame;
-		double currentTime;
+		Frame currentFrame;
+		double currentTime = 0.0;
 
 		size_t numSubSteps = 1;
-
 
 	};
 

@@ -6,3 +6,5 @@ using PRECISION = float;
 	using PRECISION = double; 
 #endif
 
+// Default precision for time: double
+

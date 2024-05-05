@@ -4,14 +4,13 @@
 
 namespace HSim
 {
-	template <typename T>
 	struct Frame
 	{
 		Frame() {}
 
-		Frame(size_t index_, T timeInterval_) : index(index_), timeInterval(timeInterval_) {}
+		Frame(size_t index_, double timeInterval_) : index(index_), timeInterval(timeInterval_) {}
 
-		T elapsedTime()
+		double elapsedTime()
 		{
 			return index * timeInterval;
 		}
@@ -41,7 +40,7 @@ namespace HSim
 		// index of this frame.
 		size_t index = 0;
 		// Time interval between two frames.
-		T timeInterval = 1.0 / 60;
+		double timeInterval = 1.0 / 60;
 	};
 
 	template <typename T>
@@ -52,7 +51,7 @@ namespace HSim
 		~Solver(){};
 
 	public:
-		virtual void update(Frame<T> frame) = 0;
+		virtual void update(Frame frame) = 0;
 	};
 
 	template <typename T>
