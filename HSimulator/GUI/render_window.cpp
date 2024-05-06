@@ -25,7 +25,7 @@ void HSim::RenderWindow::init(size_t width, size_t height)
 
 	camera = std::make_shared<OrbitCamera>();
 
-	std::cout << "[Renderer] renderwinodw init" << std::endl;
+	std::cout << "[RENDERER] renderwinodw init" << std::endl;
 
 	// glfw create window
 	windowTitle = std::string("HSimulator");

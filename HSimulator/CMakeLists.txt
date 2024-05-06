@@ -22,6 +22,7 @@ aux_source_directory(scene sources)
 aux_source_directory(scene/graphics_objects sources)
 aux_source_directory(config sources)
 aux_source_directory(simulator sources)
+aux_source_directory(simulator/solvers sources)
 aux_source_directory(app sources)
 
 # target_sources(HSimulator PUBLIC ${sources})

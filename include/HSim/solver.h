@@ -1,60 +1,75 @@
-#pragma once
+// #pragma once
 
-#include <HSim/common.h>
+// #include <HSim/common.h>
 
-namespace HSim
-{
-	struct Frame
-	{
-		Frame() {}
+// namespace HSim
+// {
+// 	struct Frame
+// 	{
+// 		Frame() {}
 
-		Frame(size_t index_, double timeInterval_) : index(index_), timeInterval(timeInterval_) {}
+// 		Frame(size_t index_, double timeInterval_) : index(index_), timeInterval(timeInterval_) {}
 
-		double elapsedTime()
-		{
-			return index * timeInterval;
-		}
+// 		double elapsedTime()
+// 		{
+// 			return index * timeInterval;
+// 		}
 
-		void advance()
-		{
-			index++;
-		}
-		void advance(size_t delta)
-		{
-			index += delta;
-		}
+// 		void advance()
+// 		{
+// 			index++;
+// 		}
+// 		void advance(size_t delta)
+// 		{
+// 			index += delta;
+// 		}
 
-		Frame &operator++()
-		{
-			advance();
-			return *this;
-		}
+// 		Frame &operator++()
+// 		{
+// 			advance();
+// 			return *this;
+// 		}
 
-		Frame operator++(int)
-		{
-			Frame result = *this;
-			advance();
-			return result;
-		}
+// 		Frame operator++(int)
+// 		{
+// 			Frame result = *this;
+// 			advance();
+// 			return result;
+// 		}
 
-		// index of this frame.
-		size_t index = 0;
-		// Time interval between two frames.
-		double timeInterval = 1.0 / 60;
-	};
+// 		// index of this frame.
+// 		size_t index = 0;
+// 		// Time interval between two frames.
+// 		double timeInterval = 1.0 / 60;
+// 	};
 
-	template <typename T>
-	class Solver
-	{
-	public:
-		Solver(){};
-		~Solver(){};
+// 	template <typename T>
+// 	class Solver
+// 	{
+// 	public:
+// 		Solver(){};
+// 		~Solver(){};
 
-	public:
-		virtual void update(Frame frame) = 0;
-	};
+// 	public:
+// 		virtual void update(Frame frame) = 0;
 
-	template <typename T>
-	using Solver_Ptr = std::shared_ptr<Solver<T>>;
+// 		void run(size_t numFrame)
+// 		{
+// 			for (Frame frame; frame.index < numFrame; frame++)
+// 			{
+// 				// timer start
+				
+// 				update(frame);
+				
+// 				std::cout << "[frame] " << frame.index << " \n";
 
-} // namespace HSim
+// 				// timer end
+// 			}
+			
+// 		}
+// 	};
+
+// 	template <typename T>
+// 	using Solver_Ptr = std::shared_ptr<Solver<T>>;
+
+// } // namespace HSim

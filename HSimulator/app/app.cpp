@@ -47,4 +47,5 @@ void HSim::App::setScene(SceneGraph_ptr scene_)
 
 void HSim::App::setWindowTitle(const std::string &title_)
 {
+	
 }
