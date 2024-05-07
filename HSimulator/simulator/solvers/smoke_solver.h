@@ -6,8 +6,7 @@
 
 namespace HSim
 {
-	template <typename T>
-	class SmokeSolver : public Solver<T>
+	class SmokeSolver : public Solver
 	{
 	public:
 		SmokeSolver();
@@ -16,28 +15,12 @@ namespace HSim
 	public:
 		void update(const Frame &frame) override;
 
+
+	public:
+		PRECISION gravity;	
 		
 	};
 
-	
-	template<typename T>
-	SmokeSolver<T>::SmokeSolver()
-	{
-		
-	}
-	
-	template<typename T>
-	SmokeSolver<T>::~SmokeSolver()
-	{
-		
-	}
-	
-	template<typename T>
-	void SmokeSolver<T>::update(const Frame &frame)
-	{
-		
-	}
-	
-
+	using SmokeSolver_Ptr = std::shared_ptr<SmokeSolver>;
 
 } // namespace HSim

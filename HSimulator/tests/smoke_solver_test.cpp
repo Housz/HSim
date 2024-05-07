@@ -54,7 +54,7 @@ void createScene(HSim::App &app)
 	 */
 
 	// auto naiveSolver = std::make_shared<HSim::NaiveSolver<PRECISION>>();
-	auto smokeSolver = std::make_shared<HSim::SmokeSolver<PRECISION>>();
+	auto smokeSolver = std::make_shared<HSim::SmokeSolver>();
 	// smokeSolver->go = go1;
 
 	app.simulator->solver = smokeSolver;

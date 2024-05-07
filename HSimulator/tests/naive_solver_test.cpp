@@ -53,7 +53,7 @@ void createScene(HSim::App &app)
 	 * solver 
 	 */
 
-	auto naiveSolver = std::make_shared<HSim::NaiveSolver<PRECISION>>();
+	auto naiveSolver = std::make_shared<HSim::NaiveSolver>();
 	naiveSolver->go = go1;
 
 	app.simulator->solver = naiveSolver;

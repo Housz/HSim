@@ -29,8 +29,7 @@ namespace HSim
 	public:
 		SceneGraph_ptr scene = nullptr;
 
-		// Solver<PRECISION> solver;
-		Solver_Ptr<PRECISION> solver = nullptr;
+		Solver_Ptr solver = nullptr;
 	};
 	using Simulator_ptr = std::shared_ptr<Simulator>;
 	
