@@ -57,7 +57,7 @@ namespace HSim
 
 			// obj->transform.translation.y -= 0.0001;
 			
-			velocity += gravity * subTimeInterval;
+			velocity += gravity * subTimeInterval * 0.90;
 
 			std::cout << velocity;
 
