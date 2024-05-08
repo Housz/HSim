@@ -11,7 +11,7 @@ namespace HSim
 		~EulerFluidSolver();
 	
 	public:
-		void update(const Frame &frame) override;
+		void update(const SimFrame &frame) override;
 
 		void advanceTimeStep(double timeInterval) = 0;
 

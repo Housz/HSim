@@ -13,7 +13,7 @@ namespace HSim
 		~SmokeSolver();
 	
 	public:
-		void update(const Frame &frame) override;
+		void update(const SimFrame &frame) override;
 
 
 	public:

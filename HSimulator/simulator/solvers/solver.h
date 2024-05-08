@@ -4,7 +4,7 @@
 #include <HSim/transform3.h>
 
 #include <config/numerical_config.h>
-#include <simulator/solvers/frame.h>
+#include <simulator/simulator_frame.h>
 
 namespace HSim
 {
@@ -15,7 +15,7 @@ namespace HSim
 		~Solver();
 
 	public:
-		virtual void update(const Frame& frame) = 0;
+		virtual void update(const SimFrame& frame) = 0;
 
 		void run(size_t numFrame);
 	};

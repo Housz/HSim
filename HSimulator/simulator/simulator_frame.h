@@ -2,11 +2,11 @@
 
 namespace HSim
 {
-	struct Frame
+	struct SimulatorFrame
 	{
-		Frame();
+		SimulatorFrame();
 
-		Frame(size_t index_, double timeInterval_);
+		SimulatorFrame(size_t index_, double timeInterval_);
 
 		double elapsedTime();
 
@@ -14,12 +14,11 @@ namespace HSim
 
 		void advance(size_t delta);
 
-		Frame &operator++();
+		SimulatorFrame &operator++();
 
-
-		Frame operator++(int)
+		SimulatorFrame operator++(int)
 		{
-			Frame result = *this;
+			SimulatorFrame result = *this;
 			advance();
 			return result;
 		}
@@ -29,5 +28,8 @@ namespace HSim
 		// Time interval between two frames.
 		double timeInterval = 1.0 / 600;
 	};
+
+	using SimFrame = SimulatorFrame;
+	using SFrame = SimulatorFrame;
 
 } // namespace HSim

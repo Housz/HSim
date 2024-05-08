@@ -12,7 +12,7 @@ namespace HSim
 		
 	}
 	
-	void SmokeSolver::update(const Frame &frame)
+	void SmokeSolver::update(const SimFrame &frame)
 	{
 		
 	}

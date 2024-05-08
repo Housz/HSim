@@ -10,7 +10,7 @@ namespace HSim
 	{
 	}
 
-	void NaiveSolver::update(const Frame &frame)
+	void NaiveSolver::update(const SimFrame &frame)
 	{
 		if (frame.index > currentFrame.index)
 		{
