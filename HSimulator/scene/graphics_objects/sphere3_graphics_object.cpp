@@ -72,14 +72,16 @@ void HSim::Sphere3GObject::draw(const RenderParams &renderParams)
 	// shader->setMat4("model", renderParams.transforms.model);
 
 	glm::mat4 model = glm::mat4{1.f};
-	const auto orientation = sphere->transform.orientation;
+	// update transform.orientation identity
+	const auto orientation = sphere->transform.orientation; 
 	const auto translation = sphere->transform.translation;
-	// model = glm::rotate(model, orientation.angle(),
-	// 					glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
+	model = glm::rotate(model, orientation.angle(),
+						glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
+	std::cout << "------------------------" << orientation;
 	// std::cout << "------------------------" << translation;
 	model = glm::translate(model, glm::vec3(translation.x, translation.y, translation.z));
 
-	// std::cout << glm::to_string(model);
+	std::cout << glm::to_string(model);
 
 	shader->setMat4("model", model);
 
