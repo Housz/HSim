@@ -38,7 +38,7 @@ namespace HSim
 			currentTime += subTimeInterval;
 		}
 
-		go->renderable->renderingDataNeedUpdate = true;
+		// go->renderable->renderingDataNeedUpdate = true;
 	}
 
 	void NaiveSolver::advanceSubTimeStep(double subTimeInterval)
@@ -53,17 +53,19 @@ namespace HSim
 		
 		velocity += gravity * subTimeInterval * 0.90;
 
-		std::cout << velocity;
+		// std::cout << velocity;
 
 		obj->transform.translation += velocity * subTimeInterval;
 
-		std::cout << obj->transform.translation;
+		// std::cout << obj->transform.translation;
 
 		if (obj->transform.translation.y < 0)
 		{
 			velocity.y = -velocity.y;
 		}
 		
+		auto mat = std::static_pointer_cast<BasicMaterial>(renderable->graphicsObject->material);
+		mat->color = {obj->transform.translation.y / 10, 0.4, 0.4};
 
 		// renderable->renderingDataNeedUpdate = true;
 

@@ -32,11 +32,11 @@ void createScene(HSim::App &app)
 
 	sphere->transform.translation.y = 10;
 
-	auto material1 = std::make_shared<HSim::BasicMaterial>();
-	material1->color = {0.8, 0.4, 0.4};
-	material1->wireframe = true;
+	auto sphereMat = std::make_shared<HSim::BasicMaterial>();
+	sphereMat->color = {0.8, 0.4, 0.4};
+	sphereMat->wireframe = true;
 
-	auto sphereGraphicsObject = std::make_shared<HSim::Sphere3GObject>(sphere, material1);
+	auto sphereGraphicsObject = std::make_shared<HSim::Sphere3GObject>(sphere, sphereMat);
 
 	auto sphereRenderable = std::make_shared<HSim::Renderable>(sphere, sphereGraphicsObject);
 

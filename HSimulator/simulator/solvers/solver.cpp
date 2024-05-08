@@ -22,6 +22,7 @@ namespace HSim
 
 			// timer end
 		}
+		std::cout << "[FRAME] done!" << " \n";
 		
 	}
 

@@ -62,14 +62,26 @@ void HSim::Sphere3GObject::draw(const RenderParams &renderParams)
 	shader->use();
 	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
 	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
-    shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
+	shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
 
 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
 	shader->setVec3("viewPos", cameraPosition);
 
 	shader->setMat4("projection", renderParams.transforms.proj);
 	shader->setMat4("view", renderParams.transforms.view);
-	shader->setMat4("model", renderParams.transforms.model);
+	// shader->setMat4("model", renderParams.transforms.model);
+
+	glm::mat4 model = glm::mat4{1.f};
+	const auto orientation = sphere->transform.orientation;
+	const auto translation = sphere->transform.translation;
+	// model = glm::rotate(model, orientation.angle(),
+	// 					glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
+	// std::cout << "------------------------" << translation;
+	model = glm::translate(model, glm::vec3(translation.x, translation.y, translation.z));
+
+	// std::cout << glm::to_string(model);
+
+	shader->setMat4("model", model);
 
 	glViewport(0, 0, renderParams.width, renderParams.height);
 
@@ -124,17 +136,17 @@ std::vector<float> HSim::Sphere3GObject::buildVertices()
 	}
 
 	// transform
-	for (size_t i = 0; i < vertices.size(); i += 3)
-	{
-		// vertices[i] += center[0];
-		// vertices[i + 1] += center[1];
-		// vertices[i + 2] += center[2];
+	// for (size_t i = 0; i < vertices.size(); i += 3)
+	// {
+	// 	// vertices[i] += center[0];
+	// 	// vertices[i + 1] += center[1];
+	// 	// vertices[i + 2] += center[2];
 
-		auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
-		vertices[i] = v[0];
-        vertices[i + 1] = v[1];
-        vertices[i + 2] = v[2];
-	}
+	// 	auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
+	// 	vertices[i] = v[0];
+	// 	vertices[i + 1] = v[1];
+	// 	vertices[i + 2] = v[2];
+	// }
 
 	return vertices;
 }
