@@ -10,9 +10,9 @@ namespace HSim
     class Quaternion
     {
     public:
-        Quaternion() {};
-        ~Quaternion() {};
-        Quaternion(const Quaternion<T>& q_) { set(q_); }
+        Quaternion(){};
+        ~Quaternion(){};
+        Quaternion(const Quaternion<T> &q_) { set(q_); }
         Quaternion(T w_, T x_, T y_, T z_) : w(w_), x(x_), y(y_), z(z_) {}
         Quaternion(const std::initializer_list<T> &list) { set(list); }
         Quaternion(T w_, const Vec3<T> &u_) : w(w_), x(u_.x), y(u_.y), z(u_.z) {}
@@ -31,9 +31,12 @@ namespace HSim
             z = z_;
         }
 
-        void set(const Quaternion<T>& q_)
+        void set(const Quaternion<T> &q_)
         {
-            w = q_.w; x = q_.x; y = q_.y; z = q_.z;
+            w = q_.w;
+            x = q_.x;
+            y = q_.y;
+            z = q_.z;
         }
 
         void set(const std::initializer_list<T> &list_)
@@ -136,7 +139,7 @@ namespace HSim
          * https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
          * v' = qvq* = Mv
          * get M
-         * @return Mat33<T> 
+         * @return Mat33<T>
          */
         Mat33<T> toMatrix() const
         {
@@ -165,7 +168,7 @@ namespace HSim
          * @param v
          * @return Vec3<T>
          */
-        Vec3<T> mul(const Vec3<T>& v_) const
+        Vec3<T> mul(const Vec3<T> &v_) const
         {
             T _2xx = 2 * x * x;
             T _2yy = 2 * y * y;
@@ -189,7 +192,7 @@ namespace HSim
          * @param q_
          * @return Quaternion<T>
          */
-        Quaternion<T> mul(const Quaternion<T>& q_) const
+        Quaternion<T> mul(const Quaternion<T> &q_) const
         {
             return Quaternion(
                 w * q_.w - x * q_.x - y * q_.y - z * q_.z,
@@ -198,7 +201,7 @@ namespace HSim
                 w * q_.z + x * q_.y - y * q_.x + z * q_.w);
         }
 
-        void mul_self(const Quaternion<T>& q_)
+        void mul_self(const Quaternion<T> &q_)
         {
             set(w * q_.w - x * q_.x - y * q_.y - z * q_.z,
                 w * q_.x + x * q_.w + y * q_.z - z * q_.y,
@@ -206,7 +209,7 @@ namespace HSim
                 w * q_.z + x * q_.y - y * q_.x + z * q_.w);
         }
 
-        T dot(const Quaternion<T>& q_) const
+        T dot(const Quaternion<T> &q_) const
         {
             return w * q_.w + x * q_.x + y * q_.y + z * q_.z;
         }
@@ -248,16 +251,25 @@ namespace HSim
 
         Vec3<T> axis() const
         {
-            Vec3<T> ax(x, y, z);
-            ax.normalize();
-
-            if (2 * std::acos(w) < PI)
+            T s = std::sqrt(1 - w * w);
+            if (s < EPSILON)
             {
-                return ax;
+                return Vec3<T>(1, 0, 0);
             }
+
             else
             {
-                return -ax;
+                Vec3<T> ax(x, y, z);
+                ax.normalize();
+
+                if (2 * std::acos(w) < PI)
+                {
+                    return ax;
+                }
+                else
+                {
+                    return -ax;
+                }
             }
         }
 
@@ -266,11 +278,23 @@ namespace HSim
             return std::sqrt(w * w + x * x + y * y + z * z);
         }
 
+        T length() const
+        {
+            return std::sqrt(w * w + x * x + y * y + z * z);
+        }
+
         void normalize()
         {
-            T n = norm();
+            T n = length();
 
-            if (n > 0)
+            if (n < EPSILON)
+            {
+                w = 1;
+                x = 0;
+                y = 0;
+                z = 0;
+            }
+            else
             {
                 w /= n;
                 x /= n;
@@ -297,16 +321,23 @@ namespace HSim
         Quaternion<T> inverse() const
         {
             T norm2 = w * w + x * x + y * y + z * z;
-            return Quaternion(w / norm2, -x / norm2, -y / norm2, -z / norm2);
+            if (norm2 < EPSILON)
+            {
+                return Quaternion(1, 0, 0, 0);
+            }
+            else
+            {
+                return Quaternion(w / norm2, -x / norm2, -y / norm2, -z / norm2);
+            }
         }
 
-        Quaternion<T>& operator=(const Quaternion<T>& q_)
+        Quaternion<T> &operator=(const Quaternion<T> &q_)
         {
             set(q_);
             return *this;
         }
 
-        Quaternion<T>& operator*=(const Quaternion<T>& q_)
+        Quaternion<T> &operator*=(const Quaternion<T> &q_)
         {
             mul_self(q_);
             return *this;
@@ -327,16 +358,16 @@ namespace HSim
     }
 
     template <typename T1, typename T2>
-    inline Vec3<T2> operator*(const Quaternion<T1>& q, const Vec3<T2>& v)
+    inline Vec3<T2> operator*(const Quaternion<T1> &q, const Vec3<T2> &v)
     {
         return q.mul(v);
-    }    
+    }
 
     template <typename T1, typename T2>
-    inline Quaternion<T1> operator*(const Quaternion<T1>& q1, const Quaternion<T2>& q2)
+    inline Quaternion<T1> operator*(const Quaternion<T1> &q1, const Quaternion<T2> &q2)
     {
         return q1.mul(q2);
-    }   
+    }
 
     using Quaternionf = Quaternion<float>;
     using Quaterniond = Quaternion<double>;
