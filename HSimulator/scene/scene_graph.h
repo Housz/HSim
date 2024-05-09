@@ -18,7 +18,6 @@ namespace HSim
 		void traverse(std::function<void(GameObject_ptr)>& callback, GameObject_ptr go);
 		void traverse(const std::function<void(GameObject_ptr)>& callback, GameObject_ptr go);
 
-		void serialize();
 		void draw();
 
 		void draw(const RenderParams& renderParams);
@@ -35,8 +34,12 @@ namespace HSim
 		void addCylinder(const float radiusTop, const float radiusBottom, const float height, const Vec3f& color = {0.7, 0.7, 0.7});
 
 	public:
-		GameObject_ptr root = nullptr;
+		void serialize(); // to .obj, .vdb, ...
 
+		void snapshot(SceneGraph& sg);
+
+	public:
+		GameObject_ptr root = nullptr;
 	};
 
 	using SceneGraph_ptr = std::shared_ptr<SceneGraph>;

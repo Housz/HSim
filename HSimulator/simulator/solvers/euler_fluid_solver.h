@@ -11,13 +11,12 @@ namespace HSim
 		~EulerFluidSolver();
 	
 	public:
-		void update(const SimFrame &frame) override;
 
-		void advanceTimeStep(double timeInterval) = 0;
+		virtual void advanceTimeStep(double timeInterval) = 0;
 
-		void advanceSubTimeStep(double subTimeInterval) = 0;
+		virtual void advanceSubTimeStep(double subTimeInterval) = 0;
 
-		void init() = 0;
+		virtual void init() = 0;
 	
 	public:
 		Vec3<PRECISION> gravity = {0, -9.8, 0};

@@ -16,4 +16,9 @@ namespace HSim
 	{
 		
 	}
+	
+	void SmokeSolver::writeRendererBuffer()
+	{
+		
+	}
 }

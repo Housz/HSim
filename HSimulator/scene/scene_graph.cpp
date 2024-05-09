@@ -54,27 +54,40 @@ void HSim::SceneGraph::traverse(const std::function<void(GameObject_ptr)> &callb
 	}
 }
 
+// void HSim::SceneGraph::serialize()
+// {
+// 	// float r = 0;
+
+// 	std::function<void(HSim::GameObject_ptr)> callback_serialize = [&](HSim::GameObject_ptr go)
+// 	{
+// 		if (go->surface_ptr != nullptr && go->drawable)
+// 		{
+// 			// std::cout << "callback_serialize" << std::endl;
+
+// 			auto surface = go->surface_ptr;
+
+// 			// update transform
+// 			// surface->transform.translation.x = r;
+// 			// r+=0.001;
+
+// 			surface->serialize();
+// 		}
+// 	};
+
+// 	this->traverse(callback_serialize);
+// }
+
 void HSim::SceneGraph::serialize()
 {
-	// float r = 0;
+	// todo
+}
 
-	std::function<void(HSim::GameObject_ptr)> callback_serialize = [&](HSim::GameObject_ptr go)
-	{
-		if (go->surface_ptr != nullptr && go->drawable)
-		{
-			// std::cout << "callback_serialize" << std::endl;
-
-			auto surface = go->surface_ptr;
-
-			// update transform
-			// surface->transform.translation.x = r;
-			// r+=0.001;
-
-			surface->serialize();
-		}
-	};
-
-	this->traverse(callback_serialize);
+void HSim::SceneGraph::snapshot(SceneGraph& sg)
+{
+	sg.root = root;
+	// sg.travese 
+	// static -> do nothing
+	// dynamic -> copy construct a new obj
 }
 
 void HSim::SceneGraph::draw()

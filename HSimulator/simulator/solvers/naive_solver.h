@@ -15,6 +15,9 @@ namespace HSim
 
 	public:
 		void update(const SimFrame &frame) override;
+
+		void writeRendererBuffer() override;
+
 	public:
 		void advanceTimeStep(double timeInterval);
 
@@ -22,6 +25,8 @@ namespace HSim
 
 		void init();
 
+		void setGameObject(GameObject_ptr go_);
+		
 	public:
 		GameObject_ptr go = nullptr;
 		// std::vector<GameObject_ptr> goCollection;

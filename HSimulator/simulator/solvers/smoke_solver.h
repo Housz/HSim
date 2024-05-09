@@ -15,7 +15,8 @@ namespace HSim
 	public:
 		void update(const SimFrame &frame) override;
 
-
+		void writeRendererBuffer() override;
+		
 	public:
 		PRECISION gravity;	
 		

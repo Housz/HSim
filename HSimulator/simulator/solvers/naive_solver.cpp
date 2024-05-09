@@ -23,8 +23,15 @@ namespace HSim
 
 			currentFrame = frame;
 		}
-	}
 
+		// push sim results to renderer frame buffer
+	}
+	
+	void NaiveSolver::writeRendererBuffer()
+	{
+		
+	}
+	
 	void NaiveSolver::advanceTimeStep(double timeInterval)
 	{
 		auto subTimeInterval = timeInterval / numSubSteps;
@@ -76,6 +83,12 @@ namespace HSim
 	{
 		// pass
 		std::cout << "[SIMULATOR] Init Naive Solver.\n";
+	}
+	
+	void NaiveSolver::setGameObject(GameObject_ptr go_)
+	{
+		go = go_;
+		go->renderable->updateType = RenderableUpdateType::DYNAMIC;
 	}
 
 } // namespace HSim

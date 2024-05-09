@@ -17,6 +17,8 @@ namespace HSim
 	public:
 		virtual void update(const SimFrame& frame) = 0;
 
+		virtual void writeRendererBuffer() = 0;
+
 		void run(size_t numFrame);
 	};
 

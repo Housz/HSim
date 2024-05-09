@@ -54,7 +54,8 @@ void createScene(HSim::App &app)
 	 */
 
 	auto naiveSolver = std::make_shared<HSim::NaiveSolver>();
-	naiveSolver->go = go1;
+	// naiveSolver->go = go1;
+	naiveSolver->setGameObject(go1);
 
 	app.simulator->solver = naiveSolver;
 

@@ -6,6 +6,7 @@
 
 #include <scene/scene_graph.h>
 #include <GUI/render_window.h>
+#include <renderer/renderer_frame.h>
 #include <simulator/simulator.h>
 
 namespace HSim
@@ -31,6 +32,9 @@ namespace HSim
 		
 		Simulator_ptr simulator = nullptr;
 		RenderWindow_ptr window = nullptr;
+
+		// RenderFrame buffer (simulation results)
+		RendererFrameBuffer rendererFrameBuffer;
 	};
 	
 	
