@@ -14,6 +14,12 @@ namespace HSim
     {
     public:
         Array() {}
+
+        Array(const Array<T>& array_)
+            : _data(array_._data)
+        {
+        }
+
         ~Array() {}
 
     public:

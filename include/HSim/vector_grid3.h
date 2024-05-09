@@ -11,8 +11,13 @@ namespace HSim
 	{
 		// constructor
 	public:
-		VectorGrid3(){};
-		~VectorGrid3(){};
+		VectorGrid3() {}
+
+		VectorGrid3(const VectorGrid3& vectorGrid3_)
+			: Grid3<T>(vectorGrid3_)
+		{
+			// todo
+		}
 
 		VectorGrid3(size_t x, size_t y, size_t z) 
 		: Grid3<T>(x, y, z)
@@ -24,6 +29,8 @@ namespace HSim
 		{
 
 		}
+
+		~VectorGrid3(){};
 
 		// data
 	public:

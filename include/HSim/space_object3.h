@@ -16,6 +16,7 @@ namespace HSim
 	{
 	public:
 		SpaceObject3() {}
+		// SpaceObject3(const SpaceObject3&) = 0;
 		~SpaceObject3() {}
 
 		// todo: class info: class name, object id

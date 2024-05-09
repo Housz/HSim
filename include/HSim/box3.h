@@ -21,11 +21,15 @@ namespace HSim
 			: lowerCorner(lowerCorner_), upperCorner(upperCorner_) { SurfaceType = SurfaceType::BOX; }
 
 		Box3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_, const Transform3<T> transform_)
-			: lowerCorner(lowerCorner_), upperCorner(upperCorner_), transform(transform_) 
-			{ SurfaceType = SurfaceType::BOX; }
+			: lowerCorner(lowerCorner_), upperCorner(upperCorner_), transform(transform_)
+		{
+			SurfaceType = SurfaceType::BOX;
+		}
 
-		Box3(const Box3<T> &box_) : lowerCorner(box_.lowerCorner), upperCorner(box_.upperCorner) 
-		{ SurfaceType = SurfaceType::BOX; }
+		Box3(const Box3<T> &box_)
+			: Surface3<T>(box_), lowerCorner(box_.lowerCorner), upperCorner(box_.upperCorner)
+		{
+		}
 
 		/**
 		 * @brief set Box3 with any two points
@@ -134,27 +138,27 @@ namespace HSim
 			return closestNormal;
 		}
 
-		AABB3<T> AABBLocal()  override
+		AABB3<T> AABBLocal() override
 		{
 			AABB3<T> aabb(lowerCorner, upperCorner);
 			return aabb;
 		}
 
-		bool intersectedLocal(const Ray3<T>& ray) const override
-        {
+		bool intersectedLocal(const Ray3<T> &ray) const override
+		{
 			// todo
-            return false;
-        }    
+			return false;
+		}
 
-        IntersectionInfo interactLocal(const Ray3<T>& ray) const override
-        {
+		IntersectionInfo interactLocal(const Ray3<T> &ray) const override
+		{
 			// todo
-            IntersectionInfo intersectionInfo;
+			IntersectionInfo intersectionInfo;
 
-            return intersectionInfo;
-        }
+			return intersectionInfo;
+		}
 
-	// data
+		// data
 	public:
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
@@ -341,7 +345,6 @@ namespace HSim
 
 				std::cout << "init draw" << std::endl;
 			}
-			
 
 			// std::cout << vaoID << std::endl;
 

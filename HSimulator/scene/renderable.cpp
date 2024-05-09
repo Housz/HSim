@@ -1,4 +1,5 @@
 #include <scene/renderable.h>
+#include "renderable.h"
 
 HSim::Renderable::Renderable()
 {
@@ -8,6 +9,17 @@ HSim::Renderable::Renderable(SpaceObject3_Ptr<PRECISION> spaceObject_, GraphicsO
 {
 	spaceObject = spaceObject_;
 	graphicsObject = graphicsObject_;
+}
+
+HSim::Renderable::Renderable(const Renderable &renderable_)
+{
+	visible = renderable_.visible;
+	
+	renderingDataNeedUpdate = renderable_.renderingDataNeedUpdate;
+	
+	spaceObject = std::make_shared<SpaceObject3<PRECISION>>(*(renderable_.spaceObject));
+
+	graphicsObject = std::make_shared<GraphicsObject>(*(renderable_.graphicsObject));
 }
 
 HSim::Renderable::~Renderable()

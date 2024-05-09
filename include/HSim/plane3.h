@@ -9,16 +9,21 @@ namespace HSim
 	class Plane3 : public Surface3<T>
 	{
 	public:
-		Plane3() { SurfaceType = SurfaceType::PLANE; };
-		~Plane3() {};
+		Plane3() { SurfaceType = SurfaceType::PLANE; }
 
-		Plane3(const Transform3<T>& transform_) : transform(transform_) { SurfaceType = SurfaceType::PLANE; }
+		Plane3(const Plane3<T> &plane3_)
+			: Surface3<T>(plane3_)
+			  normal(plane3_.normal), point(plane3_.point)
+		{
+		}
+
+		Plane3(const Transform3<T> &transform_) : transform(transform_) { SurfaceType = SurfaceType::PLANE; }
 
 		Plane3(const Vec3<T> normal_, const Vec3<T> point_)
-		: normal(normal_), point(point_) { SurfaceType = SurfaceType::PLANE; }
+			: normal(normal_), point(point_) { SurfaceType = SurfaceType::PLANE; }
 
-		Plane3(const Vec3<T> normal_, const Vec3<T> point_, const Transform3<T>& transform_)
-		: normal(normal_), point(point_), transform(transform_) { SurfaceType = SurfaceType::PLANE; }
+		Plane3(const Vec3<T> normal_, const Vec3<T> point_, const Transform3<T> &transform_)
+			: normal(normal_), point(point_), transform(transform_) { SurfaceType = SurfaceType::PLANE; }
 
 		Plane3(const Vec3<T> p1, const Vec3<T> p2, const Vec3<T> p3)
 		{
@@ -31,11 +36,11 @@ namespace HSim
 			point = p1;
 		}
 
-		Plane3(const Vec3<T> p1, const Vec3<T> p2, const Vec3<T> p3, const Transform3<T>& transform_)
-		: transform(transform_)
+		Plane3(const Vec3<T> p1, const Vec3<T> p2, const Vec3<T> p3, const Transform3<T> &transform_)
+			: transform(transform_)
 		{
 			SurfaceType = SurfaceType::PLANE;
-			
+
 			auto v12 = p2 - p1;
 			auto v13 = p3 - p1;
 
@@ -43,51 +48,50 @@ namespace HSim
 			point = p1;
 		}
 
-	
-	// Inherited from Surface3
+		~Plane3(){};
+
+		// Inherited from Surface3
 	public:
-		Vec3<T> closestPositionLocal(const Vec3<T>& positionInLocal_) const override
+		Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const override
 		{
 			Vec3<T> r = positionInLocal_ - point;
-			return point + r - normal.dot(r)*normal;
+			return point + r - normal.dot(r) * normal;
 		}
 
-		Vec3<T> closestNormalLocal(const Vec3<T>& positionInLocal_) const override
+		Vec3<T> closestNormalLocal(const Vec3<T> &positionInLocal_) const override
 		{
 			return normal;
 		}
 
-		AABB3<T> AABBLocal()  override
+		AABB3<T> AABBLocal() override
 		{
 			// todo
 			AABB3<T> aabb;
 			return aabb;
 		}
 
-        bool intersectedLocal(const Ray3<T>& ray) const override
-        {
+		bool intersectedLocal(const Ray3<T> &ray) const override
+		{
 			// todo
-            return false;
-        }    
+			return false;
+		}
 
-        IntersectionInfo interactLocal(const Ray3<T>& ray) const override
-        {
+		IntersectionInfo interactLocal(const Ray3<T> &ray) const override
+		{
 			// todo
-            IntersectionInfo intersectionInfo;
+			IntersectionInfo intersectionInfo;
 
-            return intersectionInfo;
-        }
-		
+			return intersectionInfo;
+		}
 
-	// data
+		// data
 	public:
 		// plane normal
 		Vec3<T> normal = {0, 1, 0};
 		// A point on the plane
 		Vec3<T> point = {0, 0, 0};
-
 	};
-	
+
 	// template <typename T>
 	// using Plane3_Ptr = std::make_shared<Plane3<T>>;
 

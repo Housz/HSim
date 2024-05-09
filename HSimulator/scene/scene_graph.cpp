@@ -85,6 +85,22 @@ void HSim::SceneGraph::serialize()
 void HSim::SceneGraph::snapshot(SceneGraph& sg)
 {
 	sg.root = root;
+
+	auto callback = [&](HSim::GameObject_ptr go)
+	{
+		if (go->renderable->updateType == RenderableUpdateType::STATIC)
+		{
+			return;
+		}
+
+		if (go->renderable->updateType == RenderableUpdateType::RIGID)
+		{
+			
+		}
+		
+	};
+
+	// sg.traverse();
 	// sg.travese 
 	// static -> do nothing
 	// dynamic -> copy construct a new obj

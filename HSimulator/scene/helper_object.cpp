@@ -14,7 +14,13 @@ HSim::GroundHelper::GroundHelper()
 {
 }
 
-HSim::GroundHelper::GroundHelper(size_t slices_) : slices(slices_)
+HSim::GroundHelper::GroundHelper(size_t slices_)
+    : slices(slices_)
+{
+}
+
+HSim::GroundHelper::GroundHelper(const GroundHelper &groundHelper_)
+    : slices(groundHelper_.slices)
 {
 }
 
@@ -27,7 +33,12 @@ HSim::LineHelper::LineHelper()
 }
 
 HSim::LineHelper::LineHelper(const Vec3f &start_, const Vec3f &end_)
-:start(start_), end(end_)
+    : start(start_), end(end_)
+{
+}
+
+HSim::LineHelper::LineHelper(const LineHelper &lineHelper_)
+    : start(lineHelper_.start), end(lineHelper_.end)
 {
 }
 
@@ -52,7 +63,12 @@ HSim::ArrowHelper::ArrowHelper()
 }
 
 HSim::ArrowHelper::ArrowHelper(const Vec3f &start_, const Vec3f &end_)
-:start(start_), end(end_)
+    : start(start_), end(end_)
+{
+}
+
+HSim::ArrowHelper::ArrowHelper(const ArrowHelper &arrowHelper_)
+    : start(arrowHelper_.start), end(arrowHelper_.end)
 {
 }
 

@@ -12,21 +12,32 @@ namespace HSim
 	{
 	public:
 		Cylinder3() { SurfaceType = SurfaceType::Cylinder; }
-		~Cylinder3() {}
 
-		Cylinder3(const Transform3<T> transform_) 
-		: transform(transform_) { SurfaceType = SurfaceType::Cylinder; }
+		Cylinder3(const Cylinder3<T> &cylinder3_)
+			: Surface3<T>(cylinder3_),
+			  radiusTop(cylinder3_.radiusTop), radiusBottom(cylinder3_.radiusBottom), height(cylinder3_.height)
+		{
+			SurfaceType = SurfaceType::Cylinder;
+		}
+
+		Cylinder3(const Transform3<T> transform_)
+			: transform(transform_) { SurfaceType = SurfaceType::Cylinder; }
 
 		Cylinder3(const T radius_, const T height_)
-		: radiusTop(radius_), radiusBottom(radius_), height(height_)
-		{ SurfaceType = SurfaceType::Cylinder; }
+			: radiusTop(radius_), radiusBottom(radius_), height(height_)
+		{
+			SurfaceType = SurfaceType::Cylinder;
+		}
 
 		Cylinder3(const T radiusTop_, const T radiusBottom_, const T height_)
-		: radiusTop(radiusTop_), radiusBottom(radiusBottom_), height(height_)
-		{ SurfaceType = SurfaceType::Cylinder; }
+			: radiusTop(radiusTop_), radiusBottom(radiusBottom_), height(height_)
+		{
+			SurfaceType = SurfaceType::Cylinder;
+		}
 
+		~Cylinder3() {}
 
-		void setRadius(const T radius_) 
+		void setRadius(const T radius_)
 		{
 			radiusTop = radius_;
 			radiusBottom = radius_;
@@ -53,7 +64,6 @@ namespace HSim
 			height = height;
 		}
 
-
 	public:
 		Vec3<T> closestPositionLocal(const Vec3<T> &positionInLocal_) const override
 		{
@@ -67,28 +77,28 @@ namespace HSim
 			return Vec3<T>();
 		}
 
-		AABB3<T> AABBLocal()  override
+		AABB3<T> AABBLocal() override
 		{
 			// todo
 			AABB3<T> aabb;
 			return aabb;
 		}
 
-		bool intersectedLocal(const Ray3<T>& ray) const override
+		bool intersectedLocal(const Ray3<T> &ray) const override
 		{
 			// todo
-            return false;
+			return false;
 		}
 
-		IntersectionInfo interactLocal(const Ray3<T>& ray) const override
+		IntersectionInfo interactLocal(const Ray3<T> &ray) const override
 		{
 			// todo
-            IntersectionInfo intersectionInfo;
+			IntersectionInfo intersectionInfo;
 
-            return intersectionInfo;
+			return intersectionInfo;
 		}
 
-	// data
+		// data
 	public:
 		T radiusTop;
 		T radiusBottom;
@@ -97,5 +107,5 @@ namespace HSim
 
 	template <typename T>
 	using Cylinder3_Ptr = std::shared_ptr<Cylinder3<T>>;
-	
+
 } // namespace HSim

@@ -11,19 +11,23 @@ namespace HSim
 	{
 	public:
 		Sphere3() { SurfaceType = SurfaceType::SPHERE; }
-		~Sphere3(){};
 
 		// Sphere3(const Vec3<T> &center_, const T radius_) : center(center_), radius(radius_) {}
 
 		Sphere3(const Transform3<T> &transform_) : Surface3<T>(transform_) { SurfaceType = SurfaceType::SPHERE; };
 
 		Sphere3(const Vec3<T> &center_, const T radius_, const Transform3<T> &transform_)
-			: Surface3<T>(transform_), center(center_), radius(radius_) 
-			{ SurfaceType = SurfaceType::SPHERE; }
+			: Surface3<T>(transform_), center(center_), radius(radius_)
+		{
+			SurfaceType = SurfaceType::SPHERE;
+		}
 
 		Sphere3(const Sphere3<T> &sphere_)
-			: Surface3<T>(sphere_.transform), center(sphere_.center), radius(sphere_.radius) 
-			{ SurfaceType = SurfaceType::SPHERE; }
+			: Surface3<T>(sphere_), center(sphere_.center), radius(sphere_.radius)
+		{
+		}
+
+		~Sphere3(){};
 
 		void setCenter(const Vec3<T> center_) { center = center_; }
 		void setRadius(const T radius_) { radius = radius_; }
@@ -54,7 +58,7 @@ namespace HSim
 			}
 		}
 
-		AABB3<T> AABBLocal()  override
+		AABB3<T> AABBLocal() override
 		{
 			AABB3<T> aabb;
 			auto offset = {radius, radius, radius};
@@ -130,7 +134,7 @@ namespace HSim
 			{
 				// auto v = transform.mul({vertices[i], vertices[i + 1], vertices[i + 2]});
 
-				vertices[i] 	+= center[0];
+				vertices[i] += center[0];
 				vertices[i + 1] += center[1];
 				vertices[i + 2] += center[2];
 			}
@@ -228,7 +232,6 @@ namespace HSim
 				buildRenderingData();
 
 				renderingDataNeedUpdate = false;
-
 			}
 			else
 			{

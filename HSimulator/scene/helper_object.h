@@ -239,6 +239,7 @@ namespace HSim
 	public:
 		GroundHelper();
 		GroundHelper(size_t slices_);
+		GroundHelper(const GroundHelper& groundHelper_);
 		~GroundHelper();
 
 	public:
@@ -252,6 +253,7 @@ namespace HSim
 	public:
 		LineHelper();
 		LineHelper(const Vec3f& start_, const Vec3f& end_);
+		LineHelper(const LineHelper& lineHelper_);
 		~LineHelper();
 
 	public:
@@ -266,6 +268,7 @@ namespace HSim
 	public:
 		ArrowHelper();
 		ArrowHelper(const Vec3f& start_, const Vec3f& end_);
+		ArrowHelper(const ArrowHelper& arrowHelper_);
 		~ArrowHelper();
 
 	public:

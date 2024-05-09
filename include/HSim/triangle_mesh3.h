@@ -18,14 +18,23 @@ namespace HSim
 	class TriangleMesh3 : public Surface3<T>
 	{
 	public:
-		TriangleMesh3() 
+		TriangleMesh3() {}
+
+		TriangleMesh3(const TriangleMesh3<T> triangleMesh3_) 
+			: Surface3<T>(triangleMesh3_)
+			  points(triangleMesh3_.points), normals(triangleMesh3_.normals), uvs(triangleMesh3_.uvs),
+			  pointIndices(triangleMesh3_.pointIndices), normalIndices(triangleMesh3_.normalIndices), uvIndices(triangleMesh3_.uvIndices),
+		{
+		}
+
+		TriangleMesh3()
 		{
 			SurfaceType = SurfaceType::TRIANGLE_MESH;
 
 			bvh = std::make_shared<BVH3<T>>();
 		}
 
-		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_) 
+		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_)
 		{
 			SurfaceType = SurfaceType::TRIANGLE_MESH;
 
@@ -36,16 +45,16 @@ namespace HSim
 			const std::vector<Vec3<T>> &points_, const std::vector<Vec3<T>> &normals_, const std::vector<Vec2<T>> &uvs_,
 			const std::vector<Vec3ui> pointIndices_, const std::vector<Vec3ui> normalIndices_, const std::vector<Vec3ui> uvIndices_,
 			const Transform3<T> &transform_)
-			: points(points), normals(normals_), uvs(uvs_),
-	  		pointIndices(pointIndices_), normalIndices(normalIndices_), uvIndices(uvIndices_),
-	  		transform(transform_) 
+			: points(points_), normals(normals_), uvs(uvs_),
+			  pointIndices(pointIndices_), normalIndices(normalIndices_), uvIndices(uvIndices_),
+			  transform(transform_)
 		{
 			SurfaceType = SurfaceType::TRIANGLE_MESH;
 
 			bvh = std::make_shared<BVH3<T>>();
 		}
 
-		~TriangleMesh3() {};
+		~TriangleMesh3(){};
 
 		// manipulators
 	public:
@@ -917,7 +926,5 @@ namespace HSim
 
 	template <typename T>
 	using TriangleMesh3_Ptr = std::shared_ptr<TriangleMesh3<T>>;
-
-
 
 } // namespace HSim

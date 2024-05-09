@@ -12,7 +12,7 @@
 
 namespace HSim
 {
-	enum class SurfaceType 
+	enum class SurfaceType
 	{
 		BOX,
 		SPHERE,
@@ -83,12 +83,19 @@ namespace HSim
 		{
 			spaceObjectType = SpaceObjectType::SURFACE;
 		};
-		~Surface3(){};
 
-		Surface3(const Transform3<T> &transform_) : transform(transform_) 
+		Surface3(const Transform3<T>& transform_) : transform(transform_)
 		{
 			spaceObjectType = SpaceObjectType::SURFACE;
 		}
+
+		Surface3(const Surface3<T>& surface3_)
+			: transform(surface3_.transform), SurfaceType(surface3_.SurfaceType)
+		{
+			spaceObjectType = SpaceObjectType::SURFACE;
+		}
+
+		~Surface3(){};
 
 		Vec3<T> closestPosition(const Vec3<T> &positionInWorld_) const
 		{
@@ -168,7 +175,6 @@ namespace HSim
 		// status flags
 		bool renderingDataNeedUpdate = true;
 		bool aabbNeedUpdate = true;
-
 
 		// simulator change surface
 		// surface.updateStatus() { renderingDataNeedUpdate = true;  aabbNeedUpdate = ture; }

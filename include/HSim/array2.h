@@ -15,6 +15,7 @@ namespace HSim
 	{
 	public:
 		Array2() {}
+        // todo copy
 		~Array2() {}
 
 		Array2(Vec2i size)

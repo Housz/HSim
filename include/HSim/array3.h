@@ -10,19 +10,26 @@ namespace HSim
     {
     public:
         Array3() {}
-        ~Array3() {}
+
+        Array3(const Array3<T>& array3_)
+            : Array<T>(array3_), _size(array3_._size)
+        {
+        }
 
         Array3(Vec3i size)
+            : _size(size)
         {
-            _size = size;
+            
             _data.resize(size.x * size.y * size.z);
         }
 
         Array3(size_t x, size_t y, size_t z)
+            : _size({x, y, z})
         {
-            _size = {x, y, z};
             _data.resize(x * y * z);
         }
+
+        ~Array3() {}
 
         // setter, getter
     public:

@@ -10,7 +10,17 @@ namespace HSim
     {
     public:
         FaceCenterGrid3() {}
-        ~FaceCenterGrid3() {}
+
+        FaceCenterGrid3(const FaceCenterGrid3<T>& faceCenterGrid3_)
+            : VectorGrid3(faceCenterGrid3_),
+              _dataU(faceCenterGrid3_._dataU),
+              _dataV(faceCenterGrid3_._dataV),
+              _dataW(faceCenterGrid3_._dataW),
+              _dataOriginU(faceCenterGrid3_._dataOriginU),
+              _dataOriginV(faceCenterGrid3_._dataOriginV),
+              _dataOriginW(faceCenterGrid3_._dataOriginW),
+        {
+        }
 
         FaceCenterGrid3(size_t x, size_t y, size_t z)
             : VectorGrid3<T>(x, y, z)
@@ -19,14 +29,16 @@ namespace HSim
             _dataV.resize(x, y + 1, z);
             _dataW.resize(x, y, z + 1);
 
-            _dataOriginU = _girdOrigin + Vec3<T>(0, deltaY() / 2, deltaZ() / 2);
-            _dataOriginV = _girdOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
-            _dataOriginW = _girdOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
+            _dataOriginU = girdOrigin + Vec3<T>(0, deltaY() / 2, deltaZ() / 2);
+            _dataOriginV = girdOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
+            _dataOriginW = girdOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
         }
         FaceCenterGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
             : VectorGrid3<T>(resolution, origin, gridSpacing)
         {
         }
+
+        ~FaceCenterGrid3() {}
 
         // setter getter
     public:
@@ -122,5 +134,11 @@ namespace HSim
     {
         return divergenceAtCellCenter(position.x, position.y, position.z);
     }
+    
+    template <typename T>
+    using MACGrid3 = FaceCenterGrid3<T>;
+
+    template <typename T>
+    using StaggeredGrid3 = FaceCenterGrid3<T>;
 
 } // namespace HSim

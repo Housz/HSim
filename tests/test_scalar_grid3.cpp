@@ -13,7 +13,7 @@ int main()
 
 	sg3.setData(data);
 
-	std::cout << sg3._gridSpacing << sg3._girdOrigin << sg3._gridResolution << std::endl;
+	std::cout << sg3.gridSpacing << sg3.girdOrigin << sg3.gridResolution << std::endl;
 
 	std::cout << sg3._data[0] << std::endl;
 	sg3(1, 2, 3) = 2;

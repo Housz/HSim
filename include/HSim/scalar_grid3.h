@@ -10,20 +10,25 @@ namespace HSim
 	{
 		// constructor
 	public:
-		ScalarGrid3(){};
-		~ScalarGrid3(){};
+		ScalarGrid3() {}
+		ScalarGrid3(const ScalarGrid3<T>& scalarGrid3_)
+			: Grid3<T>(scalarGrid3_), _data(scalarGrid3_._data)
+		{
+		}
 
 		ScalarGrid3(size_t x, size_t y, size_t z)
 			: Grid3<T>(x, y, z)
 		{
-			_data.resize(x*y*z);
+			_data.resize(x * y * z);
 		}
 
 		ScalarGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
 			: Grid3<T>(resolution, origin, gridSpacing)
 		{
-			_data.resize(x*y*z);
+			_data.resize(x * y * z);
 		}
+
+		~ScalarGrid3(){};
 
 		// setter getter
 	public:
@@ -50,16 +55,14 @@ namespace HSim
 	public:
 		std::vector<T> _data;
 
-
 		// for rendering
 	public:
 		// draw boundary
-		virtual void drawBoundary() override 
+		virtual void drawBoundary() override
 		{
 			std::cout << "drawBoundary scalar_grid3" << std::endl;
 		}
 
-		
 		// draw grid
 		virtual void drawGrid() override
 		{
@@ -67,12 +70,11 @@ namespace HSim
 		}
 
 		// draw data
-		// put all data to a VBO, glDrawArrays() 
+		// put all data to a VBO, glDrawArrays()
 		virtual void drawData() override
 		{
 			std::cout << "drawData scalar_grid3" << std::endl;
 		}
-
 	};
 
 	template <typename T>
@@ -105,7 +107,6 @@ namespace HSim
 		std::fill(_data.begin(), _data.end(), value);
 	}
 
-
 	/**
 	 * @brief Gradient (Central Finite Difference)
 	 * df/dx = [f(x+h) - f(x-h)]/ 2h
@@ -114,9 +115,9 @@ namespace HSim
 	template <typename T>
 	Vec3<T> ScalarGrid3<T>::gradientAt(size_t i, size_t j, size_t k)
 	{
-		size_t sizeX = _gridResolution.x;
-		size_t sizeY = _gridResolution.y;
-		size_t sizeZ = _gridResolution.z;
+		size_t sizeX = gridResolution.x;
+		size_t sizeY = gridResolution.y;
+		size_t sizeZ = gridResolution.z;
 		assert(i < sizeX && j < sizeY && k < sizeZ);
 
 		Vec3<T> grad;
@@ -143,9 +144,9 @@ namespace HSim
 	template <typename T>
 	T ScalarGrid3<T>::laplacianAt(size_t i, size_t j, size_t k)
 	{
-		size_t sizeX = _gridResolution.x;
-		size_t sizeY = _gridResolution.y;
-		size_t sizeZ = _gridResolution.z;
+		size_t sizeX = gridResolution.x;
+		size_t sizeY = gridResolution.y;
+		size_t sizeZ = gridResolution.z;
 		assert(i < sizeX && j < sizeY && k < sizeZ);
 
 		T center = dataAt(i, j, k);

@@ -9,7 +9,11 @@ namespace HSim
 	{
 	public:
 		VertexCenterScalarGrid3() {}
-		~VertexCenterScalarGrid3() {}
+
+		VertexCenterScalarGrid3(const VertexCenterScalarGrid3<T>& vertexCenterScalarGrid3) 
+			: ScalarGrid3<T>(vertexCenterScalarGrid3)
+		{
+		}
 
 		VertexCenterScalarGrid3(size_t x, size_t y, size_t z)
 			: ScalarGrid3<T>(x, y, z)
@@ -20,21 +24,23 @@ namespace HSim
 		{
 		}
 
+		~VertexCenterScalarGrid3() {}
+
 	public:
 		Vec3i dataSize() override
 		{
-			if (_gridResolution.isZero())
+			if (gridResolution.isZero())
 			{
 				return Vec3i();
 			}
 			else
 			{
-				return _gridResolution + Vec3i(1, 1, 1);
+				return gridResolution + Vec3i(1, 1, 1);
 			}
 		}
 		Vec3<T> dataOrigin() override
 		{
-			return _girdOrigin;
+			return girdOrigin;
 		}
 	};
 

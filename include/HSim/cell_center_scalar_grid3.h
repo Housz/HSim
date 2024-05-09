@@ -10,7 +10,10 @@ namespace HSim
 	{
 	public:
 		CellCenterScalarGrid3() {}
-		~CellCenterScalarGrid3() {}
+
+		CellCenterScalarGrid3(const CellCenterScalarGrid3<T> cellCenterScalarGrid3_)
+			: ScalarGrid3<T>(cellCenterScalarGrid3_)
+		{}
 
 		CellCenterScalarGrid3(size_t x, size_t y, size_t z)
 			: ScalarGrid3<T>(x, y, z) {}
@@ -18,15 +21,17 @@ namespace HSim
 		CellCenterScalarGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
 			: ScalarGrid3<T>(resolution, origin, gridSpacing) {}
 
+		~CellCenterScalarGrid3() {}
+
 	public:
 		Vec3i dataSize() override
 		{
-			return _gridResolution;
+			return gridResolution;
 		}
 
 		Vec3<T> dataOrigin() override
 		{
-			return _girdOrigin + _gridSpacing * 0.5;
+			return girdOrigin + gridSpacing * 0.5;
 		}
 
 		// for rendering
