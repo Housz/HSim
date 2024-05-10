@@ -69,7 +69,7 @@ namespace HSim
          *
          * @return Vec3i
          */
-        Vec3i gridResolution() { return gridResolution; }
+        // Vec3i gridResolution() { return gridResolution; }
         void setGridResolution(Vec3i r) { gridResolution = r; }
         size_t sizeX() { return gridResolution.x; }
         size_t sizeY() { return gridResolution.y; }
@@ -80,7 +80,7 @@ namespace HSim
          *
          * @return Vec3<T>
          */
-        Vec3<T> gridOrigin() { return girdOrigin; }
+        // Vec3<T> gridOrigin() { return girdOrigin; }
         void setGridOrigin(Vec3<T> origin) { girdOrigin = origin; }
 
         /**
@@ -88,7 +88,7 @@ namespace HSim
          *
          * @return Vec3<T>
          */
-        Vec3<T> gridSpacing() { return gridSpacing; }
+        // Vec3<T> gridSpacing() { return gridSpacing; }
         void setGridSpacing(Vec3<T> gs) { gridSpacing = gs; }
         T deltaX() { return gridSpacing.x; }
         T deltaY() { return gridSpacing.y; }

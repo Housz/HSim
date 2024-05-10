@@ -1,9 +1,18 @@
 #include <scene/graphics_objects/graphics_object.h>
+#include "graphics_object.h"
 
 HSim::GraphicsObject::GraphicsObject()
 {
 	// VAO init
 	vao.create();
+}
+
+HSim::GraphicsObject::GraphicsObject(const GraphicsObject &graphicsObject_)
+{
+	// VAO init
+	vao.create();
+
+	material = std::make_shared<Material>(*(graphicsObject_.material));
 }
 
 HSim::GraphicsObject::GraphicsObject(const Material_Ptr material_)
@@ -14,6 +23,19 @@ HSim::GraphicsObject::GraphicsObject(const Material_Ptr material_)
 }
 
 HSim::GraphicsObject::~GraphicsObject()
+{
+}
+
+bool HSim::GraphicsObject::isRendingDataValid()
+{
+	return false;
+}
+
+void HSim::GraphicsObject::draw(const RenderParams &renderParams)
+{
+}
+
+void HSim::GraphicsObject::buildRenderingData()
 {
 }
 
@@ -334,8 +356,6 @@ HSim::GraphicsObject::~GraphicsObject()
 
 // 	vao.bindVBO(vbo, 0, 3, 3 * sizeof(float), (void *)0);
 // }
-
-
 
 // void HSim::LineHelperGObject::draw(const RenderParams &renderParams)
 // {

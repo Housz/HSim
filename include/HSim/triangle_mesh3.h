@@ -18,20 +18,18 @@ namespace HSim
 	class TriangleMesh3 : public Surface3<T>
 	{
 	public:
-		TriangleMesh3() {}
-
-		TriangleMesh3(const TriangleMesh3<T> triangleMesh3_) 
-			: Surface3<T>(triangleMesh3_)
-			  points(triangleMesh3_.points), normals(triangleMesh3_.normals), uvs(triangleMesh3_.uvs),
-			  pointIndices(triangleMesh3_.pointIndices), normalIndices(triangleMesh3_.normalIndices), uvIndices(triangleMesh3_.uvIndices),
-		{
-		}
-
 		TriangleMesh3()
 		{
 			SurfaceType = SurfaceType::TRIANGLE_MESH;
 
 			bvh = std::make_shared<BVH3<T>>();
+		}
+
+		TriangleMesh3(const TriangleMesh3<T>& triangleMesh3_) 
+			: Surface3<T>(triangleMesh3_),
+			  points(triangleMesh3_.points), normals(triangleMesh3_.normals), uvs(triangleMesh3_.uvs),
+			  pointIndices(triangleMesh3_.pointIndices), normalIndices(triangleMesh3_.normalIndices), uvIndices(triangleMesh3_.uvIndices)
+		{
 		}
 
 		TriangleMesh3(const Transform3<T> &transform_) : transform(transform_)

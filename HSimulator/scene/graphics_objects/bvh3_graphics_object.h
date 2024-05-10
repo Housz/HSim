@@ -8,6 +8,7 @@ namespace HSim
 	{
 	public:
 		BVH3GraphicsObject();
+		BVH3GraphicsObject(const BVH3GraphicsObject& other);
 		BVH3GraphicsObject(const BVH3_Ptr<PRECISION> bvh_, const BasicMaterial_Ptr material_);
 		~BVH3GraphicsObject();
 

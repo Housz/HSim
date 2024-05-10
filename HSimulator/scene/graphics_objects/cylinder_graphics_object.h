@@ -8,6 +8,7 @@ namespace HSim
     {
     public:
         CylinderGraphicsObject();
+        CylinderGraphicsObject(const CylinderGraphicsObject& cylinderGraphicsObject_);
         CylinderGraphicsObject(const Cylinder3_Ptr<PRECISION> cylinder_, const BasicMaterial_Ptr material_);
         ~CylinderGraphicsObject();
 

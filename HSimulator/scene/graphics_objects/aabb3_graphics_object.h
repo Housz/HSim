@@ -13,6 +13,7 @@ namespace HSim
 	{
 	public:
 		AABB3GraphicsObject();
+		AABB3GraphicsObject(const AABB3GraphicsObject& other);
 		// AABB3GObject(const AABB3_Ptr<PRECISION> aabb_, const BasicMaterial_Ptr material_);
 		AABB3GraphicsObject(const AABB3<PRECISION> aabb_, const BasicMaterial_Ptr material_);
 		// AABB3GObject(const SpaceObject3_Ptr<PRECISION> spaceObject_, const BasicMaterial_Ptr material_);

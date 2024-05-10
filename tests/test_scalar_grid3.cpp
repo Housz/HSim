@@ -18,8 +18,8 @@ int main()
 	std::cout << sg3._data[0] << std::endl;
 	sg3(1, 2, 3) = 2;
 	std::cout << sg3(1, 2, 3) << std::endl;
-	std::cout << sg3.gridOrigin() << std::endl;
-	std::cout << sg3.gridResolution() << std::endl;
+	std::cout << sg3.gridOrigin << std::endl;
+	std::cout << sg3.gridResolution << std::endl;
 
 	// auto func = [&](size_t i, size_t j, size_t k)
 	// {

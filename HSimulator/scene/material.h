@@ -1,7 +1,7 @@
 #pragma once
 
 #include <HSim/common.h>
-#include <scene/color.h>
+#include <HSim/color.h>
 #include <renderer/shader.h>
 
 namespace HSim
@@ -17,6 +17,7 @@ namespace HSim
 	{
 	public:
 		Material();
+		Material(const Material& material_);
 		~Material();
 
 	public:
@@ -30,6 +31,7 @@ namespace HSim
 	{
 	public:
 		BasicMaterial();
+		BasicMaterial(const BasicMaterial& basicMaterial_);
 		BasicMaterial(const Color &color_, const bool wireframe_);
 		~BasicMaterial();
 
@@ -44,6 +46,7 @@ namespace HSim
 	{
 	public:
 		LineMaterial();
+		LineMaterial(const LineMaterial& lineMaterial_);
 		LineMaterial(const Color &color_);
 		~LineMaterial();
 

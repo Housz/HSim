@@ -1,7 +1,18 @@
 #include <scene/graphics_objects/bvh3_graphics_object.h>
+#include "bvh3_graphics_object.h"
 
 HSim::BVH3GraphicsObject::BVH3GraphicsObject()
 {
+}
+
+HSim::BVH3GraphicsObject::BVH3GraphicsObject(const BVH3GraphicsObject &other)
+	: GraphicsObject(other)
+{
+	bvh = std::make_shared<BVH3<PRECISION>>(*(other.bvh));
+
+	vbo.create();
+
+	buildRenderingData();
 }
 
 HSim::BVH3GraphicsObject::BVH3GraphicsObject(const BVH3_Ptr<PRECISION> bvh_, const BasicMaterial_Ptr material_)
@@ -135,32 +146,32 @@ void HSim::BVH3GraphicsObject::draw(const RenderParams &renderParams)
 		buildRenderingData();
 	}
 
-    auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
-    auto color = mat->color;
-    auto shader = mat->shader;
+	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+	auto color = mat->color;
+	auto shader = mat->shader;
 
-    // use shader with renderParams
-    shader->use();
-    shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
-    shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
-    shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
+	// use shader with renderParams
+	shader->use();
+	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
+	shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
 
-    glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
-    shader->setVec3("viewPos", cameraPosition);
+	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+	shader->setVec3("viewPos", cameraPosition);
 
-    shader->setMat4("projection", renderParams.transforms.proj);
-    shader->setMat4("view", renderParams.transforms.view);
-    shader->setMat4("model", renderParams.transforms.model);
+	shader->setMat4("projection", renderParams.transforms.proj);
+	shader->setMat4("view", renderParams.transforms.view);
+	shader->setMat4("model", renderParams.transforms.model);
 
-    glViewport(0, 0, renderParams.width, renderParams.height);
+	glViewport(0, 0, renderParams.width, renderParams.height);
 
-    // bind vao and draw
+	// bind vao and draw
 	vao.bind();
-	
-    glLineWidth(1.0f);
-    glDrawArrays(GL_LINES, 0, numElements);  
 
-    vao.unbind();
+	glLineWidth(1.0f);
+	glDrawArrays(GL_LINES, 0, numElements);
+
+	vao.unbind();
 }
 
 bool HSim::BVH3GraphicsObject::isRendingDataValid()

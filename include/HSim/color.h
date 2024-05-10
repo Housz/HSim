@@ -8,7 +8,6 @@ namespace HSim
 	struct Color
 	{
 		Color() {}
-		~Color() {}
 
 		Color(float r_, float g_, float b_) : r(r_), g(g_), b(b_) {}
 
@@ -46,6 +45,7 @@ namespace HSim
 			// todo
 		}
 
+	// data
 		float r = 0.0f;
 		float g = 0.0f;
 		float b = 0.0f;

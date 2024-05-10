@@ -1,7 +1,19 @@
 #include <scene/graphics_objects/ground_helper_graphics_object.h>
+#include "ground_helper_graphics_object.h"
 
 HSim::GroundHelperGObject::GroundHelperGObject()
 {
+}
+
+HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelperGObject &other)
+	: GraphicsObject(other)
+{
+	groundHelper = std::make_shared<GroundHelper>(*(other.groundHelper));
+
+	vbo.create();
+	ebo.create();
+
+	buildRenderingData();
 }
 
 HSim::GroundHelperGObject::~GroundHelperGObject()
@@ -40,7 +52,7 @@ void HSim::GroundHelperGObject::draw(const RenderParams &renderParams)
 	shader->use();
 	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
 	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
-    shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
+	shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
 
 	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
 	shader->setVec3("viewPos", cameraPosition);

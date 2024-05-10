@@ -5,6 +5,17 @@ HSim::TriangleMesh3GObject::TriangleMesh3GObject()
 {
 }
 
+HSim::TriangleMesh3GObject::TriangleMesh3GObject(const TriangleMesh3GObject &other)
+    : GraphicsObject(other)
+{
+    mesh = std::make_shared<TriangleMesh3<PRECISION>>(*(other.mesh));
+
+    vbo.create();
+    ebo.create();
+
+    buildRenderingData();
+}
+
 HSim::TriangleMesh3GObject::TriangleMesh3GObject(const TriangleMesh3_Ptr<PRECISION> mesh_, const BasicMaterial_Ptr material_)
     : GraphicsObject(material_)
 {

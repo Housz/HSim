@@ -19,7 +19,11 @@ namespace HSim
 		{
 			reset();
 		}
-		~AABB3() {}
+
+		AABB3(const AABB3<T>& aabb_)
+			: lowerCorner(aabb_.lowerCorner), upperCorner(aabb_.upperCorner)
+		{
+		}
 
 		// AABB3(const Vec3<T> &lowerCorner_, const Vec3<T> &upperCorner_)
 		// 	: lowerCorner(lowerCorner_), upperCorner(upperCorner_)
@@ -31,11 +35,6 @@ namespace HSim
 			set(p1, p2);
 		}
 
-		AABB3(const AABB3<T> &boundingBox_)
-			: lowerCorner(boundingBox_.lowerCorner), upperCorner(boundingBox_.upperCorner)
-		{
-		}
-
 		/**
 		 * @brief set BoundingBox3 with any two points
 		 */
@@ -44,6 +43,8 @@ namespace HSim
 			lowerCorner = {std::min(p1.x, p2.x), std::min(p1.y, p2.y), std::min(p1.z, p2.z)};
 			upperCorner = {std::max(p1.x, p2.x), std::max(p1.y, p2.y), std::max(p1.z, p2.z)};
 		}
+
+		~AABB3() {}
 
 		void reset()
 		{

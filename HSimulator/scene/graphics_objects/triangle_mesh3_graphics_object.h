@@ -8,6 +8,7 @@ namespace HSim
 	{
 	public:
 		TriangleMesh3GObject();
+		TriangleMesh3GObject(const TriangleMesh3GObject& other);
 		TriangleMesh3GObject(const TriangleMesh3_Ptr<PRECISION> mesh_, const BasicMaterial_Ptr material_);
 		~TriangleMesh3GObject();
 

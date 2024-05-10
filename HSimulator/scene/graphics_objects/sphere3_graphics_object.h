@@ -8,6 +8,7 @@ namespace HSim
 	{
 	public:
 		Sphere3GObject();
+		Sphere3GObject(const Sphere3GObject& other);
 		Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_);
 		~Sphere3GObject();
 

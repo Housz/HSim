@@ -1,11 +1,18 @@
 #include <scene/graphics_objects/line_helper_graphics_object.h>
+#include "line_helper_graphics_object.h"
 
 HSim::LineHelperGObject::LineHelperGObject()
 {
 }
 
-HSim::LineHelperGObject::~LineHelperGObject()
+HSim::LineHelperGObject::LineHelperGObject(const LineHelperGObject &other)
+    : GraphicsObject(other)
 {
+    lineHelper = std::make_shared<LineHelper>(*(other.lineHelper));
+
+    vbo.create();
+
+    buildRenderingData();
 }
 
 HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, const LineMaterial_Ptr material_)
@@ -16,6 +23,10 @@ HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, con
     vbo.create();
 
     buildRenderingData();
+}
+
+HSim::LineHelperGObject::~LineHelperGObject()
+{
 }
 
 bool HSim::LineHelperGObject::isRendingDataValid()

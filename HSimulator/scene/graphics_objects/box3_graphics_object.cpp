@@ -1,7 +1,18 @@
 #include <scene/graphics_objects/box3_graphics_object.h>
+#include "box3_graphics_object.h"
 
 HSim::Box3GraphicsObject::Box3GraphicsObject()
 {
+}
+
+HSim::Box3GraphicsObject::Box3GraphicsObject(const Box3GraphicsObject &box3GraphicsObject)
+    : GraphicsObject(box3GraphicsObject)
+{
+    box = std::make_shared<Box3<PRECISION>>(*(box3GraphicsObject.box));
+
+    vbo.create();
+
+    buildRenderingData();
 }
 
 HSim::Box3GraphicsObject::Box3GraphicsObject(const Box3_Ptr<PRECISION> box_, const BasicMaterial_Ptr material_)

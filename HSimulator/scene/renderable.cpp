@@ -17,6 +17,7 @@ HSim::Renderable::Renderable(const Renderable &renderable_)
 	
 	renderingDataNeedUpdate = renderable_.renderingDataNeedUpdate;
 	
+	// todo : all copy constructor
 	spaceObject = std::make_shared<SpaceObject3<PRECISION>>(*(renderable_.spaceObject));
 
 	graphicsObject = std::make_shared<GraphicsObject>(*(renderable_.graphicsObject));

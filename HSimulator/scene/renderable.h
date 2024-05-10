@@ -35,6 +35,7 @@ namespace HSim
 
 		void draw(const RenderParams &renderParams);
 
+	// data
 	public:
 		SpaceObject3_Ptr<PRECISION> spaceObject; // ptr to surface/grid/field/helper ...
 

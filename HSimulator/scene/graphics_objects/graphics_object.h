@@ -16,15 +16,16 @@ namespace HSim
 	{
 	public:
 		GraphicsObject();
+		GraphicsObject(const GraphicsObject& graphicsObject_);
 		GraphicsObject(Material_Ptr material_);
 		~GraphicsObject();
 
-		virtual void buildRenderingData() = 0;
+		virtual void buildRenderingData();
 
-		virtual void draw(const RenderParams &renderParams) = 0;
+		virtual void draw(const RenderParams &renderParams);
 
 	public:
-		virtual bool isRendingDataValid() = 0;
+		virtual bool isRendingDataValid();
 
 	public:
 		VertexArrayObject vao;

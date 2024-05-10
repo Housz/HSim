@@ -1,7 +1,20 @@
 #include <scene/graphics_objects/sphere3_graphics_object.h>
+#include "sphere3_graphics_object.h"
 
 HSim::Sphere3GObject::Sphere3GObject()
 {
+}
+
+HSim::Sphere3GObject::Sphere3GObject(const Sphere3GObject &other)
+	: GraphicsObject(other), 
+	  numSectors(other.numSectors), numStacks(other.numStacks)
+{
+	sphere = std::make_shared<Sphere3<PRECISION>>(*(other.sphere));
+
+	vbo.create();
+	ebo.create();
+
+	buildRenderingData();
 }
 
 HSim::Sphere3GObject::Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_)

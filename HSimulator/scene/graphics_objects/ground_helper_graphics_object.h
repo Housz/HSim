@@ -8,6 +8,7 @@ namespace HSim
     {
     public:
         GroundHelperGObject();
+        GroundHelperGObject(const GroundHelperGObject& other);
         GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
         ~GroundHelperGObject();
 

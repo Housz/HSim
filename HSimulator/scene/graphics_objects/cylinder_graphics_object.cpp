@@ -1,7 +1,19 @@
 #include <scene/graphics_objects/cylinder_graphics_object.h>
+#include "cylinder_graphics_object.h"
 
 HSim::CylinderGraphicsObject::CylinderGraphicsObject()
 {
+}
+
+HSim::CylinderGraphicsObject::CylinderGraphicsObject(const CylinderGraphicsObject &cylinderGraphicsObject_)
+    : GraphicsObject(cylinderGraphicsObject_), segments(cylinderGraphicsObject_.segments)
+{
+    cylinder = std::make_shared<Cylinder3<PRECISION>>(*(cylinderGraphicsObject_.cylinder));
+        
+    vbo.create();
+    ebo.create();
+
+    buildRenderingData();
 }
 
 HSim::CylinderGraphicsObject::CylinderGraphicsObject(const Cylinder3_Ptr<PRECISION> cylinder_, const BasicMaterial_Ptr material_)

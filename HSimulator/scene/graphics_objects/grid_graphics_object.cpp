@@ -4,6 +4,16 @@ HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject()
 {
 }
 
+HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3GraphicsObject &other)
+	: GraphicsObject(other)
+{
+	grid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*(other.grid));
+
+	vbo.create();
+
+	buildRenderingData();
+}
+
 HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_)
 	: GraphicsObject(material_)
 {

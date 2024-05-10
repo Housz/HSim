@@ -13,15 +13,13 @@ namespace HSim
     class Triangle3 : public Surface3<T>
     {
     public:
-        Triangle3() {}
+        Triangle3() { SurfaceType = SurfaceType::TRIANGLE; }
 
-        Triangle3(const Triangle3 &triangle3_)
-            : Surface3<T>(triangle3_)
+        Triangle3(const Triangle3<T> &triangle3_)
+            : Surface3<T>(triangle3_),
               points(triangle3_.points), normals(triangle3_.normals), uvs(triangle3_.uvs)
         {
         }
-
-        Triangle3() { SurfaceType = SurfaceType::TRIANGLE; }
 
         Triangle3(const Transform3<T> &transform_) : Surface3(transform_) { SurfaceType = SurfaceType::TRIANGLE; }
 
