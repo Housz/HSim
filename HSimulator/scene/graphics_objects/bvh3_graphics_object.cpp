@@ -29,6 +29,11 @@ HSim::BVH3GraphicsObject::~BVH3GraphicsObject()
 {
 }
 
+void HSim::BVH3GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+	ptr = std::make_shared<BVH3GraphicsObject>(*this);
+}
+
 void HSim::BVH3GraphicsObject::buildRenderingData()
 {
 	assert(bvh != nullptr);

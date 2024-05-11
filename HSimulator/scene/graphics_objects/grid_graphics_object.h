@@ -15,6 +15,8 @@ namespace HSim
 		CellCenterScalarGrid3GraphicsObject(const CellCenterScalarGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_);
 		~CellCenterScalarGrid3GraphicsObject();
 
+		void clone(std::shared_ptr<GraphicsObject> &ptr) override;
+
 	public:
 		void buildRenderingData() override;
 

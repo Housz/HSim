@@ -95,6 +95,11 @@ void HSim::SceneGraph::snapshot(SceneGraph& sg)
 
 		if (go->renderable->updateType == RenderableUpdateType::RIGID)
 		{
+
+		}
+		
+		if (go->renderable->updateType == RenderableUpdateType::DYNAMIC)
+		{
 			
 		}
 		
@@ -102,8 +107,8 @@ void HSim::SceneGraph::snapshot(SceneGraph& sg)
 
 	// sg.traverse();
 	// sg.travese 
-	// static -> do nothing
-	// dynamic -> copy construct a new obj
+	// static -> do nothing (ptr to one )
+	// dynamic -> clone a new obj
 }
 
 void HSim::SceneGraph::draw()

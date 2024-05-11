@@ -12,6 +12,8 @@ namespace HSim
         CylinderGraphicsObject(const Cylinder3_Ptr<PRECISION> cylinder_, const BasicMaterial_Ptr material_);
         ~CylinderGraphicsObject();
 
+        void clone(std::shared_ptr<GraphicsObject> &ptr) override;
+
     public:
         void buildRenderingData() override;
 

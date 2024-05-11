@@ -28,6 +28,11 @@ HSim::GroundHelper::~GroundHelper()
 {
 }
 
+void HSim::GroundHelper::clone(std::shared_ptr<SpaceObject3<float>> &ptr)
+{
+    ptr = std::make_shared<GroundHelper>(*this);
+}
+
 HSim::LineHelper::LineHelper()
 {
 }
@@ -44,6 +49,11 @@ HSim::LineHelper::LineHelper(const LineHelper &lineHelper_)
 
 HSim::LineHelper::~LineHelper()
 {
+}
+
+void HSim::LineHelper::clone(std::shared_ptr<SpaceObject3<float>> &ptr)
+{
+    ptr = std::make_shared<LineHelper>(*this);
 }
 
 // HSim::SphereHelper::SphereHelper()
@@ -74,4 +84,9 @@ HSim::ArrowHelper::ArrowHelper(const ArrowHelper &arrowHelper_)
 
 HSim::ArrowHelper::~ArrowHelper()
 {
+}
+
+void HSim::ArrowHelper::clone(std::shared_ptr<SpaceObject3<float>> &ptr)
+{
+    ptr = std::make_shared<ArrowHelper>(*this);
 }

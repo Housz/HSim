@@ -12,6 +12,8 @@ namespace HSim
 		Sphere3GObject(const Sphere3_Ptr<PRECISION> sphere_, const BasicMaterial_Ptr material_);
 		~Sphere3GObject();
 
+		void clone(std::shared_ptr<GraphicsObject> &ptr) override;
+
 	public:
 		void buildRenderingData() override;
 

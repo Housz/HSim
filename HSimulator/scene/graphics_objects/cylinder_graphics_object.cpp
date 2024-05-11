@@ -31,6 +31,11 @@ HSim::CylinderGraphicsObject::~CylinderGraphicsObject()
 {
 }
 
+void HSim::CylinderGraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+    ptr = std::make_shared<CylinderGraphicsObject>(*this);
+}
+
 void HSim::CylinderGraphicsObject::buildRenderingData()
 {
     assert(cylinder != nullptr);

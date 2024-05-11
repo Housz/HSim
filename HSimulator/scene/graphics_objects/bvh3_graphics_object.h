@@ -11,6 +11,8 @@ namespace HSim
 		BVH3GraphicsObject(const BVH3GraphicsObject& other);
 		BVH3GraphicsObject(const BVH3_Ptr<PRECISION> bvh_, const BasicMaterial_Ptr material_);
 		~BVH3GraphicsObject();
+		
+        void clone(std::shared_ptr<GraphicsObject> &ptr) override;
 
 	public:
 		void buildRenderingData() override;

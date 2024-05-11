@@ -12,7 +12,7 @@ namespace HSim
 		Plane3() { SurfaceType = SurfaceType::PLANE; }
 
 		Plane3(const Plane3<T> &plane3_)
-			: Surface3<T>(plane3_)
+			: Surface3<T>(plane3_),
 			  normal(plane3_.normal), point(plane3_.point)
 		{
 		}
@@ -46,6 +46,11 @@ namespace HSim
 
 			normal = v12.cross(v13).getNormalized();
 			point = p1;
+		}
+
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<Plane3<T>>(*this);
 		}
 
 		~Plane3(){};

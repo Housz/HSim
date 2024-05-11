@@ -37,6 +37,11 @@ HSim::AABB3GraphicsObject::~AABB3GraphicsObject()
 {
 }
 
+void HSim::AABB3GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+	ptr = std::make_shared<AABB3GraphicsObject>(*this);
+}
+
 void HSim::AABB3GraphicsObject::buildRenderingData()
 {
 	// assert(aabb != nullptr);

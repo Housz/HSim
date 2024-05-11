@@ -45,6 +45,11 @@ namespace HSim
 
         ~Triangle3(){};
 
+        void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<Triangle3<T>>(*this);
+		}
+
     public:
         T area() const
         {

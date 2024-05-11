@@ -31,6 +31,11 @@ HSim::TriangleMesh3GObject::~TriangleMesh3GObject()
 {
 }
 
+void HSim::TriangleMesh3GObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+    ptr = std::make_shared<TriangleMesh3GObject>(*this);
+}
+
 void HSim::TriangleMesh3GObject::buildRenderingData()
 {
     auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);

@@ -40,6 +40,11 @@ namespace HSim
 
         ~FaceCenterGrid3() {}
 
+        void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<FaceCenterGrid3<T>>(*this);
+		}
+
         // setter getter
     public:
         Array3<T> &dataU() { return _dataU; }

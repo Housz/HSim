@@ -26,6 +26,10 @@ HSim::GraphicsObject::~GraphicsObject()
 {
 }
 
+void HSim::GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+}
+
 bool HSim::GraphicsObject::isRendingDataValid()
 {
 	return false;

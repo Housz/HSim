@@ -11,16 +11,22 @@ HSim::Renderable::Renderable(SpaceObject3_Ptr<PRECISION> spaceObject_, GraphicsO
 	graphicsObject = graphicsObject_;
 }
 
-HSim::Renderable::Renderable(const Renderable &renderable_)
+HSim::Renderable::Renderable(const Renderable &other)
 {
-	visible = renderable_.visible;
+	visible = other.visible;
 	
-	renderingDataNeedUpdate = renderable_.renderingDataNeedUpdate;
+	renderingDataNeedUpdate = other.renderingDataNeedUpdate;
 	
 	// todo : all copy constructor
-	spaceObject = std::make_shared<SpaceObject3<PRECISION>>(*(renderable_.spaceObject));
+	// todo clone()
+	// renderable_.spaceObject->clone(spaceObject);
+	// spaceObject = std::make_shared<SpaceObject3<PRECISION>>(*(renderable_.spaceObject));
+	other.spaceObject->clone(spaceObject);
 
-	graphicsObject = std::make_shared<GraphicsObject>(*(renderable_.graphicsObject));
+	// todo clone()
+	// renderable_.graphicsObject->clone(graphicsObject);
+	// graphicsObject = std::make_shared<GraphicsObject>(*(renderable_.graphicsObject));
+	other.graphicsObject->clone(graphicsObject);
 }
 
 HSim::Renderable::~Renderable()

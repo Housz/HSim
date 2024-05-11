@@ -31,6 +31,11 @@ namespace HSim
 		{
 		}
 
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<Box3<T>>(*this);
+		}
+
 		/**
 		 * @brief set Box3 with any two points
 		 */

@@ -29,6 +29,11 @@ HSim::LineHelperGObject::~LineHelperGObject()
 {
 }
 
+void HSim::LineHelperGObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+    ptr = std::make_shared<LineHelperGObject>(*this);
+}
+
 bool HSim::LineHelperGObject::isRendingDataValid()
 {
     return (vao.isValid() && vbo.isValid());

@@ -11,9 +11,9 @@ namespace HSim
 	public:
 		CellCenterScalarGrid3() {}
 
-		// CellCenterScalarGrid3(const CellCenterScalarGrid3<T>& cellCenterScalarGrid3_)
-		// 	: ScalarGrid3<T>(cellCenterScalarGrid3_)
-		// {}
+		CellCenterScalarGrid3(const CellCenterScalarGrid3<T>& cellCenterScalarGrid3_)
+			: ScalarGrid3<T>(cellCenterScalarGrid3_)
+		{}
 
 		CellCenterScalarGrid3(size_t x, size_t y, size_t z)
 			: ScalarGrid3<T>(x, y, z) {}
@@ -22,6 +22,11 @@ namespace HSim
 			: ScalarGrid3<T>(resolution, origin, gridSpacing) {}
 
 		~CellCenterScalarGrid3() {}
+
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<CellCenterScalarGrid3<T>>(*this);
+		}
 
 	public:
 		Vec3i dataSize() override

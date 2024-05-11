@@ -242,6 +242,9 @@ namespace HSim
 		GroundHelper(const GroundHelper& groundHelper_);
 		~GroundHelper();
 
+		void clone(std::shared_ptr<SpaceObject3<float>>& ptr) override;
+
+
 	public:
 		size_t slices = 100;
 	};
@@ -255,6 +258,8 @@ namespace HSim
 		LineHelper(const Vec3f& start_, const Vec3f& end_);
 		LineHelper(const LineHelper& lineHelper_);
 		~LineHelper();
+
+		void clone(std::shared_ptr<SpaceObject3<float>>& ptr) override;
 
 	public:
 		Vec3f start;
@@ -270,6 +275,8 @@ namespace HSim
 		ArrowHelper(const Vec3f& start_, const Vec3f& end_);
 		ArrowHelper(const ArrowHelper& arrowHelper_);
 		~ArrowHelper();
+
+		void clone(std::shared_ptr<SpaceObject3<float>>& ptr) override;
 
 	public:
 		Vec3f start;

@@ -28,6 +28,11 @@ HSim::CellCenterScalarGrid3GraphicsObject::~CellCenterScalarGrid3GraphicsObject(
 {
 }
 
+void HSim::CellCenterScalarGrid3GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+	ptr = std::make_shared<CellCenterScalarGrid3GraphicsObject>(*this);
+}
+
 bool HSim::CellCenterScalarGrid3GraphicsObject::isRendingDataValid()
 {
 	return (vao.isValid() && vbo.isValid());

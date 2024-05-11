@@ -12,6 +12,10 @@ namespace HSim
         GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
         ~GroundHelperGObject();
 
+        void clone(std::shared_ptr<GraphicsObject> &ptr) override;
+        
+    public:
+
         void buildRenderingData() override;
 
         void draw(const RenderParams &renderParams) override;

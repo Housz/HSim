@@ -54,6 +54,11 @@ namespace HSim
 
 		~TriangleMesh3(){};
 
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<TriangleMesh3<T>>(*this);
+		}
+
 		// manipulators
 	public:
 		void addPoint(const Vec3<T> &point_)

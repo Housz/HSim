@@ -21,6 +21,8 @@ namespace HSim
 
 		// todo: class info: class name, object id
 
+		virtual void clone(std::shared_ptr<SpaceObject3<T>>& ptr) {}
+
 	public:
 		SpaceObjectType spaceObjectType;
 	};

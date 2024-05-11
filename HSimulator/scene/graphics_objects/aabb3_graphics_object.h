@@ -20,6 +20,8 @@ namespace HSim
 		// AABB3GObject(const Surface3_Ptr<PRECISION> surface_, const BasicMaterial_Ptr material_);
 		~AABB3GraphicsObject();
 
+		void clone(std::shared_ptr<GraphicsObject>& ptr) override;
+
 	public:
 		void buildRenderingData() override;
 

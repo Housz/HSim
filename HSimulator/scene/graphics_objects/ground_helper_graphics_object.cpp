@@ -20,6 +20,11 @@ HSim::GroundHelperGObject::~GroundHelperGObject()
 {
 }
 
+void HSim::GroundHelperGObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+	ptr = std::make_shared<GroundHelperGObject>(*this);
+}
+
 HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_)
 	: GraphicsObject(material_)
 {

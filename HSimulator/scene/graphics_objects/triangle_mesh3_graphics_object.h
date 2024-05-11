@@ -8,9 +8,11 @@ namespace HSim
 	{
 	public:
 		TriangleMesh3GObject();
-		TriangleMesh3GObject(const TriangleMesh3GObject& other);
+		TriangleMesh3GObject(const TriangleMesh3GObject &other);
 		TriangleMesh3GObject(const TriangleMesh3_Ptr<PRECISION> mesh_, const BasicMaterial_Ptr material_);
 		~TriangleMesh3GObject();
+
+		void clone(std::shared_ptr<GraphicsObject> &ptr) override;
 
 	public:
 		void buildRenderingData() override;
@@ -24,7 +26,7 @@ namespace HSim
 		ElementBufferObject ebo;
 
 		TriangleMesh3_Ptr<PRECISION> mesh = nullptr;
-	
+
 	private:
 		void buildRenderingDataNaive();
 		void buildRenderingDataFlat();
@@ -34,7 +36,6 @@ namespace HSim
 		std::vector<float> buildVerticesFlat();
 		std::vector<float> buildVerticesSmooth();
 		std::vector<unsigned int> buildIndices();
-
 	};
 
 } // namespace HSim

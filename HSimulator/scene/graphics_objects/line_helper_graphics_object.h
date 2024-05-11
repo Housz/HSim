@@ -11,6 +11,9 @@ namespace HSim
         LineHelperGObject(const LineHelper_Ptr lineHelper_, const LineMaterial_Ptr material_);
         ~LineHelperGObject();
 
+        void clone(std::shared_ptr<GraphicsObject> &ptr) override;
+        
+    public:
         void buildRenderingData() override;
 
         void draw(const RenderParams &renderParams) override;

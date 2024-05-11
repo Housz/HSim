@@ -37,6 +37,11 @@ namespace HSim
 
 		~Cylinder3() {}
 
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<Cylinder3<T>>(*this);
+		}
+
 		void setRadius(const T radius_)
 		{
 			radiusTop = radius_;

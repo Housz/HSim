@@ -20,6 +20,8 @@ namespace HSim
 		GraphicsObject(Material_Ptr material_);
 		~GraphicsObject();
 
+		virtual void clone(std::shared_ptr<GraphicsObject>& ptr);
+	public:
 		virtual void buildRenderingData();
 
 		virtual void draw(const RenderParams &renderParams);

@@ -26,6 +26,11 @@ namespace HSim
 
 		~VertexCenterScalarGrid3() {}
 
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<VertexCenterScalarGrid3<T>>(*this);
+		}
+
 	public:
 		Vec3i dataSize() override
 		{

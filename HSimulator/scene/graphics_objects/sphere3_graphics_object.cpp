@@ -32,6 +32,11 @@ HSim::Sphere3GObject::~Sphere3GObject()
 {
 }
 
+void HSim::Sphere3GObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+	ptr = std::make_shared<Sphere3GObject>(*this);
+}
+
 void HSim::Sphere3GObject::buildRenderingData()
 {
 	assert(sphere != nullptr);

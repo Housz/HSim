@@ -29,6 +29,11 @@ HSim::Box3GraphicsObject::~Box3GraphicsObject()
 {
 }
 
+void HSim::Box3GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+    ptr = std::make_shared<Box3GraphicsObject>(*this);
+}
+
 void HSim::Box3GraphicsObject::buildRenderingData()
 {
     assert(box != nullptr);

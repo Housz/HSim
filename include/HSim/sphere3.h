@@ -29,6 +29,11 @@ namespace HSim
 
 		~Sphere3(){};
 
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		{
+			ptr = std::make_shared<Sphere3<T>>(*this);
+		}
+
 		void setCenter(const Vec3<T> center_) { center = center_; }
 		void setRadius(const T radius_) { radius = radius_; }
 		void setTransform(const Transform3<T> transform_) { transform = transform_; }
