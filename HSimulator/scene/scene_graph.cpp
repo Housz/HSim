@@ -88,6 +88,9 @@ void HSim::SceneGraph::snapshot(SceneGraph& sg)
 
 	auto callback = [&](HSim::GameObject_ptr go)
 	{
+		
+		
+
 		if (go->renderable->updateType == RenderableUpdateType::STATIC)
 		{
 			return;
@@ -109,6 +112,8 @@ void HSim::SceneGraph::snapshot(SceneGraph& sg)
 	// sg.travese 
 	// static -> do nothing (ptr to one )
 	// dynamic -> clone a new obj
+
+	
 }
 
 void HSim::SceneGraph::draw()

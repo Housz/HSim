@@ -23,6 +23,7 @@ namespace HSim
 		RIGID,	 // rigid transformation, only translation and rotation.
 		DYNAMIC, // deformable, fluid, ...
 		// PARTIAL // partial change
+		// INSTANCED // instanced 
 	};
 
 	class Renderable
