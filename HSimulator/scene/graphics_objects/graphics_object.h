@@ -20,14 +20,16 @@ namespace HSim
 		GraphicsObject(Material_Ptr material_);
 		~GraphicsObject();
 
-		virtual void clone(std::shared_ptr<GraphicsObject>& ptr);
+		virtual void clone(std::shared_ptr<GraphicsObject>& ptr) = 0;
 	public:
-		virtual void buildRenderingData();
+		virtual void buildRenderingData() = 0;
 
-		virtual void draw(const RenderParams &renderParams);
+		virtual void draw(const RenderParams &renderParams) = 0;
+
+		// virtual void drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION>& transform) = 0;
 
 	public:
-		virtual bool isRendingDataValid();
+		virtual bool isRendingDataValid() = 0;
 
 	public:
 		VertexArrayObject vao;

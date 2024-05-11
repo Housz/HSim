@@ -34,7 +34,12 @@ namespace HSim
 		Renderable(const Renderable& renderable_);
 		~Renderable();
 
+	public:
+		// sync simulation and renderering
 		void draw(const RenderParams &renderParams);
+
+		// async simulation and renderering
+		void drawAsync(const RenderParams &renderParams);
 
 	// data
 	public:
@@ -50,6 +55,9 @@ namespace HSim
 		// bool aabbNeedUpdate = true;
 
 		RenderableUpdateType updateType = RenderableUpdateType::STATIC;
+
+		
+
 	};
 
 	using Renderable_Ptr = std::shared_ptr<Renderable>;

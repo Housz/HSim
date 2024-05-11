@@ -47,5 +47,25 @@ void HSim::Renderable::draw(const RenderParams &renderParams)
 		
 		graphicsObject->draw(renderParams);
 	}
+	// if RenderableUpdateType::RIGID
+	// drawRigid(rigidtransform, renderparams)
+}
+
+void HSim::Renderable::drawAsync(const RenderParams &renderParams)
+{
+	if (updateType == RenderableUpdateType::STATIC)
+	{
+		graphicsObject->draw(renderParams);
+	}
+
+	if (updateType == RenderableUpdateType::RIGID)
+	{
+		
+	}
+
+	if (updateType == RenderableUpdateType::DYNAMIC)
+	{
+		
+	}
 	
 }

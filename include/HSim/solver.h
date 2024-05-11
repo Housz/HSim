@@ -1,3 +1,5 @@
+// Deprecated
+
 // #pragma once
 
 // #include <HSim/common.h>

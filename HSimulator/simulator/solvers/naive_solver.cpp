@@ -88,7 +88,7 @@ namespace HSim
 	void NaiveSolver::setGameObject(GameObject_ptr go_)
 	{
 		go = go_;
-		go->renderable->updateType = RenderableUpdateType::DYNAMIC;
+		go->renderable->updateType = RenderableUpdateType::RIGID;
 	}
 
 } // namespace HSim

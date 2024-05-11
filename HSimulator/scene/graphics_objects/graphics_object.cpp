@@ -26,22 +26,26 @@ HSim::GraphicsObject::~GraphicsObject()
 {
 }
 
-void HSim::GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
-{
-}
+// void HSim::GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+// {
+// }
 
-bool HSim::GraphicsObject::isRendingDataValid()
-{
-	return false;
-}
+// bool HSim::GraphicsObject::isRendingDataValid()
+// {
+// 	return false;
+// }
 
-void HSim::GraphicsObject::draw(const RenderParams &renderParams)
-{
-}
+// void HSim::GraphicsObject::draw(const RenderParams &renderParams)
+// {
+// }
 
-void HSim::GraphicsObject::buildRenderingData()
-{
-}
+// void HSim::GraphicsObject::drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION> &transform)
+// {
+// }
+
+// void HSim::GraphicsObject::buildRenderingData()
+// {
+// }
 
 /*********************************************************************/
 

@@ -94,8 +94,8 @@ namespace HSim
 		Vec3<T> center = {0, 0, 0};
 		T radius = 1;
 
+		// Deprecated
 		// for rendering
-		// todo
 	public:
 		unsigned int vaoID = 0;
 		unsigned int vboID = 0;
