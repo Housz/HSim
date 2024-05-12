@@ -27,6 +27,7 @@ namespace HSim
 		virtual void draw(const RenderParams &renderParams) = 0;
 
 		// virtual void drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION>& transform) = 0;
+		virtual void drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION>& transform);
 
 	public:
 		virtual bool isRendingDataValid() = 0;

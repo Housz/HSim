@@ -26,6 +26,10 @@ HSim::GraphicsObject::~GraphicsObject()
 {
 }
 
+void HSim::GraphicsObject::drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION> &transform)
+{
+}
+
 // void HSim::GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
 // {
 // }

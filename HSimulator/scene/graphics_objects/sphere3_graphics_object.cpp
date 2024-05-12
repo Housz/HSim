@@ -87,12 +87,64 @@ void HSim::Sphere3GObject::draw(const RenderParams &renderParams)
 
 	shader->setMat4("projection", renderParams.transforms.proj);
 	shader->setMat4("view", renderParams.transforms.view);
+	shader->setMat4("model", renderParams.transforms.model);
+
+	// glm::mat4 model = glm::mat4{1.f};
+	// // update transform.orientation identity
+	// const auto orientation = sphere->transform.orientation; 
+	// const auto translation = sphere->transform.translation;
+	// model = glm::rotate(model, orientation.angle(),
+	// 					glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
+	// model = glm::translate(model, glm::vec3(translation.x, translation.y, translation.z));
+
+	// std::cout << glm::to_string(model);
+
+	shader->setMat4("model", model);
+
+	glViewport(0, 0, renderParams.width, renderParams.height);
+
+	// bind vao and draw
+	vao.bind();
+
+	if (mat->wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	glDrawElements(GL_TRIANGLES, numSectors * numStacks * 2 * 3, GL_UNSIGNED_INT, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	vao.unbind();
+}
+
+void HSim::Sphere3GObject::drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION> &transform)
+{
+	if (!isRendingDataValid())
+	{
+		std::cout << vao.id << " " << vbo.id << " " << ebo.id << "\n";
+		buildRenderingData();
+	}
+
+	auto mat = std::static_pointer_cast<HSim::BasicMaterial>(material);
+	auto color = mat->color;
+	auto shader = mat->shader;
+
+	// use shader with renderParams
+	shader->use();
+	shader->setFloat4("ourColor", color.r, color.g, color.b, 0.0f);
+	shader->setVec3("lightPos", renderParams.lightPos.x, renderParams.lightPos.y, renderParams.lightPos.z);
+	shader->setVec3("lightColor", renderParams.lightColor.r, renderParams.lightColor.g, renderParams.lightColor.b);
+
+	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
+	shader->setVec3("viewPos", cameraPosition);
+
+	shader->setMat4("projection", renderParams.transforms.proj);
+	shader->setMat4("view", renderParams.transforms.view);
 	// shader->setMat4("model", renderParams.transforms.model);
 
 	glm::mat4 model = glm::mat4{1.f};
 	// update transform.orientation identity
-	const auto orientation = sphere->transform.orientation; 
-	const auto translation = sphere->transform.translation;
+	const auto orientation = transform.orientation; 
+	const auto translation = transform.translation;
 	model = glm::rotate(model, orientation.angle(),
 						glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
 	model = glm::translate(model, glm::vec3(translation.x, translation.y, translation.z));
