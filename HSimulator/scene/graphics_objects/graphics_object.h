@@ -6,7 +6,7 @@
 #include <scene/graphics_buffer.h>
 #include <scene/material.h>
 #include <scene/helper_object.h>
-#include <config/numerical_config.h>
+#include <config/configs.h>
 #include <renderer/render_params.h>
 
 
@@ -28,6 +28,7 @@ namespace HSim
 
 		// virtual void drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION>& transform) = 0;
 		virtual void drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION>& transform);
+		virtual void drawWithRigidTransfom(const RenderParams &renderParams);
 
 	public:
 		virtual bool isRendingDataValid() = 0;

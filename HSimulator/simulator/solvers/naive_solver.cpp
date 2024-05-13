@@ -16,9 +16,19 @@ namespace HSim
 		{
 			auto numFrames = frame.index - currentFrame.index;
 
+			std::chrono::high_resolution_clock clk;
+
 			for (size_t i = 0; i < numFrames; i++)
 			{
+				auto BEGIN_TIME = clk.now();
+
 				advanceTimeStep(frame.timeInterval);
+
+				auto du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
+				// std::cout << du << "\n";
+
+				// std::this_thread::sleep_for(std::chrono::milliseconds((int)timeInterval * 1000 - du));
+				std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 1000) - du));
 			}
 
 			currentFrame = frame;
@@ -26,12 +36,11 @@ namespace HSim
 
 		// push sim results to renderer frame buffer
 	}
-	
+
 	void NaiveSolver::writeRendererBuffer()
 	{
-		
 	}
-	
+
 	void NaiveSolver::advanceTimeStep(double timeInterval)
 	{
 		auto subTimeInterval = timeInterval / numSubSteps;
@@ -57,7 +66,7 @@ namespace HSim
 		auto obj = std::static_pointer_cast<Surface3<PRECISION>>(go->renderable->spaceObject);
 
 		// obj->transform.translation.y -= 0.0001;
-		
+
 		velocity += gravity * subTimeInterval * 0.90;
 
 		// std::cout << velocity;
@@ -70,7 +79,7 @@ namespace HSim
 		{
 			velocity.y = -velocity.y;
 		}
-		
+
 		auto mat = std::static_pointer_cast<BasicMaterial>(renderable->graphicsObject->material);
 		mat->color = {obj->transform.translation.y / 10, 0.4, 0.4};
 
@@ -84,10 +93,11 @@ namespace HSim
 		// pass
 		std::cout << "[SIMULATOR] Init Naive Solver.\n";
 	}
-	
+
 	void NaiveSolver::setGameObject(GameObject_ptr go_)
 	{
 		go = go_;
+
 		go->renderable->updateType = RenderableUpdateType::RIGID;
 	}
 

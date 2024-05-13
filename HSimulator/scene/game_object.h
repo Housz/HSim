@@ -7,7 +7,7 @@
 // #include <HSim/scalar_grid3.h>
 #include <HSim/cell_center_scalar_grid3.h>
 
-#include <config/numerical_config.h>
+#include <config/configs.h>
 #include <scene/renderable.h>
 #include <renderer/render_params.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <HSim/space_object3.h>
-#include <config/numerical_config.h>
+#include <config/configs.h>
 #include <scene/graphics_objects.h>
 #include <renderer/render_params.h>
 
@@ -51,12 +51,14 @@ namespace HSim
 	public:
 		bool visible = true;
 
+		RenderableUpdateType updateType = RenderableUpdateType::STATIC;
+
+		// for RenderableUpdateType::DYNAMIC
 		bool renderingDataNeedUpdate = true;
 		// bool aabbNeedUpdate = true;
 
-		RenderableUpdateType updateType = RenderableUpdateType::STATIC;
-
-		
+		// for RenderableUpdateType::RIGID
+		Transform3<PRECISION> rigidTransfrom;
 
 	};
 

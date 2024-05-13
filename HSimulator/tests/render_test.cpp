@@ -2,7 +2,7 @@
 #include <HSim/sphere3.h>
 
 #include <scene/game_object.h>
-#include <config/numerical_config.h>
+#include <config/configs.h>
 #include <app/app.h>
 #include <IO/obj_reader.h>
 

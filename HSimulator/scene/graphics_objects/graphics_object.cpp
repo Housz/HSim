@@ -30,6 +30,10 @@ void HSim::GraphicsObject::drawWithRigidTransfom(const RenderParams &renderParam
 {
 }
 
+void HSim::GraphicsObject::drawWithRigidTransfom(const RenderParams &renderParams)
+{
+}
+
 // void HSim::GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
 // {
 // }

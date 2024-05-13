@@ -20,6 +20,7 @@ namespace HSim
 		void draw(const RenderParams &renderParams) override;
 
 		void drawWithRigidTransfom(const RenderParams &renderParams, const Transform3<PRECISION>& transform) override;
+		void drawWithRigidTransfom(const RenderParams &renderParams) override;
 
 
 		bool isRendingDataValid() override;

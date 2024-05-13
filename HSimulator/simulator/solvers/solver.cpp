@@ -18,7 +18,7 @@ namespace HSim
 			
 			update(frame);
 			
-			std::cout << "[FRAME] " << frame.index << " \n";
+			// std::cout << "[FRAME] " << frame.index << " \n";
 
 			// timer end
 		}

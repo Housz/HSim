@@ -3,7 +3,7 @@
 #include <HSim/common.h>
 // #include <app/mtx.h>
 #include <HSim/lock.h>
-#include <config/numerical_config.h>
+#include <config/configs.h>
 
 #include <scene/scene_graph.h>
 

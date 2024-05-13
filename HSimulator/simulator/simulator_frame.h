@@ -26,7 +26,7 @@ namespace HSim
 		// index of this frame.
 		size_t index = 0;
 		// Time interval between two frames.
-		double timeInterval = 1.0 / 600;
+		double timeInterval = 1.0 / 60;
 	};
 
 	using SimFrame = SimulatorFrame;

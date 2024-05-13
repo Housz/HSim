@@ -82,15 +82,12 @@ void HSim::SceneGraph::serialize()
 	// todo
 }
 
-void HSim::SceneGraph::snapshot(SceneGraph& sg)
+void HSim::SceneGraph::snapshot(SceneGraph &sg)
 {
 	sg.root = root;
 
 	auto callback = [&](HSim::GameObject_ptr go)
 	{
-		
-		
-
 		if (go->renderable->updateType == RenderableUpdateType::STATIC)
 		{
 			return;
@@ -98,22 +95,17 @@ void HSim::SceneGraph::snapshot(SceneGraph& sg)
 
 		if (go->renderable->updateType == RenderableUpdateType::RIGID)
 		{
-
 		}
-		
+
 		if (go->renderable->updateType == RenderableUpdateType::DYNAMIC)
 		{
-			
 		}
-		
 	};
 
 	// sg.traverse();
-	// sg.travese 
+	// sg.travese
 	// static -> do nothing (ptr to one )
 	// dynamic -> clone a new obj
-
-	
 }
 
 void HSim::SceneGraph::draw()
@@ -154,7 +146,11 @@ void HSim::SceneGraph::draw(const RenderParams &renderParams)
 	{
 		if (go->renderable != nullptr && go->renderable->visible)
 		{
+#ifdef ASYNC_PLAYMODE
+			go->renderable->drawAsync(renderParams);
+#else
 			go->renderable->draw(renderParams);
+#endif
 		}
 	};
 
@@ -197,11 +193,11 @@ void HSim::SceneGraph::addBox(const Vec3f &lowerCorner, const Vec3f &upperCorner
 	auto box = std::make_shared<HSim::Box3<PRECISION>>(lowerCorner, upperCorner);
 	auto boxMat = std::make_shared<HSim::BasicMaterial>();
 	boxMat->color = {color[0], color[1], color[2]};
-	
+
 	auto boxGraphicsObject = std::make_shared<HSim::Box3GraphicsObject>(box, boxMat);
 
 	auto boxRenderable = std::make_shared<HSim::Renderable>(box, boxGraphicsObject);
-	
+
 	auto go = std::make_shared<HSim::GameObject>();
 	go->renderable = boxRenderable;
 
@@ -230,7 +226,7 @@ void HSim::SceneGraph::addCylinder(const float radiusTop, const float radiusBott
 	auto cylinderMat = std::make_shared<HSim::BasicMaterial>();
 	cylinderMat->color = {color[0], color[1], color[2]};
 	// cylinderMat->wireframe = true;
-	
+
 	auto cylinderGraphicsObject = std::make_shared<HSim::CylinderGObject>(cylinder, cylinderMat);
 
 	auto cylinderRenderable = std::make_shared<HSim::Renderable>(cylinder, cylinderGraphicsObject);

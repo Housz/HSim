@@ -14,9 +14,9 @@ HSim::Renderable::Renderable(SpaceObject3_Ptr<PRECISION> spaceObject_, GraphicsO
 HSim::Renderable::Renderable(const Renderable &other)
 {
 	visible = other.visible;
-	
+
 	renderingDataNeedUpdate = other.renderingDataNeedUpdate;
-	
+
 	// todo : all copy constructor
 	// todo clone()
 	// renderable_.spaceObject->clone(spaceObject);
@@ -44,7 +44,7 @@ void HSim::Renderable::draw(const RenderParams &renderParams)
 			graphicsObject->buildRenderingData();
 			renderingDataNeedUpdate = false;
 		}
-		
+
 		graphicsObject->draw(renderParams);
 	}
 	// if RenderableUpdateType::RIGID
@@ -53,19 +53,36 @@ void HSim::Renderable::draw(const RenderParams &renderParams)
 
 void HSim::Renderable::drawAsync(const RenderParams &renderParams)
 {
+	assert(graphicsObject != nullptr);
+
 	if (updateType == RenderableUpdateType::STATIC)
 	{
-		graphicsObject->draw(renderParams);
+		if (visible)
+		{
+			graphicsObject->draw(renderParams);
+		}
 	}
 
 	if (updateType == RenderableUpdateType::RIGID)
 	{
-		
+		if (visible)
+		{
+			graphicsObject->drawWithRigidTransfom(renderParams);
+			// graphicsObject->drawWithRigidTransfom(renderParams, rigidTransfrom);
+		}
 	}
 
 	if (updateType == RenderableUpdateType::DYNAMIC)
 	{
-		
+		if (visible)
+		{
+			if (renderingDataNeedUpdate)
+			{
+				graphicsObject->buildRenderingData();
+				renderingDataNeedUpdate = false;
+			}
+
+			graphicsObject->draw(renderParams);
+		}
 	}
-	
 }

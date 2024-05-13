@@ -3,7 +3,7 @@
 #include <HSim/common.h>
 #include <HSim/transform3.h>
 
-#include <config/numerical_config.h>
+#include <config/configs.h>
 #include <simulator/simulator_frame.h>
 
 namespace HSim

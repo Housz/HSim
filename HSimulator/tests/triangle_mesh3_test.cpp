@@ -2,7 +2,7 @@
 
 #include <app/app.h>
 #include <scene/game_object.h>
-#include <config/numerical_config.h>
+#include <config/configs.h>
 #include <IO/obj_reader.h>
 
 void createScene(HSim::App &app)
