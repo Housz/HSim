@@ -11,6 +11,8 @@ HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject(c
 
 	vbo.create();
 
+	vbo.allocate((unsigned int)(grid->sizeX() * grid->sizeY() * grid->sizeZ() * 6) * sizeof(float), GL_DYNAMIC_DRAW);
+
 	buildRenderingData();
 }
 
@@ -20,6 +22,8 @@ HSim::CellCenterScalarGrid3GraphicsObject::CellCenterScalarGrid3GraphicsObject(c
 	grid = grid_;
 
 	vbo.create();
+
+	vbo.allocate((unsigned int)(grid->sizeX() * grid->sizeY() * grid->sizeZ() * 6) * sizeof(float), GL_DYNAMIC_DRAW);
 
 	buildRenderingData();
 }
@@ -95,7 +99,7 @@ void HSim::CellCenterScalarGrid3GraphicsObject::buildRenderingData()
 	vao.bind();
 
 	vbo.bind();
-	vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_DYNAMIC_DRAW);
+	// vbo.allocate((unsigned int)vertices.size() * sizeof(float), GL_DYNAMIC_DRAW);
 	vbo.loadData(vertices.data(), (unsigned int)vertices.size() * sizeof(float), 0);
 
 	vao.bindVBO(vbo, 0, 3, 6 * sizeof(float), (void *)0);

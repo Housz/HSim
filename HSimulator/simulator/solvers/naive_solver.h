@@ -24,7 +24,8 @@ namespace HSim
 		void advanceSubTimeStep(double subTimeInterval);
 
 		void init();
-
+	
+	public:
 		void setGameObject(GameObject_ptr go_);
 		
 	public:

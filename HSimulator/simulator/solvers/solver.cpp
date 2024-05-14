@@ -12,7 +12,8 @@ namespace HSim
 
 	void Solver::run(size_t numFrame)
 	{
-		for (SimFrame frame; frame.index < numFrame; frame++)
+		// for (SimFrame frame; frame.index < numFrame; frame++)
+		for (SimFrame frame(0, 1/20); frame.index < numFrame; frame++)
 		{
 			// timer start
 			
@@ -25,5 +26,10 @@ namespace HSim
 		std::cout << "[FRAME] done!" << " \n";
 		
 	}
+
+	void Solver::writeRendererBuffer()
+	{
+	}
+	
 
 } // namespace HSim

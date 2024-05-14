@@ -17,5 +17,10 @@ target_link_libraries(gridTest PUBLIC HSimulatorLib)
 add_executable(naiveSolverTest naive_solver_test.cpp)
 target_link_libraries(naiveSolverTest PUBLIC HSimulatorLib)
 
+add_executable(naiveFluidSolverTest naive_fluid_solver_test.cpp)
+target_link_libraries(naiveFluidSolverTest PUBLIC HSimulatorLib)
+
+
 add_executable(smokeSolverTest smoke_solver_test.cpp)
 target_link_libraries(smokeSolverTest PUBLIC HSimulatorLib)
+

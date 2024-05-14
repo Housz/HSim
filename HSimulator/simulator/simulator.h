@@ -7,7 +7,6 @@
 
 #include <scene/scene_graph.h>
 
-// #include <HSim/solver.h>
 #include <simulator/solvers.h>
 
 namespace HSim
