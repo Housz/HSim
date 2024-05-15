@@ -37,6 +37,7 @@ target_link_libraries(HSimulatorLib PUBLIC glad::glad)
 target_link_libraries(HSimulatorLib PUBLIC glm::glm)
 target_link_libraries(HSimulatorLib PUBLIC imgui::imgui)
 target_link_libraries(HSimulatorLib PUBLIC TBB::tbb)
+target_link_libraries(HSimulatorLib PUBLIC OpenVDB::openvdb)
 
 target_include_directories(HSimulatorLib PUBLIC .)
 

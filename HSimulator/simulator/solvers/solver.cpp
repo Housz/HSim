@@ -13,7 +13,7 @@ namespace HSim
 	void Solver::run(size_t numFrame)
 	{
 		// for (SimFrame frame; frame.index < numFrame; frame++)
-		for (SimFrame frame(0, 1/20); frame.index < numFrame; frame++)
+		for (SimFrame frame(0, 1.0/20); frame.index < numFrame; frame++)
 		{
 			// timer start
 			

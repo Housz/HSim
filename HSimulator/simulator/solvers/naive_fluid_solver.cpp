@@ -23,10 +23,11 @@ void HSim::NaiveFluidSolver::update(const SimFrame &frame)
             advanceTimeStep(frame.timeInterval);
 
             auto du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
-            // std::cout << du << "\n";
 
-            // std::this_thread::sleep_for(std::chrono::milliseconds((int)timeInterval * 1000 - du));
-            // std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 1000) - du));
+            // std::cout << "advanceTimeStep " << du << "\n";
+            // std::cout << "sleep  " << (int)(frame.timeInterval * 1000) - du << "\n";
+
+            std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 1000) - du));
         }
 
         currentFrame = frame;
@@ -47,31 +48,33 @@ void HSim::NaiveFluidSolver::advanceTimeStep(double timeInterval)
     }
 
     go->renderable->renderingDataNeedUpdate = true;
+
+    // write .vdb
 }
 
 void HSim::NaiveFluidSolver::advanceSubTimeStep(double subTimeInterval)
 {
-	auto renderable = go->renderable;
+    auto renderable = go->renderable;
 
-	auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
+    auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
 
-	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution(-5, 5);
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(-5, 5);
 
-	auto fillGrid = [&](size_t i, size_t j, size_t k)
-	{
-		int dice_roll = distribution(generator);
+    auto fillGrid = [&](size_t i, size_t j, size_t k)
+    {
+        int dice_roll = distribution(generator);
 
-		(*grid)(i, j, k) = dice_roll;
-	};
+        (*grid)(i, j, k) = dice_roll;
+    };
 
     grid->parallelForEachCell(fillGrid);
-
 }
 
 void HSim::NaiveFluidSolver::init()
 {
-    // pass
+    openvdb::initialize();
+
     std::cout << "[SIMULATOR] Init Naive Fluid Solver.\n";
 }
 

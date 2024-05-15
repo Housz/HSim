@@ -142,6 +142,10 @@ void HSim::SceneGraph::draw()
 
 void HSim::SceneGraph::draw(const RenderParams &renderParams)
 {
+	std::chrono::high_resolution_clock clk;
+
+	auto BEGIN_TIME = clk.now();
+
 	std::function<void(HSim::GameObject_ptr)> callback_draw = [&](HSim::GameObject_ptr go)
 	{
 		if (go->renderable != nullptr && go->renderable->visible)
@@ -155,6 +159,10 @@ void HSim::SceneGraph::draw(const RenderParams &renderParams)
 	};
 
 	this->traverse(callback_draw);
+
+	auto du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
+
+	// std::cout << "SceneGraph::draw " << du << "\n";
 }
 
 void HSim::SceneGraph::addGround(size_t slices)

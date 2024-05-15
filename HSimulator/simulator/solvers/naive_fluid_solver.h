@@ -4,6 +4,8 @@
 #include <scene/scene_graph.h>
 #include <simulator/solvers/solver.h>
 
+#include <openvdb/openvdb.h>
+
 #include <HSim/cell_center_scalar_grid3.h>
 
 namespace HSim
@@ -30,7 +32,7 @@ namespace HSim
         SimFrame currentFrame;
         double currentTime = 0.0;
 
-        size_t numSubSteps = 3;
+        size_t numSubSteps = 1;
 
     public:
         // CellCenterScalarGrid3_Ptr<PRECISION> grid = nullptr;
