@@ -49,7 +49,26 @@ void HSim::NaiveFluidSolver::advanceTimeStep(double timeInterval)
 
     go->renderable->renderingDataNeedUpdate = true;
 
+    auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
+
+    openvdb::FloatGrid::Ptr vdbGrid = openvdb::FloatGrid::create();
+
+    openvdb::FloatGrid::Accessor accessor = vdbGrid->getAccessor();
+
     // write .vdb
+    auto callback = [&](size_t i, size_t j, size_t k)
+    {
+        openvdb::Coord ijk(i, j, k);
+        accessor.setValue(ijk, grid->dataAt(i,j,k));
+    };
+
+    openvdb::GridPtrVec vdbGrids;
+	vdbGrids.push_back(vdbGrid);
+
+    openvdb::io::File file("grid_" + std::to_string(currentFrame.index) + ".vdb");
+	file.write(vdbGrids);
+	file.close();
+
 }
 
 void HSim::NaiveFluidSolver::advanceSubTimeStep(double subTimeInterval)
