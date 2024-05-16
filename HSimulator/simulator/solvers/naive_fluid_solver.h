@@ -26,6 +26,8 @@ namespace HSim
 
         void init();
 
+        void writeVDB();
+
     public:
         void setGameObject(GameObject_ptr go_);
 
