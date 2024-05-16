@@ -50,8 +50,26 @@ void HSim::NaiveFluidSolver::advanceTimeStep(double timeInterval)
 
     go->renderable->renderingDataNeedUpdate = true;
 
+    auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
 
-    writeVDB();
+    openvdb::FloatGrid::Ptr vdbGrid = openvdb::FloatGrid::create();
+
+    openvdb::FloatGrid::Accessor accessor = vdbGrid->getAccessor();
+
+    // write .vdb
+    auto callback = [&](size_t i, size_t j, size_t k)
+    {
+        openvdb::Coord ijk(i, j, k);
+        accessor.setValue(ijk, grid->dataAt(i,j,k));
+    };
+
+    openvdb::GridPtrVec vdbGrids;
+	vdbGrids.push_back(vdbGrid);
+
+    openvdb::io::File file("grid_" + std::to_string(currentFrame.index) + ".vdb");
+	file.write(vdbGrids);
+	file.close();
+
 }
 
 void HSim::NaiveFluidSolver::advanceSubTimeStep(double subTimeInterval)
@@ -87,42 +105,4 @@ void HSim::NaiveFluidSolver::setGameObject(GameObject_ptr go_)
     go = go_;
 
     go->renderable->updateType = RenderableUpdateType::DYNAMIC;
-}
-
-
-void HSim::NaiveFluidSolver::writeVDB()
-{
-    std::chrono::high_resolution_clock clk;
-    auto BEGIN_TIME = clk.now();
-
-    auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
-
-    openvdb::FloatGrid::Ptr vdbGrid = openvdb::FloatGrid::create();
-
-    openvdb::FloatGrid::Accessor accessor = vdbGrid->getAccessor();
-
-    auto callback = [&](size_t i, size_t j, size_t k)
-    {
-        openvdb::Coord ijk(i, j, k);
-        accessor.setValue(ijk, grid->dataAt(i, j, k));
-    };
-
-    grid->forEachCell(callback);
-
-    openvdb::GridPtrVec vdbGrids;
-    vdbGrids.push_back(vdbGrid);
-
-    auto du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
-
-    // std::cout << "VDB grid build: " << du << "\n";
-
-    BEGIN_TIME = clk.now();
-
-    openvdb::io::File file("grid_" + std::to_string(currentFrame.index) + ".vdb");
-    file.write(vdbGrids);
-    file.close();
-
-    du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
-
-    // std::cout << "VDB grid write: " << du << "\n";
 }
