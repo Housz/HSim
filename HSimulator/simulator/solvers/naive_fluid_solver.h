@@ -1,3 +1,8 @@
+/**
+ * for testing fluid grid update, rendering, wirteVDB...
+ * 
+ */
+
 #pragma once
 
 #include <HSim/common.h>
@@ -7,6 +12,8 @@
 #include <openvdb/openvdb.h>
 
 #include <HSim/cell_center_scalar_grid3.h>
+
+#define WRITEVDB
 
 namespace HSim
 {
