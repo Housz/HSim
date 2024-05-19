@@ -48,8 +48,6 @@ namespace HSim
 		void applyBoundaryCondition();
 
     public:
-        void setGameObject(GameObject_ptr go_);
-
         SimFrame currentFrame;
         double currentTime = 0.0;
 
@@ -57,8 +55,6 @@ namespace HSim
 
 	// grids	
 	public:
-
-		GameObject_ptr go = nullptr;
 		
 		// FaceCenterGrid3 (MACGrid3, StaggeredGrid3)
 		GameObject_ptr velocityGO = nullptr;
@@ -70,19 +66,17 @@ namespace HSim
 		GameObject_ptr temperatureGO = nullptr;
 
 		// CellCenterScalarGrid3
-		GameObject_ptr smokeEmitterGO = nullptr;
+		GameObject_ptr emitterGO = nullptr;
 
 		// CellCenterScalarGrid3
 		GameObject_ptr colliderGO = nullptr;
 
-		
 
 	// data
 	public:
 
 		Vec3<PRECISION> gravity = {0, -9.8, 0};
 
-		double 
 
 	};
 	

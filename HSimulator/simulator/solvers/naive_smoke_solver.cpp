@@ -42,7 +42,7 @@ void HSim::naiveSmokeSolver::advanceTimeStep(double timeInterval)
 	/******************************************************
 	 * before a time step
 	 */
-	
+
 	// updateEmitter()
 
 
@@ -90,12 +90,13 @@ void HSim::naiveSmokeSolver::init()
 	std::cout << "[SIMULATOR] Init Naive Fluid Solver.\n";
 }
 
-void HSim::naiveSmokeSolver::setGameObject(GameObject_ptr go_)
-{
-	go = go_;
 
-	go->renderable->updateType = RenderableUpdateType::DYNAMIC;
-}
+// void HSim::naiveSmokeSolver::setGameObject(GameObject_ptr go_)
+// {
+// 	go = go_;
+
+// 	go->renderable->updateType = RenderableUpdateType::DYNAMIC;
+// }
 
 void HSim::naiveSmokeSolver::writeVDB()
 {
@@ -119,4 +120,24 @@ void HSim::naiveSmokeSolver::writeVDB()
 	file.write(vdbGrids);
 	file.close();
 #endif // WRITEVDB
+}
+
+void HSim::naiveSmokeSolver::applyGravity()
+{
+
+}
+
+void HSim::naiveSmokeSolver::updateEmitter()
+{
+
+}
+
+void HSim::naiveSmokeSolver::applyBuoyancy()
+{
+
+}
+
+void HSim::naiveSmokeSolver::applyBoundaryCondition()
+{
+	
 }
