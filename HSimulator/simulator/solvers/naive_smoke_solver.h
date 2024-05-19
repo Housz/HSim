@@ -47,6 +47,17 @@ namespace HSim
 
 		void applyBoundaryCondition();
 
+		void applyPressure();
+		
+		void applyAdvection();
+		
+	public:
+		void setVelocityGO(const GameObject_ptr& other);
+		void setDensityGO(const GameObject_ptr& other);
+		void setTemperatureGO(const GameObject_ptr& other);
+		void setEmitterGO(const GameObject_ptr& other);
+		void setColliderGO(const GameObject_ptr& other);
+
     public:
         SimFrame currentFrame;
         double currentTime = 0.0;

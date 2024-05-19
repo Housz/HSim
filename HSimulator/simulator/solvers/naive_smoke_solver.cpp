@@ -124,20 +124,89 @@ void HSim::naiveSmokeSolver::writeVDB()
 
 void HSim::naiveSmokeSolver::applyGravity()
 {
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->graphicsObject);
+
+	auto velocityY = velocityGrid->dataV();
+
+	// velocittY. parallel for
 
 }
 
 void HSim::naiveSmokeSolver::updateEmitter()
 {
-
+	// parallel for
+	// cell(ijk) if > 0
+	// desity(ijk) +=
+	// temperature(ijk) +=
 }
 
 void HSim::naiveSmokeSolver::applyBuoyancy()
 {
-
+	// all vY +=
 }
 
 void HSim::naiveSmokeSolver::applyBoundaryCondition()
 {
+	// 
+}
+
+void HSim::naiveSmokeSolver::applyPressure()
+{
+	// velOld = vel.clone
+
+
+}
+
+void HSim::naiveSmokeSolver::applyAdvection()
+{
+	// semi-lagrangian
+
 	
+}
+
+void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)
+{
+	velocityGO = other;
+
+	velocityGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
+
+	velocityGO->renderable->visible = false;
+}
+
+void HSim::naiveSmokeSolver::setDensityGO(const GameObject_ptr &other)
+{
+	densityGO = other;
+
+	densityGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
+
+	densityGO->renderable->visible = true;
+
+}
+
+void HSim::naiveSmokeSolver::setTemperatureGO(const GameObject_ptr &other)
+{
+	temperatureGO = other;
+
+	temperatureGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
+
+	temperatureGO->renderable->visible = false;
+
+}
+
+void HSim::naiveSmokeSolver::setEmitterGO(const GameObject_ptr &other)
+{
+	emitterGO = other;
+
+	emitterGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
+
+	emitterGO->renderable->visible = false;
+}
+
+void HSim::naiveSmokeSolver::setColliderGO(const GameObject_ptr &other)
+{
+	colliderGO = other;
+
+	colliderGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
+
+	colliderGO->renderable->visible = false;
 }
