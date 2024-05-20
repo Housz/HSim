@@ -1,6 +1,7 @@
 #pragma once
 
 #include <HSim/common.h>
+#include <HSim/parallel.h>
 
 namespace HSim
 {
@@ -38,7 +39,16 @@ namespace HSim
             std::fill(_data.begin(), _data.end(), value);
         }
 
-        void 
+        void parallelForEach(const std::function<void(T&)> &func)
+        {
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, _data.size()),
+            [&](tbb::blocked_range<size_t>& range) {
+               for (size_t i = range.begin(); i != range.end(); i++)
+               {
+                    func(_data[i]);
+               }
+            });
+        }
 
     public:
         std::vector<T> _data;

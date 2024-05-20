@@ -62,19 +62,19 @@ void HSim::naiveSmokeSolver::advanceTimeStep(double timeInterval)
 	 * after a time step
 	 */
 
-	go->renderable->renderingDataNeedUpdate = true;
+	// go->renderable->renderingDataNeedUpdate = true;
+
+	// auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
+	// auto velocityY = velocityGrid->dataV();
+	// std::cout << velocityY.dataAt(0, 0, 0) << "\n";
 
 	writeVDB();
 }
 
 void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
 {
-	auto renderable = go->renderable;
-
-	auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
-
 	// 1 external forces (gravity, buoyancy force, other ex forces)
-
+	applyGravity();
 
 	// 2 viscosity (pass)
 
@@ -124,9 +124,14 @@ void HSim::naiveSmokeSolver::writeVDB()
 
 void HSim::naiveSmokeSolver::applyGravity()
 {
-	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->graphicsObject);
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 
 	auto velocityY = velocityGrid->dataV();
+
+	velocityY.parallelForEach([&](PRECISION& n){
+		n++;
+	});
+
 
 	// velocittY. parallel for
 
@@ -161,7 +166,7 @@ void HSim::naiveSmokeSolver::applyAdvection()
 {
 	// semi-lagrangian
 
-	
+
 }
 
 void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)

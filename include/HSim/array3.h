@@ -66,6 +66,7 @@ namespace HSim
             _data.clear();
         }
 
+
     public:
         Size3 _size;
     };

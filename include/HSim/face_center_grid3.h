@@ -18,7 +18,7 @@ namespace HSim
               _dataW(faceCenterGrid3_._dataW),
               _dataOriginU(faceCenterGrid3_._dataOriginU),
               _dataOriginV(faceCenterGrid3_._dataOriginV),
-              _dataOriginW(faceCenterGrid3_._dataOriginW),
+              _dataOriginW(faceCenterGrid3_._dataOriginW)
         {
         }
 

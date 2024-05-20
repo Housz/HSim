@@ -9,23 +9,34 @@ void createScene(HSim::App &app)
 
     scene->addGround(100);
 
-    
-	/**************************************************
-	 * scene
-	*/
+    /**************************************************
+     * scene
+     */
     const size_t n = 64;
-    auto grid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
+    auto velocityGrid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
 
-	
+    auto gridMat = std::make_shared<HSim::PointMaterial>();
+    auto velocityGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(velocityGrid, gridMat);
+    auto velocityGridRenderable = std::make_shared<HSim::Renderable>(velocityGrid, velocityGridGObject);
+
+    auto velocityGO = std::make_shared<HSim::GameObject>();
+    velocityGO->renderable = velocityGridRenderable;
+
+    root->addChild(velocityGO);
+
     /**************************************************/
 
+    /**************************************************
+     * solver
+     */
+    auto naiveSmokeSolver = std::make_shared<HSim::naiveSmokeSolver>();
 
-	/**************************************************
-	 * solver
-	*/
+    naiveSmokeSolver->setVelocityGO(velocityGO);
 
 
-	/**************************************************/
+    app.simulator->solver = naiveSmokeSolver;
+
+    /**************************************************/
 }
 
 int main()
