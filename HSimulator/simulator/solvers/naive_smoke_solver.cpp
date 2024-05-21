@@ -34,7 +34,6 @@ void HSim::naiveSmokeSolver::update(const SimFrame &frame)
 		currentFrame = frame;
 
 		std::cout << "[FRAME] " << currentFrame.index << "\n";
-
 	}
 }
 
@@ -64,7 +63,7 @@ void HSim::naiveSmokeSolver::advanceTimeStep(double timeInterval)
 	 * after a time step
 	 */
 
-	// go->renderable->renderingDataNeedUpdate = true;
+	densityGO->renderable->renderingDataNeedUpdate = true;
 
 	// auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 	// auto velocityY = velocityGrid->dataV();
@@ -104,17 +103,29 @@ void HSim::naiveSmokeSolver::init()
 void HSim::naiveSmokeSolver::writeVDB()
 {
 #ifdef WRITEVDB
-	auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(go->renderable->spaceObject);
+	auto densityGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
 
 	openvdb::FloatGrid::Ptr vdbGrid = openvdb::FloatGrid::create();
 
 	openvdb::FloatGrid::Accessor accessor = vdbGrid->getAccessor();
 
-	auto callback = [&](size_t i, size_t j, size_t k)
+	// auto callback = [&](size_t i, size_t j, size_t k)
+	// {
+	// 	openvdb::Coord ijk(i, j, k);
+	// 	accessor.setValue(ijk, densityGrid->dataAt(i, j, k));
+	// };
+
+	for (size_t k = 0; k < densityGrid->sizeZ(); k++)
 	{
-		openvdb::Coord ijk(i, j, k);
-		accessor.setValue(ijk, grid->dataAt(i, j, k));
-	};
+		for (size_t j = 0; j < densityGrid->sizeY(); j++)
+		{
+			for (size_t i = 0; i < densityGrid->sizeX(); i++)
+			{
+				openvdb::Coord ijk(i, j, k);
+				accessor.setValue(ijk, densityGrid->dataAt(i, j, k));
+			}
+		}
+	}
 
 	openvdb::GridPtrVec vdbGrids;
 	vdbGrids.push_back(vdbGrid);
@@ -188,11 +199,12 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
-		auto density = (*desityGrid)(i, j, k);
-
 		if (j > 0)
 		{
-			(*desityGrid)(i, j, k) = (*oldDensityGrid)(i, j - 1, k) / 2;
+			if ((*oldDensityGrid)(i, j - 1, k) > 0)
+			{
+				(*desityGrid)(i, j, k) = (*oldDensityGrid)(i, j - 1, k);
+			}
 		}
 	};
 

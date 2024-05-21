@@ -17,7 +17,7 @@
 
 #include <HSim/cell_center_scalar_grid3.h>
 
-// #define WRITEVDB
+#define WRITEVDB
 
 namespace HSim
 {

@@ -136,9 +136,9 @@ namespace HSim
 
         void computeAABB()
         {
-            std::cout << "aabb:\n";
-            std::cout << girdOrigin;
-            std::cout << girdOrigin + gridResolution * gridSpacing;
+            // std::cout << "aabb:\n";
+            // std::cout << girdOrigin;
+            // std::cout << girdOrigin + gridResolution * gridSpacing;
 
             aabb->setLowerCorner(girdOrigin);
             aabb->setUpperCorner(girdOrigin + gridResolution * gridSpacing);
