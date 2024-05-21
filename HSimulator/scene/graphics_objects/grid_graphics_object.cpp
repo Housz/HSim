@@ -71,7 +71,7 @@ void HSim::CellCenterScalarGrid3GraphicsObject::draw(const RenderParams &renderP
 
 	// bind vao and draw
 	vao.bind();
-	glPointSize(4.0f);
+	glPointSize(8.0f);
 	glDrawArrays(GL_POINTS, 0, numElements);
 	vao.unbind();
 }

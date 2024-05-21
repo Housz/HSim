@@ -40,16 +40,16 @@ namespace HSim
         void writeVDB();
 
 	public:
-		void applyGravity();
-		void applyBuoyancy();
-
 		void updateEmitter();
+
+		void applyGravity(double subTimeInterval);
+		void applyBuoyancy(double subTimeInterval);
 
 		void applyBoundaryCondition();
 
 		void applyPressure();
 		
-		void applyAdvection();
+		void applyAdvection(double subTimeInterval);
 		
 	public:
 		void setVelocityGO(const GameObject_ptr& other);
