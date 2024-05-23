@@ -62,6 +62,9 @@ namespace HSim
 		void setColliderGO(const GameObject_ptr &other);
 
 	public:
+		bool isBoundary(size_t x, size_t y, size_t z);
+
+	public:
 		SimFrame currentFrame;
 		double currentTime = 0.0;
 

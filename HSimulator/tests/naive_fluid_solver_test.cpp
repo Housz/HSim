@@ -11,6 +11,7 @@ void createScene(HSim::App &app)
 
     /**************************************************/
     const size_t n = 64;
+
     auto grid = std::make_shared<HSim::CellCenterScalarGrid3<float>>(n, n, n);
 
     std::default_random_engine generator;

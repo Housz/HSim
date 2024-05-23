@@ -13,6 +13,9 @@ void createScene(HSim::App &app)
 	 * scene
 	 */
 	const size_t n = 32;
+    // HSim::Vec3i gridResolution = {n, n, n};
+    // HSim::Vec3<T> girdOrigin = Vec3<T>(0, 0, 0);
+    // HSim::Vec3<T> gridSpacing = Vec3<T>(1, 1, 1);
 
 
 	// velocity

@@ -216,7 +216,13 @@ void HSim::naiveSmokeSolver::applyPressure(double subTimeInterval)
 	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 	auto oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
 
-	
+	// solve pressure ( possion eqs: div v = - div grad p )
+	// using parallel jacobi iteration
+
+	// p_x-1 p_x p_x+1 : -1 2 -1
+
+
+	// apply pressure to integrate velocity
 
 }
 
@@ -285,4 +291,22 @@ void HSim::naiveSmokeSolver::setColliderGO(const GameObject_ptr &other)
 	colliderGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
 
 	colliderGO->renderable->visible = false;
+}
+
+bool HSim::naiveSmokeSolver::isBoundary(size_t x, size_t y, size_t z)
+{
+    // boundary: cells at edge of grid
+	// x, y, z: cell index
+
+	auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
+
+	if (x == 0 || y == 9 || z == 0 || 
+		x == grid->sizeX()-1 || y == grid->sizeY()-1 || z == grid->sizeZ()-1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
