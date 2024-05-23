@@ -14,6 +14,9 @@ void createScene(HSim::App &app)
 	 */
 	const size_t n = 32;
 
+
+	// velocity
+
 	auto velocityGrid = std::make_shared<HSim::FaceCenterGrid3<PRECISION>>(n, n, n);
 
 	// auto gridMat = std::make_shared<HSim::PointMaterial>();
@@ -25,7 +28,7 @@ void createScene(HSim::App &app)
 
 	root->addChild(velocityGO);
 
-
+	// density
 
 	auto desityGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
 
@@ -38,6 +41,7 @@ void createScene(HSim::App &app)
 
 	root->addChild(densityGO);
 
+	// emitter
 
 	auto emitterGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
 
@@ -45,7 +49,7 @@ void createScene(HSim::App &app)
 	{
 		for (size_t k = 10; k < 20; k++)
 		{
-			(*emitterGrid)(i, 0, k) = 1.0f;
+			(*emitterGrid)(i, 1, k) = 1.0f;
 		}
 	}    
 
@@ -57,6 +61,18 @@ void createScene(HSim::App &app)
 
 	root->addChild(emitterGO);
 
+	// temperature
+
+	auto temperatureGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
+
+	auto temperatureGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(temperatureGrid, gridMat);
+	auto temperatureGridenderable = std::make_shared<HSim::Renderable>(temperatureGrid, temperatureGridGObject);
+
+	auto temperatureGO = std::make_shared<HSim::GameObject>();
+	temperatureGO->renderable = temperatureGridenderable;
+
+	root->addChild(temperatureGO);
+
 	/**************************************************/
 
 	/**************************************************
@@ -67,6 +83,7 @@ void createScene(HSim::App &app)
 	naiveSmokeSolver->setVelocityGO(velocityGO);
 	naiveSmokeSolver->setDensityGO(densityGO);
 	naiveSmokeSolver->setEmitterGO(emitterGO);
+	naiveSmokeSolver->setTemperatureGO(temperatureGO);
 
 	app.simulator->solver = naiveSmokeSolver;
 
