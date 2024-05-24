@@ -128,7 +128,7 @@ namespace HSim
 
     // data
     public:
-        Vec3i gridResolution;
+        Size3 gridResolution;
         Vec3<T> girdOrigin = Vec3<T>(0, 0, 0);
         Vec3<T> gridSpacing = Vec3<T>(1, 1, 1);
 

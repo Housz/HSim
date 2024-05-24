@@ -13,6 +13,8 @@
 #pragma once
 
 #include <HSim/common.h>
+#include <HSim/linearSystem.h>
+
 #include <scene/scene_graph.h>
 #include <simulator/solvers/solver.h>
 
@@ -55,6 +57,14 @@ namespace HSim
 		void applyAdvection(double subTimeInterval);
 
 	public:
+		void buildLinearSystem();
+
+		void jacobiSolve();
+		// void gaussSeidelSolve();
+		// void SORSolve();
+		// void ChebyshevSolve();
+
+	public:
 		void setVelocityGO(const GameObject_ptr &other);
 		void setDensityGO(const GameObject_ptr &other);
 		void setTemperatureGO(const GameObject_ptr &other);
@@ -63,6 +73,7 @@ namespace HSim
 
 	public:
 		bool isBoundary(size_t x, size_t y, size_t z);
+		bool isCollider(size_t x, size_t y, size_t z);
 
 	public:
 		SimFrame currentFrame;
@@ -95,6 +106,10 @@ namespace HSim
 		const double buoyancySmokeDensityFactor = -0.000625; 
 		// beta in [2] eq. 8
 		const double buoyancyTemperatureFactor = 5.0;
+
+	// linear system
+	public:
+		LinearSystem3 linearSystem;
 	};
 
 } // namespace HSim

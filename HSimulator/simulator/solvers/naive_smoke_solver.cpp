@@ -187,16 +187,14 @@ void HSim::naiveSmokeSolver::applyBuoyancy(double subTimeInterval)
 			return avg_local; }, std::plus<double>());
 	ambTemperature /= temperatureGrid->_data.size();
 
-
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
 		auto density = (*desityGrid)(i, j, k);
 		auto temperature = (*temperatureGrid)(i, j, k);
 
 		// buoyancy force in i, j, k
-		double buoyancyForce = 
-			buoyancySmokeDensityFactor * density
-			+
+		double buoyancyForce =
+			buoyancySmokeDensityFactor * density +
 			buoyancyTemperatureFactor * (temperature - ambTemperature);
 
 		velocityY(i, j, k) += subTimeInterval * buoyancyForce;
@@ -220,10 +218,9 @@ void HSim::naiveSmokeSolver::applyPressure(double subTimeInterval)
 	// using parallel jacobi iteration
 
 	// p_x-1 p_x p_x+1 : -1 2 -1
-
+	buildLinearSystem();
 
 	// apply pressure to integrate velocity
-
 }
 
 void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
@@ -246,6 +243,161 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	};
 
 	desityGrid->parallelForEachCell(callback);
+}
+
+void HSim::naiveSmokeSolver::buildLinearSystem()
+{
+
+	// buildMarkers todo
+
+	// buildLinearSystem Ax = b
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
+
+	linearSystem.clear();
+	linearSystem.resize(velocityGrid->gridResolution);
+
+	auto &A = linearSystem.A;
+	auto &b = linearSystem.b;
+
+	A.parallelForEachCell(
+		[&](size_t i, size_t j, size_t k)
+		{
+			auto &row = A(i, j, k);
+
+			// init
+			row.center = row.right = row.up = row.front = 0.;
+			b(i, j, k) = 0.;
+
+			if (isBoundary(i, j, k))
+			{
+				row.center = 1.;
+				return;
+			}
+
+			b(i, j, k) = velocityGrid->divergenceAtCellCenter(i, j, k);
+
+			double invSpacingX2 = 1. / (velocityGrid->gridSpacing.x * velocityGrid->gridSpacing.x);
+			double invSpacingY2 = 1. / (velocityGrid->gridSpacing.y * velocityGrid->gridSpacing.y);
+			double invSpacingZ2 = 1. / (velocityGrid->gridSpacing.z * velocityGrid->gridSpacing.z);
+
+			// x
+			if (isBoundary(i - 1, j, k) && isBoundary(i + 1, j, k))
+			{
+			}
+			else if (isBoundary(i - 1, j, k) || isBoundary(i + 1, j, k))
+			{
+				row.center += invSpacingX2;
+				row.right = -invSpacingX2;
+			}
+			else // (i-1, j, k) (i+1, j, k) all fluid
+			{
+				row.center += 2 * invSpacingX2;
+				row.right = -invSpacingX2;
+			}
+
+			// y
+			if (isBoundary(i, j - 1, k) && isBoundary(i, j + 1, k))
+			{
+			}
+			else if (isBoundary(i, j - 1, k) || isBoundary(i, j + 1, k))
+			{
+				row.center += invSpacingY2;
+				row.up = -invSpacingY2;
+			}
+			else // (i-1, j, k) (i+1, j, k) all fluid
+			{
+				row.center += 2 * invSpacingY2;
+				row.up = -invSpacingY2;
+			}
+
+			// z
+			if (isBoundary(i, j - 1, k) && isBoundary(i, j + 1, k))
+			{
+			}
+			else if (isBoundary(i, j - 1, k) || isBoundary(i, j + 1, k))
+			{
+				row.center += invSpacingZ2;
+				row.front = -invSpacingZ2;
+			}
+			else // (i-1, j, k) (i+1, j, k) all fluid
+			{
+				row.center += 2 * invSpacingZ2;
+				row.front = -invSpacingZ2;
+			}
+		});
+}
+
+void HSim::naiveSmokeSolver::jacobiSolve()
+{
+	auto &A = linearSystem.A;
+	auto &x = linearSystem.x;
+	auto &b = linearSystem.b;
+
+	const size_t MAX_NUM_ITERATIONS = 50;
+	const size_t CHECK_INTERVAL = 10;
+	const double TOLERANCE = 1e-8;
+
+	auto size = A.size();
+
+	PossionVector3 tempX;
+	tempX.resize(x.size());
+
+	PossionVector3 residual;
+	residual.resize(x.size());
+
+	for (size_t iter = 0; iter < MAX_NUM_ITERATIONS; iter++)
+	{
+		A.parallelForEachCell(
+			[&](size_t i, size_t j, size_t k)
+			{
+				// double r =
+				// 	((i == 0) ? A(i - 1, j, k).right * x(i - 1, j, k) : 0.0) +
+				// 	((i == size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
+				// 	((j == 0) ? A(i, j - 1, k).up * x(i, j - 1, k) : 0.0) +
+				// 	((j == size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
+				// 	((k == 0) ? A(i, j, k - 1).front * x(i, j, k - 1) : 0.0) +
+				// 	((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
+
+				double r =
+					((i == 0) ? A(i, j, k).right * x(i - 1, j, k) : 0.0) +
+					((i == size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
+					((j == 0) ? A(i, j, k).up * x(i, j - 1, k) : 0.0) +
+					((j == size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
+					((k == 0) ? A(i, j, k).front * x(i, j, k - 1) : 0.0) +
+					((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
+
+				tempX(i, j, k) = (b(i, j, k) - r) / A(i, j, k).center;
+			});
+
+		std::swap(x._data, tempX._data);
+
+		if (iter != 0 && iter % CHECK_INTERVAL == 0)
+		{
+			// compute current residual
+			A.parallelForEachCell(
+				[&](size_t i, size_t j, size_t k)
+				{
+					residual(i, j, k) =
+						b(i, j, k) -
+						(
+							A(i, j, k).center * x(i, j, k) +
+							((i == 0) ? A(i, j, k).right * x(i - 1, j, k) : 0.0) +
+							((i == size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
+							((j == 0) ? A(i, j, k).up * x(i, j - 1, k) : 0.0) +
+							((j == size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
+							((k == 0) ? A(i, j, k).front * x(i, j, k - 1) : 0.0) +
+							((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0)
+						);
+				});
+			
+			// compute residual.norm
+			// paralle reduce
+
+			// if(norm < TOLERANCE) break; break jacobi iteration
+			
+			
+		}
+	}
 }
 
 void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)
@@ -295,13 +447,13 @@ void HSim::naiveSmokeSolver::setColliderGO(const GameObject_ptr &other)
 
 bool HSim::naiveSmokeSolver::isBoundary(size_t x, size_t y, size_t z)
 {
-    // boundary: cells at edge of grid
+	// boundary: cells at edge of grid
 	// x, y, z: cell index
 
 	auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
 
-	if (x == 0 || y == 9 || z == 0 || 
-		x == grid->sizeX()-1 || y == grid->sizeY()-1 || z == grid->sizeZ()-1)
+	if (x == 0 || y == 0 || z == 0 ||
+		x == grid->sizeX() - 1 || y == grid->sizeY() - 1 || z == grid->sizeZ() - 1)
 	{
 		return true;
 	}
@@ -309,4 +461,10 @@ bool HSim::naiveSmokeSolver::isBoundary(size_t x, size_t y, size_t z)
 	{
 		return false;
 	}
+}
+
+bool HSim::naiveSmokeSolver::isCollider(size_t x, size_t y, size_t z)
+{
+	// todo
+	return false;
 }

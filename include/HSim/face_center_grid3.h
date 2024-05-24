@@ -69,8 +69,8 @@ namespace HSim
 
         T divergenceAtCellCenter(size_t, size_t, size_t);
         T divergenceAtCellCenter(Vec3i);
-        T divergenceAt(T, T, T);
-        T divergenceAt(Vec3<T>);
+        // T divergenceAt(T, T, T);
+        // T divergenceAt(Vec3<T>);
 
         // Vec3<T> curlAtCellCenter(size_t, size_t, size_t);
         // Vec3<T> curlAtCellCenter(Vec3i);

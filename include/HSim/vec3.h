@@ -449,7 +449,7 @@ namespace HSim
     using Vec3d = Vec3<double>;
     
     using Vec3ui = Vec3<size_t>;
-    using Size3 = Vec3<int>;
+    using Size3 = Vec3<size_t>;
 
     template <typename T1>
     inline std::ostream &operator<<(std::ostream &os, Vec3<T1> &v_)
