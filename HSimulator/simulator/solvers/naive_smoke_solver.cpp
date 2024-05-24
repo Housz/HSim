@@ -220,7 +220,11 @@ void HSim::naiveSmokeSolver::applyPressure(double subTimeInterval)
 	// p_x-1 p_x p_x+1 : -1 2 -1
 	buildLinearSystem();
 
-	// apply pressure to integrate velocity
+	jacobiSolve();
+
+	// integrate pressure gradient to the velocity grid
+
+	integratePressureGradient();
 }
 
 void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
@@ -337,16 +341,17 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 	const size_t CHECK_INTERVAL = 10;
 	const double TOLERANCE = 1e-8;
 
-	auto size = A.size();
+	auto size = A.size;
 
 	PossionVector3 tempX;
-	tempX.resize(x.size());
+	tempX.resize(x.size);
 
 	PossionVector3 residual;
-	residual.resize(x.size());
+	residual.resize(x.size);
 
 	for (size_t iter = 0; iter < MAX_NUM_ITERATIONS; iter++)
 	{
+		// jacobi relax
 		A.parallelForEachCell(
 			[&](size_t i, size_t j, size_t k)
 			{
@@ -371,33 +376,40 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 
 		std::swap(x._data, tempX._data);
 
+		// check residual
 		if (iter != 0 && iter % CHECK_INTERVAL == 0)
 		{
 			// compute current residual
-			A.parallelForEachCell(
-				[&](size_t i, size_t j, size_t k)
-				{
-					residual(i, j, k) =
-						b(i, j, k) -
-						(
-							A(i, j, k).center * x(i, j, k) +
-							((i == 0) ? A(i, j, k).right * x(i - 1, j, k) : 0.0) +
-							((i == size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
-							((j == 0) ? A(i, j, k).up * x(i, j - 1, k) : 0.0) +
-							((j == size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
-							((k == 0) ? A(i, j, k).front * x(i, j, k - 1) : 0.0) +
-							((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0)
-						);
-				});
-			
-			// compute residual.norm
-			// paralle reduce
+			linearSystem3Residual(linearSystem, residual);
 
-			// if(norm < TOLERANCE) break; break jacobi iteration
-			
-			
+			double l2Norm = possionVector3L2Norm(residual);
+
+			// break jacobi iterations
+			if (l2Norm < TOLERANCE)
+			{
+				std::cout << "[OK] " << "iter: " << iter << "residual: " << l2Norm << "\n";
+				// break;
+				return;
+			}
 		}
 	}
+
+	linearSystem3Residual(linearSystem, residual);
+	double l2Norm = possionVector3L2Norm(residual);
+
+	if (l2Norm < TOLERANCE)
+	{
+		std::cout << "[OK] " << "iter: " << MAX_NUM_ITERATIONS << "residual: " << l2Norm << "\n";
+	}
+	else
+	{
+		std::cout << "[FAIL] " << "iter: " << MAX_NUM_ITERATIONS << "residual: " << l2Norm << "\n";
+	}
+}
+
+void HSim::naiveSmokeSolver::integratePressureGradient()
+{
+	
 }
 
 void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)

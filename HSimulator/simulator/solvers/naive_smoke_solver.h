@@ -64,6 +64,8 @@ namespace HSim
 		// void SORSolve();
 		// void ChebyshevSolve();
 
+		void integratePressureGradient();
+
 	public:
 		void setVelocityGO(const GameObject_ptr &other);
 		void setDensityGO(const GameObject_ptr &other);

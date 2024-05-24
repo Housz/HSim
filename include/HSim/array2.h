@@ -18,15 +18,15 @@ namespace HSim
         // todo copy
 		~Array2() {}
 
-		Array2(Vec2i size)
+		Array2(Vec2i size_) 
+            : size(size_)
         {
-            _size = size;
             _data.resize(size.x * size.y);
         }
 
 		Array2(size_t x, size_t y)
         {
-            _size = {x, y};
+            size = {x, y};
             _data.resize(x * y);
         }
 
@@ -37,9 +37,14 @@ namespace HSim
             return dataAt(i, j);
         }
 
+        T operator()(size_t i, size_t j) const
+        {
+            return dataAt(i, j);
+        }
+
 		T& dataAt(size_t i, size_t j)
         {
-            assert( i<_size.x && j<_size.y);
+            assert( i<size.x && j<size.y);
             return _data[i + j * sizeX()];
         }
 
@@ -47,25 +52,30 @@ namespace HSim
         {
             return _data[i];
         }
+        
+        T operator()(size_t i) const
+        {
+            return _data[i];
+        }
 
-        Size2 size() { return _size; }
-        size_t sizeX() { return _size.x; }
-        size_t sizeY() { return _size.y; }
+        // Size2 size() { return size; }
+        size_t sizeX() const { return size.x; }
+        size_t sizeY() const { return size.y; }
 
         void resize(size_t x, size_t y)
         {   
-            _size = {x, y};
-            _data.resize(_size.x * _size.y);
+            size = {x, y};
+            _data.resize(size.x * size.y);
         }
 
 		void clear()
         {
-            _size.set(0);
+            size.set(0);
             _data.clear();
         }
 
     public:
-        Size2 _size;
+        Size2 size;
 	};
 	
 } // namespace HSim
