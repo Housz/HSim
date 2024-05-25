@@ -232,8 +232,10 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	// semi-lagrangian
 
 	auto desityGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
-
 	auto oldDensityGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*desityGrid);
+
+	// advection
+	
 
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
@@ -409,7 +411,46 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 
 void HSim::naiveSmokeSolver::integratePressureGradient()
 {
-	
+	auto &x = linearSystem.x;
+
+	auto size = x.size;
+
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
+
+	auto &u = velocityGrid->dataV();
+	auto &v = velocityGrid->dataV();
+	auto &w = velocityGrid->dataV();
+
+	double invSpacingX = 1. / velocityGrid->gridSpacing.x;
+	double invSpacingY = 1. / velocityGrid->gridSpacing.y;
+	double invSpacingZ = 1. / velocityGrid->gridSpacing.z;
+
+	x.parallelForEachCell(
+
+		[&](size_t i, size_t j, size_t k)
+		{
+			if (isBoundary(i, j, k))
+			{
+				return;
+			}
+
+			if (!isBoundary(i + 1, j, k))
+			{
+				u(i + 1) += invSpacingX * (x(i + 1, j, k) - x(i, j, k));
+			}
+
+			if (!isBoundary(i, j + 1, k))
+			{
+				v(i + 1) += invSpacingY * (x(i, j + 1, k) - x(i, j, k));
+			}
+
+			if (!isBoundary(i, j, k + 1))
+			{
+				w(i + 1) += invSpacingZ * (x(i, j, k + 1) - x(i, j, k));
+			}
+		}
+
+	);
 }
 
 void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)
