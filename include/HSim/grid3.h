@@ -24,7 +24,7 @@ namespace HSim
 
         Grid3(const Grid3<T>& grid3_) 
             : gridResolution(grid3_.gridResolution),
-              girdOrigin(grid3_.girdOrigin),
+              gridOrigin(grid3_.gridOrigin),
               gridSpacing(grid3_.gridSpacing)
         {
             spaceObjectType = SpaceObjectType::GRID;
@@ -54,7 +54,7 @@ namespace HSim
          * @param origin
          * @param gridSpacing
          */
-        Grid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1}) : gridResolution(resolution), girdOrigin(origin), gridSpacing(gridSpacing)
+        Grid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1}) : gridResolution(resolution), gridOrigin(origin), gridSpacing(gridSpacing)
         {
             spaceObjectType = SpaceObjectType::GRID;
             
@@ -80,8 +80,8 @@ namespace HSim
          *
          * @return Vec3<T>
          */
-        // Vec3<T> gridOrigin() { return girdOrigin; }
-        void setGridOrigin(Vec3<T> origin) { girdOrigin = origin; }
+        // Vec3<T> gridOrigin() { return gridOrigin; }
+        void setGridOrigin(Vec3<T> origin) { gridOrigin = origin; }
 
         /**
          * @brief The spacing of the grid in the x, y and z directions
@@ -129,7 +129,7 @@ namespace HSim
     // data
     public:
         Size3 gridResolution;
-        Vec3<T> girdOrigin = Vec3<T>(0, 0, 0);
+        Vec3<T> gridOrigin = Vec3<T>(0, 0, 0);
         Vec3<T> gridSpacing = Vec3<T>(1, 1, 1);
 
         AABB3_Ptr<T> aabb = std::make_shared<AABB3<T>>();
@@ -137,11 +137,11 @@ namespace HSim
         void computeAABB()
         {
             // std::cout << "aabb:\n";
-            // std::cout << girdOrigin;
-            // std::cout << girdOrigin + gridResolution * gridSpacing;
+            // std::cout << gridOrigin;
+            // std::cout << gridOrigin + gridResolution * gridSpacing;
 
-            aabb->setLowerCorner(girdOrigin);
-            aabb->setUpperCorner(girdOrigin + gridResolution * gridSpacing);
+            aabb->setLowerCorner(gridOrigin);
+            aabb->setUpperCorner(gridOrigin + gridResolution * gridSpacing);
         }
 
         // for rendering

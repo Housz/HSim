@@ -29,9 +29,9 @@ namespace HSim
             _dataV.resize(x, y + 1, z);
             _dataW.resize(x, y, z + 1);
 
-            _dataOriginU = girdOrigin + Vec3<T>(0, deltaY() / 2, deltaZ() / 2);
-            _dataOriginV = girdOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
-            _dataOriginW = girdOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
+            _dataOriginU = gridOrigin + Vec3<T>(0, deltaY() / 2, deltaZ() / 2);
+            _dataOriginV = gridOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
+            _dataOriginW = gridOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
         }
         FaceCenterGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
             : VectorGrid3<T>(resolution, origin, gridSpacing)
@@ -51,9 +51,9 @@ namespace HSim
         Array3<T> &dataV() { return _dataV; }
         Array3<T> &dataW() { return _dataW; }
 
-        Vec3i dataSizeU() { return _dataU.size(); }
-        Vec3i dataSizeV() { return _dataV.size(); }
-        Vec3i dataSizeW() { return _dataW.size(); }
+        Vec3i dataSizeU() { return _dataU.size; }
+        Vec3i dataSizeV() { return _dataV.size; }
+        Vec3i dataSizeW() { return _dataW.size; }
 
         Vec3<T> &dataOriginU() { return _dataOriginU; }
         Vec3<T> &dataOriginV() { return _dataOriginV; }

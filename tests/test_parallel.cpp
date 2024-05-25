@@ -64,7 +64,7 @@ int main()
 				{
 					float s = HSim::parallelReduce(
 						0, n,
-						0,
+						0.,
 						[&](tbb::blocked_range<size_t> r, float local_sum)
 						{
 							for (size_t col = r.begin(); col < r.end(); col++)

@@ -11,19 +11,20 @@ namespace HSim
 	public:
 		CellCenterScalarGrid3() {}
 
-		CellCenterScalarGrid3(const CellCenterScalarGrid3<T>& cellCenterScalarGrid3_)
+		CellCenterScalarGrid3(const CellCenterScalarGrid3<T> &cellCenterScalarGrid3_)
 			: ScalarGrid3<T>(cellCenterScalarGrid3_)
-		{}
+		{
+		}
 
 		CellCenterScalarGrid3(size_t x, size_t y, size_t z)
 			: ScalarGrid3<T>(x, y, z) {}
 
-		CellCenterScalarGrid3(const Vec3i& resolution, const Vec3<T>& origin = {0, 0, 0}, const Vec3<T>& gridSpacing = {1, 1, 1})
+		CellCenterScalarGrid3(const Vec3i &resolution, const Vec3<T> &origin = {0, 0, 0}, const Vec3<T> &gridSpacing = {1, 1, 1})
 			: ScalarGrid3<T>(resolution, origin, gridSpacing) {}
 
 		~CellCenterScalarGrid3() {}
 
-		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		void clone(std::shared_ptr<SpaceObject3<T>> &ptr) override
 		{
 			ptr = std::make_shared<CellCenterScalarGrid3<T>>(*this);
 		}
@@ -36,7 +37,12 @@ namespace HSim
 
 		Vec3<T> dataOrigin() override
 		{
-			return girdOrigin + gridSpacing * 0.5;
+			return gridOrigin + gridSpacing * 0.5;
+		}
+
+		Vec3<T> positionAt(size_t i, size_t j, size_t k) override
+		{
+			return gridOrigin + gridSpacing * 0.5 + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
 		}
 
 		// for rendering
@@ -84,14 +90,13 @@ namespace HSim
 			unsigned int vao;
 			glGenVertexArrays(1, &vao);
 			glBindVertexArray(vao);
-			
+
 			// layout 0: positions
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 			// layout 1: normals
 			// glEnableVertexAttribArray(1);
 			// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-
 
 			glBindVertexArray(0);
 			// glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -109,6 +114,6 @@ namespace HSim
 	};
 
 	template <typename T>
-	using CellCenterScalarGrid3_Ptr = std::shared_ptr<CellCenterScalarGrid3<T>>; 
+	using CellCenterScalarGrid3_Ptr = std::shared_ptr<CellCenterScalarGrid3<T>>;
 
 } // namespace HSim

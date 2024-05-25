@@ -48,8 +48,12 @@ namespace HSim
 
 		// for subclasses
 	public:
+
 		virtual Vec3i dataSize() = 0;
 		virtual Vec3<T> dataOrigin() = 0;
+
+		// get the position coordinates (x, y, z) at grid (i, j, k)
+		virtual Vec3<T> positionAt(size_t i, size_t j, size_t k) = 0;
 
 		// data
 	public:

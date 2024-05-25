@@ -10,7 +10,7 @@ namespace HSim
 	public:
 		VertexCenterScalarGrid3() {}
 
-		VertexCenterScalarGrid3(const VertexCenterScalarGrid3<T>& vertexCenterScalarGrid3) 
+		VertexCenterScalarGrid3(const VertexCenterScalarGrid3<T> &vertexCenterScalarGrid3)
 			: ScalarGrid3<T>(vertexCenterScalarGrid3)
 		{
 		}
@@ -26,7 +26,7 @@ namespace HSim
 
 		~VertexCenterScalarGrid3() {}
 
-		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
+		void clone(std::shared_ptr<SpaceObject3<T>> &ptr) override
 		{
 			ptr = std::make_shared<VertexCenterScalarGrid3<T>>(*this);
 		}
@@ -45,7 +45,12 @@ namespace HSim
 		}
 		Vec3<T> dataOrigin() override
 		{
-			return girdOrigin;
+			return gridOrigin;
+		}
+
+		Vec3<T> positionAt(size_t i, size_t j, size_t k) override
+		{
+			return gridOrigin + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
 		}
 	};
 
