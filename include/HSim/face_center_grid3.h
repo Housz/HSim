@@ -51,9 +51,9 @@ namespace HSim
         Array3<T> &dataV() { return _dataV; }
         Array3<T> &dataW() { return _dataW; }
 
-        Vec3i dataSizeU() { return _dataU.size; }
-        Vec3i dataSizeV() { return _dataV.size; }
-        Vec3i dataSizeW() { return _dataW.size; }
+        Vec3i dataSizeU() const { return _dataU.size; }
+        Vec3i dataSizeV() const { return _dataV.size; }
+        Vec3i dataSizeW() const { return _dataW.size; }
 
         Vec3<T> &dataOriginU() { return _dataOriginU; }
         Vec3<T> &dataOriginV() { return _dataOriginV; }
@@ -62,6 +62,10 @@ namespace HSim
         T &u(size_t i, size_t j, size_t k) { return _dataU(i, j, k); }
         T &v(size_t i, size_t j, size_t k) { return _dataV(i, j, k); }
         T &w(size_t i, size_t j, size_t k) { return _dataW(i, j, k); }
+
+        T u(size_t i, size_t j, size_t k) const { return _dataU(i, j, k); }
+        T v(size_t i, size_t j, size_t k) const { return _dataV(i, j, k); }
+        T w(size_t i, size_t j, size_t k) const { return _dataW(i, j, k); }
 
         // cell center data by index i, j, k
         Vec3<T> dataAtCellCenter(size_t, size_t, size_t);

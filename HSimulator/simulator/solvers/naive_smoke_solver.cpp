@@ -231,14 +231,36 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 {
 	// semi-lagrangian
 
-	auto desityGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
+	auto densityGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
 	auto oldDensityGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*desityGrid);
+
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 
 	// advection
 	// mid-point integration
 
-	
+	densityGrid->parallelForEachCell([&](size_t i, size_t j, size_t k) {
 
+		auto posNow = oldDensityGrid->positionAt(i, j, k);
+		auto velNow = velocityGrid->dataAtCellCenter(i, j, k);
+		// auto posPre
+
+		auto densityNow = densityGrid->dataAt(i, j, k);
+
+		auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
+		auto midVelPre = velocityGrid->sample(midPosPre); // todo
+
+		auto posPre = posNow - subTimeInterval * midVelPre;
+
+		// todo
+		// handle boundary: clamp to boundary
+		// clamp(posPre, gridOrigin, GridOrigin+GridSize*GridSpacing)
+
+		auto density = densityGrid->sample(posPre);
+
+		(*densityGrid)(i, j, k) = density;
+
+	});
 
 	// auto callback = [&](size_t i, size_t j, size_t k)
 	// {
