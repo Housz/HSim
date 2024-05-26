@@ -235,20 +235,23 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	auto oldDensityGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*desityGrid);
 
 	// advection
+	// mid-point integration
+
 	
 
-	auto callback = [&](size_t i, size_t j, size_t k)
-	{
-		if (j > 0)
-		{
-			if ((*oldDensityGrid)(i, j - 1, k) > 0)
-			{
-				(*desityGrid)(i, j, k) = (*oldDensityGrid)(i, j - 1, k);
-			}
-		}
-	};
 
-	desityGrid->parallelForEachCell(callback);
+	// auto callback = [&](size_t i, size_t j, size_t k)
+	// {
+	// 	if (j > 0)
+	// 	{
+	// 		if ((*oldDensityGrid)(i, j - 1, k) > 0)
+	// 		{
+	// 			(*desityGrid)(i, j, k) = (*oldDensityGrid)(i, j - 1, k);
+	// 		}
+	// 	}
+	// };
+
+	// desityGrid->parallelForEachCell(callback);
 }
 
 void HSim::naiveSmokeSolver::buildLinearSystem()
