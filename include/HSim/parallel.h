@@ -53,7 +53,7 @@ namespace HSim
 	{
 		size_t n = end - begin;
 		
-		return tbb::parallel_reduce(
+		return (T)tbb::parallel_reduce(
 			tbb::blocked_range<size_t>(0, n),
 			identity,
 			func,
@@ -69,7 +69,7 @@ namespace HSim
 		const Reduce& reduce
 	)
 	{
-		return tbb::parallel_reduce(
+		return (T)tbb::parallel_reduce(
 			tbb::blocked_range<size_t>(begin, end),
 			identity,
 			func,

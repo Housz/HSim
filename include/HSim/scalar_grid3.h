@@ -11,7 +11,8 @@ namespace HSim
 		// constructor
 	public:
 		ScalarGrid3() {}
-		ScalarGrid3(const ScalarGrid3<T>& scalarGrid3_)
+
+		ScalarGrid3(const ScalarGrid3<T> &scalarGrid3_)
 			: Grid3<T>(scalarGrid3_), _data(scalarGrid3_._data)
 		{
 		}
@@ -22,10 +23,10 @@ namespace HSim
 			_data.resize(x * y * z);
 		}
 
-		ScalarGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
-			: Grid3<T>(resolution, origin, gridSpacing)
+		ScalarGrid3(Vec3i resolution, Vec3<T> gridOrigin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
+			: Grid3<T>(resolution, gridOrigin, gridSpacing)
 		{
-			_data.resize(x * y * z);
+			_data.resize(resolution.x * resolution.y * resolution.z);
 		}
 
 		~ScalarGrid3(){};
@@ -36,24 +37,28 @@ namespace HSim
 		void getData(std::vector<T> &targetData);
 
 		T &operator()(size_t, size_t, size_t);
+		T operator()(size_t, size_t, size_t) const;
 
-		T dataAt(size_t, size_t, size_t);
+		T &dataAt(size_t, size_t, size_t);
+		T dataAt(size_t, size_t, size_t) const;
 
 		void fill(T);
 
 		// difference operators
 	public:
-		Vec3<T> gradientAt(size_t, size_t, size_t);
-		T laplacianAt(size_t, size_t, size_t);
+		Vec3<T> gradientAt(size_t, size_t, size_t) const;
+		T laplacianAt(size_t, size_t, size_t) const;
 
 		// for subclasses
 	public:
-
-		virtual Vec3i dataSize() = 0;
-		virtual Vec3<T> dataOrigin() = 0;
+		virtual Vec3i dataSize() const = 0;
+		virtual Vec3<T> dataOrigin() const = 0;
 
 		// get the position coordinates (x, y, z) at grid (i, j, k)
-		virtual Vec3<T> positionAt(size_t i, size_t j, size_t k) = 0;
+		virtual Vec3<T> positionAt(size_t i, size_t j, size_t k) const = 0;
+
+		// sample the data at position(x, y, z)
+		virtual T sample(const Vec3<T> &position) const = 0;
 
 		// data
 	public:
@@ -94,13 +99,25 @@ namespace HSim
 	}
 
 	template <typename T>
-	T ScalarGrid3<T>::dataAt(size_t i, size_t j, size_t k)
+	T &ScalarGrid3<T>::dataAt(size_t i, size_t j, size_t k)
+	{
+		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
+	}
+
+	template <typename T>
+	T ScalarGrid3<T>::dataAt(size_t i, size_t j, size_t k) const
 	{
 		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
 	}
 
 	template <typename T>
 	T &ScalarGrid3<T>::operator()(size_t i, size_t j, size_t k)
+	{
+		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
+	}
+
+	template <typename T>
+	T ScalarGrid3<T>::operator()(size_t i, size_t j, size_t k) const
 	{
 		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
 	}
@@ -117,7 +134,7 @@ namespace HSim
 	 * gradient f = (df/dx, df/dy, df/dz)
 	 */
 	template <typename T>
-	Vec3<T> ScalarGrid3<T>::gradientAt(size_t i, size_t j, size_t k)
+	Vec3<T> ScalarGrid3<T>::gradientAt(size_t i, size_t j, size_t k) const
 	{
 		size_t sizeX = gridResolution.x;
 		size_t sizeY = gridResolution.y;
@@ -146,7 +163,7 @@ namespace HSim
 	 * laplacian f = d2f/dx2 + d2f/dy2 + d2f/dz2
 	 */
 	template <typename T>
-	T ScalarGrid3<T>::laplacianAt(size_t i, size_t j, size_t k)
+	T ScalarGrid3<T>::laplacianAt(size_t i, size_t j, size_t k) const
 	{
 		size_t sizeX = gridResolution.x;
 		size_t sizeY = gridResolution.y;

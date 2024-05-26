@@ -62,7 +62,7 @@ int main()
 			{
 				for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
 				{
-					float s = HSim::parallelReduce(
+					double s = HSim::parallelReduce(
 						0, n,
 						0.,
 						[&](tbb::blocked_range<size_t> r, float local_sum)

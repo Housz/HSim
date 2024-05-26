@@ -2,6 +2,9 @@
 #include <HSim/cell_center_scalar_grid3.h>
 #include <HSim/vertex_center_scalar_grid3.h>
 
+// #define TEST
+#ifdef TEST
+
 int main()
 {
 	size_t n = 100;
@@ -54,7 +57,65 @@ int main()
 
 	std::cout << sg3.dataSize();
 	std::cout << sg3.dataOrigin();
-	
 
 	return 0;
 }
+
+#endif // TEST
+
+// #define POSITION_AT
+#ifdef POSITION_AT
+
+int main()
+{
+	const size_t n = 100;
+
+	HSim::Vec3i gridOrigin = {-1, -1, -1};
+	HSim::Vec3i gridSpacing = {1, 2, 3};
+
+	HSim::CellCenterScalarGrid3<float> cellGrid({n, n, n}, gridOrigin, gridSpacing);
+	HSim::VertexCenterScalarGrid3<float> vertGrid({n, n, n}, gridOrigin, gridSpacing);
+
+	std::cout << cellGrid.positionAt(0, 0, 0);
+	std::cout << vertGrid.positionAt(0, 0, 0);
+	std::cout << std::endl;
+	std::cout << cellGrid.positionAt(1, 1, 1);
+	std::cout << vertGrid.positionAt(1, 1, 1);
+
+	return 0;
+}
+
+#endif // POSITION_AT
+
+#define INTERPOLATION
+
+#ifdef INTERPOLATION
+
+int main()
+{
+	const size_t n = 100;
+
+	HSim::Vec3i gridOrigin = {-1, -1, -1};
+	HSim::Vec3i gridSpacing = {1, 2, 3};
+
+	// HSim::CellCenterScalarGrid3<float> cellGrid({n, n, n}, gridOrigin, gridSpacing);
+	// HSim::VertexCenterScalarGrid3<float> vertGrid({n, n, n}, gridOrigin, gridSpacing);
+	HSim::CellCenterScalarGrid3<float> cellGrid(n, n, n);
+	HSim::VertexCenterScalarGrid3<float> vertGrid(n, n, n);
+
+	// cellGrid.fill(1);
+	// vertGrid.fill(1);
+	cellGrid.parallelForEachCell([&](size_t i, size_t j, size_t k){
+		cellGrid(i, j, k) = i;
+		vertGrid(i, j, k) = i; 
+	});
+
+	// std::cout << vertGrid.dataAt(1, 1, 1) << std::endl;
+	// std::cout << vertGrid.positionAt(1, 1, 1) << std::endl;
+	std::cout << vertGrid.sample({1, 1, 1}) << std::endl;
+
+	std::cout << cellGrid.sample({1, 1, 1}) << std::endl;
+
+}
+
+#endif // INTERPOLATION

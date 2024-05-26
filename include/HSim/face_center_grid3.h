@@ -63,10 +63,11 @@ namespace HSim
         T &v(size_t i, size_t j, size_t k) { return _dataV(i, j, k); }
         T &w(size_t i, size_t j, size_t k) { return _dataW(i, j, k); }
 
-        // cell center data by interpolation
+        // cell center data by index i, j, k
         Vec3<T> dataAtCellCenter(size_t, size_t, size_t);
         Vec3<T> dataAtCellCenter(Vec3i);
 
+        // divergence at index i, j, k
         T divergenceAtCellCenter(size_t, size_t, size_t);
         T divergenceAtCellCenter(Vec3i);
         // T divergenceAt(T, T, T);

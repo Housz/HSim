@@ -21,6 +21,10 @@ add_executable(testparallel test_parallel.cpp)
 target_link_libraries(testparallel PUBLIC HSim)
 target_link_libraries(testparallel PUBLIC TBB::tbb)
 
+add_executable(testmath test_math_utils.cpp)
+target_link_libraries(testmath PUBLIC HSim)
+target_link_libraries(testmath PUBLIC TBB::tbb)
+
 add_executable(testmat test_mat.cpp)
 target_link_libraries(testmat PUBLIC HSim)
 target_link_libraries(testmat PUBLIC TBB::tbb)

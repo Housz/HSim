@@ -5,6 +5,7 @@
 #include <HSim/vec3.h>
 #include <HSim/aabb3.h>
 #include <HSim/parallel.h>
+#include <HSim/math_utils.h>
 
 namespace HSim
 {
@@ -70,10 +71,10 @@ namespace HSim
          * @return Vec3i
          */
         // Vec3i gridResolution() { return gridResolution; }
-        void setGridResolution(Vec3i r) { gridResolution = r; }
-        size_t sizeX() { return gridResolution.x; }
-        size_t sizeY() { return gridResolution.y; }
-        size_t sizeZ() { return gridResolution.z; }
+        void setGridResolution(const Vec3i& r) { gridResolution = r; }
+        size_t sizeX() const { return gridResolution.x; }
+        size_t sizeY() const { return gridResolution.y; }
+        size_t sizeZ() const { return gridResolution.z; }
 
         /**
          * @brief grid origin, the position (x, y, z) of the grid origin
@@ -81,7 +82,7 @@ namespace HSim
          * @return Vec3<T>
          */
         // Vec3<T> gridOrigin() { return gridOrigin; }
-        void setGridOrigin(Vec3<T> origin) { gridOrigin = origin; }
+        void setGridOrigin(const Vec3<T>& origin) { gridOrigin = origin; }
 
         /**
          * @brief The spacing of the grid in the x, y and z directions
@@ -89,10 +90,10 @@ namespace HSim
          * @return Vec3<T>
          */
         // Vec3<T> gridSpacing() { return gridSpacing; }
-        void setGridSpacing(Vec3<T> gs) { gridSpacing = gs; }
-        T deltaX() { return gridSpacing.x; }
-        T deltaY() { return gridSpacing.y; }
-        T deltaZ() { return gridSpacing.z; }
+        void setGridSpacing(const Vec3<T>& gs) { gridSpacing = gs; }
+        T deltaX() const { return gridSpacing.x; }
+        T deltaY() const { return gridSpacing.y; }
+        T deltaZ() const { return gridSpacing.z; }
 
         void forEachCell(const std::function<void(size_t, size_t, size_t)> &func)
         {

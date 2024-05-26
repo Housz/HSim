@@ -19,8 +19,8 @@ namespace HSim
 		CellCenterScalarGrid3(size_t x, size_t y, size_t z)
 			: ScalarGrid3<T>(x, y, z) {}
 
-		CellCenterScalarGrid3(const Vec3i &resolution, const Vec3<T> &origin = {0, 0, 0}, const Vec3<T> &gridSpacing = {1, 1, 1})
-			: ScalarGrid3<T>(resolution, origin, gridSpacing) {}
+		CellCenterScalarGrid3(const Vec3i &resolution, const Vec3<T> &gridOrigin = {0, 0, 0}, const Vec3<T> &gridSpacing = {1, 1, 1})
+			: ScalarGrid3<T>(resolution, gridOrigin, gridSpacing) {}
 
 		~CellCenterScalarGrid3() {}
 
@@ -30,19 +30,32 @@ namespace HSim
 		}
 
 	public:
-		Vec3i dataSize() override
+		Vec3i dataSize() const override
 		{
 			return gridResolution;
 		}
 
-		Vec3<T> dataOrigin() override
+		Vec3<T> dataOrigin() const override
 		{
 			return gridOrigin + gridSpacing * 0.5;
 		}
 
-		Vec3<T> positionAt(size_t i, size_t j, size_t k) override
+		Vec3<T> positionAt(size_t i, size_t j, size_t k) const override
 		{
 			return gridOrigin + gridSpacing * 0.5 + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
+		}
+
+		T sample(const Vec3<T> &p) const override
+		{
+			size_t i = (size_t)((p.x - .5 * deltaX()) / deltaX());
+			size_t j = (size_t)((p.y - .5 * deltaY()) / deltaY());
+			size_t k = (size_t)((p.z - .5 * deltaZ()) / deltaZ());
+
+			auto t = p - positionAt(i, j, k);
+
+			return lerp(dataAt(i, j, k), dataAt(i + 1, j, k), dataAt(i, j + 1, k), dataAt(i + 1, j + 1, k),
+						dataAt(i, j, k + 1), dataAt(i + 1, j, k + 1), dataAt(i, j + 1, k + 1), dataAt(i + 1, j + 1, k + 1),
+						t.x, t.y, t.z);
 		}
 
 		// for rendering
