@@ -44,6 +44,18 @@ namespace HSim
 
         T &dataAt(size_t i, size_t j, size_t k)
         {
+            if (!(i < size.x && j < size.y && k < size.z))
+            {
+                std::cout << "err " << i << " " << j << " " << k << "\n";
+            }
+
+            assert(i < size.x && j < size.y && k < size.z);
+            return _data[i + j * sizeX() + k * sizeX() * sizeY()];
+        }
+
+        T dataAt(size_t i, size_t j, size_t k) const
+        {
+
             assert(i < size.x && j < size.y && k < size.z);
             return _data[i + j * sizeX() + k * sizeX() * sizeY()];
         }
@@ -69,12 +81,11 @@ namespace HSim
             _data.resize(size.x * size.y * size.z);
         }
 
-        void resize(const Size3& other)
+        void resize(const Size3 &other)
         {
             size = other;
             _data.resize(size.x * size.y * size.z);
         }
-
 
         void clear()
         {
@@ -87,11 +98,11 @@ namespace HSim
             tbb::parallel_for(tbb::blocked_range3d<size_t>(0, size.x, 0, size.y, 0, size.z),
                               [&](tbb::blocked_range3d<size_t> r)
                               {
-                                  for (size_t k = r.pages().begin(); k < r.pages().end(); k++)
+                                  for (size_t i = r.pages().begin(); i < r.pages().end(); i++)
                                   {
-                                      for (size_t j = r.cols().begin(); j < r.cols().end(); j++)
+                                      for (size_t j = r.rows().begin(); j < r.rows().end(); j++)
                                       {
-                                          for (size_t i = r.rows().begin(); i < r.rows().end(); i++)
+                                          for (size_t k = r.cols().begin(); k < r.cols().end(); k++)
                                           {
                                               func(i, j, k);
                                           }

@@ -503,9 +503,9 @@ namespace HSim
 
         tbb::parallel_for(tbb::blocked_range2d<size_t>(0, M, 0, N),
             [&](tbb::blocked_range2d<size_t> rA){
-                for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
+                for(size_t i = rA.rows().begin(); i < rA.rows().end(); i++)
                 {
-                    for(size_t i = rA.rows().begin(); i < rA.rows().end(); i++)
+                    for(size_t j = rA.cols().begin(); j < rA.cols().end(); j++)
                     {
                         // C[i][j]
                         T1 sum = parallelReduce(

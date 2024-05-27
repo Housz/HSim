@@ -51,6 +51,13 @@ namespace HSim
 			size_t j = (size_t)((p.y - .5 * deltaY()) / deltaY());
 			size_t k = (size_t)((p.z - .5 * deltaZ()) / deltaZ());
 
+			if (!(i<gridResolution.x && j < gridResolution.y && k < gridResolution.z))
+			{	
+				std::cout << p;
+				std::cout << i << " " << j << " " << k << "\n";
+			}
+			
+
 			auto t = p - positionAt(i, j, k);
 
 			return lerp(dataAt(i, j, k), dataAt(i + 1, j, k), dataAt(i, j + 1, k), dataAt(i + 1, j + 1, k),

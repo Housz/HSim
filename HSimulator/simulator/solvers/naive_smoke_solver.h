@@ -14,6 +14,7 @@
 
 #include <HSim/common.h>
 #include <HSim/linearSystem.h>
+#include <HSim/math_utils.h>
 
 #include <scene/scene_graph.h>
 #include <simulator/solvers/solver.h>

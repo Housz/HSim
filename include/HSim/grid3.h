@@ -114,11 +114,11 @@ namespace HSim
             tbb::parallel_for(tbb::blocked_range3d<size_t>(0, gridResolution.x, 0, gridResolution.y, 0, gridResolution.z),
                               [&](tbb::blocked_range3d<size_t> r)
                               {
-                                  for (size_t k = r.pages().begin(); k < r.pages().end(); k++)
+                                  for (size_t i = r.pages().begin(); i < r.pages().end(); i++)
                                   {
-                                      for (size_t j = r.cols().begin(); j < r.cols().end(); j++)
+                                      for (size_t j = r.rows().begin(); j < r.rows().end(); j++)
                                       {
-                                          for (size_t i = r.rows().begin(); i < r.rows().end(); i++)
+                                          for (size_t k = r.cols().begin(); k < r.cols().end(); k++)
                                           {
                                               func(i, j, k);
                                           }

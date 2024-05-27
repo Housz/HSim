@@ -1,5 +1,4 @@
 #include <simulator/solvers/naive_smoke_solver.h>
-#include "naive_smoke_solver.h"
 
 HSim::naiveSmokeSolver::naiveSmokeSolver()
 {
@@ -83,8 +82,8 @@ void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
 
 	// 2 viscosity (todo)
 
-	// 3 pressure (Gauss-Seidel)
-	applyPressure(subTimeInterval);
+	// 3 pressure (Jacobi)
+	// applyPressure(subTimeInterval);
 
 	// 4 advection (Semi-Lagrangian)
 	applyAdvection(subTimeInterval);
@@ -232,35 +231,42 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	// semi-lagrangian
 
 	auto densityGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
-	auto oldDensityGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*desityGrid);
+	auto oldDensityGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*densityGrid);
 
 	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 
 	// advection
 	// mid-point integration
 
-	densityGrid->parallelForEachCell([&](size_t i, size_t j, size_t k) {
+	densityGrid->parallelForEachCell([&](size_t i, size_t j, size_t k)
+									 {
+										 auto posNow = oldDensityGrid->positionAt(i, j, k);
+										 auto velNow = velocityGrid->dataAtCellCenter(i, j, k);
+										 // auto posPre
 
-		auto posNow = oldDensityGrid->positionAt(i, j, k);
-		auto velNow = velocityGrid->dataAtCellCenter(i, j, k);
-		// auto posPre
+										 auto densityNow = densityGrid->dataAt(i, j, k);
 
-		auto densityNow = densityGrid->dataAt(i, j, k);
+										 auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
+										 midPosPre = clamp(midPosPre,
+										 	   densityGrid->dataOrigin(),
+										 	   densityGrid->gridSpacing * densityGrid->gridResolution);
+										 auto midVelPre = velocityGrid->sample(midPosPre);
 
-		auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
-		auto midVelPre = velocityGrid->sample(midPosPre); // todo
+										//  std::cout << posNow;
+										//  std::cout << midPosPre;
 
-		auto posPre = posNow - subTimeInterval * midVelPre;
+										 auto posPre = posNow - subTimeInterval * midVelPre;
 
-		// todo
-		// handle boundary: clamp to boundary
-		// clamp(posPre, gridOrigin, GridOrigin+GridSize*GridSpacing)
+										 posPre = clamp(posPre,
+										 	   densityGrid->dataOrigin(),
+										 	   densityGrid->gridSpacing * densityGrid->gridResolution);
 
-		auto density = densityGrid->sample(posPre);
+										//  std::cout << posPre;
 
-		(*densityGrid)(i, j, k) = density;
+										 auto density = densityGrid->sample(posPre);
 
-	});
+										 // (*densityGrid)(i, j, k) = density;
+									 });
 
 	// auto callback = [&](size_t i, size_t j, size_t k)
 	// {

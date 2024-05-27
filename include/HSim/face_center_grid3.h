@@ -71,6 +71,8 @@ namespace HSim
         Vec3<T> dataAtCellCenter(size_t, size_t, size_t);
         Vec3<T> dataAtCellCenter(Vec3i);
 
+        Vec3<T> sample(const Vec3<T> &p) const;
+
         // divergence at index i, j, k
         T divergenceAtCellCenter(size_t, size_t, size_t);
         T divergenceAtCellCenter(Vec3i);
@@ -116,7 +118,26 @@ namespace HSim
         return dataAtCellCenter(position.x, position.y, position.z);
     }
 
-    /**
+	template <typename T>
+	Vec3<T> FaceCenterGrid3<T>::sample(const Vec3<T> &p) const
+	{
+        size_t i = (size_t)(p.x / deltaX());
+        size_t j = (size_t)(p.y / deltaY());
+        size_t k = (size_t)(p.z / deltaZ());
+
+        auto positionAtVertex = gridOrigin + Vec3<T>(i, j, k) * gridSpacing;
+        auto t = p - positionAtVertex;
+        
+        Vec3<T> result = {
+          lerp(u(i, j, k), u(i + 1, j, k), t.x),  
+          lerp(v(i, j, k), v(i, j + 1, k), t.y),  
+          lerp(w(i, j, k), w(i, j, k + 1), t.z)  
+        };
+
+		return result;
+	}
+
+	/**
      * @brief divergence at center of cell (i,j,k)
      *
      * divergence f = df/dx + df/dy + df/dz
