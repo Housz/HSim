@@ -83,7 +83,7 @@ void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
 	// 2 viscosity (todo)
 
 	// 3 pressure (Jacobi)
-	// applyPressure(subTimeInterval);
+	applyPressure(subTimeInterval);
 
 	// 4 advection (Semi-Lagrangian)
 	applyAdvection(subTimeInterval);

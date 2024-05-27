@@ -101,24 +101,36 @@ namespace HSim
 	template <typename T>
 	T &ScalarGrid3<T>::dataAt(size_t i, size_t j, size_t k)
 	{
+		i = clamp(i, 0, gridResolution.x - 1);
+		j = clamp(j, 0, gridResolution.y - 1);
+		k = clamp(k, 0, gridResolution.z - 1);
 		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
 	}
 
 	template <typename T>
 	T ScalarGrid3<T>::dataAt(size_t i, size_t j, size_t k) const
 	{
+		i = clamp(i, 0, gridResolution.x - 1);
+		j = clamp(j, 0, gridResolution.y - 1);
+		k = clamp(k, 0, gridResolution.z - 1);
 		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
 	}
 
 	template <typename T>
 	T &ScalarGrid3<T>::operator()(size_t i, size_t j, size_t k)
 	{
+		i = clamp(i, 0, gridResolution.x - 1);
+		j = clamp(j, 0, gridResolution.y - 1);
+		k = clamp(k, 0, gridResolution.z - 1);
 		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
 	}
 
 	template <typename T>
 	T ScalarGrid3<T>::operator()(size_t i, size_t j, size_t k) const
 	{
+		i = clamp(i, 0, gridResolution.x - 1);
+		j = clamp(j, 0, gridResolution.y - 1);
+		k = clamp(k, 0, gridResolution.z - 1);
 		return _data[i + j * sizeX() + k * sizeX() * sizeY()];
 	}
 

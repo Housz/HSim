@@ -5,8 +5,8 @@
 
 namespace HSim
 {
-	template <typename T>
-	inline T clamp(T value, T min, T max)
+	template <typename T1, typename T2, typename T3>
+	inline T1 clamp(T1 value, T2 min, T3 max)
 	{
 		assert(min <= max);
 
@@ -24,8 +24,8 @@ namespace HSim
 		}
 	}
 
-	template <typename T>
-	inline Vec3<T> clamp(const Vec3<T> &value, const Vec3<T> &min, const Vec3<T> &max)
+	template <typename T1, typename T2, typename T3>
+	inline Vec3<T1> clamp(const Vec3<T1> &value, const Vec3<T2> &min, const Vec3<T3> &max)
 	{
 		assert(min.x <= max.x && min.y <= max.y && min.z <= max.z);
 

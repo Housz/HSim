@@ -59,13 +59,16 @@ namespace HSim
 			size_t j = (size_t)(p.y / deltaY());
 			size_t k = (size_t)(p.z / deltaZ());
 
+			i = clamp(i, 0, gridResolution.x - 1);
+			j = clamp(j, 0, gridResolution.y - 1);
+			k = clamp(k, 0, gridResolution.z - 1);
+
 			auto t = p - positionAt(i, j, k);
 
 			return lerp(dataAt(i, j, k), dataAt(i + 1, j, k), dataAt(i, j + 1, k), dataAt(i + 1, j + 1, k),
 						dataAt(i, j, k + 1), dataAt(i + 1, j, k + 1), dataAt(i, j + 1, k + 1), dataAt(i + 1, j + 1, k + 1),
 						t.x, t.y, t.z);
 		}
-
 	};
 
 } // namespace HSim

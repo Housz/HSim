@@ -112,10 +112,15 @@ int main()
 
 	// std::cout << vertGrid.dataAt(1, 1, 1) << std::endl;
 	// std::cout << vertGrid.positionAt(1, 1, 1) << std::endl;
-	std::cout << vertGrid.sample({1, 1, 1}) << std::endl;
 
-	std::cout << cellGrid.sample({1, 1, 1}) << std::endl;
+	// std::cout << vertGrid.sample({1, 1, 1}) << std::endl;
+	// std::cout << cellGrid.sample({1, 1, 1}) << std::endl;
 
+	// std::cout << vertGrid.sample({0, 0, 0}) << std::endl;
+	// std::cout << cellGrid.sample({0, 0, 0}) << std::endl;
+
+	std::cout << vertGrid.sample({n+1, n, n}) << std::endl;
+	std::cout << cellGrid.sample({n, n, n}) << std::endl;
 }
 
 #endif // INTERPOLATION

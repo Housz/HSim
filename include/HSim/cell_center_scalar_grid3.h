@@ -51,12 +51,15 @@ namespace HSim
 			size_t j = (size_t)((p.y - .5 * deltaY()) / deltaY());
 			size_t k = (size_t)((p.z - .5 * deltaZ()) / deltaZ());
 
-			if (!(i<gridResolution.x && j < gridResolution.y && k < gridResolution.z))
-			{	
-				std::cout << p;
-				std::cout << i << " " << j << " " << k << "\n";
-			}
-			
+			// if (!(i < gridResolution.x && j < gridResolution.y && k < gridResolution.z))
+			// {
+			// 	std::cout << p;
+			// 	std::cout << i << " " << j << " " << k << "\n";
+			// }
+			i = clamp(i, 0, gridResolution.x - 1);
+			j = clamp(j, 0, gridResolution.y - 1);
+			k = clamp(k, 0, gridResolution.z - 1);
+			// std::cout << i << " " << j << " " << k << "\n";
 
 			auto t = p - positionAt(i, j, k);
 
