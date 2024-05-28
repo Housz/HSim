@@ -27,3 +27,6 @@ target_link_libraries(naiveSmokeSolverTest PUBLIC HSimulatorLib)
 add_executable(smokeSolverTest smoke_solver_test.cpp)
 target_link_libraries(smokeSolverTest PUBLIC HSimulatorLib)
 
+add_executable(linearSystemTest linearsystem_test.cpp)
+target_link_libraries(linearSystemTest PUBLIC HSimulatorLib)
+

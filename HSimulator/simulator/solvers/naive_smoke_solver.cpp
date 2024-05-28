@@ -248,20 +248,20 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 										 auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
 										 midPosPre = clamp(midPosPre,
-										 	   densityGrid->dataOrigin(),
-										 	   densityGrid->gridSpacing * densityGrid->gridResolution);
+														   densityGrid->dataOrigin(),
+														   densityGrid->gridSpacing * densityGrid->gridResolution);
 										 auto midVelPre = velocityGrid->sample(midPosPre);
 
-										//  std::cout << posNow;
-										//  std::cout << midPosPre;
+										 //  std::cout << posNow;
+										 //  std::cout << midPosPre;
 
 										 auto posPre = posNow - subTimeInterval * midVelPre;
 
 										 posPre = clamp(posPre,
-										 	   densityGrid->dataOrigin(),
-										 	   densityGrid->gridSpacing * densityGrid->gridResolution);
+														densityGrid->dataOrigin(),
+														densityGrid->gridSpacing * densityGrid->gridResolution);
 
-										//  std::cout << posPre;
+										 //  std::cout << posPre;
 
 										 auto density = densityGrid->sample(posPre);
 
@@ -370,7 +370,7 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 	auto &x = linearSystem.x;
 	auto &b = linearSystem.b;
 
-	const size_t MAX_NUM_ITERATIONS = 50;
+	const size_t MAX_NUM_ITERATIONS = 100;
 	const size_t CHECK_INTERVAL = 10;
 	const double TOLERANCE = 1e-8;
 
@@ -397,17 +397,27 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 				// 	((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
 
 				double r =
-					((i == 0) ? A(i, j, k).right * x(i - 1, j, k) : 0.0) +
-					((i == size.x) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
-					((j == 0) ? A(i, j, k).up * x(i, j - 1, k) : 0.0) +
-					((j == size.y) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
-					((k == 0) ? A(i, j, k).front * x(i, j, k - 1) : 0.0) +
-					((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
+					((i > 0) ? A(i, j, k).right * x(i - 1, j, k) : 0.0) +
+					((i < size.x - 1) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
+					((j > 0) ? A(i, j, k).up * x(i, j - 1, k) : 0.0) +
+					((j < size.y - 1) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
+					((k > 0) ? A(i, j, k).front * x(i, j, k - 1) : 0.0) +
+					((k < size.z - 1) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
 
-				tempX(i, j, k) = (b(i, j, k) - r) / A(i, j, k).center;
+				// tempX(i, j, k) = (b(i, j, k) - r) / A(i, j, k).center;
+				auto t = (b(i, j, k) - r) / A(i, j, k).center;
+				// tempX(i, j, k) = 1;
+				std::cout << t << std::endl;
+				std::cout << tempX(i, j, k) << std::endl;
+
 			});
-
+		
+		// std::cout << x.size << tempX.size << "-\n";
 		std::swap(x._data, tempX._data);
+
+		// std::cout << x.size << tempX.size << "\n";
+
+		// x._data = tempX._data;
 
 		// check residual
 		if (iter != 0 && iter % CHECK_INTERVAL == 0)
@@ -432,11 +442,11 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 
 	if (l2Norm < TOLERANCE)
 	{
-		std::cout << "[OK] " << "iter: " << MAX_NUM_ITERATIONS << "residual: " << l2Norm << "\n";
+		std::cout << "[OK] " << "iter: " << MAX_NUM_ITERATIONS << " residual: " << l2Norm << "\n";
 	}
 	else
 	{
-		std::cout << "[FAIL] " << "iter: " << MAX_NUM_ITERATIONS << "residual: " << l2Norm << "\n";
+		std::cout << "[FAIL] " << "iter: " << MAX_NUM_ITERATIONS << " residual: " << l2Norm << "\n";
 	}
 }
 

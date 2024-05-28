@@ -55,7 +55,10 @@ namespace HSim
 
         T dataAt(size_t i, size_t j, size_t k) const
         {
-
+            if (!(i < size.x && j < size.y && k < size.z))
+            {
+                std::cout << "err " << i << " " << j << " " << k << "\n";
+            }
             assert(i < size.x && j < size.y && k < size.z);
             return _data[i + j * sizeX() + k * sizeX() * sizeY()];
         }
