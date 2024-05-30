@@ -161,7 +161,7 @@ void HSim::naiveSmokeSolver::updateEmitter()
 		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k);
 
 		// temperature
-		// (*temperatureGrid)(i, j, k) +=
+		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * .001;
 	};
 
 	emitterGrid->parallelForEachCell(callback);
@@ -265,8 +265,7 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 										 auto density = densityGrid->sample(posPre);
 
-										 // (*densityGrid)(i, j, k) = density;
-									 });
+										 (*densityGrid)(i, j, k) = density; });
 
 	// auto callback = [&](size_t i, size_t j, size_t k)
 	// {
@@ -397,27 +396,18 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 				// 	((k == size.z) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
 
 				double r =
-					((i > 0) ? A(i, j, k).right * x(i - 1, j, k) : 0.0) +
+					((i > 0) ? A(i - 1, j, k).right * x(i - 1, j, k) : 0.0) +
 					((i < size.x - 1) ? A(i, j, k).right * x(i + 1, j, k) : 0.0) +
-					((j > 0) ? A(i, j, k).up * x(i, j - 1, k) : 0.0) +
+					((j > 0) ? A(i, j - 1, k).up * x(i, j - 1, k) : 0.0) +
 					((j < size.y - 1) ? A(i, j, k).up * x(i, j + 1, k) : 0.0) +
-					((k > 0) ? A(i, j, k).front * x(i, j, k - 1) : 0.0) +
+					((k > 0) ? A(i, j, k - 1).front * x(i, j, k - 1) : 0.0) +
 					((k < size.z - 1) ? A(i, j, k).front * x(i, j, k + 1) : 0.0);
 
 				// tempX(i, j, k) = (b(i, j, k) - r) / A(i, j, k).center;
-				auto t = (b(i, j, k) - r) / A(i, j, k).center;
-				// tempX(i, j, k) = 1;
-				std::cout << t << std::endl;
-				std::cout << tempX(i, j, k) << std::endl;
-
+				tempX(i, j, k) = (b(i, j, k) - r) / A(i, j, k).center;
 			});
-		
-		// std::cout << x.size << tempX.size << "-\n";
+
 		std::swap(x._data, tempX._data);
-
-		// std::cout << x.size << tempX.size << "\n";
-
-		// x._data = tempX._data;
 
 		// check residual
 		if (iter != 0 && iter % CHECK_INTERVAL == 0)
@@ -430,7 +420,7 @@ void HSim::naiveSmokeSolver::jacobiSolve()
 			// break jacobi iterations
 			if (l2Norm < TOLERANCE)
 			{
-				std::cout << "[OK] " << "iter: " << iter << "residual: " << l2Norm << "\n";
+				std::cout << "[OK] " << "iter: " << iter << " residual: " << l2Norm << "\n";
 				// break;
 				return;
 			}
@@ -477,16 +467,30 @@ void HSim::naiveSmokeSolver::integratePressureGradient()
 
 			if (!isBoundary(i + 1, j, k))
 			{
+				if (i == size.x-1)
+				{
+					std::cout << "err";
+				}
+				
 				u(i + 1) += invSpacingX * (x(i + 1, j, k) - x(i, j, k));
 			}
 
 			if (!isBoundary(i, j + 1, k))
 			{
+				if (j == size.y-1)
+				{
+					std::cout << "err";
+				}
+				
 				v(i + 1) += invSpacingY * (x(i, j + 1, k) - x(i, j, k));
 			}
 
 			if (!isBoundary(i, j, k + 1))
 			{
+				if (k == size.z-1)
+				{
+					std::cout << "err";
+				}
 				w(i + 1) += invSpacingZ * (x(i, j, k + 1) - x(i, j, k));
 			}
 		}
@@ -546,8 +550,8 @@ bool HSim::naiveSmokeSolver::isBoundary(size_t x, size_t y, size_t z)
 
 	auto grid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
 
-	if (x == 0 || y == 0 || z == 0 ||
-		x == grid->sizeX() - 1 || y == grid->sizeY() - 1 || z == grid->sizeZ() - 1)
+	if (x <= 0 || y <= 0 || z <= 0 ||
+		x >= grid->sizeX() - 1 || y >= grid->sizeY() - 1 || z >= grid->sizeZ() - 1)
 	{
 		return true;
 	}

@@ -8,5 +8,6 @@ HSim::LinearSystem3 sys;
 int main()
 {
 	sys.resize(SIZE);
+	
 	return 0;
 }

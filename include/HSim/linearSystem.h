@@ -14,6 +14,11 @@ namespace HSim
 		double up = 0.;
 
 		double front = 0.;
+
+		void print()
+		{
+			std::cout << center << " " << right << " " << up << " " << front << "\n";
+		}
 	};
 
 	using PossionMatrix3 = Array3<PossionMatrixRow3>;
@@ -47,6 +52,22 @@ namespace HSim
 			A.clear();
 			x.clear();
 			b.clear();
+		}
+
+		void printA()
+		{
+			auto size = A.size;
+
+			for (size_t i = 0; i < size.x; i++)
+			{
+				for (size_t j = 0; j < size.y; j++)
+				{
+					for (size_t k = 0; k < size.k; k++)
+					{
+						A(i, j, k).print();
+					}
+				}
+			}
 		}
 	};
 

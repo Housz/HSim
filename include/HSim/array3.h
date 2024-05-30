@@ -34,11 +34,23 @@ namespace HSim
     public:
         T &operator()(size_t i, size_t j, size_t k)
         {
+            if (!(i < size.x && j < size.y && k < size.z))
+            {
+                std::cout << "err " << i << " " << j << " " << k << "\n";
+            }
+
+            assert(i < size.x && j < size.y && k < size.z);
             return dataAt(i, j, k);
         }
 
         T operator()(size_t i, size_t j, size_t k) const
         {
+            if (!(i < size.x && j < size.y && k < size.z))
+            {
+                std::cout << "err " << i << " " << j << " " << k << "\n";
+            }
+
+            assert(i < size.x && j < size.y && k < size.z);
             return dataAt(i, j, k);
         }
 
@@ -94,6 +106,12 @@ namespace HSim
         {
             size.set(0);
             _data.clear();
+        }
+
+        void swap(Array3 &other)
+        {
+            std::swap(other._data, _data);
+            std::swap(other.size, size);
         }
 
         void parallelForEachCell(const std::function<void(size_t, size_t, size_t)> &func)
