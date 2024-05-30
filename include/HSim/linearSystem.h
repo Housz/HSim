@@ -62,7 +62,7 @@ namespace HSim
 			{
 				for (size_t j = 0; j < size.y; j++)
 				{
-					for (size_t k = 0; k < size.k; k++)
+					for (size_t k = 0; k < size.z; k++)
 					{
 						A(i, j, k).print();
 					}

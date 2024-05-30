@@ -34,44 +34,38 @@ namespace HSim
     public:
         T &operator()(size_t i, size_t j, size_t k)
         {
-            if (!(i < size.x && j < size.y && k < size.z))
-            {
-                std::cout << "err " << i << " " << j << " " << k << "\n";
-            }
-
-            assert(i < size.x && j < size.y && k < size.z);
             return dataAt(i, j, k);
         }
 
         T operator()(size_t i, size_t j, size_t k) const
         {
-            if (!(i < size.x && j < size.y && k < size.z))
-            {
-                std::cout << "err " << i << " " << j << " " << k << "\n";
-            }
-
-            assert(i < size.x && j < size.y && k < size.z);
             return dataAt(i, j, k);
         }
 
         T &dataAt(size_t i, size_t j, size_t k)
         {
-            if (!(i < size.x && j < size.y && k < size.z))
-            {
-                std::cout << "err " << i << " " << j << " " << k << "\n";
-            }
+            // if (!(i < size.x && j < size.y && k < size.z))
+            // {
+            //     std::cout << "err " << i << " " << j << " " << k << "\n";
+            // }
+            // assert(i < size.x && j < size.y && k < size.z);
 
-            assert(i < size.x && j < size.y && k < size.z);
+            i = clamp(i, 0, size.x - 1);
+			j = clamp(j, 0, size.y - 1);
+			k = clamp(k, 0, size.z - 1);
             return _data[i + j * sizeX() + k * sizeX() * sizeY()];
         }
 
         T dataAt(size_t i, size_t j, size_t k) const
         {
-            if (!(i < size.x && j < size.y && k < size.z))
-            {
-                std::cout << "err " << i << " " << j << " " << k << "\n";
-            }
-            assert(i < size.x && j < size.y && k < size.z);
+            // if (!(i < size.x && j < size.y && k < size.z))
+            // {
+            //     std::cout << "err " << i << " " << j << " " << k << "\n";
+            // }
+            // assert(i < size.x && j < size.y && k < size.z);
+            i = clamp(i, 0, size.x - 1);
+			j = clamp(j, 0, size.y - 1);
+			k = clamp(k, 0, size.z - 1);
             return _data[i + j * sizeX() + k * sizeX() * sizeY()];
         }
 

@@ -82,7 +82,7 @@ namespace HSim
 		SimFrame currentFrame;
 		double currentTime = 0.0;
 
-		size_t numSubSteps = 1;
+		size_t numSubSteps = 20;
 
 		// grids
 	public:
