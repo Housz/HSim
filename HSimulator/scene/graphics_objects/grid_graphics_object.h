@@ -4,6 +4,7 @@
 #include <HSim/space_object3.h>
 #include <HSim/aabb3.h>
 #include <HSim/cell_center_scalar_grid3.h>
+#include <HSim/face_center_grid3.h>
 
 namespace HSim
 {
@@ -35,6 +36,13 @@ namespace HSim
 
 	using CellCenterScalarGrid3GObject = CellCenterScalarGrid3GraphicsObject;
 
+	class FaceCenterGrid3GraphicsObject : public GObject
+	{
+	public:
+		// gl draw line
+	};
 	
+	using FaceCenterGrid3GObject = FaceCenterGrid3GraphicsObject;
+
 
 } // namespace HSim
