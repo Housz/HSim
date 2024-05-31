@@ -11,7 +11,7 @@ namespace HSim
     public:
         FaceCenterGrid3() {}
 
-        FaceCenterGrid3(const FaceCenterGrid3<T>& faceCenterGrid3_)
+        FaceCenterGrid3(const FaceCenterGrid3<T> &faceCenterGrid3_)
             : VectorGrid3(faceCenterGrid3_),
               _dataU(faceCenterGrid3_._dataU),
               _dataV(faceCenterGrid3_._dataV),
@@ -40,10 +40,10 @@ namespace HSim
 
         ~FaceCenterGrid3() {}
 
-        void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override
-		{
-			ptr = std::make_shared<FaceCenterGrid3<T>>(*this);
-		}
+        void clone(std::shared_ptr<SpaceObject3<T>> &ptr) override
+        {
+            ptr = std::make_shared<FaceCenterGrid3<T>>(*this);
+        }
 
         // setter getter
     public:
@@ -118,26 +118,25 @@ namespace HSim
         return dataAtCellCenter(position.x, position.y, position.z);
     }
 
-	template <typename T>
-	Vec3<T> FaceCenterGrid3<T>::sample(const Vec3<T> &p) const
-	{
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::sample(const Vec3<T> &p) const
+    {
         size_t i = (size_t)(p.x / deltaX());
         size_t j = (size_t)(p.y / deltaY());
         size_t k = (size_t)(p.z / deltaZ());
 
         auto positionAtVertex = gridOrigin + Vec3<T>(i, j, k) * gridSpacing;
         auto t = p - positionAtVertex;
-        
+
         Vec3<T> result = {
-          lerp(u(i, j, k), u(i + 1, j, k), t.x),  
-          lerp(v(i, j, k), v(i, j + 1, k), t.y),  
-          lerp(w(i, j, k), w(i, j, k + 1), t.z)  
-        };
+            lerp(u(i, j, k), u(i + 1, j, k), t.x),
+            lerp(v(i, j, k), v(i, j + 1, k), t.y),
+            lerp(w(i, j, k), w(i, j, k + 1), t.z)};
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
+    /**
      * @brief divergence at center of cell (i,j,k)
      *
      * divergence f = df/dx + df/dy + df/dz
@@ -165,11 +164,18 @@ namespace HSim
     {
         return divergenceAtCellCenter(position.x, position.y, position.z);
     }
-    
+
+    template <typename T>
+    using FaceCenterGrid3_Ptr = std::shared_ptr<FaceCenterGrid3<T>>;
+
     template <typename T>
     using MACGrid3 = FaceCenterGrid3<T>;
+    template <typename T>
+    using MACGrid3_Ptr = std::shared_ptr<MACGrid3<T>>;
 
     template <typename T>
     using StaggeredGrid3 = FaceCenterGrid3<T>;
+    template <typename T>
+    using StaggeredGrid3_Ptr = std::shared_ptr<StaggeredGrid3<T>>;
 
 } // namespace HSim

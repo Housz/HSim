@@ -109,3 +109,59 @@ void HSim::CellCenterScalarGrid3GraphicsObject::buildRenderingData()
 
 	numElements = vertices.size() / 3;
 }
+
+
+/**********************************************************************************/
+
+
+HSim::FaceCenterGrid3GraphicsObject::FaceCenterGrid3GraphicsObject()
+{
+}
+
+HSim::FaceCenterGrid3GraphicsObject::~FaceCenterGrid3GraphicsObject()
+{
+}
+
+HSim::FaceCenterGrid3GraphicsObject::FaceCenterGrid3GraphicsObject(const FaceCenterGrid3GraphicsObject &other)
+	: GraphicsObject(other)
+{
+	grid = std::make_shared<FaceCenterGrid3<PRECISION>>(*(other.grid));
+
+	vbo.create();
+
+	vbo.allocate((unsigned int)(grid->sizeX() * grid->sizeY() * grid->sizeZ() * 6) * sizeof(float), GL_DYNAMIC_DRAW);
+
+	buildRenderingData();
+}
+
+HSim::FaceCenterGrid3GraphicsObject::FaceCenterGrid3GraphicsObject(const FaceCenterGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_)
+	: GraphicsObject(material_)
+{
+	grid = grid_;
+
+	vbo.create();
+
+	vbo.allocate((unsigned int)(grid->sizeX() * grid->sizeY() * grid->sizeZ() * 6) * sizeof(float), GL_DYNAMIC_DRAW);
+
+	buildRenderingData();
+	
+}
+
+
+
+void HSim::FaceCenterGrid3GraphicsObject::clone(std::shared_ptr<GraphicsObject> &ptr)
+{
+}
+
+void HSim::FaceCenterGrid3GraphicsObject::buildRenderingData()
+{
+}
+
+void HSim::FaceCenterGrid3GraphicsObject::draw(const RenderParams &renderParams)
+{
+}
+
+bool HSim::FaceCenterGrid3GraphicsObject::isRendingDataValid()
+{
+	return false;
+}

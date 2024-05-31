@@ -39,7 +39,27 @@ namespace HSim
 	class FaceCenterGrid3GraphicsObject : public GObject
 	{
 	public:
-		// gl draw line
+		FaceCenterGrid3GraphicsObject();
+		FaceCenterGrid3GraphicsObject(const FaceCenterGrid3GraphicsObject& other);
+		FaceCenterGrid3GraphicsObject(const FaceCenterGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_);
+		~FaceCenterGrid3GraphicsObject();
+
+		void clone(std::shared_ptr<GraphicsObject> &ptr) override;
+
+	public:
+		void buildRenderingData() override;
+
+		void draw(const RenderParams &renderParams) override;
+
+		bool isRendingDataValid() override;
+	
+	public:
+		VertexBufferObject vbo;
+
+		FaceCenterGrid3_Ptr<PRECISION> grid = nullptr;
+
+	private:
+		size_t numElements; 
 	};
 	
 	using FaceCenterGrid3GObject = FaceCenterGrid3GraphicsObject;
