@@ -55,6 +55,18 @@ namespace HSim
 		
 	};
 
+	class LineFieldMaterial : public Material
+	{
+	public:
+		LineFieldMaterial();
+		LineFieldMaterial(const LineFieldMaterial& lineFieldMaterial_);
+		LineFieldMaterial(const Color &color_);
+		~LineFieldMaterial();
+
+	public:
+		Color color = {0.5, 0.5, 0.5}; // default color
+	};
+
 	class PointMaterial : public Material
 	{
 	public:
@@ -65,6 +77,7 @@ namespace HSim
 	using Material_Ptr = std::shared_ptr<Material>;
 	using BasicMaterial_Ptr = std::shared_ptr<BasicMaterial>;
 	using LineMaterial_Ptr = std::shared_ptr<LineMaterial>;
+	using LineFieldMaterial_Ptr = std::shared_ptr<LineFieldMaterial>;
 	using PointMaterial_Ptr = std::shared_ptr<PointMaterial>;
 
 } // namespace HSim

@@ -79,3 +79,25 @@ HSim::PointMaterial::PointMaterial()
 HSim::PointMaterial::~PointMaterial()
 {
 }
+
+/********************************************************************/
+
+HSim::LineFieldMaterial::LineFieldMaterial()
+{
+	shader = std::make_shared<Shader>("./resources/shaders/linefield.vs", "./resources/shaders/linefield.fs");
+}
+
+HSim::LineFieldMaterial::LineFieldMaterial(const LineFieldMaterial &lineFieldMaterial_)
+	: Material(lineFieldMaterial_), color(lineFieldMaterial_.color)
+{	
+}
+
+HSim::LineFieldMaterial::LineFieldMaterial(const Color &color_)
+	: color(color_)
+{
+	shader = std::make_shared<Shader>("./resources/shaders/linefield.vs", "./resources/shaders/linefield.fs");
+}
+
+HSim::LineFieldMaterial::~LineFieldMaterial()
+{
+}

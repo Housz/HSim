@@ -22,9 +22,9 @@ void createScene(HSim::App &app)
 
 	auto velocityGrid = std::make_shared<HSim::FaceCenterGrid3<PRECISION>>(n, n, n);
 
-	// auto gridMat = std::make_shared<HSim::PointMaterial>();
-	// auto velocityGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(velocityGrid, gridMat);
-	auto velocityGridRenderable = std::make_shared<HSim::Renderable>(velocityGrid, nullptr);
+	auto velGridMat = std::make_shared<HSim::LineFieldMaterial>();
+	auto velocityGridGObject = std::make_shared<HSim::FaceCenterGrid3GObject>(velocityGrid, velGridMat);
+	auto velocityGridRenderable = std::make_shared<HSim::Renderable>(velocityGrid, velocityGridGObject);
 
 	auto velocityGO = std::make_shared<HSim::GameObject>();
 	velocityGO->renderable = velocityGridRenderable;

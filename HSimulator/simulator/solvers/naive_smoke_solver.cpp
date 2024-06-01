@@ -66,6 +66,7 @@ void HSim::naiveSmokeSolver::advanceTimeStep(double timeInterval)
 
 	// update rendering states
 	densityGO->renderable->renderingDataNeedUpdate = true;
+	velocityGO->renderable->renderingDataNeedUpdate = true;
 
 	// auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 	// auto velocityY = velocityGrid->dataV();
@@ -524,7 +525,7 @@ void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)
 
 	velocityGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
 
-	velocityGO->renderable->visible = false;
+	velocityGO->renderable->visible = true;
 }
 
 void HSim::naiveSmokeSolver::setDensityGO(const GameObject_ptr &other)

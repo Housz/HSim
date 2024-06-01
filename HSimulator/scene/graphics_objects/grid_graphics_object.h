@@ -36,12 +36,14 @@ namespace HSim
 
 	using CellCenterScalarGrid3GObject = CellCenterScalarGrid3GraphicsObject;
 
+/**********************************************************************************/
+
 	class FaceCenterGrid3GraphicsObject : public GObject
 	{
 	public:
 		FaceCenterGrid3GraphicsObject();
 		FaceCenterGrid3GraphicsObject(const FaceCenterGrid3GraphicsObject& other);
-		FaceCenterGrid3GraphicsObject(const FaceCenterGrid3_Ptr<PRECISION> grid_, const PointMaterial_Ptr material_);
+		FaceCenterGrid3GraphicsObject(const FaceCenterGrid3_Ptr<PRECISION> grid_, const LineFieldMaterial_Ptr material_);
 		~FaceCenterGrid3GraphicsObject();
 
 		void clone(std::shared_ptr<GraphicsObject> &ptr) override;

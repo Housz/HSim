@@ -68,8 +68,10 @@ namespace HSim
         T w(size_t i, size_t j, size_t k) const { return _dataW(i, j, k); }
 
         // cell center data by index i, j, k
-        Vec3<T> dataAtCellCenter(size_t, size_t, size_t);
-        Vec3<T> dataAtCellCenter(Vec3i);
+        Vec3<T> dataAtCellCenter(size_t, size_t, size_t) const;
+        Vec3<T> dataAtCellCenter(Vec3i) const;
+
+        Vec3<T> positionAt(size_t i, size_t j, size_t k) const;
 
         Vec3<T> sample(const Vec3<T> &p) const;
 
@@ -102,7 +104,7 @@ namespace HSim
      *
      */
     template <typename T>
-    Vec3<T> FaceCenterGrid3<T>::dataAtCellCenter(size_t i, size_t j, size_t k)
+    Vec3<T> FaceCenterGrid3<T>::dataAtCellCenter(size_t i, size_t j, size_t k) const
     {
         assert(i < sizeX() && j < sizeY() && k < sizeZ());
 
@@ -113,9 +115,15 @@ namespace HSim
         return data;
     }
     template <typename T>
-    Vec3<T> FaceCenterGrid3<T>::dataAtCellCenter(Vec3i position)
+    Vec3<T> FaceCenterGrid3<T>::dataAtCellCenter(Vec3i position) const
     {
         return dataAtCellCenter(position.x, position.y, position.z);
+    }
+
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::positionAt(size_t i, size_t j, size_t k) const
+    {
+        return gridOrigin + gridSpacing * 0.5 + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
     }
 
     template <typename T>
