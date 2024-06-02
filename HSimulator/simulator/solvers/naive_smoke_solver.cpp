@@ -27,12 +27,12 @@ void HSim::naiveSmokeSolver::update(const SimFrame &frame)
 			// std::cout << "advanceTimeStep " << du << "\n";
 			// std::cout << "sleep  " << (int)(frame.timeInterval * 1000) - du << "\n";
 
-			std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 10000) - du));
+			std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 1000) - du));
 		}
 
 		currentFrame = frame;
 
-		std::cout << "[FRAME] " << currentFrame.index << "\n";
+		// std::cout << "[FRAME] " << currentFrame.index << "\n";
 	}
 }
 

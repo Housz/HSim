@@ -161,31 +161,53 @@ void HSim::FaceCenterGrid3GraphicsObject::buildRenderingData()
 	{
 		auto startPos = grid->positionAt(i, j, k);
 
+		startPos = {0, 0, 0};
+
 		auto vel = grid->dataAtCellCenter(i, j, k);
 		auto direction = vel.getNormalized();
 		// auto endPos = startPos + spacing * direction;
 		auto endPos = startPos + vel;
+		endPos = {10, 20, 30};
+
+		// std::cout << i << " " << j << " " << k << std::endl;
+		// std::cout << startPos;
+		// std::cout << endPos;
 
 		// start position
-		vertices.push_back(startPos.x);
-		vertices.push_back(startPos.y);
-		vertices.push_back(startPos.z);
+		// vertices.push_back(startPos.x);
+		// vertices.push_back(startPos.y);
+		// vertices.push_back(startPos.z);
+		vertices.push_back(0.);
+		vertices.push_back(0.);
+		vertices.push_back(0.);
 		// start color
-		vertices.push_back(vel.length() / 5.0);
-		vertices.push_back(1.0 - vel.length() / 5.0);
-		vertices.push_back(1.0 - vel.length() / 5.0);
+		// vertices.push_back(vel.length() / 5.0);
+		// vertices.push_back(1.0 - vel.length() / 5.0);
+		// vertices.push_back(1.0 - vel.length() / 5.0);
+		vertices.push_back(1.);
+		vertices.push_back(0.);
+		vertices.push_back(0.);
 
 		// end position
-		vertices.push_back(endPos.x);
-		vertices.push_back(endPos.y);
-		vertices.push_back(endPos.z);
+		// vertices.push_back(endPos.x);
+		// vertices.push_back(endPos.y);
+		// vertices.push_back(endPos.z);
+		vertices.push_back(10.);
+		vertices.push_back(10.);
+		vertices.push_back(10.);
 		// end color
-		vertices.push_back(vel.length() / 5.0);
-		vertices.push_back(1.0 - vel.length() / 5.0);
-		vertices.push_back(1.0 - vel.length() / 5.0);
+		// vertices.push_back(vel.length() / 5.0);
+		// vertices.push_back(1.0 - vel.length() / 5.0);
+		// vertices.push_back(1.0 - vel.length() / 5.0);
+		vertices.push_back(1.);
+		vertices.push_back(0.);
+		vertices.push_back(0.);
 	};
 
 	grid->forEachCell(callback);
+
+	// std::cout << grid->gridResolution;
+	// std::cout << vertices.size() << std::endl;
 
 	vao.bind();
 	vbo.bind();
@@ -197,7 +219,7 @@ void HSim::FaceCenterGrid3GraphicsObject::buildRenderingData()
 
 	vao.unbind();
 
-	numElements = vertices.size() / 3;
+	numElements = vertices.size() / 6;
 }
 
 void HSim::FaceCenterGrid3GraphicsObject::draw(const RenderParams &renderParams)
@@ -214,9 +236,6 @@ void HSim::FaceCenterGrid3GraphicsObject::draw(const RenderParams &renderParams)
 	// use shader with renderParams
 	shader->use();
 
-	glm::vec3 cameraPosition = glm::vec3(renderParams.transforms.view[3]);
-	shader->setVec3("viewPos", cameraPosition);
-
 	shader->setMat4("projection", renderParams.transforms.proj);
 	shader->setMat4("view", renderParams.transforms.view);
 	shader->setMat4("model", renderParams.transforms.model);
@@ -225,10 +244,10 @@ void HSim::FaceCenterGrid3GraphicsObject::draw(const RenderParams &renderParams)
 
 	// bind vao and draw
 	vao.bind();
-	glLineWidth(2.0);
-	// glDrawArrays(GL_LINES, 0, numElements);
-	glDrawArrays(GL_TRIANGLES, 0, numElements);
-	glLineWidth(1.0);
+	// glLineWidth(2.0);
+	glDrawArrays(GL_LINES, 0, numElements);
+	// glDrawArrays(GL_TRIANGLES, 0, numElements);
+	// glLineWidth(1.0);
 	vao.unbind();
 }
 
