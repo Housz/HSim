@@ -27,7 +27,7 @@ void HSim::naiveSmokeSolver::update(const SimFrame &frame)
 			// std::cout << "advanceTimeStep " << du << "\n";
 			// std::cout << "sleep  " << (int)(frame.timeInterval * 1000) - du << "\n";
 
-			std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 1000) - du));
+			std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 3000) - du));
 		}
 
 		currentFrame = frame;
@@ -151,8 +151,8 @@ void HSim::naiveSmokeSolver::applyGravity(double subTimeInterval)
 	velocityY.parallelForEach([&](PRECISION &vy)
 							  { vy += -subTimeInterval * gravity.y ; });
 
-	// velocityX.parallelForEach([&](PRECISION &vx)
-	// 						  { vx += subTimeInterval * 0.1; });
+	velocityX.parallelForEach([&](PRECISION &vx)
+							  { vx += subTimeInterval * 1; });
 }
 
 void HSim::naiveSmokeSolver::updateEmitter()
@@ -164,7 +164,7 @@ void HSim::naiveSmokeSolver::updateEmitter()
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
 		// density
-		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k);
+		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 10;
 
 		// temperature
 		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * .001;
@@ -525,7 +525,7 @@ void HSim::naiveSmokeSolver::setVelocityGO(const GameObject_ptr &other)
 
 	velocityGO->renderable->updateType = RenderableUpdateType::DYNAMIC;
 
-	velocityGO->renderable->visible = true;
+	velocityGO->renderable->visible = false;
 }
 
 void HSim::naiveSmokeSolver::setDensityGO(const GameObject_ptr &other)
