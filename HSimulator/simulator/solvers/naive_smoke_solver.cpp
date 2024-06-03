@@ -1,4 +1,5 @@
 #include <simulator/solvers/naive_smoke_solver.h>
+#include "naive_smoke_solver.h"
 
 HSim::naiveSmokeSolver::naiveSmokeSolver()
 {
@@ -79,13 +80,14 @@ void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
 {
 	// 1 external forces (gravity, buoyancy force, other ex forces)
 
-	applyGravity(subTimeInterval);
-	// applyBuoyancy(subTimeInterval);
+	// applyGravity(subTimeInterval);
+	applyBuoyancy(subTimeInterval);
 
 	// 2 viscosity (todo)
 
 	// 3 pressure (Jacobi)
 	// applyPressure(subTimeInterval);
+	applyPressure_(subTimeInterval);
 
 	// 4 advection (Semi-Lagrangian)
 	applyAdvection(subTimeInterval);
@@ -163,16 +165,11 @@ void HSim::naiveSmokeSolver::updateEmitter()
 
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
-		if ((*emitterGrid)(i, j, k) > 0)
-		{
-			(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 10;
-		}
-
 		// density
-		// (*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 10;
+		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k);
 
 		// temperature
-		// (*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * .001;
+		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k);
 	};
 
 	emitterGrid->parallelForEachCell(callback);
@@ -237,12 +234,50 @@ void HSim::naiveSmokeSolver::applyPressure(double subTimeInterval)
 	integratePressureGradient();
 }
 
+void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
+{
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
+	auto oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
+
+	auto stencil = [&](size_t i, size_t j, size_t k)
+	{
+		if (isBoundary(i, j, k))
+		{
+			return;
+		}
+
+		auto sum =
+			oldVelocityGrid->dataAtCellCenter(i, j, k) +
+			oldVelocityGrid->dataAtCellCenter(i + 1, j, k) +
+			oldVelocityGrid->dataAtCellCenter(i - 1, j, k) +
+			oldVelocityGrid->dataAtCellCenter(i, j + 1, k) +
+			oldVelocityGrid->dataAtCellCenter(i, j - 1, k) +
+			oldVelocityGrid->dataAtCellCenter(i, j, k + 1) +
+			oldVelocityGrid->dataAtCellCenter(i, j, k - 1);
+
+		auto vel = sum / 7.;
+
+		velocityGrid->u(i, j, k) = vel.x;
+		velocityGrid->u(i + 1, j, k) = vel.x;
+		velocityGrid->v(i, j, k) = vel.y;
+		velocityGrid->v(i, j + 1, k) = vel.y;
+		velocityGrid->w(i, j, k) = vel.z;
+		velocityGrid->w(i, j, k + 1) = vel.z;
+	};
+
+	// velocityGrid->forEachCell(stencil);
+	velocityGrid->parallelForEachCell(stencil);
+}
+
 void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 {
 	// semi-lagrangian
 
 	auto densityGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(densityGO->renderable->spaceObject);
 	auto oldDensityGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*densityGrid);
+
+	auto temperatureGrid = std::static_pointer_cast<CellCenterScalarGrid3<PRECISION>>(temperatureGO->renderable->spaceObject);
+	auto oldTemperatureGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*temperatureGrid);
 
 	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 
@@ -307,8 +342,11 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 					   densityGrid->dataOrigin(),
 					   densityGrid->gridSpacing * densityGrid->gridResolution);
 
-		auto density = densityGrid->sample(posPre);
+		auto density = oldDensityGrid->sample(posPre);
 		(*densityGrid)(i, j, k) = density;
+
+		auto temperature = oldTemperatureGrid->sample(posPre);
+		(*temperatureGrid)(i, j, k) = temperature;
 	};
 
 	densityGrid->parallelForEachCell(callback);

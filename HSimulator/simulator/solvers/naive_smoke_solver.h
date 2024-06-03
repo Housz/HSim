@@ -54,6 +54,7 @@ namespace HSim
 		void applyBoundaryCondition();
 
 		void applyPressure(double subTimeInterval);
+		void applyPressure_(double subTimeInterval);
 
 		void applyAdvection(double subTimeInterval);
 
