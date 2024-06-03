@@ -28,7 +28,7 @@ void HSim::naiveSmokeSolver::update(const SimFrame &frame)
 			// std::cout << "advanceTimeStep " << du << "\n";
 			// std::cout << "sleep  " << (int)(frame.timeInterval * 1000) - du << "\n";
 
-			std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 3000) - du));
+			// std::this_thread::sleep_for(std::chrono::milliseconds((int)(frame.timeInterval * 1000) - du));
 		}
 
 		currentFrame = frame;
@@ -246,23 +246,24 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 			return;
 		}
 
-		auto sum =
-			oldVelocityGrid->dataAtCellCenter(i, j, k) +
-			oldVelocityGrid->dataAtCellCenter(i + 1, j, k) +
-			oldVelocityGrid->dataAtCellCenter(i - 1, j, k) +
-			oldVelocityGrid->dataAtCellCenter(i, j + 1, k) +
-			oldVelocityGrid->dataAtCellCenter(i, j - 1, k) +
-			oldVelocityGrid->dataAtCellCenter(i, j, k + 1) +
-			oldVelocityGrid->dataAtCellCenter(i, j, k - 1);
+		auto div =
+			oldVelocityGrid->dataAtCellCenter(i + 1, j, k).x -
+			oldVelocityGrid->dataAtCellCenter(i - 1, j, k).x +
 
-		auto vel = sum / 7.;
+			oldVelocityGrid->dataAtCellCenter(i, j + 1, k).y -
+			oldVelocityGrid->dataAtCellCenter(i, j - 1, k).y +
 
-		velocityGrid->u(i, j, k) = vel.x;
-		velocityGrid->u(i + 1, j, k) = vel.x;
-		velocityGrid->v(i, j, k) = vel.y;
-		velocityGrid->v(i, j + 1, k) = vel.y;
-		velocityGrid->w(i, j, k) = vel.z;
-		velocityGrid->w(i, j, k + 1) = vel.z;
+			oldVelocityGrid->dataAtCellCenter(i, j, k + 1).z -
+			oldVelocityGrid->dataAtCellCenter(i, j, k - 1).z;
+
+		div /= 6.;
+
+		velocityGrid->u(i, j, k) += div;
+		velocityGrid->u(i + 1, j, k) -= div;
+		velocityGrid->v(i, j, k) += div;
+		velocityGrid->v(i, j + 1, k) -= div;
+		velocityGrid->w(i, j, k) += div;
+		velocityGrid->w(i, j, k + 1) -= div;
 	};
 
 	// velocityGrid->forEachCell(stencil);

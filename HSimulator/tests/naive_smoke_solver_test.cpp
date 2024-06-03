@@ -53,11 +53,13 @@ void createScene(HSim::App &app)
 	// 	(*emitterGrid)(i, j, k) = -1.f;
 	// });
 
-	for (size_t i = 0; i < 15; i++)
+	for (size_t i = 10; i < 15; i++)
 	{
-		for (size_t k = 0; k < 15; k++)
+		for (size_t k = 10; k < 15; k++)
 		{
 			(*emitterGrid)(i, 1, k) = 1.0f;
+			// (*emitterGrid)(i, 2, k) = 1.0f;
+			// (*emitterGrid)(i, 3, k) = 1.0f;
 		}
 	}    
 
