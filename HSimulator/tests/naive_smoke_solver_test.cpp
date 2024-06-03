@@ -48,6 +48,11 @@ void createScene(HSim::App &app)
 
 	auto emitterGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
 
+	emitterGrid->parallelForEachCell([&](size_t i, size_t j, size_t k)
+	{
+		(*emitterGrid)(i, j, k) = -1.f;
+	});
+
 	for (size_t i = 10; i < 15; i++)
 	{
 		for (size_t k = 10; k < 15; k++)

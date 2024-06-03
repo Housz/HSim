@@ -149,7 +149,7 @@ void HSim::naiveSmokeSolver::applyGravity(double subTimeInterval)
 	auto &velocityY = velocityGrid->dataV();
 
 	velocityY.parallelForEach([&](PRECISION &vy)
-							  { vy += -subTimeInterval * gravity.y ; });
+							  { vy += -subTimeInterval * gravity.y; });
 
 	velocityX.parallelForEach([&](PRECISION &vx)
 							  { vx += subTimeInterval * 1; });
@@ -163,11 +163,16 @@ void HSim::naiveSmokeSolver::updateEmitter()
 
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
+		if ((*emitterGrid)(i, j, k) > 0)
+		{
+			(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 10;
+		}
+
 		// density
-		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 10;
+		// (*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 10;
 
 		// temperature
-		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * .001;
+		// (*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * .001;
 	};
 
 	emitterGrid->parallelForEachCell(callback);
@@ -304,7 +309,6 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 		auto density = densityGrid->sample(posPre);
 		(*densityGrid)(i, j, k) = density;
-
 	};
 
 	densityGrid->parallelForEachCell(callback);
