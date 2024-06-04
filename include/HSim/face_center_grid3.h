@@ -86,6 +86,14 @@ namespace HSim
         // Vec3<T> curlAt(T, T, T);
         // Vec3<T> curlAt(Vec3<T>);
 
+        void swap(FaceCenterGrid3& other)
+        {
+            _dataU.swap(other._dataU);
+            _dataV.swap(other._dataV);
+            _dataW.swap(other._dataW);
+        }
+
+
         // data
     public:
         Array3<T> _dataU;

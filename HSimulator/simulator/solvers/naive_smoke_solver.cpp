@@ -169,7 +169,7 @@ void HSim::naiveSmokeSolver::updateEmitter()
 		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k);
 
 		// temperature
-		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k);
+		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 1;
 	};
 
 	emitterGrid->parallelForEachCell(callback);
@@ -239,35 +239,68 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 	auto oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
 
+
 	auto stencil = [&](size_t i, size_t j, size_t k)
 	{
+		auto &u = oldVelocityGrid->dataU();
+		auto &v = oldVelocityGrid->dataV();
+		auto &w = oldVelocityGrid->dataW();
+
 		if (isBoundary(i, j, k))
 		{
 			return;
 		}
 
-		auto div =
-			oldVelocityGrid->dataAtCellCenter(i + 1, j, k).x -
-			oldVelocityGrid->dataAtCellCenter(i - 1, j, k).x +
+		int n =
+			(isBoundary(i + 1, j, k) ? 0 : 1) +
+			(isBoundary(i - 1, j, k) ? 0 : 1) +
+			(isBoundary(i, j + 1, k) ? 0 : 1) +
+			(isBoundary(i, j - 1, k) ? 0 : 1) +
+			(isBoundary(i, j, k + 1) ? 0 : 1) +
+			(isBoundary(i, j, k - 1) ? 0 : 1);
 
-			oldVelocityGrid->dataAtCellCenter(i, j + 1, k).y -
-			oldVelocityGrid->dataAtCellCenter(i, j - 1, k).y +
+		auto div = 
+			(isBoundary(i + 1, j, k) ? 0 : u(i + 1, j, k) )+
+			(isBoundary(i - 1, j, k) ? 0 : -u(i, j, k)    )+
+			(isBoundary(i, j + 1, k) ? 0 : v(i, j + 1, k) )+
+			(isBoundary(i, j - 1, k) ? 0 : -v(i, j, k)    )+
+			(isBoundary(i, j, k + 1) ? 0 : u(i, j, k + 1) )+
+			(isBoundary(i, j, k - 1) ? 0 : -v(i, j, k)    );
 
-			oldVelocityGrid->dataAtCellCenter(i, j, k + 1).z -
-			oldVelocityGrid->dataAtCellCenter(i, j, k - 1).z;
 
-		div /= 6.;
+		// auto div =
+		// 	oldVelocityGrid->dataAtCellCenter(i + 1, j, k).x -
+		// 	oldVelocityGrid->dataAtCellCenter(i - 1, j, k).x +
 
-		velocityGrid->u(i, j, k) += div;
-		velocityGrid->u(i + 1, j, k) -= div;
-		velocityGrid->v(i, j, k) += div;
-		velocityGrid->v(i, j + 1, k) -= div;
-		velocityGrid->w(i, j, k) += div;
-		velocityGrid->w(i, j, k + 1) -= div;
+		// 	oldVelocityGrid->dataAtCellCenter(i, j + 1, k).y -
+		// 	oldVelocityGrid->dataAtCellCenter(i, j - 1, k).y +
+
+		// 	oldVelocityGrid->dataAtCellCenter(i, j, k + 1).z -
+		// 	oldVelocityGrid->dataAtCellCenter(i, j, k - 1).z;
+
+		// div /= 6.;
+
+		div /= n;
+
+		if( ! isBoundary(i + 1, j, k) ) velocityGrid->u(i + 1, j, k) -= div ;
+		if( ! isBoundary(i - 1, j, k) ) velocityGrid->u(i, j, k) += div;
+		if( ! isBoundary(i, j + 1, k) ) velocityGrid->v(i, j + 1, k) -= div;
+		if( ! isBoundary(i, j - 1, k) ) velocityGrid->v(i, j, k) += div;
+		if( ! isBoundary(i, j, k + 1) ) velocityGrid->w(i, j, k + 1) -= div;
+		if( ! isBoundary(i, j, k - 1) ) velocityGrid->w(i, j, k) += div;
 	};
 
 	// velocityGrid->forEachCell(stencil);
-	velocityGrid->parallelForEachCell(stencil);
+	const size_t MAX_ITERATIONS = 50;
+	for (size_t i = 0; i < MAX_ITERATIONS; i++)
+	{
+		velocityGrid->parallelForEachCell(stencil);
+		// std::swap(x._data, tempX._data);
+		// velocityGrid->swap(*oldVelocityGrid);
+		oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
+	}
+	
+	// velocityGrid->parallelForEachCell(stencil);
 }
 
 void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
@@ -281,6 +314,7 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	auto oldTemperatureGrid = std::make_shared<CellCenterScalarGrid3<PRECISION>>(*temperatureGrid);
 
 	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
+	auto oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
 
 	// advection
 	// mid-point integration
@@ -327,7 +361,8 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 	// desityGrid->parallelForEachCell(callback);
 
-	auto callback = [&](size_t i, size_t j, size_t k)
+	// density, temperature
+	auto scaler_advect = [&](size_t i, size_t j, size_t k)
 	{
 		auto posNow = oldDensityGrid->positionAt(i, j, k);
 		auto velNow = velocityGrid->dataAtCellCenter(i, j, k);
@@ -348,9 +383,23 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 		auto temperature = oldTemperatureGrid->sample(posPre);
 		(*temperatureGrid)(i, j, k) = temperature;
+
+		// auto velocity = 
 	};
 
-	densityGrid->parallelForEachCell(callback);
+	densityGrid->parallelForEachCell(scaler_advect);
+
+	// velocity
+	auto &u = oldVelocityGrid->dataU();
+	auto &v = oldVelocityGrid->dataV();
+	auto &w = oldVelocityGrid->dataW();
+
+	auto u
+
+	u.parallelForEachCell();
+	v.parallelForEachCell();
+	w.parallelForEachCell();
+
 }
 
 void HSim::naiveSmokeSolver::buildLinearSystem()
