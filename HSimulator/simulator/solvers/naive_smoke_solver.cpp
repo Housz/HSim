@@ -394,11 +394,25 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	auto &v = oldVelocityGrid->dataV();
 	auto &w = oldVelocityGrid->dataW();
 
-	auto u
+	auto u_advect = [&](size_t i, size_t j, size_t k)
+	{
+		auto posNow = velocityGrid->positionAtFaceU(i, j, k);
+		auto velNow = velocityGrid->
+	};
 
-	u.parallelForEachCell();
-	v.parallelForEachCell();
-	w.parallelForEachCell();
+	auto v_advect = [&](size_t i, size_t j, size_t k)
+	{
+
+	};
+
+	auto w_advect = [&](size_t i, size_t j, size_t k)
+	{
+
+	};
+
+	u.parallelForEachCell(u_advect);
+	v.parallelForEachCell(v_advect);
+	w.parallelForEachCell(w_advect);
 
 }
 

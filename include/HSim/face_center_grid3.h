@@ -68,10 +68,19 @@ namespace HSim
         T w(size_t i, size_t j, size_t k) const { return _dataW(i, j, k); }
 
         // cell center data by index i, j, k
-        Vec3<T> dataAtCellCenter(size_t, size_t, size_t) const;
+        Vec3<T> dataAtCellCenter(size_t i, size_t j, size_t k) const;
         Vec3<T> dataAtCellCenter(Vec3i) const;
 
+        Vec3<T> dataAtFaceU(size_t i, size_t j, size_t k) const;
+        Vec3<T> dataAtFaceV(size_t i, size_t j, size_t k) const;
+        Vec3<T> dataAtFaceW(size_t i, size_t j, size_t k) const;
+
         Vec3<T> positionAt(size_t i, size_t j, size_t k) const;
+
+        Vec3<T> positionAtFaceU(size_t i, size_t j, size_t k) const;
+        Vec3<T> positionAtFaceV(size_t i, size_t j, size_t k) const;
+        Vec3<T> positionAtFaceW(size_t i, size_t j, size_t k) const;
+
 
         Vec3<T> sample(const Vec3<T> &p) const;
 
@@ -129,9 +138,49 @@ namespace HSim
     }
 
     template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::dataAtFaceU(size_t i, size_t j, size_t k) const
+    {
+        Vec3<T> data;
+        data.x = 0.5 * (u(i, j, k) + u(i + 1, j, k));
+        data.y = 0.5 * (v(i, j, k) + v(i, j + 1, k));
+        data.z = 0.5 * (w(i, j, k) + w(i, j, k + 1));
+        return data;
+    }
+
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::dataAtFaceV(size_t i, size_t j, size_t k) const
+    {
+        return Vec3<T>();
+    }
+
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::dataAtFaceW(size_t i, size_t j, size_t k) const
+    {
+        return Vec3<T>();
+    }
+
+    template <typename T>
     Vec3<T> FaceCenterGrid3<T>::positionAt(size_t i, size_t j, size_t k) const
     {
         return gridOrigin + gridSpacing * 0.5 + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
+    }
+
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::positionAtFaceU(size_t i, size_t j, size_t k) const
+    {
+        return _dataOriginU + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z)
+    }
+
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::positionAtFaceV(size_t i, size_t j, size_t k) const
+    {
+        return _dataOriginV + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z)
+    }
+
+    template <typename T>
+    Vec3<T> FaceCenterGrid3<T>::positionAtFaceW(size_t i, size_t j, size_t k) const
+    {
+        return _dataOriginW + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z)
     }
 
     template <typename T>
