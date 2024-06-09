@@ -239,7 +239,6 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 	auto oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
 
-
 	auto stencil = [&](size_t i, size_t j, size_t k)
 	{
 		auto &u = oldVelocityGrid->dataU();
@@ -259,14 +258,13 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 			(isBoundary(i, j, k + 1) ? 0 : 1) +
 			(isBoundary(i, j, k - 1) ? 0 : 1);
 
-		auto div = 
-			(isBoundary(i + 1, j, k) ? 0 : u(i + 1, j, k) )+
-			(isBoundary(i - 1, j, k) ? 0 : -u(i, j, k)    )+
-			(isBoundary(i, j + 1, k) ? 0 : v(i, j + 1, k) )+
-			(isBoundary(i, j - 1, k) ? 0 : -v(i, j, k)    )+
-			(isBoundary(i, j, k + 1) ? 0 : u(i, j, k + 1) )+
-			(isBoundary(i, j, k - 1) ? 0 : -v(i, j, k)    );
-
+		auto div =
+			(isBoundary(i + 1, j, k) ? 0 : u(i + 1, j, k)) +
+			(isBoundary(i - 1, j, k) ? 0 : -u(i, j, k)) +
+			(isBoundary(i, j + 1, k) ? 0 : v(i, j + 1, k)) +
+			(isBoundary(i, j - 1, k) ? 0 : -v(i, j, k)) +
+			(isBoundary(i, j, k + 1) ? 0 : u(i, j, k + 1)) +
+			(isBoundary(i, j, k - 1) ? 0 : -v(i, j, k));
 
 		// auto div =
 		// 	oldVelocityGrid->dataAtCellCenter(i + 1, j, k).x -
@@ -282,24 +280,34 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 
 		div /= n;
 
-		if( ! isBoundary(i + 1, j, k) ) velocityGrid->u(i + 1, j, k) -= div ;
-		if( ! isBoundary(i - 1, j, k) ) velocityGrid->u(i, j, k) += div;
-		if( ! isBoundary(i, j + 1, k) ) velocityGrid->v(i, j + 1, k) -= div;
-		if( ! isBoundary(i, j - 1, k) ) velocityGrid->v(i, j, k) += div;
-		if( ! isBoundary(i, j, k + 1) ) velocityGrid->w(i, j, k + 1) -= div;
-		if( ! isBoundary(i, j, k - 1) ) velocityGrid->w(i, j, k) += div;
+		if (!isBoundary(i + 1, j, k))
+			velocityGrid->u(i + 1, j, k) -= div;
+		if (!isBoundary(i - 1, j, k))
+			velocityGrid->u(i, j, k) += div;
+		if (!isBoundary(i, j + 1, k))
+			velocityGrid->v(i, j + 1, k) -= div;
+		if (!isBoundary(i, j - 1, k))
+			velocityGrid->v(i, j, k) += div;
+		if (!isBoundary(i, j, k + 1))
+			velocityGrid->w(i, j, k + 1) -= div;
+		if (!isBoundary(i, j, k - 1))
+			velocityGrid->w(i, j, k) += div;
 	};
 
 	// velocityGrid->forEachCell(stencil);
-	const size_t MAX_ITERATIONS = 50;
+
+	const size_t MAX_ITERATIONS = 10;
 	for (size_t i = 0; i < MAX_ITERATIONS; i++)
 	{
 		velocityGrid->parallelForEachCell(stencil);
+		// velocityGrid->forEachCell(stencil);
 		// std::swap(x._data, tempX._data);
 		// velocityGrid->swap(*oldVelocityGrid);
 		oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
 	}
-	
+
+	// compute Residual
+
 	// velocityGrid->parallelForEachCell(stencil);
 }
 
@@ -365,13 +373,13 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 	auto scaler_advect = [&](size_t i, size_t j, size_t k)
 	{
 		auto posNow = oldDensityGrid->positionAt(i, j, k);
-		auto velNow = velocityGrid->dataAtCellCenter(i, j, k);
+		auto velNow = oldVelocityGrid->dataAtCellCenter(i, j, k);
 
 		auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
 		midPosPre = clamp(midPosPre,
 						  densityGrid->dataOrigin(),
 						  densityGrid->gridSpacing * densityGrid->gridResolution);
-		auto midVelPre = velocityGrid->sample(midPosPre);
+		auto midVelPre = oldVelocityGrid->sample(midPosPre);
 
 		auto posPre = posNow - subTimeInterval * midVelPre;
 		posPre = clamp(posPre,
@@ -379,15 +387,15 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 					   densityGrid->gridSpacing * densityGrid->gridResolution);
 
 		auto density = oldDensityGrid->sample(posPre);
-		(*densityGrid)(i, j, k) = density;
+		(*densityGrid)(i, j, k) = density * 0.9;
 
 		auto temperature = oldTemperatureGrid->sample(posPre);
-		(*temperatureGrid)(i, j, k) = temperature;
+		(*temperatureGrid)(i, j, k) = temperature * 0.9;
 
-		// auto velocity = 
 	};
 
-	densityGrid->parallelForEachCell(scaler_advect);
+	// densityGrid->parallelForEachCell(scaler_advect);
+	densityGrid->forEachCell(scaler_advect);
 
 	// velocity
 	auto &u = oldVelocityGrid->dataU();
@@ -396,18 +404,63 @@ void HSim::naiveSmokeSolver::applyAdvection(double subTimeInterval)
 
 	auto u_advect = [&](size_t i, size_t j, size_t k)
 	{
-		auto posNow = velocityGrid->positionAtFaceU(i, j, k);
-		auto velNow = velocityGrid->
+		auto posNow = oldVelocityGrid->positionAtFaceU(i, j, k);
+		auto velNow = oldVelocityGrid->sample(posNow);
+
+		auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
+		midPosPre = clamp(midPosPre,
+						  densityGrid->dataOrigin(),
+						  densityGrid->gridSpacing * densityGrid->gridResolution);
+		auto midVelPre = oldVelocityGrid->sample(midPosPre);
+
+		auto posPre = posNow - subTimeInterval * midVelPre;
+		posPre = clamp(posPre,
+					   densityGrid->dataOrigin(),
+					   densityGrid->gridSpacing * densityGrid->gridResolution);
+
+		auto velocity = oldVelocityGrid->sample(posPre);
+		(*velocityGrid).u(i, j, k) = velocity.x * 0.9;
+		
 	};
 
-	auto v_advect = [&](size_t i, size_t j, size_t k)
+	auto v_advect = [&](size_t i, size_t j, size_t k) 
 	{
+		auto posNow = oldVelocityGrid->positionAtFaceV(i, j, k);
+		auto velNow = oldVelocityGrid->sample(posNow);
 
+		auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
+		midPosPre = clamp(midPosPre,
+						  densityGrid->dataOrigin(),
+						  densityGrid->gridSpacing * densityGrid->gridResolution);
+		auto midVelPre = oldVelocityGrid->sample(midPosPre);
+
+		auto posPre = posNow - subTimeInterval * midVelPre;
+		posPre = clamp(posPre,
+					   densityGrid->dataOrigin(),
+					   densityGrid->gridSpacing * densityGrid->gridResolution);
+
+		auto velocity = oldVelocityGrid->sample(posPre);
+		(*velocityGrid).v(i, j, k) = velocity.y * 0.9;
 	};
 
-	auto w_advect = [&](size_t i, size_t j, size_t k)
+	auto w_advect = [&](size_t i, size_t j, size_t k) 
 	{
+		auto posNow = oldVelocityGrid->positionAtFaceW(i, j, k);
+		auto velNow = oldVelocityGrid->sample(posNow);
 
+		auto midPosPre = posNow - 0.5 * subTimeInterval * velNow;
+		midPosPre = clamp(midPosPre,
+						  densityGrid->dataOrigin(),
+						  densityGrid->gridSpacing * densityGrid->gridResolution);
+		auto midVelPre = oldVelocityGrid->sample(midPosPre);
+
+		auto posPre = posNow - subTimeInterval * midVelPre;
+		posPre = clamp(posPre,
+					   densityGrid->dataOrigin(),
+					   densityGrid->gridSpacing * densityGrid->gridResolution);
+
+		auto velocity = oldVelocityGrid->sample(posPre);
+		(*velocityGrid).w(i, j, k) = velocity.z * 0.9;
 	};
 
 	u.parallelForEachCell(u_advect);

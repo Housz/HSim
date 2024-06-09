@@ -88,9 +88,9 @@ void HSim::CellCenterScalarGrid3GraphicsObject::buildRenderingData()
 			vertices.push_back(i);
 			vertices.push_back(j);
 			vertices.push_back(k);
-			vertices.push_back(data / 5.0);
-			vertices.push_back(1.0 - data / 5.0);
-			vertices.push_back(1.0 - data / 5.0);
+			vertices.push_back(data / 3.0);
+			vertices.push_back(1.0 - data / 3.0);
+			vertices.push_back(1.0 - data / 3.0);
 		}
 	};
 

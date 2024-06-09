@@ -23,7 +23,13 @@ namespace HSim
 			_data.resize(x * y * z);
 		}
 
-		ScalarGrid3(Vec3i resolution, Vec3<T> gridOrigin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
+		// ScalarGrid3(const Size3& resolution)
+		// 	: Grid3<T>(resolution)
+		// {
+		// 	_data.resize(resolution.x * resolution.y * resolution.z);
+		// }
+
+		ScalarGrid3(const Size3& resolution, const Vec3<T>& gridOrigin = {0, 0, 0}, const Vec3<T>& gridSpacing = {1, 1, 1})
 			: Grid3<T>(resolution, gridOrigin, gridSpacing)
 		{
 			_data.resize(resolution.x * resolution.y * resolution.z);

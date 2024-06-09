@@ -12,7 +12,9 @@ void createScene(HSim::App &app)
 	/**************************************************
 	 * scene
 	 */
-	const size_t n = 32;
+	const size_t n = 128;
+	HSim::Size3 gridResolution = {32, 64, 32};
+
     // HSim::Vec3i gridResolution = {n, n, n};
     // HSim::Vec3<T> gridOrigin = Vec3<T>(0, 0, 0);
     // HSim::Vec3<T> gridSpacing = Vec3<T>(1, 1, 1);
@@ -20,7 +22,7 @@ void createScene(HSim::App &app)
 
 	// velocity
 
-	auto velocityGrid = std::make_shared<HSim::FaceCenterGrid3<PRECISION>>(n, n, n);
+	auto velocityGrid = std::make_shared<HSim::FaceCenterGrid3<PRECISION>>(gridResolution);
 
 	auto velGridMat = std::make_shared<HSim::LineFieldMaterial>();
 	auto velocityGridGObject = std::make_shared<HSim::FaceCenterGrid3GObject>(velocityGrid, velGridMat);
@@ -33,7 +35,7 @@ void createScene(HSim::App &app)
 
 	// density
 
-	auto desityGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
+	auto desityGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(gridResolution);
 
 	auto gridMat = std::make_shared<HSim::PointMaterial>();
 	auto desityGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(desityGrid, gridMat);
@@ -46,16 +48,16 @@ void createScene(HSim::App &app)
 
 	// emitter
 
-	auto emitterGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
+	auto emitterGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(gridResolution);
 
 	// emitterGrid->parallelForEachCell([&](size_t i, size_t j, size_t k)
 	// {
 	// 	(*emitterGrid)(i, j, k) = -1.f;
 	// });
 
-	for (size_t i = 10; i < 15; i++)
+	for (size_t i = 11; i < 17; i++)
 	{
-		for (size_t k = 10; k < 15; k++)
+		for (size_t k = 11; k < 17; k++)
 		{
 			(*emitterGrid)(i, 1, k) = 1.0f;
 			// (*emitterGrid)(i, 2, k) = 1.0f;
@@ -73,7 +75,7 @@ void createScene(HSim::App &app)
 
 	// temperature
 
-	auto temperatureGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(n, n, n);
+	auto temperatureGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(gridResolution);
 
 	auto temperatureGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(temperatureGrid, gridMat);
 	auto temperatureGridenderable = std::make_shared<HSim::Renderable>(temperatureGrid, temperatureGridGObject);

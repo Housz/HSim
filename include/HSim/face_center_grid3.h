@@ -33,9 +33,31 @@ namespace HSim
             _dataOriginV = gridOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
             _dataOriginW = gridOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
         }
-        FaceCenterGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
+
+        // FaceCenterGrid3(const Size3& resolution)
+        //     : VectorGrid3<T>(resolution)
+        // {
+        //     _dataU.resize(resolution.x + 1, resolution.y, resolution.z);
+        //     _dataV.resize(resolution.x, resolution.y + 1, resolution.z);
+        //     _dataW.resize(resolution.x, resolution.y, resolution.z + 1);
+
+        //     _dataOriginU = gridOrigin + Vec3<T>(0, deltaY() / 2, deltaZ() / 2);
+        //     _dataOriginV = gridOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
+        //     _dataOriginW = gridOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
+        // }
+
+
+
+        FaceCenterGrid3(const Size3& resolution, const Vec3<T>& origin = {0, 0, 0}, const Vec3<T>& gridSpacing = {1, 1, 1})
             : VectorGrid3<T>(resolution, origin, gridSpacing)
         {
+            _dataU.resize(resolution.x + 1, resolution.y, resolution.z);
+            _dataV.resize(resolution.x, resolution.y + 1, resolution.z);
+            _dataW.resize(resolution.x, resolution.y, resolution.z + 1);
+
+            _dataOriginU = gridOrigin + Vec3<T>(0, deltaY() / 2, deltaZ() / 2);
+            _dataOriginV = gridOrigin + Vec3<T>(deltaX() / 2, 0, deltaZ() / 2);
+            _dataOriginW = gridOrigin + Vec3<T>(deltaX() / 2, deltaY() / 2, 0);
         }
 
         ~FaceCenterGrid3() {}
@@ -140,22 +162,21 @@ namespace HSim
     template <typename T>
     Vec3<T> FaceCenterGrid3<T>::dataAtFaceU(size_t i, size_t j, size_t k) const
     {
-        Vec3<T> data;
-        data.x = 0.5 * (u(i, j, k) + u(i + 1, j, k));
-        data.y = 0.5 * (v(i, j, k) + v(i, j + 1, k));
-        data.z = 0.5 * (w(i, j, k) + w(i, j, k + 1));
-        return data;
+        // todo
+        return Vec3<T>();
     }
 
     template <typename T>
     Vec3<T> FaceCenterGrid3<T>::dataAtFaceV(size_t i, size_t j, size_t k) const
     {
+        // todo
         return Vec3<T>();
     }
 
     template <typename T>
     Vec3<T> FaceCenterGrid3<T>::dataAtFaceW(size_t i, size_t j, size_t k) const
     {
+        // todo
         return Vec3<T>();
     }
 
@@ -168,19 +189,19 @@ namespace HSim
     template <typename T>
     Vec3<T> FaceCenterGrid3<T>::positionAtFaceU(size_t i, size_t j, size_t k) const
     {
-        return _dataOriginU + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z)
+        return _dataOriginU + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
     }
 
     template <typename T>
     Vec3<T> FaceCenterGrid3<T>::positionAtFaceV(size_t i, size_t j, size_t k) const
     {
-        return _dataOriginV + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z)
+        return _dataOriginV + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
     }
 
     template <typename T>
     Vec3<T> FaceCenterGrid3<T>::positionAtFaceW(size_t i, size_t j, size_t k) const
     {
-        return _dataOriginW + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z)
+        return _dataOriginW + Vec3<T>(i * gridSpacing.x, j * gridSpacing.y, k * gridSpacing.z);
     }
 
     template <typename T>

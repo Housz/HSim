@@ -24,7 +24,12 @@ namespace HSim
 		{
 		}
 
-		VectorGrid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
+		// VectorGrid3(const Size3& resolution) 
+		// : Grid3<T>(resolution)
+		// {
+		// }
+
+		VectorGrid3(const Size3& resolution, const Vec3<T>& origin = {0, 0, 0}, const Vec3<T>& gridSpacing = {1, 1, 1})
 		: Grid3<T>(resolution, origin, gridSpacing)
 		{
 

@@ -48,6 +48,14 @@ namespace HSim
             gridResolution = {x, y, z};
             computeAABB();
         }
+        // Grid3(const Size3& resolution)
+        // {
+        //     spaceObjectType = SpaceObjectType::GRID;
+
+        //     gridResolution = resolution;
+        //     computeAABB();
+        // }
+
         /**
          * @brief Construct a new Grid3 object by gird resolution, grid origin and grid spacing.
          *
@@ -55,9 +63,12 @@ namespace HSim
          * @param origin
          * @param gridSpacing
          */
-        Grid3(Vec3i resolution, Vec3<T> origin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1}) : gridResolution(resolution), gridOrigin(origin), gridSpacing(gridSpacing)
+        Grid3(const Size3& resolution, const Vec3<T>& origin = {0, 0, 0}, const Vec3<T>& gridSpacing = {1, 1, 1}) 
+            : gridResolution(resolution), gridOrigin(origin), gridSpacing(gridSpacing)
         {
             spaceObjectType = SpaceObjectType::GRID;
+
+            gridResolution = resolution;
             
             computeAABB();
         }
@@ -68,10 +79,10 @@ namespace HSim
         /**
          * @brief gird resolution
          *
-         * @return Vec3i
+         * @return Size3
          */
-        // Vec3i gridResolution() { return gridResolution; }
-        void setGridResolution(const Vec3i& r) { gridResolution = r; }
+        // Size3 gridResolution() { return gridResolution; }
+        void setGridResolution(const Size3& r) { gridResolution = r; }
         size_t sizeX() const { return gridResolution.x; }
         size_t sizeY() const { return gridResolution.y; }
         size_t sizeZ() const { return gridResolution.z; }

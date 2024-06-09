@@ -19,7 +19,13 @@ namespace HSim
 			: ScalarGrid3<T>(x, y, z)
 		{
 		}
-		VertexCenterScalarGrid3(Vec3i resolution, Vec3<T> gridOrigin = {0, 0, 0}, Vec3<T> gridSpacing = {1, 1, 1})
+
+		// VertexCenterScalarGrid3(const Size3& resolution)
+		// 	: ScalarGrid3<T>(resolution)
+		// {
+		// }
+
+		VertexCenterScalarGrid3(const Size3& resolution, const Vec3<T>& gridOrigin = {0, 0, 0}, const Vec3<T>& gridSpacing = {1, 1, 1})
 			: ScalarGrid3<T>(resolution, gridOrigin, gridSpacing)
 		{
 		}

@@ -18,8 +18,11 @@ namespace HSim
 
 		CellCenterScalarGrid3(size_t x, size_t y, size_t z)
 			: ScalarGrid3<T>(x, y, z) {}
+		
+		// CellCenterScalarGrid3(const Size3 &resolution)
+		// 	: ScalarGrid3<T>(resolution) {}
 
-		CellCenterScalarGrid3(const Vec3i &resolution, const Vec3<T> &gridOrigin = {0, 0, 0}, const Vec3<T> &gridSpacing = {1, 1, 1})
+		CellCenterScalarGrid3(const Size3 &resolution, const Vec3<T> &gridOrigin = {0, 0, 0}, const Vec3<T> &gridSpacing = {1, 1, 1})
 			: ScalarGrid3<T>(resolution, gridOrigin, gridSpacing) {}
 
 		~CellCenterScalarGrid3() {}
