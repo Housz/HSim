@@ -9,7 +9,7 @@ namespace HSim
     public:
         GroundHelperGObject();
         GroundHelperGObject(const GroundHelperGObject& other);
-        GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_);
+        GroundHelperGObject(const GroundHelper_Ptr<PRECISION> groundHelper_, const BasicMaterial_Ptr material_);
         ~GroundHelperGObject();
 
         void clone(std::shared_ptr<GraphicsObject> &ptr) override;
@@ -26,7 +26,7 @@ namespace HSim
         VertexBufferObject vbo;
         ElementBufferObject ebo;
 
-        GroundHelper_Ptr groundHelper = nullptr;
+        GroundHelper_Ptr<PRECISION> groundHelper = nullptr;
 
     private:
         size_t numElements;

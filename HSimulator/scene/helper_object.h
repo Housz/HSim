@@ -11,7 +11,8 @@
 
 namespace HSim
 {
-	class Helper : public SpaceObject3<float>
+	template <typename T>
+	class Helper : public SpaceObject3<T>
 	{
 	public:
 		Helper();
@@ -233,57 +234,62 @@ namespace HSim
 		std::vector<unsigned int> indices;
 	};
 
-
-	class GroundHelper : public Helper
+	template <typename T>
+	class GroundHelper : public Helper<T>
 	{
 	public:
 		GroundHelper();
 		GroundHelper(size_t slices_);
-		GroundHelper(const GroundHelper& groundHelper_);
+		GroundHelper(const GroundHelper<T>& groundHelper_);
 		~GroundHelper();
 
-		void clone(std::shared_ptr<SpaceObject3<float>>& ptr) override;
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override;
 
 
 	public:
 		size_t slices = 100;
 	};
 
-	using GroundHelper_Ptr = std::shared_ptr<GroundHelper>;
+	template <typename T>
+	using GroundHelper_Ptr = std::shared_ptr<GroundHelper<T>>;
 
-	class LineHelper : public Helper
+	template <typename T>
+	class LineHelper : public Helper<T>
 	{
 	public:
 		LineHelper();
 		LineHelper(const Vec3f& start_, const Vec3f& end_);
-		LineHelper(const LineHelper& lineHelper_);
+		LineHelper(const LineHelper<T>& lineHelper_);
 		~LineHelper();
 
-		void clone(std::shared_ptr<SpaceObject3<float>>& ptr) override;
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override;
 
 	public:
 		Vec3f start;
 		Vec3f end;
 	};
 
-	using LineHelper_Ptr = std::shared_ptr<LineHelper>;
+	template <typename T>
+	using LineHelper_Ptr = std::shared_ptr<LineHelper<T>>;
 
-	class ArrowHelper : public Helper
+	template <typename T>
+	class ArrowHelper : public Helper<T>
 	{
 	public:
 		ArrowHelper();
 		ArrowHelper(const Vec3f& start_, const Vec3f& end_);
-		ArrowHelper(const ArrowHelper& arrowHelper_);
+		ArrowHelper(const ArrowHelper<T>& arrowHelper_);
 		~ArrowHelper();
 
-		void clone(std::shared_ptr<SpaceObject3<float>>& ptr) override;
+		void clone(std::shared_ptr<SpaceObject3<T>>& ptr) override;
 
 	public:
 		Vec3f start;
 		Vec3f end;
 	};
 
-	using ArrowHelper_Ptr = std::shared_ptr<ArrowHelper>;
+	template <typename T>
+	using ArrowHelper_Ptr = std::shared_ptr<ArrowHelper<T>>;
 
 	// class SphereHelper : public Helper
 	// {
@@ -300,3 +306,109 @@ namespace HSim
 
 
 } // namespace HSim
+template <typename T>
+HSim::Helper<T>::Helper()
+{
+    spaceObjectType = SpaceObjectType::HELPER;
+}
+
+template <typename T>
+HSim::Helper<T>::~Helper()
+{
+}
+
+template <typename T>
+HSim::GroundHelper<T>::GroundHelper()
+{
+}
+
+template <typename T>
+HSim::GroundHelper<T>::GroundHelper(size_t slices_)
+    : slices(slices_)
+{
+}
+
+template <typename T>
+HSim::GroundHelper<T>::GroundHelper(const GroundHelper<T> &groundHelper_)
+    : slices(groundHelper_.slices)
+{
+}
+
+template <typename T>
+HSim::GroundHelper<T>::~GroundHelper()
+{
+}
+
+template <typename T>
+void HSim::GroundHelper<T>::clone(std::shared_ptr<SpaceObject3<T>> &ptr)
+{
+    ptr = std::make_shared<GroundHelper<T>>(*this);
+}
+
+template <typename T>
+HSim::LineHelper<T>::LineHelper()
+{
+}
+
+template <typename T>
+HSim::LineHelper<T>::LineHelper(const Vec3f &start_, const Vec3f &end_)
+    : start(start_), end(end_)
+{
+}
+
+template <typename T>
+HSim::LineHelper<T>::LineHelper(const LineHelper<T> &lineHelper_)
+    : start(lineHelper_.start), end(lineHelper_.end)
+{
+}
+
+template <typename T>
+HSim::LineHelper<T>::~LineHelper()
+{
+}
+
+template <typename T>
+void HSim::LineHelper<T>::clone(std::shared_ptr<SpaceObject3<T>> &ptr)
+{
+    ptr = std::make_shared<LineHelper<T>>(*this);
+}
+
+// HSim::SphereHelper::SphereHelper()
+// {
+// }
+
+// HSim::SphereHelper::SphereHelper(const Vec3f &center_, const float radius_)
+// {
+// }
+
+// HSim::SphereHelper::~SphereHelper()
+// {
+// }
+
+template <typename T>
+HSim::ArrowHelper<T>::ArrowHelper()
+{
+}
+
+template <typename T>
+HSim::ArrowHelper<T>::ArrowHelper(const Vec3f &start_, const Vec3f &end_)
+    : start(start_), end(end_)
+{
+}
+
+template <typename T>
+HSim::ArrowHelper<T>::ArrowHelper(const ArrowHelper<T> &arrowHelper_)
+    : start(arrowHelper_.start), end(arrowHelper_.end)
+{
+}
+
+template <typename T>
+HSim::ArrowHelper<T>::~ArrowHelper()
+{
+}
+
+template <typename T>
+void HSim::ArrowHelper<T>::clone(std::shared_ptr<SpaceObject3<T>> &ptr)
+{
+    ptr = std::make_shared<ArrowHelper<T>>(*this);
+}

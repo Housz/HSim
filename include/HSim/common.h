@@ -28,6 +28,14 @@ const float MAX_FLOAT = std::numeric_limits<float>::max();
 const double MAX_DOUBLE = std::numeric_limits<double>::max();
 
 
+
+using PRECISION = double; 
+
+#ifdef DOUBLE_PRECISION
+	using PRECISION = double; 
+#endif
+
+
 /**
  * rendering mods
  */

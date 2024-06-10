@@ -145,7 +145,7 @@ void HSim::Sphere3GObject::drawWithRigidTransfom(const RenderParams &renderParam
 	// update transform.orientation identity
 	const auto orientation = transform.orientation;
 	const auto translation = transform.translation;
-	model = glm::rotate(model, orientation.angle(),
+	model = glm::rotate(model, (float)orientation.angle(),
 						glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
 	model = glm::translate(model, glm::vec3(translation.x, translation.y, translation.z));
 
@@ -198,7 +198,7 @@ void HSim::Sphere3GObject::drawWithRigidTransfom(const RenderParams &renderParam
 	// update transform.orientation identity
 	const auto orientation = sphere->transform.orientation;
 	const auto translation = sphere->transform.translation;
-	model = glm::rotate(model, orientation.angle(),
+	model = glm::rotate(model, (float)orientation.angle(),
 						glm::vec3(orientation.axis().x, orientation.axis().y, orientation.axis().z));
 	model = glm::translate(model, glm::vec3(translation.x, translation.y, translation.z));
 

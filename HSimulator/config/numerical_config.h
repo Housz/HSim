@@ -1,10 +1,10 @@
-#pragma once
+// #pragma once
 
-using PRECISION = float; 
+// using PRECISION = double; 
 
-#ifdef DOUBLE_PRECISION
-	using PRECISION = double; 
-#endif
+// #ifdef DOUBLE_PRECISION
+// 	using PRECISION = double; 
+// #endif
 
 // Default precision for time: double
 

@@ -109,7 +109,7 @@ namespace HSim
 		// alpha in [2] eq. 8
 		const double buoyancySmokeDensityFactor = -0.000625; 
 		// beta in [2] eq. 8
-		const double buoyancyTemperatureFactor = 5000.0;
+		const double buoyancyTemperatureFactor = 5.0;
 
 	// linear system
 	public:

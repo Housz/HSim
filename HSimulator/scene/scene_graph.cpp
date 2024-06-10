@@ -167,7 +167,7 @@ void HSim::SceneGraph::draw(const RenderParams &renderParams)
 
 void HSim::SceneGraph::addGround(size_t slices)
 {
-	auto groudHelper = std::make_shared<HSim::GroundHelper>(slices);
+	auto groudHelper = std::make_shared<HSim::GroundHelper<PRECISION>>(slices);
 	auto mat = std::make_shared<HSim::BasicMaterial>();
 	mat->color = {0.2, 0.2, 0.2};
 	auto groundHelperGObject = std::make_shared<HSim::GroundHelperGObject>(groudHelper, mat);
@@ -214,7 +214,7 @@ void HSim::SceneGraph::addBox(const Vec3f &lowerCorner, const Vec3f &upperCorner
 
 void HSim::SceneGraph::addLine(const Vec3f &start, const Vec3f &end, const Vec3f &color)
 {
-	auto lineHelper = std::make_shared<HSim::LineHelper>(start, end);
+	auto lineHelper = std::make_shared<HSim::LineHelper<PRECISION>>(start, end);
 	auto lineMat = std::make_shared<HSim::LineMaterial>();
 	lineMat->color = {color[0], color[1], color[2]};
 

@@ -17,7 +17,7 @@ namespace HSim
 		BVH3Node_Ptr LChild = nullptr;
 		BVH3Node_Ptr RChild = nullptr;
 
-		AABB3f aabb;
+		AABB3<PRECISION> aabb;
 		size_t primitiveIndex; // if isLeaf
 
 		size_t depth;
@@ -56,7 +56,7 @@ namespace HSim
 		return os;
 	}
 
-	template <typename T = float>
+	template <typename T>
 	class BVH3
 	{
 	public:
@@ -106,7 +106,7 @@ namespace HSim
 			auto depth = recursiveBuid(rootNode, indexBegin, indexEnd, 0);
 			rootNode->depth = depth;
 
-			buildRenderingData();
+			// buildRenderingData();
 		}
 
 		//  primitiveIndices begin iter, end iter,
@@ -134,7 +134,7 @@ namespace HSim
 			}
 
 			// Compute node AABB by merging all children of the curr node.
-			AABB3f nodeAABB;
+			AABB3<T> nodeAABB;
 			// for (size_t i = 0; i < primitiveIndices.size(); i++)
 			// {
 			// 	auto currPrimitiveIndex = primitiveIndices[i];
@@ -417,6 +417,7 @@ namespace HSim
 		// AABB of root
 		AABB3<T> rootAABB;
 
+/*
 		// for rendering
 	public:
 		unsigned int vaoID = 0;
@@ -528,7 +529,7 @@ namespace HSim
 			// unbind
 			glBindVertexArray(0);
 		}
-
+*/
 	}; // class BVH3
 
 	template <typename T>

@@ -13,7 +13,7 @@ void createScene(HSim::App &app)
 	 * scene
 	 */
 	const size_t n = 128;
-	HSim::Size3 gridResolution = {32, 64, 32};
+	HSim::Size3 gridResolution = {64, 64, 64};
 
     // HSim::Vec3i gridResolution = {n, n, n};
     // HSim::Vec3<T> gridOrigin = Vec3<T>(0, 0, 0);
@@ -55,9 +55,9 @@ void createScene(HSim::App &app)
 	// 	(*emitterGrid)(i, j, k) = -1.f;
 	// });
 
-	for (size_t i = 11; i < 17; i++)
+	for (size_t i = 13; i < 17; i++)
 	{
-		for (size_t k = 11; k < 17; k++)
+		for (size_t k = 13; k < 17; k++)
 		{
 			(*emitterGrid)(i, 1, k) = 1.0f;
 			// (*emitterGrid)(i, 2, k) = 1.0f;

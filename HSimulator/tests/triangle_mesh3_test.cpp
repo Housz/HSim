@@ -14,7 +14,7 @@ void createScene(HSim::App &app)
 
 	auto root = scene->root;
 
-	auto mesh = std::make_shared<HSim::TriangleMesh3f>();
+	auto mesh = std::make_shared<HSim::TriangleMesh3<PRECISION>>();
 	HSim::readOBJtoTriangleMesh(mesh, "./resources/models/spot_triangulated.obj");
 
 	mesh->buildBVH();
@@ -41,7 +41,7 @@ void createScene(HSim::App &app)
 	sphere1->center = target;
 	sphere1->radius = 0.01;
 
-	auto sphere2 = std::make_shared<HSim::Sphere3<float>>();
+	auto sphere2 = std::make_shared<HSim::Sphere3<PRECISION>>();
 	sphere2->center = p;
 	sphere2->radius = 0.005;
 

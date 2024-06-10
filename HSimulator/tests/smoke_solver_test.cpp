@@ -13,7 +13,7 @@ void createScene(HSim::App &app)
 
 	/**************************************************/
 
-	auto groudHelper = std::make_shared<HSim::GroundHelper>();
+	auto groudHelper = std::make_shared<HSim::GroundHelper<PRECISION>>();
 
 	auto material0 = std::make_shared<HSim::BasicMaterial>();
 	material0->color = {0.2, 0.2, 0.2};

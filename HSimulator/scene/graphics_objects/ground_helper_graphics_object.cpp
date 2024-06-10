@@ -8,7 +8,7 @@ HSim::GroundHelperGObject::GroundHelperGObject()
 HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelperGObject &other)
 	: GraphicsObject(other)
 {
-	groundHelper = std::make_shared<GroundHelper>(*(other.groundHelper));
+	groundHelper = std::make_shared<GroundHelper<PRECISION>>(*(other.groundHelper));
 
 	vbo.create();
 	ebo.create();
@@ -25,7 +25,7 @@ void HSim::GroundHelperGObject::clone(std::shared_ptr<GraphicsObject> &ptr)
 	ptr = std::make_shared<GroundHelperGObject>(*this);
 }
 
-HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelper_Ptr groundHelper_, const BasicMaterial_Ptr material_)
+HSim::GroundHelperGObject::GroundHelperGObject(const GroundHelper_Ptr<PRECISION> groundHelper_, const BasicMaterial_Ptr material_)
 	: GraphicsObject(material_)
 {
 	groundHelper = groundHelper_;

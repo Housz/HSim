@@ -8,14 +8,14 @@ HSim::LineHelperGObject::LineHelperGObject()
 HSim::LineHelperGObject::LineHelperGObject(const LineHelperGObject &other)
     : GraphicsObject(other)
 {
-    lineHelper = std::make_shared<LineHelper>(*(other.lineHelper));
+    lineHelper = std::make_shared<LineHelper<PRECISION>>(*(other.lineHelper));
 
     vbo.create();
 
     buildRenderingData();
 }
 
-HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr lineHelper_, const LineMaterial_Ptr material_)
+HSim::LineHelperGObject::LineHelperGObject(const LineHelper_Ptr<PRECISION> lineHelper_, const LineMaterial_Ptr material_)
     : GraphicsObject(material_)
 {
     lineHelper = lineHelper_;

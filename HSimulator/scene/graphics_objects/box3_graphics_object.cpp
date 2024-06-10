@@ -45,53 +45,53 @@ void HSim::Box3GraphicsObject::buildRenderingData()
     auto transform = box->transform;
 
     float vertices[] = {
-        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-        upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-        upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 0.0f, 0.0f, -1.0f,
 
-        upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-        lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
-        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 0.0f, 0.0f, -1.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, 0.0f, -1.0f,
 
-        lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-        upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)upperCorner[2], 0.0f, 0.0f, 1.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)upperCorner[2], 0.0f, 0.0f, 1.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, 0.0f, 1.0f,
 
-        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-        lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
-        lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 0.0f, 1.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, 0.0f, 1.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, 0.0f, 1.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)upperCorner[2], 0.0f, 0.0f, 1.0f,
 
-        lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
-        upperCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
-        upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], -1.0f, 0.0f, 0.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], -1.0f, 0.0f, 0.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)upperCorner[2], -1.0f, 0.0f, 0.0f,
 
-        upperCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
-        lowerCorner[0], lowerCorner[1], upperCorner[2], -1.0f, 0.0f, 0.0f,
-        lowerCorner[0], lowerCorner[1], lowerCorner[2], -1.0f, 0.0f, 0.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)upperCorner[2], -1.0f, 0.0f, 0.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)upperCorner[2], -1.0f, 0.0f, 0.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], -1.0f, 0.0f, 0.0f,
 
-        lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
-        upperCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
-        upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 1.0f, 0.0f, 0.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 1.0f, 0.0f, 0.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)upperCorner[2], 1.0f, 0.0f, 0.0f,
 
-        upperCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
-        lowerCorner[0], upperCorner[1], upperCorner[2], 1.0f, 0.0f, 0.0f,
-        lowerCorner[0], upperCorner[1], lowerCorner[2], 1.0f, 0.0f, 0.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)upperCorner[2], 1.0f, 0.0f, 0.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)upperCorner[2], 1.0f, 0.0f, 0.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 1.0f, 0.0f, 0.0f,
 
-        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
-        lowerCorner[0], upperCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
-        lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, -1.0f, 0.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 0.0f, -1.0f, 0.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, -1.0f, 0.0f,
 
-        lowerCorner[0], upperCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
-        lowerCorner[0], lowerCorner[1], upperCorner[2], 0.0f, -1.0f, 0.0f,
-        lowerCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, -1.0f, 0.0f,
+        (float)lowerCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, -1.0f, 0.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)upperCorner[2], 0.0f, -1.0f, 0.0f,
+        (float)lowerCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, -1.0f, 0.0f,
 
-        upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
-        upperCorner[0], upperCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f,
-        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, 1.0f, 0.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)lowerCorner[2], 0.0f, 1.0f, 0.0f,
+        (float)upperCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, 1.0f, 0.0f,
 
-        upperCorner[0], upperCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
-        upperCorner[0], lowerCorner[1], upperCorner[2], 0.0f, 1.0f, 0.0f,
-        upperCorner[0], lowerCorner[1], lowerCorner[2], 0.0f, 1.0f, 0.0f};
+        (float)upperCorner[0], (float)upperCorner[1], (float)upperCorner[2], 0.0f, 1.0f, 0.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)upperCorner[2], 0.0f, 1.0f, 0.0f,
+        (float)upperCorner[0], (float)lowerCorner[1], (float)lowerCorner[2], 0.0f, 1.0f, 0.0f};
 
     // transform
     for (size_t i = 0; i < sizeof(vertices) / sizeof(float); i += 3)

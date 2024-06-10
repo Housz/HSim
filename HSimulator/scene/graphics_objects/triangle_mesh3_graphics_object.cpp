@@ -248,9 +248,9 @@ std::vector<float> HSim::TriangleMesh3GObject::buildVerticesNaive()
         // transform
         point = mesh->transform.mul(point);
 
-        vertices.push_back(point.x);
-        vertices.push_back(point.y);
-        vertices.push_back(point.z);
+        vertices.push_back((float)point.x);
+        vertices.push_back((float)point.y);
+        vertices.push_back((float)point.z);
 
         Vec3<float> normal;
         if (mesh->hasNormal())
@@ -261,9 +261,9 @@ std::vector<float> HSim::TriangleMesh3GObject::buildVerticesNaive()
         {
             normal = tempNormals[i];
         }
-        vertices.push_back(normal.x);
-        vertices.push_back(normal.y);
-        vertices.push_back(normal.z);
+        vertices.push_back((float)normal.x);
+        vertices.push_back((float)normal.y);
+        vertices.push_back((float)normal.z);
     }
 
     return vertices;
@@ -290,24 +290,24 @@ std::vector<float> HSim::TriangleMesh3GObject::buildVerticesFlat()
 
         auto normal = (b - a).cross(c - a).getNormalized();
 
-        vertices.push_back(a.x);
-        vertices.push_back(a.y);
-        vertices.push_back(a.z);
-        vertices.push_back(normal.x);
-        vertices.push_back(normal.y);
-        vertices.push_back(normal.z);
-        vertices.push_back(b.x);
-        vertices.push_back(b.y);
-        vertices.push_back(b.z);
-        vertices.push_back(normal.x);
-        vertices.push_back(normal.y);
-        vertices.push_back(normal.z);
-        vertices.push_back(c.x);
-        vertices.push_back(c.y);
-        vertices.push_back(c.z);
-        vertices.push_back(normal.x);
-        vertices.push_back(normal.y);
-        vertices.push_back(normal.z);
+        vertices.push_back((float)a.x);
+        vertices.push_back((float)a.y);
+        vertices.push_back((float)a.z);
+        vertices.push_back((float)normal.x);
+        vertices.push_back((float)normal.y);
+        vertices.push_back((float)normal.z);
+        vertices.push_back((float)b.x);
+        vertices.push_back((float)b.y);
+        vertices.push_back((float)b.z);
+        vertices.push_back((float)normal.x);
+        vertices.push_back((float)normal.y);
+        vertices.push_back((float)normal.z);
+        vertices.push_back((float)c.x);
+        vertices.push_back((float)c.y);
+        vertices.push_back((float)c.z);
+        vertices.push_back((float)normal.x);
+        vertices.push_back((float)normal.y);
+        vertices.push_back((float)normal.z);
     }
 
     return vertices;
@@ -351,15 +351,15 @@ std::vector<float> HSim::TriangleMesh3GObject::buildVerticesSmooth()
         // transform
         point = mesh->transform.mul(point);
 
-        vertices.push_back(point.x);
-        vertices.push_back(point.y);
-        vertices.push_back(point.z);
+        vertices.push_back((float)point.x);
+        vertices.push_back((float)point.y);
+        vertices.push_back((float)point.z);
 
         auto normal = smoothNormals[i];
 
-        vertices.push_back(normal.x);
-        vertices.push_back(normal.y);
-        vertices.push_back(normal.z);
+        vertices.push_back((float)normal.x);
+        vertices.push_back((float)normal.y);
+        vertices.push_back((float)normal.z);
     }
 
     return vertices;

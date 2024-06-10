@@ -195,6 +195,7 @@ namespace HSim
 		Vec3<T> lowerCorner;
 		Vec3<T> upperCorner;
 
+/*
 		// for rendering
 	public:
 		unsigned int vaoID = 0;
@@ -372,6 +373,7 @@ namespace HSim
 			// unbind
 			glBindVertexArray(0);
 		}
+*/
 	};
 
 	using AABB3f = AABB3<float>;

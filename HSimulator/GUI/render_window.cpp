@@ -306,20 +306,20 @@ void HSim::RenderWindow::mainLoop()
 					ImGui::PushID(i);
 					i++;
 
-					if (ImGui::SliderFloat("x", &obj->transform.translation.x, -100.0f, 100.0f))
-					{
-						go->renderable->renderingDataNeedUpdate = true;
-					}
+					// if (ImGui::SliderFloat("x", &obj->transform.translation.x, -100.0f, 100.0f))
+					// {
+					// 	go->renderable->renderingDataNeedUpdate = true;
+					// }
 
-					if (ImGui::SliderFloat("y", &obj->transform.translation.y, -100.0f, 100.0f))
-					{
-						go->renderable->renderingDataNeedUpdate = true;
-					}
+					// if (ImGui::SliderFloat("y", &obj->transform.translation.y, -100.0f, 100.0f))
+					// {
+					// 	go->renderable->renderingDataNeedUpdate = true;
+					// }
 
-					if (ImGui::SliderFloat("z", &obj->transform.translation.z, -100.0f, 100.0f))
-					{
-						go->renderable->renderingDataNeedUpdate = true;
-					}
+					// if (ImGui::SliderFloat("z", &obj->transform.translation.z, -100.0f, 100.0f))
+					// {
+					// 	go->renderable->renderingDataNeedUpdate = true;
+					// }
 
 					ImGui::Separator();
 

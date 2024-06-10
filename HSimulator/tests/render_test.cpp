@@ -18,7 +18,7 @@ void createScene(HSim::App &app)
 
 	/**************************************************/
 
-	auto groudHelper = std::make_shared<HSim::GroundHelper>();
+	auto groudHelper = std::make_shared<HSim::GroundHelper<PRECISION>>();
 
 	auto material0 = std::make_shared<HSim::BasicMaterial>();
 	material0->color = {0.2, 0.2, 0.2};
@@ -52,7 +52,7 @@ void createScene(HSim::App &app)
 	/**************************************************/
 	HSim::Vec3f start = {-5, -5, -5};
 	HSim::Vec3f end = {0, 0, 0};
-	auto lineHelper = std::make_shared<HSim::LineHelper>(start, end);
+	auto lineHelper = std::make_shared<HSim::LineHelper<PRECISION>>(start, end);
 
 	auto material2 = std::make_shared<HSim::BasicMaterial>();
 	material2->color = {0.2, 0.8, 0.2};
@@ -80,7 +80,7 @@ void createScene(HSim::App &app)
 		auto z = distribution_i(generator);
 		HSim::Vec3f lower = {x, y, z};
 		HSim::Vec3f upper = {x + 1, y + 1, z + 1};
-		auto box = std::make_shared<HSim::Box3<float>>(lower, upper);
+		auto box = std::make_shared<HSim::Box3<PRECISION>>(lower, upper);
 
 		auto r = distribution_f(generator);
 		auto g = distribution_f(generator);

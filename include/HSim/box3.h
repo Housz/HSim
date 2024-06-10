@@ -168,6 +168,7 @@ namespace HSim
 		Vec3<T> lowerCorner = {0, 0, 0};
 		Vec3<T> upperCorner = {1, 1, 1};
 
+/*
 		// for rendering
 	public:
 		unsigned int vaoID = 0;
@@ -368,6 +369,7 @@ namespace HSim
 			// unbind
 			glBindVertexArray(0);
 		}
+*/
 	};
 
 	template <typename T>

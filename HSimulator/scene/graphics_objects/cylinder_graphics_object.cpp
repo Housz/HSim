@@ -130,11 +130,11 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
     for (size_t i = 0; i <= segments; i++)
     {
         // x
-        vertices.push_back(radiusTop * std::cos(i * angleStep));
+        vertices.push_back((float)(radiusTop * std::cos(i * angleStep)));
         // y
-        vertices.push_back(height / 2.0);
+        vertices.push_back((float)(height / 2.0));
         // z
-        vertices.push_back(-radiusTop * std::sin(i * angleStep));
+        vertices.push_back((float)(-radiusTop * std::sin(i * angleStep)));
 
         // normal
 
@@ -149,11 +149,11 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
     for (size_t i = 0; i <= segments; i++)
     {
         // x
-        vertices.push_back(radiusBottom * std::cos(i * angleStep));
+        vertices.push_back((float)(radiusBottom * std::cos(i * angleStep)));
         // y
-        vertices.push_back(-height / 2.0);
+        vertices.push_back((float)(-height / 2.0));
         // z
-        vertices.push_back(-radiusBottom * std::sin(i * angleStep));
+        vertices.push_back((float)(-radiusBottom * std::sin(i * angleStep)));
 
         // normal
         Vec3f n(height * std::cos(i * angleStep), radiusBottom - radiusTop, -height * std::sin(i * angleStep));
@@ -170,11 +170,11 @@ std::vector<float> HSim::CylinderGraphicsObject::buildVertices()
     for (size_t i = 0; i <= segments; i++)
     {
         // x
-        vertices.push_back(radiusTop * std::cos(i * angleStep));
+        vertices.push_back((float)(radiusTop * std::cos(i * angleStep)));
         // y
-        vertices.push_back(height / 2.0);
+        vertices.push_back((float)(height / 2.0));
         // z
-        vertices.push_back(-radiusTop * std::sin(i * angleStep));
+        vertices.push_back((float)(-radiusTop * std::sin(i * angleStep)));
 
         // normal
         vertices.push_back(0);

@@ -8,7 +8,7 @@ namespace HSim
     public:
         LineHelperGObject();
         LineHelperGObject(const LineHelperGObject& other);
-        LineHelperGObject(const LineHelper_Ptr lineHelper_, const LineMaterial_Ptr material_);
+        LineHelperGObject(const LineHelper_Ptr<PRECISION> lineHelper_, const LineMaterial_Ptr material_);
         ~LineHelperGObject();
 
         void clone(std::shared_ptr<GraphicsObject> &ptr) override;
@@ -23,7 +23,7 @@ namespace HSim
     public:
         VertexBufferObject vbo;
 
-        LineHelper_Ptr lineHelper = nullptr;
+        LineHelper_Ptr<PRECISION> lineHelper = nullptr;
     };
 
 } // namespace HSim
