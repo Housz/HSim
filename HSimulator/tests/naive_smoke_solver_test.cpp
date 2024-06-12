@@ -13,7 +13,8 @@ void createScene(HSim::App &app)
 	 * scene
 	 */
 	const size_t n = 128;
-	HSim::Size3 gridResolution = {64, 64, 64};
+	// HSim::Size3 gridResolution = {64, 64, 64};
+	HSim::Size3 gridResolution = {32, 32, 32};
 
     // HSim::Vec3i gridResolution = {n, n, n};
     // HSim::Vec3<T> gridOrigin = Vec3<T>(0, 0, 0);

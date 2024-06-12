@@ -1,3 +1,12 @@
+/*
+
+----------------------------------------------------------
+Benchmark                Time             CPU   Iterations
+----------------------------------------------------------
+for_each_serial  527002475 ns    253906250 ns            4
+for_each_para     89147750 ns     57812500 ns           10
+
+*/
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -8,7 +17,7 @@
 
 #include <benchmark/benchmark.h>
 
-HSim::Size3 gridResolution = {128, 128, 128};
+HSim::Size3 gridResolution = {256, 256, 256};
 auto MACGrid = std::make_shared<HSim::FaceCenterGrid3<float>>(gridResolution);
 auto &u = MACGrid->dataU();
 auto &v = MACGrid->dataV();

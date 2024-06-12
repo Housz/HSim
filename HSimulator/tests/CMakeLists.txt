@@ -23,6 +23,9 @@ target_link_libraries(naiveFluidSolverTest PUBLIC HSimulatorLib)
 add_executable(naiveSmokeSolverTest naive_smoke_solver_test.cpp)
 target_link_libraries(naiveSmokeSolverTest PUBLIC HSimulatorLib)
 
+add_executable(pressureTest pressure_test.cpp)
+target_link_libraries(pressureTest PUBLIC HSimulatorLib)
+
 
 add_executable(smokeSolverTest smoke_solver_test.cpp)
 target_link_libraries(smokeSolverTest PUBLIC HSimulatorLib)

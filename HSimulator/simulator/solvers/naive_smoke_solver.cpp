@@ -1,5 +1,4 @@
 #include <simulator/solvers/naive_smoke_solver.h>
-#include "naive_smoke_solver.h"
 
 HSim::naiveSmokeSolver::naiveSmokeSolver()
 {
@@ -23,7 +22,7 @@ void HSim::naiveSmokeSolver::update(const SimFrame &frame)
 
 			advanceTimeStep(frame.timeInterval);
 
-			auto du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
+			// auto du = std::chrono::duration_cast<std::chrono::milliseconds>(clk.now() - BEGIN_TIME).count();
 
 			// std::cout << "advanceTimeStep " << du << "\n";
 			// std::cout << "sleep  " << (int)(frame.timeInterval * 1000) - du << "\n";
@@ -289,7 +288,7 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 
 	// velocityGrid->forEachCell(stencil);
 
-	const size_t MAX_ITERATIONS = 50;
+	const size_t MAX_ITERATIONS = 500;
 	for (size_t i = 0; i < MAX_ITERATIONS; i++)
 	{
 		velocityGrid->parallelForEachCell(stencil);
@@ -298,6 +297,10 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 		// sum div(Residual)
 		double res = 0;
 		velocityGrid->forEachCell([&](size_t i, size_t j, size_t k){
+			if (isBoundary(i, j, k))
+			{
+				return;
+			}
 			auto div = velocityGrid->divergenceAtCellCenter(i, j, k);
 			res += div * div;
 		});

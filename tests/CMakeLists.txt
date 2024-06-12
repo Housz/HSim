@@ -51,6 +51,10 @@ add_executable(testgriddata test_grid_data.cpp)
 target_link_libraries(testgriddata PUBLIC HSim)
 target_link_libraries(testgriddata PUBLIC TBB::tbb)
 
+add_executable(testgridstencil test_grid_stencil.cpp)
+target_link_libraries(testgridstencil PUBLIC HSim)
+target_link_libraries(testgridstencil PUBLIC TBB::tbb)
+
 add_executable(testfacecentergrid3 test_face_center_grid3.cpp)
 target_link_libraries(testfacecentergrid3 PUBLIC HSim)
 target_link_libraries(testfacecentergrid3 PUBLIC OpenVDB::openvdb)
