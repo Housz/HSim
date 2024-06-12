@@ -75,10 +75,26 @@ void HSim::JacobiPressureSolver::advanceSubTimeStep(double subTimeInterval)
 
 	auto updatescalarCallback = [&](size_t i, size_t j, size_t k)
 	{
-		(*scalarGrid)(i, j, k) = velocityGrid->dataAtCellCenter(i, j, k).length();
+		// (*scalarGrid)(i, j, k) = velocityGrid->dataAtCellCenter(i, j, k).length();
+		(*scalarGrid)(i, j, k) = velocityGrid->divergenceAtCellCenter(i, j, k);
 	};
 
 	scalarGrid->parallelForEachCell(updatescalarCallback);
+
+
+	// new vel
+	// for (size_t i = 15; i < 19; i++)
+	// {
+	// 	for (size_t j = 15; j < 19; j++)
+	// 	{
+	// 		for (size_t k = 15; k < 19; k++)
+	// 		{
+	// 			velocityGrid->u(i, j, k) = 1;
+	// 			velocityGrid->v(i, j, k) = 1;
+	// 			velocityGrid->v(i, j, k) = 1;
+	// 		}
+	// 	}
+	// }
 }
 
 void HSim::JacobiPressureSolver::init()
@@ -120,6 +136,85 @@ void HSim::JacobiPressureSolver::writeVDB()
 
 void HSim::JacobiPressureSolver::jacobiSolve()
 {
+	auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
+	auto velocityGrid_old = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
+
+	auto &u = velocityGrid_old->dataU();
+	auto &v = velocityGrid_old->dataV();
+	auto &w = velocityGrid_old->dataW();
+	
+	auto stencil = [&](size_t i, size_t j, size_t k)
+	{
+		if (isBoundary(i, j, k))
+		{
+			return;
+		}
+
+		size_t n = 			
+			(isBoundary(i + 1, j, k) ? 0 : 1) +
+			(isBoundary(i - 1, j, k) ? 0 : 1) +
+			(isBoundary(i, j + 1, k) ? 0 : 1) +
+			(isBoundary(i, j - 1, k) ? 0 : 1) +
+			(isBoundary(i, j, k + 1) ? 0 : 1) +
+			(isBoundary(i, j, k - 1) ? 0 : 1);
+		
+		double div = 
+			(isBoundary(i + 1, j, k) ? 0 : u(i + 1, j, k)) +
+			(isBoundary(i - 1, j, k) ? 0 : -u(i, j, k)) +
+			(isBoundary(i, j + 1, k) ? 0 : v(i, j + 1, k)) +
+			(isBoundary(i, j - 1, k) ? 0 : -v(i, j, k)) +
+			(isBoundary(i, j, k + 1) ? 0 : w(i, j, k + 1)) +
+			(isBoundary(i, j, k - 1) ? 0 : -w(i, j, k));
+		
+		div /= n;
+
+		if (!isBoundary(i + 1, j, k))
+			velocityGrid->u(i + 1, j, k) -= div;
+		if (!isBoundary(i - 1, j, k))
+			velocityGrid->u(i, j, k) += div;
+
+		if (!isBoundary(i, j + 1, k))
+			velocityGrid->v(i, j + 1, k) -= div;
+		if (!isBoundary(i, j - 1, k))
+			velocityGrid->v(i, j, k) += div;
+			
+		if (!isBoundary(i, j, k + 1))
+			velocityGrid->w(i, j, k + 1) -= div;
+		if (!isBoundary(i, j, k - 1))
+			velocityGrid->w(i, j, k) += div;
+		
+	};
+
+	double res = 0.;
+	auto residualCallback = [&](size_t i, size_t j, size_t k)
+	{
+		auto div = velocityGrid->divergenceAtCellCenter(i, j, k);
+		res += div * div;
+	};
+
+
+	const size_t MAX_ITERATIONS = 5000;
+	for (size_t i = 0; i < MAX_ITERATIONS; i++)
+	{
+		velocityGrid->parallelForEachCell(stencil);
+
+		res = 0.;
+		velocityGrid->forEachCell(residualCallback);
+
+		if (res < 1e-8)
+		{
+			std::cout << "DONE iters = " << i << std::endl;
+			break;
+		}
+		
+
+		// velocityGrid->swap(*velocityGrid_old);
+		velocityGrid_old->dataU()._data = velocityGrid->dataU()._data;
+		velocityGrid_old->dataV()._data = velocityGrid->dataV()._data;
+		velocityGrid_old->dataW()._data = velocityGrid->dataW()._data;
+	}
+	std::cout << "RES: " << res << std::endl;
+	
 
 }
 

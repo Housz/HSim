@@ -193,6 +193,8 @@ void HSim::naiveSmokeSolver::applyBuoyancy(double subTimeInterval)
 			return avg_local; }, std::plus<double>());
 	ambTemperature /= temperatureGrid->_data.size();
 
+	std::cout << "ambTemperature " << ambTemperature << std::endl;
+
 	auto callback = [&](size_t i, size_t j, size_t k)
 	{
 		auto density = (*desityGrid)(i, j, k);
@@ -205,6 +207,8 @@ void HSim::naiveSmokeSolver::applyBuoyancy(double subTimeInterval)
 
 		velocityY(i, j, k) += subTimeInterval * buoyancyForce;
 	};
+
+	std::cout << "velocityY(i, j, k) " << velocityY(13, 1, 13) << std::endl;
 
 	desityGrid->parallelForEachCell(callback);
 }
@@ -258,7 +262,7 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 			(isBoundary(i, j, k + 1) ? 0 : 1) +
 			(isBoundary(i, j, k - 1) ? 0 : 1);
 
-		auto div =
+		double div =
 			(isBoundary(i + 1, j, k) ? 0 : u(i + 1, j, k)) +
 			(isBoundary(i - 1, j, k) ? 0 : -u(i, j, k)) +
 			(isBoundary(i, j + 1, k) ? 0 : v(i, j + 1, k)) +
@@ -287,35 +291,42 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 
 
 	// velocityGrid->forEachCell(stencil);
-
-	const size_t MAX_ITERATIONS = 500;
+	double res = 0;
+	const size_t MAX_ITERATIONS = 5000;
 	for (size_t i = 0; i < MAX_ITERATIONS; i++)
 	{
 		velocityGrid->parallelForEachCell(stencil);
 		// velocityGrid->forEachCell(stencil);
 
 		// sum div(Residual)
-		double res = 0;
+		res = 0;
 		velocityGrid->forEachCell([&](size_t i, size_t j, size_t k){
-			if (isBoundary(i, j, k))
-			{
-				return;
-			}
+			// if (isBoundary(i, j, k))
+			// {
+			// 	return;
+			// }
 			auto div = velocityGrid->divergenceAtCellCenter(i, j, k);
 			res += div * div;
 		});
-		std::cout << "RES: " << res << std::endl;
+
+		if (res < 1e-5)
+		{
+			std::cout << "DONE iters = " << i << std::endl;
+			break;
+		}
 
 
 		// std::swap(x._data, tempX._data);
-		velocityGrid->swap(*oldVelocityGrid);
-
+		// velocityGrid->swap(*oldVelocityGrid);
 
 		// oldVelocityGrid = std::make_shared<FaceCenterGrid3<PRECISION>>(*velocityGrid);
-		// oldVelocityGrid->_dataU._data = velocityGrid->_dataU._data;
-		// oldVelocityGrid->_dataV._data = velocityGrid->_dataV._data;
-		// oldVelocityGrid->_dataW._data = velocityGrid->_dataW._data;
+		oldVelocityGrid->_dataU._data = velocityGrid->_dataU._data;
+		oldVelocityGrid->_dataV._data = velocityGrid->_dataV._data;
+		oldVelocityGrid->_dataW._data = velocityGrid->_dataW._data;
+
 	}
+
+	std::cout << "RES: " << res << std::endl;
 
 	// compute 
 

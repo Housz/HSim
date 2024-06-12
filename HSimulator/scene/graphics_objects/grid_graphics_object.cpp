@@ -85,12 +85,13 @@ void HSim::CellCenterScalarGrid3GraphicsObject::buildRenderingData()
 		auto data = grid->dataAt(i, j, k);
 		if (data > 0)
 		{
-			vertices.push_back(i);
-			vertices.push_back(j);
-			vertices.push_back(k);
-			vertices.push_back((float)(data / 5.0));
-			vertices.push_back((float)(1.0 - data / 5.0));
-			vertices.push_back((float)(1.0 - data / 5.0));
+			auto p = grid->positionAt(i, j, k);
+			vertices.push_back((float)p.x);
+			vertices.push_back((float)p.y);
+			vertices.push_back((float)p.z);
+			vertices.push_back((float)(data / 1.0));
+			vertices.push_back((float)(1.0 - data / 1.0));
+			vertices.push_back((float)(1.0 - data / 1.0));
 		}
 	};
 

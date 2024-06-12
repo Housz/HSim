@@ -14,8 +14,11 @@ void createScene(HSim::App &app)
 	 */
 
 	HSim::Size3 gridResolution = {32, 32, 32};
+	// HSim::Vec3d gridOrigin = {-16, -16, -16};
+	HSim::Vec3d gridOrigin = {0, 0, 0};
 
 	auto velocityGrid = std::make_shared<HSim::FaceCenterGrid3<PRECISION>>(gridResolution);
+	velocityGrid->setGridOrigin(gridOrigin);
 
 	auto velGridMat = std::make_shared<HSim::LineFieldMaterial>();
 	auto velocityGridGObject = std::make_shared<HSim::FaceCenterGrid3GObject>(velocityGrid, velGridMat);
@@ -26,11 +29,11 @@ void createScene(HSim::App &app)
 
 	root->addChild(velocityGO);
 
-	for (size_t i = 10; i < 13; i++)
+	for (size_t i = 15; i < 19; i++)
 	{
-		for (size_t j = 10; j < 13; j++)
+		for (size_t j = 15; j < 19; j++)
 		{
-			for (size_t k = 10; k < 13; k++)
+			for (size_t k = 15; k < 19; k++)
 			{
 				velocityGrid->u(i, j, k) = 1;
 				velocityGrid->v(i, j, k) = 1;
@@ -42,6 +45,7 @@ void createScene(HSim::App &app)
 	// scalergrid for rendering velgrid scaler
 
 	auto scalarGrid = std::make_shared<HSim::CellCenterScalarGrid3<PRECISION>>(gridResolution);
+	scalarGrid->setGridOrigin(gridOrigin);
 
 	auto gridMat = std::make_shared<HSim::PointMaterial>();
 	auto scalarGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(scalarGrid, gridMat);

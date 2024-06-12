@@ -6,8 +6,8 @@ namespace HSim
 	OrbitCamera::OrbitCamera()
 		: Camera()
 	{
-		mFocusDist = 3.0f;
-		mEyePos = Vec3f(0.0f, 0.0f, 3.0f);
+		mFocusDist = 30.0f;
+		mEyePos = Vec3f(0.0f, 0.0f, 30.0f);
 		mFov = 0.90f;
 
 		this->setClipFar(500.0f);
