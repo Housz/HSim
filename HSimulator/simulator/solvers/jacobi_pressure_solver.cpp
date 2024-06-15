@@ -75,26 +75,26 @@ void HSim::JacobiPressureSolver::advanceSubTimeStep(double subTimeInterval)
 
 	auto updatescalarCallback = [&](size_t i, size_t j, size_t k)
 	{
-		// (*scalarGrid)(i, j, k) = velocityGrid->dataAtCellCenter(i, j, k).length();
-		(*scalarGrid)(i, j, k) = velocityGrid->divergenceAtCellCenter(i, j, k);
+		(*scalarGrid)(i, j, k) = velocityGrid->dataAtCellCenter(i, j, k).length();
+		// (*scalarGrid)(i, j, k) = velocityGrid->divergenceAtCellCenter(i, j, k);
 	};
 
 	scalarGrid->parallelForEachCell(updatescalarCallback);
 
 
 	// new vel
-	// for (size_t i = 15; i < 19; i++)
-	// {
-	// 	for (size_t j = 15; j < 19; j++)
-	// 	{
-	// 		for (size_t k = 15; k < 19; k++)
-	// 		{
-	// 			velocityGrid->u(i, j, k) = 1;
-	// 			velocityGrid->v(i, j, k) = 1;
-	// 			velocityGrid->v(i, j, k) = 1;
-	// 		}
-	// 	}
-	// }
+	for (size_t i = 6; i < 9; i++)
+	{
+		for (size_t j = 6; j < 9; j++)
+		{
+			for (size_t k = 6; k < 9; k++)
+			{
+				velocityGrid->u(i, j, k) = 1;
+				velocityGrid->v(i, j, k) = 1;
+				velocityGrid->v(i, j, k) = 1;
+			}
+		}
+	}
 }
 
 void HSim::JacobiPressureSolver::init()
@@ -193,7 +193,7 @@ void HSim::JacobiPressureSolver::jacobiSolve()
 	};
 
 
-	const size_t MAX_ITERATIONS = 5000;
+	const size_t MAX_ITERATIONS = 1000000;
 	for (size_t i = 0; i < MAX_ITERATIONS; i++)
 	{
 		velocityGrid->parallelForEachCell(stencil);

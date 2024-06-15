@@ -14,12 +14,12 @@ void createScene(HSim::App &app)
 	 */
 	const size_t n = 128;
 	// HSim::Size3 gridResolution = {64, 64, 64};
-	HSim::Size3 gridResolution = {32, 32, 32};
+	// HSim::Size3 gridResolution = {32, 32, 32};
+	HSim::Size3 gridResolution = {10, 10, 10};
 
-    // HSim::Vec3i gridResolution = {n, n, n};
-    // HSim::Vec3<T> gridOrigin = Vec3<T>(0, 0, 0);
-    // HSim::Vec3<T> gridSpacing = Vec3<T>(1, 1, 1);
-
+	// HSim::Vec3i gridResolution = {n, n, n};
+	// HSim::Vec3<T> gridOrigin = Vec3<T>(0, 0, 0);
+	// HSim::Vec3<T> gridSpacing = Vec3<T>(1, 1, 1);
 
 	// velocity
 
@@ -56,19 +56,17 @@ void createScene(HSim::App &app)
 	// 	(*emitterGrid)(i, j, k) = -1.f;
 	// });
 
-	for (size_t i = 13; i < 17; i++)
+	for (size_t i = 4; i < 7; i++)
 	{
-		for (size_t k = 13; k < 17; k++)
+		for (size_t k = 4; k < 7; k++)
 		{
-			(*emitterGrid)(i, 1, k) = 1.0f;
-			// (*emitterGrid)(i, 2, k) = 1.0f;
-			// (*emitterGrid)(i, 3, k) = 1.0f;
+			(*emitterGrid)(i, 3, k) = 1;
 		}
-	}    
+	}
 
 	auto emitterGridGObject = std::make_shared<HSim::CellCenterScalarGrid3GObject>(emitterGrid, gridMat);
 	auto emitterGridenderable = std::make_shared<HSim::Renderable>(emitterGrid, emitterGridGObject);
-	
+
 	auto emitterGO = std::make_shared<HSim::GameObject>();
 	emitterGO->renderable = emitterGridenderable;
 

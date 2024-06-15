@@ -66,13 +66,13 @@ void HSim::naiveSmokeSolver::advanceTimeStep(double timeInterval)
 
 	// update rendering states
 	densityGO->renderable->renderingDataNeedUpdate = true;
-	velocityGO->renderable->renderingDataNeedUpdate = true;
+	// velocityGO->renderable->renderingDataNeedUpdate = true;
 
 	// auto velocityGrid = std::static_pointer_cast<FaceCenterGrid3<PRECISION>>(velocityGO->renderable->spaceObject);
 	// auto velocityY = velocityGrid->dataV();
 	// std::cout << velocityY.dataAt(0, 0, 0) << "\n";
 
-	writeVDB();
+	// writeVDB();
 }
 
 void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
@@ -82,6 +82,8 @@ void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
 	// applyGravity(subTimeInterval);
 	applyBuoyancy(subTimeInterval);
 
+
+
 	// 2 viscosity (todo)
 
 	// 3 pressure (Jacobi)
@@ -89,7 +91,8 @@ void HSim::naiveSmokeSolver::advanceSubTimeStep(double subTimeInterval)
 	applyPressure_(subTimeInterval);
 
 	// 4 advection (Semi-Lagrangian)
-	applyAdvection(subTimeInterval);
+	// applyAdvection(subTimeInterval);
+
 }
 
 void HSim::naiveSmokeSolver::init()
@@ -168,7 +171,7 @@ void HSim::naiveSmokeSolver::updateEmitter()
 		(*desityGrid)(i, j, k) += (*emitterGrid)(i, j, k);
 
 		// temperature
-		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k) * 1;
+		(*temperatureGrid)(i, j, k) += (*emitterGrid)(i, j, k);
 	};
 
 	emitterGrid->parallelForEachCell(callback);
@@ -208,7 +211,7 @@ void HSim::naiveSmokeSolver::applyBuoyancy(double subTimeInterval)
 		velocityY(i, j, k) += subTimeInterval * buoyancyForce;
 	};
 
-	std::cout << "velocityY(i, j, k) " << velocityY(13, 1, 13) << std::endl;
+	std::cout << "velocityY(16, 16, 16) " << velocityY(5, 3, 5) << std::endl;
 
 	desityGrid->parallelForEachCell(callback);
 }
@@ -292,7 +295,13 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 
 	// velocityGrid->forEachCell(stencil);
 	double res = 0;
-	const size_t MAX_ITERATIONS = 5000;
+	auto residualCallback = [&](size_t i, size_t j, size_t k)
+	{
+		auto div = velocityGrid->divergenceAtCellCenter(i, j, k);
+		res += div * div;
+	};
+
+	const size_t MAX_ITERATIONS = 1000000;
 	for (size_t i = 0; i < MAX_ITERATIONS; i++)
 	{
 		velocityGrid->parallelForEachCell(stencil);
@@ -300,16 +309,10 @@ void HSim::naiveSmokeSolver::applyPressure_(double subTimeInterval)
 
 		// sum div(Residual)
 		res = 0;
-		velocityGrid->forEachCell([&](size_t i, size_t j, size_t k){
-			// if (isBoundary(i, j, k))
-			// {
-			// 	return;
-			// }
-			auto div = velocityGrid->divergenceAtCellCenter(i, j, k);
-			res += div * div;
-		});
+		velocityGrid->forEachCell(residualCallback);
 
-		if (res < 1e-5)
+
+		if (res < 1e-8)
 		{
 			std::cout << "DONE iters = " << i << std::endl;
 			break;

@@ -13,7 +13,8 @@ void createScene(HSim::App &app)
 	 * scene
 	 */
 
-	HSim::Size3 gridResolution = {32, 32, 32};
+	// HSim::Size3 gridResolution = {32, 32, 32};
+	HSim::Size3 gridResolution = {10, 10, 10};
 	// HSim::Vec3d gridOrigin = {-16, -16, -16};
 	HSim::Vec3d gridOrigin = {0, 0, 0};
 
@@ -29,18 +30,18 @@ void createScene(HSim::App &app)
 
 	root->addChild(velocityGO);
 
-	for (size_t i = 15; i < 19; i++)
-	{
-		for (size_t j = 15; j < 19; j++)
-		{
-			for (size_t k = 15; k < 19; k++)
-			{
-				velocityGrid->u(i, j, k) = 1;
-				velocityGrid->v(i, j, k) = 1;
-				velocityGrid->v(i, j, k) = 1;
-			}
-		}
-	}
+	// for (size_t i = 15; i < 19; i++)
+	// {
+	// 	for (size_t j = 15; j < 19; j++)
+	// 	{
+	// 		for (size_t k = 15; k < 19; k++)
+	// 		{
+	// 			velocityGrid->u(i, j, k) = 1;
+	// 			velocityGrid->v(i, j, k) = 1;
+	// 			velocityGrid->v(i, j, k) = 1;
+	// 		}
+	// 	}
+	// }
 
 	// scalergrid for rendering velgrid scaler
 

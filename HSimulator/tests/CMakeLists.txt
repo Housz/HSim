@@ -3,6 +3,12 @@ cmake_minimum_required(VERSION 3.26)
 # add_executable(test test.cpp)
 # target_link_libraries(test PUBLIC HSimulatorLib)
 
+add_executable(naiveSmokeSolverTest naive_smoke_solver_test.cpp)
+target_link_libraries(naiveSmokeSolverTest PUBLIC HSimulatorLib)
+
+add_executable(pressureTest pressure_test.cpp)
+target_link_libraries(pressureTest PUBLIC HSimulatorLib)
+
 add_executable(meshTest triangle_mesh3_test.cpp)
 target_link_libraries(meshTest PUBLIC HSimulatorLib)
 
@@ -20,11 +26,7 @@ target_link_libraries(naiveSolverTest PUBLIC HSimulatorLib)
 add_executable(naiveFluidSolverTest naive_fluid_solver_test.cpp)
 target_link_libraries(naiveFluidSolverTest PUBLIC HSimulatorLib)
 
-add_executable(naiveSmokeSolverTest naive_smoke_solver_test.cpp)
-target_link_libraries(naiveSmokeSolverTest PUBLIC HSimulatorLib)
 
-add_executable(pressureTest pressure_test.cpp)
-target_link_libraries(pressureTest PUBLIC HSimulatorLib)
 
 
 add_executable(smokeSolverTest smoke_solver_test.cpp)
